@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security" 
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.2.xsd"> 
+  
+	<http auto-config="true">
+		<access-denied-handler error-page="/403" />
+ 		<intercept-url pattern="/login*" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
+ 		<intercept-url pattern="/webjars/**" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 		
+ 		<intercept-url pattern="/**" access="ROLE_BIBLIOTECARIO , ROLE_COORDENADOR_CURSO" />	
+
+ 		<form-login login-page="/login" authentication-success-handler-ref="myAuthenticationSuccessHandler" authentication-failure-url="/loginfailed" />
+ 		<logout logout-success-url="/login" invalidate-session="true" logout-url="/logout"/> 	
+ 	</http>
+
+	<beans:bean id="myAuthenticationSuccessHandler" class="br.ufc.npi.gal.service.SimpleUrlAuthenticationSuccessHandler" />
+ 	
+ 	<beans:bean id="ldapAuthenticationProvider" class="br.ufc.quixada.npi.ldap.service.LdapAuthenticationProvider"></beans:bean>
+  
+	<authentication-manager alias="authenticationManager">
+	    <authentication-provider ref="ldapAuthenticationProvider"></authentication-provider>
+	</authentication-manager>
+
+	<global-method-security  secured-annotations = "enabled"  />
+
+</beans:beans>

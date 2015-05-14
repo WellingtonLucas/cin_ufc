@@ -28,5 +28,6 @@
 	<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
  
 	<context:component-scan base-package="br.ufc.cin.*" />
+    <context:component-scan base-package="br.ufc.quixada.npi.*" />
     
 </beans>

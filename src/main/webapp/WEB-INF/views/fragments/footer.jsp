@@ -13,7 +13,6 @@
 <script src="<c:url value="/webjars/bootstrap/3.1.1/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/webjars/datatables/1.9.4/media/js/jquery.dataTables.min.js" />"></script>
 <script src="<c:url value="/resources/js/dataTables.tableTools.js" />"></script>
-<script src="<c:url value="/resources/js/gal.js" />"></script>
 <script src="<c:url value="/resources/js/jquery-ui.min.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.cookie.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.fastLiveFilter.js" />"></script>

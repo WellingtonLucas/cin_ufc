@@ -11,8 +11,6 @@ import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 public class TurmaServiceImpl extends GenericServiceImpl<Turma> implements TurmaService{
 
-	@Inject
-	private TurmaRepository turmaRepository;
 	
 	@Override
 	public Turma getTurmaBySemestre(String semestre) {

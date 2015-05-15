@@ -23,10 +23,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name = "turma", uniqueConstraints = {@UniqueConstraint(columnNames = "curso")})
 public class Turma implements Serializable{
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -43,6 +40,9 @@ public class Turma implements Serializable{
 	@Pattern(regexp = "[a-zA-Z]{0,}", message = "O campo não pode possuir caracteres especiais ou números.")
 	@Size(min = 2, max = 3, message = "A sigla deve conter entre 2 e 3 caracteres")
 	private String siglaDoCurso;
+	
+	@Column
+	private boolean status;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_professor")
@@ -94,10 +94,7 @@ public class Turma implements Serializable{
 	public List<Aluno> getAlunos() {
 		return alunos;
 	}
-
-	/*
-	 * Falta corrigir
-	 * */
+	
 	public void setAlunos(List<Aluno> alunos) {
 		this.alunos = alunos;
 	}

@@ -22,7 +22,7 @@ public class Equipe {
 	private String nome;
 	
 	@Column
-	private boolean ativo;
+	private boolean status;
 	
 	@OneToMany(mappedBy = "equipe", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
 	private List<Aluno> alunos;
@@ -36,11 +36,11 @@ public class Equipe {
 	}
 
 	public boolean isAtivo() {
-		return ativo;
+		return status;
 	}
 
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public List<Aluno> getAlunos() {

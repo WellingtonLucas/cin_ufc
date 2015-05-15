@@ -7,7 +7,7 @@ import br.ufc.quixada.npi.repository.GenericRepository;
 
 public interface TurmaRepository extends GenericRepository<Turma>{
 			
-	public abstract Turma getTurmaBySemestre(String semestre);
+	public abstract List<Turma> getTurmaBySemestre(String semestre);
 	
-	public abstract List<Turma> getTurmasBySemestreCurso(String semestre, String curso);
+	public abstract Turma getTurmasBySemestreCurso(String semestre, String curso);
 }

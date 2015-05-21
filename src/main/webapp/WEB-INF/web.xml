@@ -6,22 +6,9 @@
 	id="WebApp_ID" version="3.0">
 	
   	<display-name>Concurso de Idéias de Negócios</display-name>
-  	
-  	<jsp-config>
-	    <jsp-property-group>
-	        <url-pattern>*.jsp</url-pattern>
-	        <page-encoding>UTF-8</page-encoding>
-	    </jsp-property-group>
-	    <jsp-property-group>
-			<url-pattern>/**</url-pattern>
-			<el-ignored>false</el-ignored>
-		</jsp-property-group>
-	</jsp-config>
-	  	
   	<welcome-file-list>
   		<welcome-file>/WEB-INF/views/index.jsp</welcome-file>
   	</welcome-file-list>
-  
   	<servlet>
 		<servlet-name>mvc-dispatcher</servlet-name>
 		<servlet-class>	
@@ -35,6 +22,26 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
+  	<jsp-config>
+	    <jsp-property-group>
+	        <url-pattern>*.jsp</url-pattern>
+	        <page-encoding>UTF-8</page-encoding>
+	    </jsp-property-group>
+	    <jsp-property-group>
+			<url-pattern>/**</url-pattern>
+			<el-ignored>false</el-ignored>
+		</jsp-property-group>
+	</jsp-config>
+	<filter>
+        <filter-name>httpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+	
+	<filter-mapping>
+        <filter-name>httpMethodFilter</filter-name>
+        <servlet-name>mvc-dispatcher</servlet-name>
+    </filter-mapping>
+   	  	
 	<listener>
     	<listener-class>
     		org.springframework.web.context.ContextLoaderListener

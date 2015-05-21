@@ -10,7 +10,7 @@
        	   http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 	<mvc:annotation-driven />
-	<context:component-scan base-package="br.ufc.npi.gal.web" />
+	<context:component-scan base-package="br.ufc.cin.web" />
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

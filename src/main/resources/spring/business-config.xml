@@ -18,19 +18,10 @@
     <context:component-scan
             base-package="br.ufc.cin.service"/>
 
-    <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
-    <!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->
     <context:property-placeholder location="classpath:spring/data-access.properties" system-properties-mode="OVERRIDE"/>
 
     <!-- enables scanning for @Transactional annotations -->
     <tx:annotation-driven />
- 
-	
-	<!-- ==================		 3 Profiles to choose from 			=================== 
-									- jdbc (uses Spring" JdbcTemplate)
-									- jpa
-									- spring-data-jpa	
-		  =============================================================================-->
 	
     <beans profile="jpa,spring-data-jpa">
         <!-- JPA EntityManagerFactory -->
@@ -38,14 +29,8 @@
               p:dataSource-ref="dataSource">
             <property name="jpaVendorAdapter">
                 <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
-                      p:database="${jpa.database}" p:showSql="${jpa.showSql}"/>
-                <!-- the 'database' parameter refers to the database dialect being used.
-                	By default, Hibernate will use a 'HSQL' dialect because 'jpa.database' has been set to 'HSQL'
-                	inside file spring/data-access.properties
-                
-                 -->
-            </property>
-            <!-- gDickens: BOTH Persistence Unit and Packages to Scan are NOT compatible, persistenceUnit will win -->
+                      p:database="${jpa.database}" p:showSql="${jpa.showSql}"/>               
+            </property>            
             <property name="persistenceUnitName" value="cin"/>
             <property name="packagesToScan" value="br.ufc.cin"/>
         </bean>

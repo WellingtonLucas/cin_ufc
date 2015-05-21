@@ -12,7 +12,7 @@
 		   http://www.springframework.org/schema/tx/spring-tx.xsd
 		   http://www.springframework.org/schema/jee 
            http://www.springframework.org/schema/jee/spring-jee-3.2.xsd">
-
+ 
 	<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="cin" />
 		<property name="dataSource" ref="cinufc"/>
@@ -25,9 +25,21 @@
 		<property name="entityManagerFactory" ref="emf" />
 	</bean>
 	
-	<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
- 
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<!-- <property name="maxUploadSize" value="100000"/> -->
+	</bean>
+	
+ 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="/WEB-INF/messages" />
+    </bean>
+   	
+   	<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
+   
+ 	<context:annotation-config />
 	<context:component-scan base-package="br.ufc.cin.*" />
-    <context:component-scan base-package="br.ufc.quixada.npi.*" />
+	<context:component-scan base-package="br.ufc.quixada.npi.repository" />
+	<context:component-scan base-package="br.ufc.quixada.npi.service.impl.GenericServiceImpl" />
     
 </beans>

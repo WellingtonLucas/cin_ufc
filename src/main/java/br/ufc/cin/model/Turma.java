@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 
 @Entity
-@Table(name = "turma", uniqueConstraints = {@UniqueConstraint(columnNames = "curso")})
+@Table(name = "turma", uniqueConstraints = {@UniqueConstraint(columnNames = "sigla_curso")})
 public class Turma implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -50,7 +50,7 @@ public class Turma implements Serializable{
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "turma")
 	private List<Aluno> alunos;
-	
+
 	public String getSemestre() {
 		return semestre;
 	}
@@ -59,28 +59,20 @@ public class Turma implements Serializable{
 		this.semestre = semestre;
 	}
 
-	public String getCurso() {
-		return siglaDoCurso;
-	}
-	
-	/**
-	 * Recebe uma sigla de um curso, que deve conter entre 2 a 3 caracteres.
-	 * Não pode receber caracteres especiais ou numeros
-	 * */
-	public void setCurso(String sigla) {
-		this.siglaDoCurso = sigla;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-	
 	public String getSiglaDoCurso() {
 		return siglaDoCurso;
 	}
 
 	public void setSiglaDoCurso(String siglaDoCurso) {
 		this.siglaDoCurso = siglaDoCurso;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public Professor getProfessor() {
@@ -94,9 +86,13 @@ public class Turma implements Serializable{
 	public List<Aluno> getAlunos() {
 		return alunos;
 	}
-	
+
 	public void setAlunos(List<Aluno> alunos) {
 		this.alunos = alunos;
+	}
+
+	public Integer getId() {
+		return id;
 	}
 
 }

@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-@RequestMapping("turma")
-public class TurmaController {
+@RequestMapping("jogo")
+public class JogoController {
 	
 	
 }

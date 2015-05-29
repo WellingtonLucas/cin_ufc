@@ -10,5 +10,13 @@ import javax.persistence.OneToMany;
 public class Professor extends Usuario{
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
-	private List<Turma> turmas; 
+	private List<Jogo> jogos; 
+	
+	public List<Jogo> getJogos() {
+		return jogos;
+	}
+
+	public void setJogos(List<Jogo> jogos) {
+		this.jogos = jogos;
+	}
 }

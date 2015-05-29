@@ -138,56 +138,8 @@
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>1.3.2</version>
-		</dependency>
- -->
-
-
-		<!-- HIBERNATE -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate.validation.version}</version>
-		</dependency>
-
-		<!-- Databases - Uses POSTGRESQL by default -->
-		<dependency>
-			<groupId>postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${postgresql.version}</version>
-		</dependency>
 		
-		<!-- Tomcat para testes -->
-		<!-- <dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-jdbc</artifactId>
-			<version>${tomcat-jdbc.version}</version>
-			<scope>runtime</scope>
-		</dependency> -->
-
-		<!-- Logging with SLF4J & LogBack -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j-log4j12.version}</version>
-		</dependency>
-
-		<!-- Spring Security -->
+				<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
@@ -212,6 +164,31 @@
 			<version>3.2.1.RELEASE</version>
 		</dependency>
 
+		<!-- HIBERNATE -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.validation.version}</version>
+		</dependency>
+
+		<!-- Databases - Uses POSTGRESQL by default -->
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+		</dependency>
+		
+		<!-- Logging with SLF4J & LogBack -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j-log4j12.version}</version>
+		</dependency>
 
 		<!-- Webjars (static dependencies distributed as JAR files) -->
 		<dependency>

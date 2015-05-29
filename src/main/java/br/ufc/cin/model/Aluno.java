@@ -13,9 +13,9 @@ public class Aluno extends Usuario{
 	private Equipe equipe;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_turma", nullable = false, unique = true)
-	private Turma turma;
-
+	@JoinColumn(name = "id_jogo", nullable = false, unique = true)
+	private Jogo jogo;		
+	
 	public Equipe getEquipe() {
 		return equipe;
 	}
@@ -23,4 +23,5 @@ public class Aluno extends Usuario{
 	public void setEquipe(Equipe equipe) {
 		this.equipe = equipe;
 	}
+	
 }

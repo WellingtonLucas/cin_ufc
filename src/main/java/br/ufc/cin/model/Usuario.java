@@ -8,6 +8,7 @@ import javax.persistence.MappedSuperclass;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+
 @MappedSuperclass
 public class Usuario {
 	
@@ -15,21 +16,44 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
 
-	@Column
+	@Column(nullable = false)
 	@NotEmpty
 	protected String nome;
 
-	@Column
+	@Column(nullable = false)
 	@NotEmpty
 	protected String senha;
 
-	@Column
+	@Column(nullable = false)
 	@NotEmpty
 	protected String email;
 
-	@Column
+	@Column(nullable = false)
 	@NotEmpty
 	protected String login;
+	
+	@Column(nullable = false)
+	@NotEmpty
+	protected String papel;
+	
+	@Column(nullable = false)
+	protected boolean habilitado;	
+	
+	public boolean isHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+
+	public String getPapel() {
+		return papel;
+	}
+
+	public void setPapel(String papel) {
+		this.papel = papel;
+	}
 
 	public String getNome() {
 		return nome;
@@ -70,8 +94,9 @@ public class Usuario {
 	public Integer getId() {
 		return id;
 	}
-
+	
 	public boolean isNew() {
 		return (this.id == null);
 	}
+	
 }

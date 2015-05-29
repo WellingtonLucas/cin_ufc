@@ -13,21 +13,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 
 @Entity
-@Table(name = "turma", uniqueConstraints = {@UniqueConstraint(columnNames = "sigla_curso")})
-public class Turma implements Serializable{
+@Table(name = "jogo")
+public class Jogo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "id_turma")
+	@Column(name = "id_jogo")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
@@ -36,10 +33,8 @@ public class Turma implements Serializable{
 	private String semestre;	
 	
 	@NotEmpty
-	@Column(name = "sigla_curso")
-	@Pattern(regexp = "[a-zA-Z]{0,}", message = "O campo não pode possuir caracteres especiais ou números.")
-	@Size(min = 2, max = 3, message = "A sigla deve conter entre 2 e 3 caracteres")
-	private String siglaDoCurso;
+	@Column(name = "nome_curso")	
+	private String NomeDoCurso;
 	
 	@Column
 	private boolean status;
@@ -48,7 +43,7 @@ public class Turma implements Serializable{
 	@JoinColumn(name = "id_professor")
 	private Professor professor;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "turma")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "jogo")
 	private List<Aluno> alunos;
 
 	public String getSemestre() {
@@ -59,12 +54,12 @@ public class Turma implements Serializable{
 		this.semestre = semestre;
 	}
 
-	public String getSiglaDoCurso() {
-		return siglaDoCurso;
+	public String getNomeDoCurso() {
+		return NomeDoCurso;
 	}
 
-	public void setSiglaDoCurso(String siglaDoCurso) {
-		this.siglaDoCurso = siglaDoCurso;
+	public void setNomeDoCurso(String nomeDoCurso) {
+		this.NomeDoCurso = nomeDoCurso;
 	}
 
 	public boolean isStatus() {

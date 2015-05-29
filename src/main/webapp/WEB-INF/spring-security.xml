@@ -12,8 +12,8 @@
 		<access-denied-handler error-page="/403" />
  		<intercept-url pattern="/login*" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
  		<intercept-url pattern="/webjars/**" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 		
- 		<intercept-url pattern="/*/diretor/**" access="ROLE_DIRETOR" />
- 		<intercept-url pattern="/**" access="ROLE_COORDENADOR,ROLE_DIRETOR" />	
+ 		<intercept-url pattern="/*/professor/**" access="ROLE_PROFESSOR" />
+ 		<intercept-url pattern="/**" access="ROLE_ALUNO,ROLE_PROFESSOR" />	
  		
  		<form-login login-page="/login" default-target-url="/" 
  			authentication-failure-url="/loginfailed" />
@@ -23,15 +23,16 @@
 	<authentication-manager>
 		<authentication-provider>
 			<password-encoder hash="sha-256"/>
-			<jdbc-user-service data-source-ref="gpa_pesquisa"
-				users-by-username-query="
-                    SELECT login, password, habilitado
-                    FROM pessoa WHERE login = ?"
+			<jdbc-user-service data-source-ref="cinufc"
+				users-by-username-query="SELECT login, senha, habilitado FROM professor WHERE login = ?"
+				authorities-by-username-query="SELECT p.login, p.papel FROM professor AS p WHERE p.login = ?" />          
 
-				authorities-by-username-query=
-                    "SELECT u.login, p.nome FROM pessoa AS u, papel_pessoa AS pu, papel AS p WHERE u.id = pu.pessoa_id AND pu.papel_id = p.id AND u.login=?" 
-                    />
-		</authentication-provider>
+			<jdbc-user-service data-source-ref="cinufc"
+				users-by-username-query="SELECT login, senha, habilitado FROM aluno WHERE login = ?"
+				authorities-by-username-query="SELECT a.login, a.papel FROM aluno AS a WHERE a.login = ?" 
+            />
+                    
+		</authentication-provider>		
  	</authentication-manager>
  	
   	<global-method-security  secured-annotations = "enabled"  />

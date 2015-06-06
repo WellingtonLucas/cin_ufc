@@ -10,4 +10,6 @@ public interface JogoRepository extends GenericRepository<Jogo>{
 	public abstract List<Jogo> getJogoBySemestre(String semestre);
 	
 	public abstract Jogo getJogosBySemestreCurso(String semestre, String curso);
+	
+	public abstract List<Jogo> getJogosByProfessor(Integer idProfessor);
 }

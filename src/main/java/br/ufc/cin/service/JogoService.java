@@ -10,4 +10,6 @@ public interface JogoService extends GenericService<Jogo> {
 	public abstract List<Jogo> getJogoBySemestre(String semestre);
 
 	public abstract Jogo getJogosBySemestreCurso(String semestre, String nomeCurso);
+	
+	public abstract List<Jogo> getJogoByProfessor(Integer idProfessor);
 }

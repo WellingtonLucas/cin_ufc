@@ -18,9 +18,9 @@ public class JpaJogoRepository extends JpaGenericRepositoryImpl<Jogo> implements
 	public List<Jogo> getJogoBySemestre(String semestre) {
 		Map<String, Object> params = new HashMap<String, Object>();	
 		params.put("semestre", semestre);
-		List<Jogo> turmas = find(QueryType.JPQL, "from Jogo where semestre = :semestre", params);
-		if(!turmas.isEmpty() && turmas != null){
-			return turmas;
+		List<Jogo> jogos = find(QueryType.JPQL, "from Jogo where semestre = :semestre", params);
+		if(!jogos.isEmpty() && jogos != null){
+			return jogos;
 		}		
 		return null;
 	}
@@ -30,9 +30,20 @@ public class JpaJogoRepository extends JpaGenericRepositoryImpl<Jogo> implements
 		Map<String, Object> params = new HashMap<String, Object>();	
 		params.put("semestre", semestre);
 		params.put("nome", nomeCurso);
-		List<Jogo> turmas = find(QueryType.JPQL, "from Jogo where semestre = :semestre and nome_curso = :nome", params);
-		if(!turmas.isEmpty() && turmas != null){
-			return turmas.get(0);
+		List<Jogo> jogos = find(QueryType.JPQL, "from Jogo where semestre = :semestre and nome_curso = :nome", params);
+		if(!jogos.isEmpty() && jogos != null){
+			return jogos.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public List<Jogo> getJogosByProfessor(Integer idProfessor) {
+		Map<String, Object> params = new HashMap<String, Object>();	
+		params.put("idProf", idProfessor);		
+		List<Jogo> jogos = find(QueryType.JPQL, "from Jogo where id_professor = :idProf", params);
+		if(!jogos.isEmpty() && jogos != null){
+			return jogos;
 		}
 		return null;
 	}

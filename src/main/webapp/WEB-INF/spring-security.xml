@@ -24,13 +24,14 @@
 		<authentication-provider>
 			<password-encoder hash="sha-256"/>
 			<jdbc-user-service data-source-ref="cinufc"
-				users-by-username-query="SELECT login, senha, habilitado FROM professor WHERE login = ?"
-				authorities-by-username-query="SELECT p.login, p.papel FROM professor AS p WHERE p.login = ?" />          
+				users-by-username-query="SELECT login, senha, habilitado FROM usuario WHERE login = ?"
+				authorities-by-username-query="SELECT u.login, u.papel FROM usuario AS u WHERE u.login = ?" 
+			/>          
 
-			<jdbc-user-service data-source-ref="cinufc"
-				users-by-username-query="SELECT login, senha, habilitado FROM aluno WHERE login = ?"
-				authorities-by-username-query="SELECT a.login, a.papel FROM aluno AS a WHERE a.login = ?" 
-            />
+			<!-- <jdbc-user-service data-source-ref="cinufc"
+				users-by-username-query="SELECT login, senha, habilitado FROM usuario WHERE login = ?"
+				authorities-by-username-query="SELECT u.login, u.papel FROM usuario AS u WHERE u.login = ?" 
+            /> -->
                     
 		</authentication-provider>		
  	</authentication-manager>

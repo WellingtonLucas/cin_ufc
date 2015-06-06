@@ -26,11 +26,7 @@
 	    <jsp-property-group>
 	        <url-pattern>*.jsp</url-pattern>
 	        <page-encoding>UTF-8</page-encoding>
-	    </jsp-property-group>
-	    <jsp-property-group>
-			<url-pattern>/**</url-pattern>
-			<el-ignored>false</el-ignored>
-		</jsp-property-group>
+	    </jsp-property-group>	    
 	</jsp-config>
 	<filter>
         <filter-name>httpMethodFilter</filter-name>
@@ -47,6 +43,22 @@
     		org.springframework.web.context.ContextLoaderListener
     	</listener-class>
     </listener>
+    
+    <!-- Paginas de erro -->
+    <error-page>
+		<error-code>403</error-code>
+		<location>/403</location>
+	</error-page>
+ 
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>500</error-code>
+		<location>/500</location>
+    </error-page>
              
 	<context-param>
  		<param-name>contextConfigLocation</param-name>

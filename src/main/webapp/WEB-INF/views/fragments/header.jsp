@@ -7,30 +7,25 @@
 		CIN <small>Concurso de Ideias de Negócio</small>
 	</h1>
 </div>
-<div align="right">Olá, docente!</div>
-<nav class="navbar navbar-default" role="navigation">
-	<div class="container-fluid">
+<div class="navbar navbar-default navbar-static-top">
+	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
-				data-target="#bs-example-navbar-collapse-1">
+				data-target="#navbar-ex-collapse">
 				<span class="sr-only">Toggle navigation</span> <span
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="<c:url value='/'/>">Início</a>
+			
 		</div>
-
-		<div class="collapse navbar-collapse"
-			id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">							
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Curso<b class="caret"></b></a>									
+		<div class="collapse navbar-collapse" id="navbar-ex-collapse">
+			<ul class="nav navbar-nav navbar-right">				
+				<li><a  class="glyphicon glyphicon-home btn-lg" href="<c:url value="/jogo/listar" />"></a></li>				
+				<li><a  class="glyphicon glyphicon-log-out btn-lg" href="<c:url value="/j_spring_security_logout" />"></a></li>
 			</ul>
-
-
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="<c:url value="#" />">Sair<span class="glyphicon glyphicon-off"></span></a></li>
-			</ul>
+			<p class="navbar-right navbar-text">
+				Bem Vindo ${usuario.nome}! <br>
+			</p>
 		</div>
 	</div>
-</nav>
+</div>

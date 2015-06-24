@@ -7,6 +7,6 @@ public interface UsuarioService  extends GenericService<Usuario>{
 
 	Usuario getUsuarioByLogin(String login);
 	
-	boolean isDiretor(Usuario usuario);
+	boolean isProfessor(Usuario usuario);	
 
 }

@@ -1,13 +1,17 @@
 body {
 	font-family: 'Lato', Calibri, Arial, sans-serif !important;
-	background: url('http://jrain.oscitas.netdna-cdn.com/wp-content/themes/zillapress/images/bg-body.png') repeat scroll 0% 0% transparent;
+	background:
+		url('http://jrain.oscitas.netdna-cdn.com/wp-content/themes/zillapress/images/bg-body.png')
+		repeat scroll 0% 0% transparent;
 	/* background: none repeat scroll 0% 0% #F2F2F2;*/
 }
 
-button, a, h2 > a {
+button, a, h2>a {
 	text-decoration: none;
 	outline: 0 !important;
 }
+
+
 
 h3 {
 	text-align: left;
@@ -31,7 +35,7 @@ label.field {
 	font-weight: 700;
 }
 
-div.detalhes > div.form-group {
+div.detalhes>div.form-group {
 	padding-bottom: 13px;
 	padding-top: 13px;
 }
@@ -41,12 +45,12 @@ div.field-value {
 	padding-left: 0px;
 }
 
-div.field-value.parecer > label {
+div.field-value.parecer>label {
 	margin-left: 17px;
 	margin-top: 7px;
 }
 
-div.field-value > a {
+div.field-value>a {
 	text-decoration: none;
 	font-size: 18px;
 	line-height: 1;
@@ -59,9 +63,11 @@ div.formulario {
 .form-control {
 	font-size: 17px !important;
 }
-
+.container-fluid{
+	font-size: 17px !important;
+}
 div.container {
-	margin-bottom: 50px;
+	margin-bottom: 0px;
 }
 
 button.close {
@@ -77,16 +83,16 @@ table.projetos {
 	background-color: #F5F5F5;
 }
 
-table.projetos > thead {
+table.projetos>thead {
 	color: #473F3F;
 	background-color: #A4CDE6;
 }
 
-table.projetos > tbody > tr > td.acoes {
+table.projetos>tbody>tr>td.acoes {
 	text-align: right;
 }
 
-table.projetos > tbody > tr > td > a {
+table.projetos>tbody>tr>td>a {
 	text-decoration: none;
 	outline: 0;
 }
@@ -119,8 +125,8 @@ div.alert {
 	text-align: center;
 }
 
-div.error{
-	color: #a94442 ;
+div.error {
+	color: #a94442;
 }
 
 div.files {
@@ -131,22 +137,23 @@ table#file-upload {
 	margin-top: 20px;
 }
 
-.input-group{
+.input-group {
 	margin: auto;
 }
 
 .has-success .control-label {
-    color: inherit;
+	color: inherit;
 }
 
 .has-success .form-control {
-    border-color: #CCC;
+	border-color: #CCC;
 }
 
 .has-success .form-control:focus {
-    border-color: #66AFE9;
-    outline: 0px none;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(102, 175, 233, 0.6);
+	border-color: #66AFE9;
+	outline: 0px none;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px
+		rgba(102, 175, 233, 0.6);
 }
 
 span.required {
@@ -171,6 +178,24 @@ textarea#comentario {
 div.file-caption {
 	text-align: left;
 }
-.datas{
+
+.datas {
 	padding-top: 18px;
+}
+
+.navbar-brand {
+	float: left;
+	height: 50px;
+	padding: 15px 15px;
+	font-size: 24px;
+	line-height: 20px
+}
+
+.navbar {
+	font-size: 18px;	
+}
+
+.navbar-default {
+	background-color: #d3d3d3;
+	border-color: #e7e7e7
 }

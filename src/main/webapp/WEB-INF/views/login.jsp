@@ -4,12 +4,9 @@
 <html>
 <head>
 <title>Página de Login</title>
-<link
-	href="<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.min.css" />"
-	rel="stylesheet" />
-<script src="<c:url value="/webjars/jquery/2.1.0/jquery.js" />"></script>
-<script
-	src="<c:url value="/webjars/bootstrap/3.1.1/js/bootstrap.min.js" />"></script>
+	<link href="<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.min.css" />" rel="stylesheet" />
+	<script src="<c:url value="/webjars/jquery/2.1.0/jquery.js" />"></script>
+	<script	src="<c:url value="/webjars/bootstrap/3.1.1/js/bootstrap.min.js" />"></script>
 
 <style>
 .errorblock {

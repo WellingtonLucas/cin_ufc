@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,11 +29,10 @@ public class Jogo implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "id_jogo")
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	
+		
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column
@@ -65,6 +65,9 @@ public class Jogo implements Serializable{
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "jogo")
 	private List<Aluno> alunos;
+	
+	@OneToMany(mappedBy = "jogo", cascade = CascadeType.REMOVE)
+	private List<Documento> documentos;
 	
 	public String getDescricao() {
 		return descricao;
@@ -140,6 +143,14 @@ public class Jogo implements Serializable{
 
 	public Integer getId() {
 		return id;
+	}
+
+	public List<Documento> getDocumentos() {
+		return documentos;
+	}
+
+	public void setDocumentos(List<Documento> documentos) {
+		this.documentos = documentos;
 	}
 
 }

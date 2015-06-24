@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
@@ -31,38 +33,30 @@
 		</div>
 	</c:if>
 	<div class="section">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-3 text-left">
-					<ul class="list-group">
-						<li class="list-group-item">Participantes</li>
-						<li class="list-group-item">Equipes&nbsp;</li>
-						<li class="list-group-item">Rankings</li>
-						<li class="list-group-item">Avaliações</li>
-						<li class="hidden-md list-group-item">Rodadas</li>
-						<li class="list-group-item">Jogo</li>
-						<li class="list-group-item">Apostas</li>
-					</ul>
-					<div class="col-md-12">
-						<hr>
+				<jsp:include page="../fragments/menu.jsp" />
+				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+					<div class="row placeholders">
+						<ul class="list-group">
+							<%-- <li class="media"><a class="btn btn-primary"
+								href="<c:url value ="/jogo/novo-jogo"></c:url>">Novo Jogo</a></li>
+							<li class="media"><hr></li> --%>
+							<li class="media"><hr></li>
+							<c:forEach var="jogo" items="${jogos}">
+								<a class="list-group-item"
+									href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
+									<h4 class="list-group-item-heading">${jogo.nomeDoCurso}</h4>
+									<p class="list-group-item-text">${jogo.semestre}</p>
+								</a>
+								<li class="media"><hr></li>
+							</c:forEach>
+						</ul>
 					</div>
-				</div>
-				<div class="col-md-9">
-					<ul class="list-group">
-						<li class="media">
-							<a class="btn btn-primary" href="<c:url value ="/jogo/novo-jogo"></c:url>">Novo Jogo</a>							
-						</li>
-						<c:forEach var="jogo" items="${jogos}">
-							<a class="list-group-item" href="#">								
-								<h4 class="list-group-item-heading">${jogo.nomeDoCurso}</h4>
-								<p class="list-group-item-text">${jogo.semestre}</p>
-							</a>
-						</c:forEach>											
-					</ul>
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>	
 	<jsp:include page="../fragments/footer.jsp" />
 </body>
 </html>

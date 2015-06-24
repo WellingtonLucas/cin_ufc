@@ -20,7 +20,7 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 	}
 
 	@Override
-	public boolean isDiretor(Usuario usuario) {
+	public boolean isProfessor(Usuario usuario) {
 		if(usuario.getPapel().equals("ROLE_PROFESSOR")){
 			return true;
 		}

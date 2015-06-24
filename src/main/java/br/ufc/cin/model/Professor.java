@@ -24,6 +24,10 @@ public class Professor{
 	@OneToOne(cascade = CascadeType.REFRESH)
 	private Usuario usuario;
 
+	public Integer getId_professor() {
+		return id_professor;
+	}
+	
 	public List<Jogo> getJogos() {
 		return jogos;
 	}

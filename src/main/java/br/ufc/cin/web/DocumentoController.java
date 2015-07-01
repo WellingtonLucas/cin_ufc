@@ -1,7 +1,6 @@
 package br.ufc.cin.web;
 
 import static br.ufc.cin.util.Constants.MENSAGEM_DOCUMENTO_INEXISTENTE;
-import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import java.io.ByteArrayInputStream;
@@ -86,12 +85,7 @@ public class DocumentoController {
 			model.addAttribute("result", "erro");
 			model.addAttribute("mensagem", MENSAGEM_DOCUMENTO_INEXISTENTE);
 			return model;
-		}
-		if(!getUsuarioLogado(session).equals(documento.getJogo().getProfessor())) {
-			model.addAttribute("result", "erro");
-			model.addAttribute("mensagem", MENSAGEM_PERMISSAO_NEGADA);
-			return model;
-		}
+		}		
 		documentoService.delete(documento);
 		model.addAttribute("result", "ok");
 		return model;

@@ -66,7 +66,7 @@ public class Jogo implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "jogo")
 	private List<Aluno> alunos;
 	
-	@OneToMany(mappedBy = "jogo", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
 	private List<Documento> documentos;
 	
 	public String getDescricao() {

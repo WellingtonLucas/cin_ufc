@@ -58,7 +58,7 @@ $(document).ready(function() {
         }
     });
 	
-	$('#submeterProjetoForm').bootstrapValidator({
+	$('#adicionarJogoForm').bootstrapValidator({
 		group: '.form-item',
 		excluded: ':disabled',
         feedbackIcons: {
@@ -126,64 +126,18 @@ $(document).ready(function() {
         }
     });
 	
-	$('#atribuirPareceristaForm, #emitirParecerForm').bootstrapValidator({
-		group: '.form-item',
-		excluded: ':disabled',
-        feedbackIcons: {
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        }
-    });
 	
-	$('#avaliarProjetoForm').bootstrapValidator({
-		group: '.form-item',
-		excluded: ':disabled',
-        feedbackIcons: {
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            ata :{
-            	validators: {
-            		callback: {
-                        message: 'Adicione a ata de reunião',
-                        callback: function(value, validator) {
-                        	if(validator.getFieldElements('ata').val() == "") {
-                    			return false;
-                    		}
-                        	return true;
-                        }
-                    }
-            	}
-            },
-            oficio :{
-            	validators: {
-            		callback: {
-                        message: 'Adicione o ofício de aceitação',
-                        callback: function(value, validator) {
-                        	if(validator.getFieldElements('oficio').val() == "") {
-                    			return false;
-                    		}
-                        	return true;
-                        }
-                    }
-            	}
-            }
-            
-        }
-    });
-	
-	// Usado para não apagar a máscara e enviar somente o valor para o servidor
+	/*// Usado para não apagar a máscara e enviar somente o valor para o servidor
 	$("#adicionarProjetoForm, #submeterProjetoForm").submit(function() {
 		$('#valorDaBolsa').val($('#bolsa').maskMoney('unmasked')[0]);
 	});
-	
-	// Máscaras
+	*/
+	/*// Máscaras
     $('[name="bolsa"]').maskMoney({prefix:'R$ ', showSymbol:true, thousands:'.', decimal:','});
     if($('[name="bolsa"]').val() != '') {
     	$('[name="bolsa"]').maskMoney('mask');
     }
-	
+	*/
     $("#inicio").datepicker({
 		format : "dd/mm/yyyy",
 		todayBtn : "linked",
@@ -191,7 +145,7 @@ $(document).ready(function() {
 		todayHighlight : true,
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
-        $('#adicionarProjetoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'inicio');
+        $('#adicionarJogoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'inicio');
     });
     
     $("#termino").datepicker({
@@ -202,8 +156,8 @@ $(document).ready(function() {
 		startDate: new Date()
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
-		$('#adicionarProjetoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'inicio');
-		$('#adicionarProjetoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'termino');
+		$('#adicionarJogoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'inicio');
+		$('#adicionarJogoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'termino');
     });
     
     $("#prazo").datepicker({
@@ -217,17 +171,17 @@ $(document).ready(function() {
 		$('#atribuirPareceristaForm').bootstrapValidator('revalidateField', 'prazo');
     });
     
-    $("#participantes, #parecerista, #posicionamento, #avaliacao").select2({
+    /*$("#participantes, #parecerista, #posicionamento, #avaliacao").select2({
    	 	placeholder: "Buscar...",
    	 	dropdownCssClass: "bigdrop"
-    });
+    });*/
     
     $('div.error-validation:has(span)').find('span').css('color', '#a94442');
     
 	$('div.error-validation:has(span)').find('span').parent().parent().parent().addClass('has-error has-feedback');
 	
 	$('#confirm-delete').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja excluir o projeto \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.modal-body').text('Tem certeza de que deseja excluir o jogo \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-danger').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
@@ -240,7 +194,7 @@ $(document).ready(function() {
 		var id = $(this).attr('data-id');
 		$.ajax({
 			type: "POST",
-			url: "/gpa-pesquisa/documento/ajax/remover/" + id
+			url: "/cin_ufc/documento/ajax/remover/" + id
 		})
 		.success(function( result ) {
 			if(result.result == 'ok') {
@@ -251,7 +205,7 @@ $(document).ready(function() {
 		});
 	});
 
-	$('#confirm-submit').on('show.bs.modal', function(e) {
+	/*$('#confirm-submit').on('show.bs.modal', function(e) {
 		$(this).find('.modal-body').text('Tem certeza de que deseja submeter o projeto \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
@@ -263,7 +217,7 @@ $(document).ready(function() {
 		$(this).find('.modal-body').text('Tem certeza de que deseja submeter o parecer do projeto \"' + $(e.relatedTarget).data('name') + '\" com o posicionamento '+valueSelected+'?');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
-	
+	*/
 	
 	$(".file").fileinput({
 		showUpload: false,
@@ -276,13 +230,13 @@ $(document).ready(function() {
 		msgLoading: "Carregando arquivo {index} de {files} &hellip;"
 	});
 	
-	$('#comentar').on('click', function(e){
+	/*$('#comentar').on('click', function(e){
 		var texto = $('#comentario').val();
 	    var projetoId = $('#projetoId').val();
 	       
 	    $.ajax({
 	    	type: "POST",
-	        url: '/gpa-pesquisa/comentario/comentar',
+	    	url: '/cin_ufc/comentario/comentar',
 	        data : {
 	        	texto : texto,
 	        	projetoId : projetoId
@@ -300,6 +254,6 @@ $(document).ready(function() {
 	    	}
 		})
 	});
-	
-	$('article').readmore();
+	*/
+	/*$('article').readmore();*/
 });

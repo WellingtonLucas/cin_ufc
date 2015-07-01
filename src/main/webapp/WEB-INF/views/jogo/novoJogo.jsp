@@ -15,7 +15,7 @@
 	
 		<c:if test="${action eq 'cadastrar' }">
 			<c:set var="url" value="/jogo/novo-jogo"></c:set>
-			<c:set var="titulo" value="Novo Jogo"></c:set>
+			<c:set var="titulo" value="Novo Jogo - ${jogo.nomeDoCurso }"></c:set>
 		</c:if>
 		<c:if test="${action eq 'editar' }">
 			<c:set var="url" value="/jogo/editar"></c:set>
@@ -33,17 +33,25 @@
 		</c:if>
 		<br>
 		<div class ="container">
-			<form:form id="adicionarJogoForm" role="form" class="form-horizontal" action="/cin_ufc/jogo/novo-jogo" commandName="jogo" enctype="multipart/form-data" servletRelativeAction="/novo-jogo" method="POST">
+			<h2>${titulo}</h2>
+			<form:form id="adicionarJogoForm" role="form" class="form-horizontal" commandName="jogo" enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
 				<input type="hidden" name="idUsuario" value="${idUsuario}"/>
+				<input type="hidden" id="id" name="id" value="${jogo.id }"/>
 				<div class="form-group">
 					<div class="form-item">
 						<label for="inputNome" class="col-sm-2 control-label" >Nome do Curso:<span class="required">*</span></label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control" id="inputNome" path="nomeDoCurso" placeholder="Engenharia de Software" />
+							<div class="error-validation">
+								<form:errors path="nomeDoCurso"></form:errors>
+							</div>
 						</div>
 						<label for="inputSemestre" class="col-sm-1 control-labe" >Semestre:<span class="required">*</span></label>
 						<div class="col-sm-2">
 							<form:input type="text" class="form-control" id="inputSemestre" path="semestre" placeholder="2015.2" /><br>
+							<div class="error-validation">
+								<form:errors path="semestre"></form:errors>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -100,7 +108,7 @@
 							<table id="table-anexos" class="table table-striped">
 								<thead>
 									<tr>
-										<th data-column-id="nome" data-order="desc">Arquivo</th>
+										<th data-column-id="nome" data-order="desc">Anexos:</th>
 										<th data-column-id="excluir" width="5%">Excluir</th>
 									</tr>
 								</thead>
@@ -108,7 +116,7 @@
 									<c:forEach items="${jogo.documentos }" var="documento">
 		                    			<tr id="documento-${documento.id}">
 									        <td>
-									            <a href="<c:url value="/documento/${jogo.id }" />">${jogo.nome }</a>
+									            <a href="<c:url value="/documento/${documento.id }" />">${documento.nome }</a>
 									        </td>
 									        <td>
 									        	<a id="exluir-arquivo" data-toggle="modal" data-target="#delete-file" href="#" data-id="${documento.id}" data-name="${documento.nome }">
@@ -134,11 +142,31 @@
 					<div class="col-sm-2"></div>
 					<div class="col-sm-2">		
 						<button type="submit" class="btn btn-primary btn-lg" >
-							Cadastrar
-						</button>
+							Salvar
+						</button>						
+					</div>
+					<div class="col-sm-2">
+						<a href="<c:url value="/jogo/index"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
 					</div>
 				</div>
 			</form:form>
+		</div>
+		
+		<!-- Modal Excluir Arquivo -->
+		<div class="modal fade" id="delete-file" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	        			<h4 class="modal-title" id="excluirArquivoModalLabel">Excluir</h4>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger confirm-delete-file" data-dismiss="modal">Excluir</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					</div>
+				</div>
+			</div>
 		</div>
 		<jsp:include page="../fragments/footer.jsp" />
 	</body>

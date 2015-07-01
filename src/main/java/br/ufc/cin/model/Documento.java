@@ -73,5 +73,16 @@ public class Documento {
 		return id;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Documento) {
+			Documento other = (Documento) obj;
+			if (other != null && other.getId() != null && this.id != null && other.getId().equals(this.id)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 }

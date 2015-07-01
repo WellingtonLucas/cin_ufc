@@ -72,12 +72,49 @@
 					</c:if>				
 					<c:if test="${not empty jogo.documentos }">
 						<c:forEach items="${jogo.documentos }" var="documento">
-							<label><a href="<c:url value="/documento/downloadDocumento/${documento.id }" ></c:url>">${documento.nome }</a></label><br>							
+							<label><a href="<c:url value="/documento/downloadDocumento/${documento.id }" ></c:url>">${documento.nomeOriginal }</a></label><br>							
 						</c:forEach>
 					</c:if>
 				</div>
-			</div>									
-							
+			</div>				
+			
+			<div class="col-sm-12">
+				<div class="row placeholders">
+					<ul class="list-group">							
+						<li class="media"><hr></li>							
+					</ul>
+					<div class="form-group">					
+						<div class="col-sm-2">				
+							<a id="editar" href="<c:url value="/jogo/${jogo.id}/editar" ></c:url>">
+								<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a id="excluir" data-toggle="modal" data-target="#confirm-delete" href="#" 
+							data-href="<c:url value="/jogo/${jogo.id}/excluir"></c:url>" data-name="${jogo.nomeDoCurso }">
+								<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
+							</a>					
+						</div>
+					</div>
+				</div>
+			</div>
+						
+		</div>
+	</div>
+	<!-- Modal Excluir JOGO -->
+	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+        			<h4 class="modal-title" id="excluirModalLabel">Excluir</h4>
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-danger">Excluir</a>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
 		</div>
 	</div>
 	<jsp:include page="../fragments/footer.jsp" />	

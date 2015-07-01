@@ -5,11 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 
 @Entity
+@Table(name="usuario")
 public class Usuario {
 	
 	@Id
@@ -19,6 +21,9 @@ public class Usuario {
 	@Column(nullable = false)
 	@NotEmpty
 	protected String nome;
+	
+	@Column
+	protected String sobreNome;	
 
 	@Column(nullable = false)
 	@NotEmpty
@@ -61,6 +66,14 @@ public class Usuario {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public String getSobreNome() {
+		return sobreNome;
+	}
+
+	public void setSobreNome(String sobreNome) {
+		this.sobreNome = sobreNome;
 	}
 
 	public String getSenha() {

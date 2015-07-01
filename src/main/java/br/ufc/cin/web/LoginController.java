@@ -1,7 +1,9 @@
 package br.ufc.cin.web;
 
 import java.security.Principal;
+
 import javax.servlet.http.HttpSession;
+
 
 
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import br.ufc.cin.model.Usuario;
 
 @Controller
 public class LoginController {
@@ -27,14 +31,17 @@ public class LoginController {
 		if (logout != null) {
 			model.addObject("msg", "You've been logged out successfully.");
 		}
+		
+		model.addObject("usuario", new Usuario());
 		model.setViewName("login");
-
+		
 		return model;
 
 	}
 
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	public String loginerror(ModelMap model) {
+		model.addAttribute("usuario", new Usuario());
 		model.addAttribute("error", "Usuário e/ou senha inválidos!");
 		return "login";
 
@@ -43,7 +50,7 @@ public class LoginController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(ModelMap model, HttpSession session) {
 		session.invalidate();
-
+		
 		return "login";
 
 	}
@@ -65,10 +72,5 @@ public class LoginController {
 		model.addAttribute("message", "Oops, página não encontrada.");
 		return "404";
 	}
-	
-	@RequestMapping(value = "/500", method = RequestMethod.GET)
-	public String erroServidor(ModelMap model, Principal user) {
-		model.addAttribute("message", "Ops, o site teve um erro técnico.");
-		return "500";
-	}
+		
 }

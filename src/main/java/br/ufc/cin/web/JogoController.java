@@ -1,6 +1,15 @@
 package br.ufc.cin.web;
 
 
+import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
+import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_ATUALIZADO;
+import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_CADASTRADO;
+import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
+import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
+import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_JOGO;
+import static br.ufc.cin.util.Constants.PAGINA_DETALHES_JOGO;
+import static br.ufc.cin.util.Constants.PAGINA_LISTAR_JOGO;
+import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.*;
 
 import java.io.IOException;
@@ -9,6 +18,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -77,7 +87,7 @@ public class JogoController {
 	public  String cadastrar(@ModelAttribute("jogo") Jogo jogo, @RequestParam("anexos") List<MultipartFile> anexos, 
 			BindingResult result, HttpSession session, RedirectAttributes redirect, Model model){
 		Usuario usuario = getUsuarioLogado(session);
-		
+		model.addAttribute("action", "cadastrar");
 		if (result.hasErrors()) {
 			return PAGINA_CADASTRAR_JOGO;
 		}
@@ -92,7 +102,8 @@ public class JogoController {
 					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
 						Documento documento = new Documento();
 						documento.setArquivo(anexo.getBytes());
-						documento.setNome(anexo.getOriginalFilename());
+						documento.setNomeOriginal(anexo.getOriginalFilename());
+						documento.setNome(anexo.getName());
 						documento.setExtensao(anexo.getContentType());
 						documento.setJogo(jogo);
 						documentos.add(documento);
@@ -111,7 +122,79 @@ public class JogoController {
 		redirect.addFlashAttribute("info", MENSAGEM_JOGO_CADASTRADO);
 		return REDIRECT_PAGINA_LISTAR_JOGO;
 	}
+	@RequestMapping(value = "/{id}/editar", method = RequestMethod.GET)
+	public String editarForm(@PathVariable("id") Integer id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {		
+		Jogo jogo = jogoService.find(Jogo.class, id);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		if (usuario.getId() == jogo.getProfessor().getId_professor()) {
+			model.addAttribute("jogo", jogo);
+			//model.addAttribute("participantes", pessoaService.getParticipantes(usuario));
+			model.addAttribute("action", "editar");
+			return PAGINA_CADASTRAR_JOGO;
+		}
 
+		redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+		return REDIRECT_PAGINA_LISTAR_JOGO;
+	}
+	
+	@RequestMapping(value = "/editar", method = RequestMethod.POST)
+	public String editar(@RequestParam(value = "idParticipantes", required = false) List<String> idParticipantes, @RequestParam("anexos") List<MultipartFile> anexos,
+			@Valid Jogo jogo, BindingResult result, Model model, HttpSession session,
+			RedirectAttributes redirect) {
+		
+		//model.addAttribute("participantes", pessoaService.getParticipantes(getUsuarioLogado(session)));
+		model.addAttribute("action", "editar");
+		if (result.hasErrors()) {
+			return PAGINA_CADASTRAR_JOGO;
+		}
+		
+		Usuario usuario = getUsuarioLogado(session);
+		Professor professor = professorService.find(Professor.class, usuario.getId());
+		professor.setUsuario(usuario);
+		jogo.setProfessor(professor);
+		
+		/*if(idParticipantes != null && !idParticipantes.isEmpty()) {
+			List<Pessoa> participantes = new ArrayList<Pessoa>();
+			for(String idParticipante : idParticipantes) {
+				participantes.add(pessoaService.getPessoaById(new Long(idParticipante)));
+			}
+			jogo.setParticipantes(participantes);
+		}*/
+		
+		List<Documento> documentos = new ArrayList<Documento>();	
+		if(anexos != null && !anexos.isEmpty()) {
+			for(MultipartFile anexo : anexos) {
+				try {
+					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
+						Documento documento = new Documento();
+						documento.setArquivo(anexo.getBytes());
+						documento.setNomeOriginal(anexo.getOriginalFilename());
+						documento.setExtensao(anexo.getContentType());
+						documento.setNome(anexo.getName());
+						documento.setJogo(jogo);						
+						documentos.add(documento);
+					}
+				} catch (IOException e) {
+					model.addAttribute("erro", MENSAGEM_ERRO_UPLOAD);
+					return PAGINA_CADASTRAR_JOGO;
+				}
+			}
+		}
+		
+		jogoService.update(jogo);
+		
+		if(!documentos.isEmpty()) {
+			documentoService.salvar(documentos);
+		}
+							
+		redirect.addFlashAttribute("info", MENSAGEM_JOGO_ATUALIZADO);
+		return REDIRECT_PAGINA_LISTAR_JOGO;
+	}
+	
 	@RequestMapping(value = "/{id}/detalhes")
 	public String verDetalhes(@PathVariable("id") Integer id, Model model, HttpSession session,
 			RedirectAttributes redirectAttributes) {
@@ -128,6 +211,24 @@ public class JogoController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+	}
+	
+	@RequestMapping(value = "/{id}/excluir")
+	public String excluir(@PathVariable("id") Integer id, HttpSession session, RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class,id);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		if (usuario.getId() == jogo.getProfessor().getId_professor()) {
+			jogoService.delete(jogo);
+			redirectAttributes.addFlashAttribute("info", MENSAGEM_JOGO_REMOVIDO);
+		} else {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+		}
+		return REDIRECT_PAGINA_LISTAR_JOGO;
+
 	}
 
 	private Usuario getUsuarioLogado(HttpSession session) {

@@ -5,23 +5,24 @@
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <html>
 	<head>
-		<jsp:include page="../fragments/header-estrutura.jsp" />	
-		<title>Novo Jogo</title>
-	</head>
-	<body>
-	
 		<c:if test="${action eq 'cadastrar' }">
 			<c:set var="url" value="/jogo/novo-jogo"></c:set>
-			<c:set var="titulo" value="Novo Jogo - ${jogo.nomeDoCurso }"></c:set>
+			<c:set var="titulo" value="Novo Jogo"></c:set>
 		</c:if>
 		<c:if test="${action eq 'editar' }">
 			<c:set var="url" value="/jogo/editar"></c:set>
 			<c:set var="titulo" value="Editar - ${jogo.nomeDoCurso } "></c:set>
 		</c:if>
 		
+		<jsp:include page="../fragments/header-estrutura.jsp" />	
+		<title>${titulo}</title>
+	</head>
+	<body>
+	
 		<jsp:include page="../fragments/header.jsp" />
 		<c:if test="${not empty erro}">
 			<div class="alert alert-danger alert-dismissible" role="alert">
@@ -33,33 +34,56 @@
 		</c:if>
 		<br>
 		<div class ="container">
-			<h2>${titulo}</h2>
+			<div class="col-sm-12">
+				<h2>${titulo}</h2>
+				<hr>
+			</div>
 			<form:form id="adicionarJogoForm" role="form" class="form-horizontal" commandName="jogo" enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
-				<input type="hidden" name="idUsuario" value="${idUsuario}"/>
-				<input type="hidden" id="id" name="id" value="${jogo.id }"/>
+				<%-- <form:input type="hidden" name="idUsuario" value="${idUsuario}"/> --%>
+				<form:hidden id="id" name="id" path="id" />
 				<div class="form-group">
 					<div class="form-item">
-						<label for="inputNome" class="col-sm-2 control-label" >Nome do Curso:<span class="required">*</span></label>
+						<label for="nomeDoCurso" class="col-sm-2 control-label" >Nome do Curso:<span class="required">*</span></label>
 						<div class="col-sm-4">
-							<form:input type="text" class="form-control" id="inputNome" path="nomeDoCurso" placeholder="Engenharia de Software" />
+							<form:input type="text" class="form-control" id="nomeDoCurso" path="nomeDoCurso" placeholder="Engenharia de Software" />
 							<div class="error-validation">
 								<form:errors path="nomeDoCurso"></form:errors>
 							</div>
 						</div>
-						<label for="inputSemestre" class="col-sm-1 control-labe" >Semestre:<span class="required">*</span></label>
+					</div>
+					<div class="form-item">	
+						<label for="semestre" class="col-sm-1 control-label" >Semestre:<span class="required">*</span></label>
 						<div class="col-sm-2">
-							<form:input type="text" class="form-control" id="inputSemestre" path="semestre" placeholder="2015.2" /><br>
+							<form:input type="text" class="form-control" id="semestre" path="semestre" placeholder="2015.2" />
 							<div class="error-validation">
 								<form:errors path="semestre"></form:errors>
 							</div>
 						</div>
 					</div>
 				</div>
+				<!-- PARTICIPANTES -->
+				<div class="form-group form-item">
+					<label for="idParticipantes" class="col-sm-2 control-label">Participantes:</label>
+					<div class="col-sm-8">
+						<select id="participantes" name="idParticipantes" class="form-control" multiple="multiple">
+							<c:set var="part" value="${jogo.alunos }"></c:set>
+							<c:forEach items="${participantes }" var="participante">
+								<c:set var="selected" value=""></c:set>
+								<c:set var="idParticipante" value="id=${participante.id }"></c:set>
+								<c:if test="${fn:contains(part, participante)}">
+									<c:set var="selected" value="selected=\"selected\""></c:set>
+								</c:if>
+								<option value="${participante.id }" ${selected }>${participante.nome } ${participante.sobreNome } - ${participante.curso }</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+				
 				<div class="form-group">
 					<div class="form-item">
-						<label for="inicio" class="col-sm-2 control-label">Data de Início:</label>
+						<label for="inicio" class="col-sm-2 control-label">Data de Início:<span class="required">*</span></label>
 						<div class="col-sm-2">
-							<form:input id="inicio" type="text" path="inicio" cssClass="form-control data" placeholder="Data de início"/>
+							<form:input id="inicio" type="text" path="inicio" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
 							<div class="error-validation">
 								<form:errors path="inicio"></form:errors>
 							</div>
@@ -72,9 +96,9 @@
 					</div>
 
 					<div class="form-item">
-						<label for="termino" class="col-sm-2 control-label">Data de Término:</label>
+						<label for="termino" class="col-sm-2 control-label">Data de Término:<span class="required">*</span></label>
 						<div class="col-sm-2">
-							<form:input id="termino" type="text" path="termino" cssClass="form-control data" placeholder="Data de término"/>
+							<form:input id="termino" type="text" path="termino" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
 							<div class="error-validation">
 								<form:errors path="termino"></form:errors>
 							</div>
@@ -87,12 +111,16 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="descricao" class="col-sm-2 control-label">Descrição do Jogo:<span class="required">*</span></label>
-					<div class="col-sm-8">
-						<form:textarea name="descricao" id="descricao" path="descricao" />
+					<div class="form-item">
+						<label for="descricao" class="col-sm-2 control-label">Descrição do Jogo:<span class="required">*</span></label>
+						<div class="col-sm-8">
+							<form:textarea name="descricao" id="descricao" path="descricao" class="form-control"/>
+							<div class="error-validation">
+									<form:errors path="descricao"></form:errors>
+							</div>
+						</div>
 					</div>
 				</div>
-				
 				<div class="form-group">
 					<label for="regras" class="col-sm-2 control-label">Regras do Jogo:</label>
 					<div class="col-sm-8">
@@ -100,23 +128,26 @@
 					</div>
 				</div>		
 									
-				<div class="form-group form-item">
+				<div class="form-group form-item col-sm-12">
 					<label for="atividades" class="col-sm-2 control-label">Anexos:</label>
-					<div class="col-sm-10">
-						<input type="file" name="anexos" class="multi" multiple="multiple" ></input>
+					<div class="col-sm-8">
+						<span class="btn btn-default btn-lg fileinput-button">
+							<span>Selecione</span>
+							<input type="file" name="anexos" class="multi btn btn-default" multiple="multiple" ></input>
+						</span>
 						<c:if test="${not empty jogo.documentos }">
 							<table id="table-anexos" class="table table-striped">
 								<thead>
 									<tr>
 										<th data-column-id="nome" data-order="desc">Anexos:</th>
-										<th data-column-id="excluir" width="5%">Excluir</th>
+										<th data-column-id="excluir" width="5%"></th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:forEach items="${jogo.documentos }" var="documento">
 		                    			<tr id="documento-${documento.id}">
 									        <td>
-									            <a href="<c:url value="/documento/${documento.id }" />">${documento.nome }</a>
+									            <a href="<c:url value="/documento/${documento.id }" />">${documento.nomeOriginal }</a>
 									        </td>
 									        <td>
 									        	<a id="exluir-arquivo" data-toggle="modal" data-target="#delete-file" href="#" data-id="${documento.id}" data-name="${documento.nome }">

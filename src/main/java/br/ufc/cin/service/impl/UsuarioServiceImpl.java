@@ -1,5 +1,7 @@
 package br.ufc.cin.service.impl;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -25,6 +27,16 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Usuario getUsuarioByEmail(String email) {
+		return usuarioRepository.getUsuarioByEmail(email);
+	}
+
+	@Override
+	public List<Usuario> getPossiveisParticipantes(Usuario usuario) {
+		return usuarioRepository.getPossiveisParticipantes(usuario);
 	}
 
 }

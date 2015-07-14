@@ -72,5 +72,11 @@ public class LoginController {
 		model.addAttribute("message", "Oops, página não encontrada.");
 		return "404";
 	}
+	
+	@RequestMapping(value = "/500", method = RequestMethod.GET)
+	public String paginaNaoEncontrada(ModelMap model, Principal user) {
+		model.addAttribute("message", "Oops, página não encontrada.");
+		return "500";
+	}
 		
 }

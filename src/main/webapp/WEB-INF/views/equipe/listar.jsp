@@ -36,28 +36,6 @@
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
-				<div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2 main">
-					<div class="row placeholders">
-						<ul class="list-group">
-							<%-- <li class="media"><a class="btn btn-primary"
-								href="<c:url value ="/jogo/novo-jogo"></c:url>">Novo Jogo</a></li>
-							<li class="media"><hr></li> --%>
-							<li class="media"><hr></li>
-							<c:forEach var="jogo" items="${jogos}">
-								<a class="list-group-item"
-									href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
-									<h4 class="list-group-item-heading">${jogo.nomeDoCurso}</h4>
-									<p class="list-group-item-text">${jogo.semestre}</p>
-								</a>
-								<li class="media"><hr></li>
-							</c:forEach>
-						</ul>
-					</div>
-				</div>
-				
 			</div>
 		</div>
-	</div>	
-	<jsp:include page="../fragments/footer.jsp" />
-</body>
-</html>
+	</div>

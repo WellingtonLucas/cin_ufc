@@ -7,29 +7,45 @@ public class Constants {
 
 	public static final String PAGINA_LISTAR_JOGO = "jogo/listar";
 	
+	public static final String PAGINA_LISTAR_USUARIOS = "jogo/participantes";
+	
+	public static final String PAGINA_LISTAR_EQUIPES = "jogo/equipes";
+	
 	public static final String PAGINA_CADASTRAR_JOGO = "jogo/novoJogo";
 	
 	public static final String PAGINA_DETALHES_JOGO = "jogo/detalhes";
 
+	public static final String PAGINA_CADASTRAR_EQUIPE = "equipe/novaEquipe";
 	/** Redirecionamentos */
 
 	public static final String REDIRECT_PAGINA_LISTAR_JOGO = "redirect:/jogo/listar";
-
+	
+	public static final String REDIRECT_PAGINA_LOGIN = "redirect:/login";
+	
 	/** Mensagens */
+	public static final String MENSAGEM_ERRO_AO_CADASTRAR_JOGO = "Aconteceu algum erro ao cadastrar um novo jogo";
 
+	public static final String MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE = "Aconteceu algum erro ao cadastrar uma nova equipe";
+	
 	public static final String MENSAGEM_PERMISSAO_NEGADA = "Permissão negada";
 
 	public static final String MENSAGEM_CAMPO_OBRIGATORIO = "Campo obrigatório";
 
 	public static final String MENSAGEM_JOGO_INEXISTENTE = "Jogo inexistente";
+	
+	public static final String MENSAGEM_EQUIPE_INEXISTENTE = "Equipe inexistente";
 
 	public static final String MENSAGEM_JOGO_ATUALIZADO = "Jogo atualizado com sucesso";
 
+	public static final String MENSAGEM_EQUIPE_ATUALIZADA = "Equipe atualizada com sucesso";
+	
 	public static final String MENSAGEM_JOGO_CADASTRADO = "Jogo cadastrado com sucesso";
-
-	public static final String MENSAGEM_JOGO_SUBMETIDO = "Jogo submetido com sucesso";
+	
+	public static final String MENSAGEM_EQUIPE_CADASTRADA = "Equipe cadastrada com sucesso";
 
 	public static final String MENSAGEM_JOGO_REMOVIDO = "Jogo removido com sucesso";	
+	
+	public static final String MENSAGEM_EQUIPE_REMOVIDO = "Equipe removida com sucesso";
 
 	public static final String MENSAGEM_DATA_TERMINO_FUTURA = "A data de término não pode ser anterior à data atual";
 
@@ -44,7 +60,10 @@ public class Constants {
 	public static final String MENSAGEM_DOCUMENTO_INEXISTENTE = "Documento inexistente";
 
 	public static final String MENSAGEM_USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
-
 	
-
+	public static final String MENSAGEM_ADD_ANEXO = "Adicione algum anexo";
+	
+	public static final String MENSAGEM_USUARIOS_NAO_ASSOCIADOS = "Não existem participantes associados ao jogo!";
+	
+	public static final String MENSAGEM_EQUIPES_NAO_CRIADAS = "Não existem equipes no jogo. Crie equipes.";
 }

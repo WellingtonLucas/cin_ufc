@@ -1,6 +1,7 @@
 package br.ufc.cin.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -28,6 +31,10 @@ public class Jogo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	public Jogo() {
+		alunos = new ArrayList<Usuario>();
+	}
+	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +52,7 @@ public class Jogo implements Serializable{
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date inicio;
+	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date termino;
 	
@@ -59,15 +67,47 @@ public class Jogo implements Serializable{
 	@Column
 	private boolean status;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne/*(fetch = FetchType.LAZY)*/
 	@JoinColumn(name = "id_professor")
-	private Professor professor;
+	private Usuario professor;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "jogo")
-	private List<Aluno> alunos;
+	@ManyToMany
+    @JoinTable(name="jogo_aluno", joinColumns = {@JoinColumn(name="jogo_id",referencedColumnName="id")}, inverseJoinColumns = {@JoinColumn(name="aluno_id", referencedColumnName="id")})
+    private List<Usuario> alunos;
+	
+	/*@OneToMany(fetch = FetchType.LAZY, mappedBy = "jogo",cascade = {CascadeType.PERSIST})
+	private List<Usuario> alunos;*/
 	
 	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
 	private List<Documento> documentos;
+	
+	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST})
+	private List<Equipe> equipes;
+	
+	public List<Equipe> getEquipes() {
+		return equipes;
+	}
+
+	public void setEquipes(List<Equipe> equpes) {
+		this.equipes = equpes;
+	}
+
+	public List<Usuario> getAlunos() {
+		return alunos;
+	}
+
+	public void setAlunos(List<Usuario> alunos) {
+		this.alunos = alunos;
+	}
+	
+	public void addAluno(Usuario usuario){
+		if(!getAlunos().contains(usuario)){
+			getAlunos().add(usuario);
+		}
+		if(!usuario.getJogoParticipa().contains(this)){
+			usuario.getJogoParticipa().add(this);
+		}
+	}
 	
 	public String getDescricao() {
 		return descricao;
@@ -125,22 +165,18 @@ public class Jogo implements Serializable{
 		this.status = status;
 	}
 
-	public Professor getProfessor() {
+	public Usuario getProfessor() {
 		return professor;
 	}
 
-	public void setProfessor(Professor professor) {
-		this.professor = professor;
+	public void setProfessor(Usuario usuario) {
+		this.professor = usuario;
 	}
 
-	public List<Aluno> getAlunos() {
-		return alunos;
+	public void setId(Integer id){
+		this.id = id;
 	}
-
-	public void setAlunos(List<Aluno> alunos) {
-		this.alunos = alunos;
-	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -152,5 +188,8 @@ public class Jogo implements Serializable{
 	public void setDocumentos(List<Documento> documentos) {
 		this.documentos = documentos;
 	}
-
+	public String toString() {
+        return "Jogo id: " + getId() + 
+               ", nome: " + getNomeDoCurso();
+	 }
 }

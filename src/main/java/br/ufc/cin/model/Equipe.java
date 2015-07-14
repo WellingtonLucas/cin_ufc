@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -25,7 +26,34 @@ public class Equipe {
 	private boolean status;
 	
 	@OneToMany(mappedBy = "equipe", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-	private List<Aluno> alunos;
+	private List<Usuario> usuarios;
+	
+	@ManyToOne
+	private Jogo jogo;
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public Jogo getJogo() {
+		return jogo;
+	}
+
+	public void setJogo(Jogo jogo) {
+		this.jogo = jogo;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getNome() {
 		return nome;
@@ -43,12 +71,12 @@ public class Equipe {
 		this.status = status;
 	}
 
-	public List<Aluno> getAlunos() {
-		return alunos;
+	public List<Usuario> getAlunos() {
+		return usuarios;
 	}
 
-	public void setAlunos(List<Aluno> alunos) {
-		this.alunos = alunos;
+	public void setAlunos(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 	public Integer getId() {

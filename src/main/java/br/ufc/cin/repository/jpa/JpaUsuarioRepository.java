@@ -25,4 +25,26 @@ public class JpaUsuarioRepository extends JpaGenericRepositoryImpl<Usuario> impl
 		return null;
 	}
 
+	@Override
+	public Usuario getUsuarioByEmail(String email) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("email", email);
+		List<Usuario> result = find(QueryType.JPQL, "from Usuario where email = :email", params);
+		if(result != null && !result.isEmpty()) {
+			return result.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public List<Usuario> getPossiveisParticipantes(Usuario usuario) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("id", usuario.getId());
+		List<Usuario> result = find(QueryType.JPQL, "from Usuario where id != :id", params);
+		if(result != null && !result.isEmpty()) {
+			return result;
+		}
+		return null;
+	}
+
 }

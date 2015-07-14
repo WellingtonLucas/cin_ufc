@@ -1,92 +1,44 @@
 $(document).ready(function() {
-	$('#adicionarProjetoForm').bootstrapValidator({
-		group: '.form-item',
-        feedbackIcons: {
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            nome: {
-                validators: {
-                    stringLength: {
-                        min: 2,
-                        message: 'O nome deve ter no mínimo 2 caracteres'
-                    }
-                }
-            },
-            descricao: {
-                validators: {
-                    stringLength: {
-                        min: 5,
-                        message: 'A descrição deve ter no mínimo 5 caracteres'
-                    }
-                }
-            },
-            quantidadeBolsa: {
-            	validators: {
-            		integer: {
-                        message: 'Digite um número válido'
-                    }
-            	}
-            },
-            cargaHoraria: {
-            	validators: {
-            		integer: {
-                        message: 'Digite um número válido'
-                    }
-            	}
-            },
-            inicio :{
-            	validators: {
-            		callback: {
-                        message: 'A data de início deve ser anterior à data de término',
-                        callback: function(value, validator) {
-                        	var termino = validator.getFieldElements('termino').val();
-                        	if(value != "" && termino != "") {
-                        		termino = moment(termino, "DD/MM/YYYY").format("DD/MM/YYYY");
-	                        	var inicio = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
-	                        	if(moment(termino, "DD/MM/YYYY").isBefore(moment(inicio, "DD/MM/YYYY"))) {
-	                        		return false;
-	                        	}
-                        	}
-                        	return true;
-                        }
-                    }
-            	}
-            }
-            
-        }
-    });
-	
 	$('#adicionarJogoForm').bootstrapValidator({
-		group: '.form-item',
-		excluded: ':disabled',
         feedbackIcons: {
-            invalid: 'glyphicon glyphicon-remove',
+        	valid: 'glyphicon glyphicon-ok',
+         
             validating: 'glyphicon glyphicon-refresh'
         },
+        
         fields: {
-            nome: {
+            nomeDoCurso: {
                 validators: {
                     stringLength: {
                         min: 5,
                         message: 'O nome deve ter no mínimo 5 caracteres'
-                    }
+                    },
+                    notEmpty:{
+            			message: 'O nome do curso é obrigatório.'
+            		}
                 }
             },
-            quantidadeBolsa: {
-            	validators: {
-            		integer: {
-                        message: 'Digite um número válido'
-                    }
-            	}
+            semestre: {
+                validators: {
+            		regexp:{
+            			regexp: /[0-9]{4,4}\.[0-9]{1,1}/,
+            			message: 'Siga o formato do exemplo'
+            		},
+            		notEmpty:{
+            			message: 'O semestre é obrigatório.'
+            		}
+                }
             },
-            cargaHoraria: {
-            	validators: {
-            		integer: {
-                        message: 'Digite um número válido'
+            descricao: {
+                validators: {
+            		notEmpty:{
+            			message: 'A descrição do jogo é obrigatória.'
+            		},
+            		stringLength: {
+                        min: 10,
+                        message: 'A descrição está muito resumida'
                     }
-            	}
+                }
             },
             inicio :{
             	validators: {
@@ -103,9 +55,21 @@ $(document).ready(function() {
                         	}
                         	return true;
                         }
-                    }
+                    },
+                    notEmpty:{
+            			message: 'Data de início é obrigatória.'
+            		}
+            	}
+            }, 
+            
+            termino: {
+            	validators:{
+            		notEmpty:{
+            			message: 'Data de termino é obrigatória.'
+            		}
             	}
             },
+            
             anexos :{
             	validators: {
             		callback: {
@@ -125,8 +89,7 @@ $(document).ready(function() {
             
         }
     });
-	
-	
+	 
 	/*// Usado para não apagar a máscara e enviar somente o valor para o servidor
 	$("#adicionarProjetoForm, #submeterProjetoForm").submit(function() {
 		$('#valorDaBolsa').val($('#bolsa').maskMoney('unmasked')[0]);
@@ -145,7 +108,7 @@ $(document).ready(function() {
 		todayHighlight : true,
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
-        $('#adicionarJogoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'inicio');
+        $('#adicionarJogoForm').bootstrapValidator('revalidateField', 'inicio');
     });
     
     $("#termino").datepicker({
@@ -156,8 +119,8 @@ $(document).ready(function() {
 		startDate: new Date()
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
-		$('#adicionarJogoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'inicio');
-		$('#adicionarJogoForm, #submeterProjetoForm').bootstrapValidator('revalidateField', 'termino');
+		$('#adicionarJogoForm').bootstrapValidator('revalidateField', 'inicio');
+		$('#adicionarJogoForm').bootstrapValidator('revalidateField', 'termino');
     });
     
     $("#prazo").datepicker({

@@ -19,14 +19,13 @@
 			<a class="navbar-brand" href="<c:url value="/jogo/listar" />">				
 					<strong>CIN</strong> <small>Concurso de Ideias de Negócio</small>				
 			</a>			
-			<ul class="nav navbar-nav">		        
-		        <li><a class="btn btn-lg" href="<c:url value ="/jogo/novo-jogo"></c:url>">Novo Jogo</a></li>
-		    </ul>		    
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">			
-				<li><a class="glyphicon glyphicon-home btn-lg" href="<c:url value="/jogo/listar" />"></a></li>
-				<li><a class="glyphicon glyphicon-log-out btn-lg" href="<c:url value="/j_spring_security_logout" />"></a></li>
+				<li><a class="glyphicon glyphicon-home btn-lg" data-tooggle="tooltip"  data-placement="bottom"
+				title="Principal" href="<c:url value="/jogo/listar" />"></a></li>
+				<li><a class="glyphicon glyphicon-log-out btn-lg" data-tooggle="tooltip"  data-placement="bottom"
+				title="Sair" href="<c:url value="/j_spring_security_logout" />"></a></li>
 			</ul>
 			<p class="navbar-right navbar-text">
 				Bem Vindo ${usuario.nome}!<br>

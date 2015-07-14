@@ -11,8 +11,6 @@ button, a, h2>a {
 	outline: 0 !important;
 }
 
-
-
 h3 {
 	text-align: left;
 	margin-bottom: 0px;
@@ -63,9 +61,11 @@ div.formulario {
 .form-control {
 	font-size: 17px !important;
 }
-.container-fluid{
+
+.container-fluid {
 	font-size: 17px !important;
 }
+
 div.container {
 	margin-bottom: 0px;
 }
@@ -83,7 +83,7 @@ table.projetos {
 	background-color: #F5F5F5;
 }
 
-table.projetos>thead {
+table.z>thead {
 	color: #473F3F;
 	background-color: #A4CDE6;
 }
@@ -161,7 +161,7 @@ span.required {
 }
 
 span.campo-obrigatorio {
-	font-size: 13px;
+	font-size: 16px;
 	color: #555;
 }
 
@@ -192,10 +192,66 @@ div.file-caption {
 }
 
 .navbar {
-	font-size: 18px;	
+	font-size: 18px;
 }
 
 .navbar-default {
 	background-color: #d3d3d3;
 	border-color: #e7e7e7
+}
+
+.MultiFile-label {
+	font-size: 16px;
+}
+
+.MultiFile-remove {
+	font-size: 20px;
+	color: #F00;
+}
+.inner {
+  padding: 30px;
+}
+.mastfoot {
+  color: #999; /* IE8 proofing */
+  color: #000;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .mastfoot {
+    bottom: 0;
+    vertical-align: middle;
+  }
+  .mastfoot {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .mastfoot {
+    width: 700px;
+  }
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+ .fileinput-button {
+    position: relative;
+    overflow: hidden;
+}
+
+ .fileinput-button input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter:'alpha(opacity=0)';
+    font-size: 200px;
+    direction: ltr;
+    cursor: pointer;
 }

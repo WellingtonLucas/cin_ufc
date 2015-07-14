@@ -1,10 +1,18 @@
 package br.ufc.cin.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -14,35 +22,88 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name="usuario")
 public class Usuario {
 	
+	public Usuario() {
+		jogoParticipa = new ArrayList<Jogo>();
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Integer id;
+	private Integer id;
 
 	@Column(nullable = false)
 	@NotEmpty
-	protected String nome;
+	private String nome;
 	
 	@Column
-	protected String sobreNome;	
-
-	@Column(nullable = false)
-	@NotEmpty
-	protected String senha;
-
-	@Column(nullable = false)
-	@NotEmpty
-	protected String email;
-
-	@Column(nullable = false)
-	@NotEmpty
-	protected String login;
+	private String sobreNome;	
+	
+	@Column 
+	private String curso;
 	
 	@Column(nullable = false)
 	@NotEmpty
-	protected String papel;
-	
+	private String senha;
+
 	@Column(nullable = false)
-	protected boolean habilitado;	
+	@NotEmpty
+	private String email;
+
+	@Column
+	private String login;
+	
+	@Column
+	private String papel;
+	
+	@Column
+	private boolean habilitado;	
+	
+	@ManyToOne
+	@JoinColumn(nullable = true, name = "id_equipe")
+	private Equipe equipe;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
+	private List<Jogo> jogos; 
+	
+	@ManyToMany(mappedBy="alunos")
+	private List<Jogo> jogoParticipa;
+	
+	public List<Jogo> getJogoParticipa() {
+		return jogoParticipa;
+	}
+
+	public void addJogoParticipa(Jogo jogo){
+		if(!getJogoParticipa().contains(jogo)){
+			getJogoParticipa().add(jogo);
+		}
+		if(!jogo.getAlunos().contains(this)){
+			jogo.getAlunos().add(this);
+		}
+	}
+	public void setJogoParticipa(List<Jogo> jogoParticipa) {
+		this.jogoParticipa = jogoParticipa;
+	}
+	
+	public String getCurso() {
+		return curso;
+	}
+
+	public void setCurso(String curso) {
+		this.curso = curso;
+	}
+	
+	public List<Jogo> getJogos() {
+		return jogos;
+	}
+
+	public void setJogos(List<Jogo> jogos) {
+		this.jogos = jogos;
+	}	
+	public Equipe getEquipe() {
+		return equipe;
+	}
+
+	public void setEquipe(Equipe equipe) {
+		this.equipe = equipe;
+	}
 	
 	public boolean isHabilitado() {
 		return habilitado;
@@ -112,4 +173,8 @@ public class Usuario {
 		return (this.id == null);
 	}
 	
+	 public String toString() {
+        return "Usuario id: " + getId() + 
+               ", nome: " + getNome();
+	 }
 }

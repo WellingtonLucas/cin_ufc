@@ -14,6 +14,8 @@ public class Constants {
 	public static final String PAGINA_CADASTRAR_JOGO = "jogo/novoJogo";
 	
 	public static final String PAGINA_DETALHES_JOGO = "jogo/detalhes";
+	
+	public static final String PAGINA_DETALHES_EQUIPE = "equipe/detalhes";
 
 	public static final String PAGINA_CADASTRAR_EQUIPE = "equipe/novaEquipe";
 	/** Redirecionamentos */
@@ -45,7 +47,7 @@ public class Constants {
 
 	public static final String MENSAGEM_JOGO_REMOVIDO = "Jogo removido com sucesso";	
 	
-	public static final String MENSAGEM_EQUIPE_REMOVIDO = "Equipe removida com sucesso";
+	public static final String MENSAGEM_EQUIPE_REMOVIDA = "Equipe removida com sucesso";
 
 	public static final String MENSAGEM_DATA_TERMINO_FUTURA = "A data de término não pode ser anterior à data atual";
 

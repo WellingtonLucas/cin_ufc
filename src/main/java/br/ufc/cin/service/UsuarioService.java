@@ -15,4 +15,6 @@ public interface UsuarioService  extends GenericService<Usuario>{
 	
 	List<Usuario> getPossiveisParticipantes(Usuario usuario);
 	
+	void salvar(List<Usuario> alunos);
+	
 }

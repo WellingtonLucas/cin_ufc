@@ -58,7 +58,7 @@
 					<label for="idParticipantes" class="col-sm-2 control-label">Participantes:</label>
 					<div class="col-sm-8">
 						<select id="participantes" name="idParticipantes" class="form-control" multiple="multiple">
-							<c:set var="part" value="${equipe.usuarios }"></c:set>
+							<c:set var="part" value="${equipe.alunos }"></c:set>
 							<c:forEach items="${participantes }" var="participante">
 								<c:set var="selected" value=""></c:set>
 								<c:set var="idParticipante" value="id=${participante.id }"></c:set>

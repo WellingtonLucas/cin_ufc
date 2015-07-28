@@ -57,7 +57,7 @@ public class Usuario {
 	private boolean habilitado;	
 	
 	@ManyToOne
-	@JoinColumn(nullable = true, name = "id_equipe")
+	@JoinColumn(name = "id_equipe")
 	private Equipe equipe;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
@@ -65,7 +65,18 @@ public class Usuario {
 	
 	@ManyToMany(mappedBy="alunos")
 	private List<Jogo> jogoParticipa;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
+	private List<Formulario> formulario;
 	
+	public List<Formulario> getFormulario() {
+		return formulario;
+	}
+
+	public void setFormulario(List<Formulario> formulario) {
+		this.formulario = formulario;
+	}
+
 	public List<Jogo> getJogoParticipa() {
 		return jogoParticipa;
 	}

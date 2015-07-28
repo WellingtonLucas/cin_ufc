@@ -1,11 +1,11 @@
 package br.ufc.cin.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +14,9 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Equipe {
+	public Equipe() {
+		alunos = new ArrayList<Usuario>();
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,20 +28,23 @@ public class Equipe {
 	@Column
 	private boolean status;
 	
-	@OneToMany(mappedBy = "equipe", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-	private List<Usuario> usuarios;
+	@OneToMany(mappedBy = "equipe", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	private List<Usuario> alunos;
 	
 	@ManyToOne
 	private Jogo jogo;
 
-	public List<Usuario> getUsuarios() {
-		return usuarios;
+	
+	public void addAluno(Usuario aluno){
+		if(!getAlunos().contains(aluno)){
+			getAlunos().add(aluno);
+			if(aluno.getEquipe() != null){
+				aluno.getEquipe().getAlunos().remove(aluno);
+			}
+			aluno.setEquipe(this);
+		}
 	}
-
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}
-
+	
 	public Jogo getJogo() {
 		return jogo;
 	}
@@ -72,14 +78,18 @@ public class Equipe {
 	}
 
 	public List<Usuario> getAlunos() {
-		return usuarios;
+		return alunos;
 	}
 
 	public void setAlunos(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
+		this.alunos.addAll(usuarios);
 	}
 
 	public Integer getId() {
 		return id;
+	}
+	
+	public String toString(){
+		return "Equipe id: "+getId()+ " nome: " +getNome() ;
 	}
 }

@@ -23,6 +23,7 @@
 					<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
 				</c:if>
 				<hr>
+				<li><a href="<c:url value ="/jogo/${jogo.id}/formulario"></c:url>">Criar questionário</a></li>
 				<li><a href="<c:url value ="#"></c:url>">Rankings</a></li>
 				<li><a href="<c:url value ="#"></c:url>">Avaliações</a></li>
 				<li><a href="<c:url value ="#"></c:url>">Rodadas</a></li>

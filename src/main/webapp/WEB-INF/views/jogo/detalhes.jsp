@@ -19,7 +19,15 @@
 	<jsp:include page="../fragments/menu.jsp" />		
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	
 			<input id="jogoId" type="hidden" value="${jogo.id }"/>
-			<h2>${jogo.nomeDoCurso } ${jogo.semestre }</h2>			
+			<h2>${jogo.nomeDoCurso } ${jogo.semestre }</h2>	
+			<c:if test="${not empty erro}">
+				<div class="alert alert-warning alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<c:out value="${erro}"></c:out>
+				</div>
+			</c:if>		
 			<h3>Informações</h3><hr>						
 			<div class="form-group">
 				<label class="col-sm-2 control-label field">Início:</label>

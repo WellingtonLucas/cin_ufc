@@ -39,4 +39,10 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 		return usuarioRepository.getPossiveisParticipantes(usuario);
 	}
 
+	@Override
+	public void salvar(List<Usuario> alunos) {
+		for(Usuario aluno : alunos) {
+			save(aluno);
+		}
+	}
 }

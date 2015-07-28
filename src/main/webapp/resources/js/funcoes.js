@@ -2,7 +2,7 @@ $(document).ready(function() {
 	$('#adicionarJogoForm').bootstrapValidator({
         feedbackIcons: {
         	valid: 'glyphicon glyphicon-ok',
-         
+        	/*invalid: 'glyphicon glyphicon-remove',*/
             validating: 'glyphicon glyphicon-refresh'
         },
         
@@ -34,9 +34,18 @@ $(document).ready(function() {
             		notEmpty:{
             			message: 'A descrição do jogo é obrigatória.'
             		},
-            		stringLength: {
-                        min: 10,
-                        message: 'A descrição está muito resumida'
+            		callback: {
+                        message: 'A descrição deve conter mais de 10 caracteres.',
+                        callback: function(value, validator) {
+                            if (value === '') {
+                                return true;
+                            }
+                            // Get the plain text without HTML
+                            var div  = $('<div/>').html(value).get(0),
+                                text = div.textContent || div.innerText;
+
+                            return text.length >= 10;
+                        }
                     }
                 }
             },
@@ -69,7 +78,6 @@ $(document).ready(function() {
             		}
             	}
             },
-            
             anexos :{
             	validators: {
             		callback: {
@@ -86,9 +94,9 @@ $(document).ready(function() {
                     }
             	}
             }
-            
         }
-    });
+       
+	});
 	 
 	/*// Usado para não apagar a máscara e enviar somente o valor para o servidor
 	$("#adicionarProjetoForm, #submeterProjetoForm").submit(function() {
@@ -147,6 +155,11 @@ $(document).ready(function() {
 		$(this).find('.modal-body').text('Tem certeza de que deseja excluir o jogo \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-danger').attr('href', $(e.relatedTarget).data('href'));
 	});
+
+	$('#confirm-delete2').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja excluir a equipe \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-danger').attr('href', $(e.relatedTarget).data('href'));
+	});
 	
 	$('#delete-file').on('show.bs.modal', function(e) {
 		$(this).find('.modal-body').text('Tem certeza de que deseja excluir o arquivo \"' + $(e.relatedTarget).data('name') + '\"?');
@@ -168,11 +181,22 @@ $(document).ready(function() {
 		});
 	});
 
-	/*$('#confirm-submit').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja submeter o projeto \"' + $(e.relatedTarget).data('name') + '\"?');
+	$('#confirm-submit').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja desvincular o aluno \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
-	$('#confirm-parecer').on('show.bs.modal', function(e) {
+	
+	$('#confirm-inativar').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja inativar a equipe \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
+	});
+	
+	$('#confirm-ativar').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja ativar a equipe \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
+	});
+	
+	/*$('#confirm-parecer').on('show.bs.modal', function(e) {
 		var indexSelect = document.getElementById("posicionamento").selectedIndex;
 		var valueSelected = emitirParecerForm.posicionamento.options[indexSelect].value;
 
@@ -220,3 +244,4 @@ $(document).ready(function() {
 	*/
 	/*$('article').readmore();*/
 });
+

@@ -1,7 +1,8 @@
 package br.ufc.cin.web;
 
 
-import static br.ufc.cin.util.Constants.*;
+import static br.ufc.cin.util.Constants.MENSAGEM_ADD_ANEXO;
+import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPES_NAO_CRIADAS;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_AO_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_ATUALIZADO;
@@ -12,6 +13,7 @@ import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.MENSAGEM_USUARIOS_NAO_ASSOCIADOS;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_DETALHES_JOGO;
+import static br.ufc.cin.util.Constants.PAGINA_LISTAR_EQUIPES;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_USUARIOS;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
@@ -69,7 +71,11 @@ public class JogoController {
 	public String listar(Model model, HttpSession session) {
 		Usuario usuario = getUsuarioLogado(session);
 		Integer idUsuarioLogado = usuario.getId();
-		model.addAttribute("jogos", jogoService.getJogoByProfessor(idUsuarioLogado));
+		List<Jogo> jogos = jogoService.getJogoByProfessor(idUsuarioLogado);
+		if(jogos == null){
+			model.addAttribute("info", "Não existem jogos associados.");
+		}
+		model.addAttribute("jogos", jogos);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "home");
 		if (usuarioService.isProfessor(usuario)) {
@@ -252,8 +258,13 @@ public class JogoController {
 		}
 		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.getId() == jogo.getProfessor().getId()) {
-			jogoService.delete(jogo);
-			redirectAttributes.addFlashAttribute("info", MENSAGEM_JOGO_REMOVIDO);
+			if(jogo.getEquipes().isEmpty()){
+				jogoService.delete(jogo);
+				redirectAttributes.addFlashAttribute("info", MENSAGEM_JOGO_REMOVIDO);
+			}else{
+				redirectAttributes.addFlashAttribute("erro", "Primeiramente remova as equipes associadas ao jogo.");
+				return  "redirect:/jogo/"+jogo.getId()+"/detalhes";
+			}
 		} else {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 		}
@@ -298,7 +309,7 @@ public class JogoController {
 		return PAGINA_LISTAR_EQUIPES;
 
 	}
-
+	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

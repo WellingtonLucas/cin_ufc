@@ -39,10 +39,7 @@
 				<div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2 main">
 					<div class="row placeholders">
 						<ul class="list-group">
-							<%-- <li class="media"><a class="btn btn-primary"
-								href="<c:url value ="/jogo/novo-jogo"></c:url>">Novo Jogo</a></li>
-							<li class="media"><hr></li> --%>
-							<li class="media"><hr></li>
+				
 							<c:forEach var="jogo" items="${jogos}">
 								<a class="list-group-item"
 									href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">

@@ -24,65 +24,74 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
-
 @Entity
 @Table(name = "jogo")
-public class Jogo implements Serializable{
+public class Jogo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	public Jogo() {
 		alunos = new ArrayList<Usuario>();
+		equipes = new ArrayList<Equipe>();
 	}
-	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-		
+
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column
 	private String descricao;
-	
+
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column
 	private String regras;
-	
+
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date inicio;
-	
+
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date termino;
-	
+
 	@NotEmpty
 	@Column
-	private String semestre;	
-	
+	private String semestre;
+
 	@NotEmpty
-	@Column(name = "nome_curso")	
+	@Column(name = "nome_curso")
 	private String nomeDoCurso;
-	
+
 	@Column
 	private boolean status;
-	
-	@ManyToOne/*(fetch = FetchType.LAZY)*/
+
+	@ManyToOne
+	/* (fetch = FetchType.LAZY) */
 	@JoinColumn(name = "id_professor")
 	private Usuario professor;
-	
+
 	@ManyToMany
-    @JoinTable(name="jogo_aluno", joinColumns = {@JoinColumn(name="jogo_id",referencedColumnName="id")}, inverseJoinColumns = {@JoinColumn(name="aluno_id", referencedColumnName="id")})
-    private List<Usuario> alunos;
-	
-	/*@OneToMany(fetch = FetchType.LAZY, mappedBy = "jogo",cascade = {CascadeType.PERSIST})
-	private List<Usuario> alunos;*/
-	
-	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+	@JoinTable(name = "jogo_aluno", joinColumns = { @JoinColumn(name = "jogo_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "aluno_id", referencedColumnName = "id") })
+	private List<Usuario> alunos;
+
+	@OneToMany(mappedBy = "jogo", cascade = { CascadeType.REMOVE,
+			CascadeType.PERSIST })
 	private List<Documento> documentos;
-	
-	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST})
+
+	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
 	private List<Equipe> equipes;
+
+	public void addEquipe(Equipe equipe){
+		if(!getEquipes().contains(equipe)){
+			getEquipes().add(equipe);
+			if(equipe.getJogo()!=null){
+				equipe.getJogo().getEquipes().remove(equipe);
+			}
+			equipe.setJogo(this);
+		}
+	}
 	
 	public List<Equipe> getEquipes() {
 		return equipes;
@@ -99,16 +108,16 @@ public class Jogo implements Serializable{
 	public void setAlunos(List<Usuario> alunos) {
 		this.alunos = alunos;
 	}
-	
-	public void addAluno(Usuario usuario){
-		if(!getAlunos().contains(usuario)){
+
+	public void addAluno(Usuario usuario) {
+		if (!getAlunos().contains(usuario)) {
 			getAlunos().add(usuario);
 		}
-		if(!usuario.getJogoParticipa().contains(this)){
+		if (!usuario.getJogoParticipa().contains(this)) {
 			usuario.getJogoParticipa().add(this);
 		}
 	}
-	
+
 	public String getDescricao() {
 		return descricao;
 	}
@@ -140,7 +149,7 @@ public class Jogo implements Serializable{
 	public void setTermino(Date termino) {
 		this.termino = termino;
 	}
-	
+
 	public String getSemestre() {
 		return semestre;
 	}
@@ -173,10 +182,10 @@ public class Jogo implements Serializable{
 		this.professor = usuario;
 	}
 
-	public void setId(Integer id){
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -188,8 +197,8 @@ public class Jogo implements Serializable{
 	public void setDocumentos(List<Documento> documentos) {
 		this.documentos = documentos;
 	}
+
 	public String toString() {
-        return "Jogo id: " + getId() + 
-               ", nome: " + getNomeDoCurso();
-	 }
+		return "Jogo id: " + getId() + ", nome: " + getNomeDoCurso();
+	}
 }

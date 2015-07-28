@@ -6,6 +6,7 @@
 	 </div>
  </div>
 
+
 <script src="<c:url value="/webjars/jquery/2.1.0/jquery.min.js" />"></script>
 <script src="<c:url value="/webjars/jquery-ui/1.11.1/jquery-ui.min.js" />"></script>
 <script src="<c:url value="/webjars/bootstrap/3.1.1/js/bootstrap.min.js" />"></script>
@@ -13,6 +14,7 @@
 <script src="<c:url value="/resources/js/bootstrap-datepicker.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.pt-BR.js" />"></script>
 <script src="<c:url value="/resources/js/funcoes.js" />"></script>
+<script src="<c:url value="/resources/js/formulario.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
 <script src="<c:url value="/resources/js/language/pt_BR.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.mask.min.js" />"></script>
@@ -27,7 +29,9 @@
 <script src="<c:url value="/resources/js/jquery.iframe-transport.js" />"></script>
 <%-- <script src="<c:url value="/resources/js/vendor/jquery.ui.widget.js.js" />"></script> --%>
 <script src="<c:url value="/resources/ckeditor/ckeditor.js"/>"></script>
+<script src="<c:url value="/resources/ckeditor/adapters/jquery.js"/>"></script>
 <script>
 	CKEDITOR.replace('descricao');
 	CKEDITOR.replace('regras');
+	CKEDITOR.config.resize_enabled = false;
 </script>

@@ -40,4 +40,8 @@ public class Opcao {
 	public void setPergunta(Pergunta pergunta) {
 		this.pergunta = pergunta;
 	}
+	
+	public String toString() {
+		return "Opcao id: " + getId() + ", descricao: " + getDescricao();
+	}
 }

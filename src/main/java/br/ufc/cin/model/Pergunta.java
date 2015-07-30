@@ -1,6 +1,5 @@
 package br.ufc.cin.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,10 +16,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Pergunta {
 	
-	public Pergunta() {
-		this.opcoes = new ArrayList<Opcao>();
-	}
-	
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -28,7 +23,7 @@ public class Pergunta {
 	@Column(columnDefinition="TEXT")
 	private String descricao;
 	
-	@OneToMany(mappedBy="pergunta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="pergunta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Opcao> opcoes;
 	
 	@ManyToOne
@@ -83,5 +78,9 @@ public class Pergunta {
 
 	public void setObrigatoria(boolean obrigatoria) {
 		this.obrigatoria = obrigatoria;
+	}
+	
+	public String toString() {
+		return "Pergunta id: " + getId() + ", descricao: " + getDescricao();
 	}
 }

@@ -24,6 +24,8 @@ import br.ufc.cin.model.Pergunta;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.OpcaoService;
+import br.ufc.cin.service.PerguntaService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
@@ -36,6 +38,12 @@ public class FormularioController {
 	private FormularioService formularioService;
 
 	@Inject
+	private PerguntaService perguntaService;
+
+	@Inject
+	private OpcaoService opcaoService;
+
+	@Inject
 	private UsuarioService usuarioService;
 
 	@RequestMapping(value = "/jogo/{id}/formulario", method = RequestMethod.GET)
@@ -46,19 +54,16 @@ public class FormularioController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Formulario formulario = new Formulario();
-		Pergunta pergunta = new Pergunta();
-		Opcao opcao = new Opcao();
-		pergunta.addOpcao(opcao);
-		formulario.addPergunta(pergunta);
+		
 		model.addAttribute("idJogo", id);
 		model.addAttribute("formulario", formulario);
 		model.addAttribute("action","cadastrar");
 		
-		return "jogo/formulario";
+		return "formulario/formulario";
 
 	}
-	@RequestMapping(value = "/{id}/formulario/salvar", method = RequestMethod.POST)
-	public String cadastroFormulario(@PathVariable("id") Integer idJogo,
+	@RequestMapping(value = "/{idJogo}/formulario/salvar", method = RequestMethod.POST)
+	public String cadastroFormulario(@PathVariable("idJogo") Integer idJogo,
 			@ModelAttribute("formulario") Formulario formulario, Model model,
 			HttpSession session, RedirectAttributes redirect, BindingResult result) {
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
@@ -71,11 +76,23 @@ public class FormularioController {
 		
 		if (result.hasErrors()) {
 			model.addAttribute("erro", "Erro ao cadastrar um formulário.");
-			return "jogo/formulario";
+			return "formulario/formulario";
 		}
-		formulario.setProfessor(usuarioService.find(Usuario.class, usuario.getId()));
-		formulario.setJogo(jogo);
+		formulario.setProfessor(usuario);
 		formularioService.save(formulario);
+		
+		for (Pergunta pergunta : formulario.getPerguntas()) {
+			pergunta.setFormulario(formulario);
+		}
+		
+		perguntaService.salvar(formulario.getPerguntas());
+		
+		for (Pergunta pergunta : formulario.getPerguntas()) {
+			for (Opcao opcao : pergunta.getOpcoes()) {
+				opcao.setPergunta(pergunta);
+			}
+			opcaoService.salvar(pergunta.getOpcoes());
+		}
 		
 		redirect.addFlashAttribute("info", "Formulário cadastrado com sucesso!");
 		return  "redirect:/jogo/"+jogo.getId()+"/detalhes";

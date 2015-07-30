@@ -11,7 +11,7 @@ $(function () {
         newElem.find('.qt1').attr('for', 'ID' + newNum + '_questao').html('Questão ' + newNum + ':');
         newElem.find('.questao1')
         	.attr('id', 'ID' + newNum + '_questao')
-        	.attr('name', 'formulario.perguntas['+ (newNum -1) +'].descricao').val('');
+        	.attr('name', 'perguntas['+ (newNum -1) +'].descricao').val('');
         //.attr('path', 'perguntas['+ (newNum -1) +'].descricao')
 
         // Opção 1 - text
@@ -19,7 +19,7 @@ $(function () {
 		newElem.find('.optR').attr('id', 'ID' + newNum + '_opcaoR').attr('name', 'ID' + newNum + '_opcaoR').val('');
         newElem.find('.opcao1')
         	.attr('id', 'ID' + newNum + '_opcao')
-        	.attr('name', 'formulario.perguntas['+ (newNum -1) +'].opcoes[0].descricao').val('');
+        	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[0].descricao').val('');
         //.attr('path', 'perguntas['+ (newNum -1) +'].opcoes[0].descricao')
         
 		// Opção 2 - text
@@ -27,7 +27,7 @@ $(function () {
 		newElem.find('.optR').attr('id', 'ID' + newNum + '_opcaoR2').attr('name', 'ID' + newNum + '_opcaoR').val('');
         newElem.find('.opcao2')
         	.attr('id', 'ID' + newNum + '_opcao2')
-        	.attr('name', 'formulario.perguntas['+ (newNum -1) +'].opcoes[1].descricao').val('');
+        	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[1].descricao').val('');
         //.attr('path', 'perguntas['+ (newNum -1) +'].opcoes[1].descricao')
         
 		// Opção 3 - text
@@ -35,7 +35,7 @@ $(function () {
 		newElem.find('.optR').attr('id', 'ID' + newNum + '_opcaoR3').attr('name', 'ID' + newNum + '_opcaoR').val('');
         newElem.find('.opcao3')
         	.attr('id', 'ID' + newNum + '_opcao3')
-        	.attr('name', 'formulario.perguntas['+ (newNum -1) +'].opcoes[2].descricao').val('');
+        	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[2].descricao').val('');
         //.attr('path', 'perguntas['+ (newNum) +'].opcoes[2].descricao')
 
         // Opção 4 - text
@@ -43,7 +43,7 @@ $(function () {
 		newElem.find('.optR').attr('id', 'ID' + newNum + '_opcaoR4').attr('name', 'ID' + newNum + '_opcaoR').val('');
         newElem.find('.opcao4')
         	.attr('id', 'ID' + newNum + '_opcao4')
-        	.attr('name', 'formulario.perguntas['+ (newNum -1) +'].opcoes[3].descricao').val('');
+        	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[3].descricao').val('');
         //.attr('path', 'perguntas['+ (newNum) +'].opcoes[3].descricao')
         
 		// Opção 5 - text
@@ -51,7 +51,7 @@ $(function () {
 		newElem.find('.optR').attr('id', 'ID' + newNum + '_opcaoR5').attr('name', 'ID' + newNum + '_opcaoR').val('');
         newElem.find('.opcao5')
         	.attr('id', 'ID' + newNum + '_opcao5')
-        	.attr('name', 'formulario.perguntas['+ (newNum -1) +'].opcoes[4].descricao').val('');
+        	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[4].descricao').val('');
         	//.attr('path', 'perguntas['+ (newNum -1) +'].opcoes[4].descricao')
 		
     // Insert the new element after the last "duplicatable" input field

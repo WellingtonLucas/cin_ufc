@@ -47,7 +47,6 @@
 			
 			<c:if test="${formulario.id != null}">
 				<form:input type="hidden" path="id" value="${formulario.id}" />
-				<form:input type="hidden" path="jogo.id" value="${formulario.jogo.id}" />
 			</c:if>
 			
 			<c:if test="${formulario.id == null}">
@@ -58,15 +57,13 @@
 					</div>
 				</div>
 				<div id="entry1" class="clonedInput panel panel-default">
-
-					<div class="form-group">
-						 <div class="panel-heading">
+					<div class="panel-heading">
+						<div class="form-group">
 							<label class="col-sm-2 qt1 control-label" for="perguntas[0].descricao">Questão 1:</label>
 							<div class="col-sm-9">
-								<input id="perguntas[0].descricao" name="formulario.perguntas[0].descricao" type="text" placeholder=""
-								class="questao1 form-control"	/>
+								<input id="perguntas[0].descricao" name="perguntas[0].descricao" type="text" placeholder=""
+								class="questao1 form-control" required />
 							</div>
-	
 						</div>
 					</div>
 					
@@ -76,7 +73,7 @@
 							<label class="col-sm-2 opt1 control-label" for="opcao1"></label>
 							<input type="radio" name="opcaoR" id="opcaoR" class="optR">
 							<div class="col-sm-6">
-								<input id="opcao1" name="formulario.perguntas[0].opcoes[0].descricao" type="text" placeholder=""
+								<input id="opcao1" name="perguntas[0].opcoes[0].descricao" type="text" placeholder=""
 									class="opcao1 form-control" required />
 							</div>
 						</div>
@@ -87,7 +84,7 @@
 							</label>
 							 <input	type="radio" name="opcaoR" id="opcaoR2" class="optR">
 							<div class="col-xs-6">
-								<input id="opcao2" name="formulario.perguntas[0].opcoes[1].descricao" type="text" placeholder=""
+								<input id="opcao2" name="perguntas[0].opcoes[1].descricao" type="text" placeholder=""
 									class="opcao2 form-control" required />
 							</div>
 						</div>
@@ -98,7 +95,7 @@
 							</label>
 							<input type="radio" name="opcaoR" id="opcaoR3" class="optR">
 							<div class="col-xs-6">
-								<input id="opcao3" name="formulario.perguntas[0].opcoes[2].descricao" type="text" placeholder=""
+								<input id="opcao3" name="perguntas[0].opcoes[2].descricao" type="text" placeholder=""
 									class="opcao3 form-control" required />
 							</div>
 						</div>
@@ -109,7 +106,7 @@
 							</label>
 							<input type="radio" name="opcaoR" id="opcaoR4" class="optR">
 							<div class="col-xs-6">
-								<input id="opcao4" name="formulario.perguntas[0].opcoes[3].descricao" type="text" placeholder=""
+								<input id="opcao4" name="perguntas[0].opcoes[3].descricao" type="text" placeholder=""
 									class="opcao4 form-control" required />
 							</div>
 						</div>
@@ -119,43 +116,59 @@
 							<label class="col-xs-2 opt5 control-label" for="opcao5"></label>
 							<input	type="radio" name="opcaoR" id="opcaoR5" class="optR">
 							<div class="col-xs-6">
-								<input id="opcao5" name="formulario.perguntas[0].opcoes[4].descricao" type="text" placeholder=""
+								<input id="opcao5" name="perguntas[0].opcoes[4].descricao" type="text" placeholder=""
 									class="opcao5 form-control" required />
 							</div>
 						</div>
 					</div>
 				</div>
 			</c:if>
-			<!-- end #entry1 -->
-			<!-- Button (Double) -->
 			
-			<div class="col-sm-12">
-				<button type="button" id="btnAdd" name="btnAdd"	class="btn btn-primary btn-lg col-sm-2">
-					Nova questão  <i class="glyphicon glyphicon-plus"></i>
-				</button>
-				<div class="col-sm-1"></div>
-				<!-- Colocar o modal padrão -->	
-				<button type="button" id="btnDel" name="btnDel"	class="btn btn-danger btn-lg col-sm-2">
-					Remover questão  <i class="glyphicon glyphicon-trash"></i>
-				</button>
-			</div>
-
-			<!-- Textarea -->
-			<div class="col-sm-12">
-				<div class="form-group">
-					<label class="control-label" for="nota">Nota:</label>
-					<textarea id="nota" name="formulario.nota" class="form-control"
-						placeholder="Não irá adicionar alguma nota?"></textarea>
+			<div class="form-group">
+				<div class="col-sm-12">
+					<button type="button" id="btnAdd" name="btnAdd"	class="btn btn-success btn-lg col-sm-2">
+						Nova questão  <i class="glyphicon glyphicon-plus"></i>
+					</button>
+					<div class="col-sm-1"></div>
+					<!-- Colocar o modal padrão -->	
+					<button type="button" id="btnDel" name="btnDel"	class="btn btn-danger btn-lg col-sm-2">
+						Remover questão  <i class="glyphicon glyphicon-trash"></i>
+					</button>
 				</div>
 			</div>
-			<!-- Button -->
-			<div class="col-sm-12">
-				<div class="form-group">
+			
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="form-group">
+						<label for="termino" class="col-sm-2 control-label">Aberto até:</label>
+						<div class="col-sm-2">
+							<form:input id="termino" type="text" path="prazo" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
+							<div class="error-validation">
+								<form:errors path="prazo"></form:errors>
+							</div>
+							<c:if test="${not empty error_termino}">
+								<div class="error-validation">
+									<span>${error_termino}</span>
+								</div>
+							</c:if>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="nota">Nota:</label>
+						<div class="col-sm-10">
+							<textarea id="nota" name="nota" class="form-control"
+							placeholder="Não irá adicionar alguma nota?"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-12">
 					<button id="submit_button" name="submit_button"
-						class="btn btn-primary btn-lg">Cadastrar</button>
+						class="btn btn-primary btn-lg col-sm-2">Cadastrar</button>
 				</div>
 			</div>
-
 		</form:form>
 		<!-- end attribution -->
 	</div>

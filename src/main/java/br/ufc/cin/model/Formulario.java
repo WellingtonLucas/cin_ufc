@@ -1,7 +1,5 @@
 package br.ufc.cin.model;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,27 +12,21 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Formulario {
 
-	public Formulario() {
-		this.respostas = new ArrayList<Resposta>();
-		this.perguntas = new ArrayList<Pergunta>();
-	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private String titulo;
 
-	@OneToMany(mappedBy = "formulario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "formulario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Pergunta> perguntas;
-	
-	@OneToOne
-	private Jogo jogo;
 
 	@ManyToOne
 	@JoinColumn(name = "id_professor")
@@ -46,6 +38,7 @@ public class Formulario {
 	@Transient
 	private boolean respondida;
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date prazo;
 
 	private String nota;
@@ -58,14 +51,6 @@ public class Formulario {
 			}
 			pergunta.setFormulario(this);
 		}
-	}
-	
-	public Jogo getJogo() {
-		return jogo;
-	}
-
-	public void setJogo(Jogo jogo) {
-		this.jogo = jogo;
 	}
 
 	public String getNota() {
@@ -128,16 +113,11 @@ public class Formulario {
 		return prazo;
 	}
 
-	public String getPrazoFormatado() {
-		if (this.prazo != null) {
-			SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
-			return formatData.format(this.prazo);
-		}
-		return "";
-	}
-
 	public void setPrazo(Date disponivelAte) {
 		this.prazo = disponivelAte;
 	}
-
+	
+	public String toString() {
+		return "Formulario id: " + getId() + ", titulo: " + getTitulo();
+	}
 }

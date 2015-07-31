@@ -1,7 +1,7 @@
 package br.ufc.cin.web;
 
 
-import static br.ufc.cin.util.Constants.MENSAGEM_ADD_ANEXO;
+import static br.ufc.cin.util.Constants.*;
 import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPES_NAO_CRIADAS;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_AO_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
@@ -42,6 +42,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.DocumentoService;
@@ -310,6 +311,24 @@ public class JogoController {
 
 	}
 	
+	@RequestMapping(value = "/{id}/formularios", method = RequestMethod.GET)
+	public String listarFormularios(Model model, HttpSession session, @PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class,id);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("action","formularios");
+		List<Formulario> formularios = jogo.getProfessor().getFormulario();
+		if(formularios == null || formularios.isEmpty()){
+			model.addAttribute("erro", MENSAGEM_FORM_NAO_CRIADOS);
+		}
+		model.addAttribute("formularios", formularios);
+		
+		return PAGINA_LISTAR_FORMULARIOS;
+
+	}
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

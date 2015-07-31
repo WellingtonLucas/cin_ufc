@@ -16,7 +16,7 @@
 	<c:set var="titulo" value="Novo Formulário"></c:set>
 </c:if>
 <c:if test="${action eq 'editar' }">
-	<c:set var="url" value="/${idJogo }/formulario/editar"></c:set>
+	<c:set var="url" value="/${idJogo }/formulario/${formulario.id }/editar"></c:set>
 	<c:set var="titulo" value="Editar - ${jogo.nomeDoCurso } "></c:set>
 </c:if>
 
@@ -47,6 +47,81 @@
 			
 			<c:if test="${formulario.id != null}">
 				<form:input type="hidden" path="id" value="${formulario.id}" />
+			</c:if>
+			<c:if test="${formulario.id != null }">
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Titulo do formulário</label>
+					<div class="col-xs-10">
+						<form:input path="titulo" type="text" class="form-control" name="titulo" required="true" />
+					</div>
+				</div>
+				<c:forEach var="pergunta" items="${formulario.perguntas}" varStatus="questId">
+					<div id="entry${questId.count}" class="clonedInput panel panel-default">
+						<div class="panel-heading">
+							<div class="form-group">
+								<label class="col-sm-2 qt1 control-label" for="perguntas[${ questId.index}].descricao">Questão ${ questId.count}:</label>
+								<div class="col-sm-9">
+									<input id="perguntas[${ questId.index}].descricao" name="perguntas[${ questId.index}].descricao" type="text" value="${pergunta.descricao }"
+									class="questao1 form-control" required />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="radio panel-body">
+								<label class="col-sm-2 opt1 control-label" for="opcao1"></label>
+								<input type="radio" name="opcaoR" id="opcaoR" class="optR">
+								<div class="col-sm-6">
+									<input id="opcao1" name="perguntas[${ questId.index}].opcoes[0].descricao" type="text" 
+										value="${pergunta.opcoes[0].descricao }" class="opcao1 form-control" required />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="radio panel-body">
+								<label class="col-xs-2 opt2 control-label" for="opcao2">
+								</label>
+								 <input	type="radio" name="opcaoR" id="opcaoR2" class="optR">
+								<div class="col-xs-6">
+									<input id="opcao2" name="perguntas[${ questId.index}].opcoes[1].descricao" type="text" 
+										value="${pergunta.opcoes[1].descricao }" class="opcao2 form-control" required />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="radio panel-body">
+								<label class="col-xs-2 opt3 control-label" for="opcao3"> 
+								</label>
+								<input type="radio" name="opcaoR" id="opcaoR3" class="optR">
+								<div class="col-xs-6">
+									<input id="opcao3" name="perguntas[${ questId.index}].opcoes[2].descricao" type="text" 
+										value="${pergunta.opcoes[2].descricao }" class="opcao3 form-control" required />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="radio panel-body">
+								<label class="col-xs-2 opt4 control-label" for="opcao4"> 
+								</label>
+								<input type="radio" name="opcaoR" id="opcaoR4" class="optR">
+								<div class="col-xs-6">
+									<input id="opcao4" name="perguntas[${ questId.index}].opcoes[3].descricao" type="text" 
+										value="${pergunta.opcoes[3].descricao }" class="opcao4 form-control" required />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="radio panel-body">
+								<label class="col-xs-2 opt5 control-label" for="opcao5"></label>
+								<input	type="radio" name="opcaoR" id="opcaoR5" class="optR">
+								<div class="col-xs-6">
+									<input id="opcao5" name="perguntas[${ questId.index}].opcoes[4].descricao" type="text" 
+										value="${pergunta.opcoes[4].descricao }" class="opcao5 form-control" required />
+								</div>
+							</div>
+						</div>
+					</div>
+				</c:forEach>
 			</c:if>
 			
 			<c:if test="${formulario.id == null}">
@@ -157,8 +232,8 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="nota">Nota:</label>
 						<div class="col-sm-10">
-							<textarea id="nota" name="nota" class="form-control"
-							placeholder="Não irá adicionar alguma nota?"></textarea>
+							<form:textarea id="nota" name="nota" path="nota" class="form-control"
+							placeholder="Não irá adicionar alguma nota?"></form:textarea>
 						</div>
 					</div>
 				</div>

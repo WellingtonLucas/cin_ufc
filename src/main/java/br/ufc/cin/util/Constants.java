@@ -9,15 +9,21 @@ public class Constants {
 	
 	public static final String PAGINA_LISTAR_USUARIOS = "jogo/participantes";
 	
-	public static final String PAGINA_LISTAR_EQUIPES = "jogo/equipes";
+	public static final String PAGINA_LISTAR_EQUIPES = "equipe/equipes";
 	
 	public static final String PAGINA_CADASTRAR_JOGO = "jogo/novoJogo";
 	
 	public static final String PAGINA_DETALHES_JOGO = "jogo/detalhes";
 	
 	public static final String PAGINA_DETALHES_EQUIPE = "equipe/detalhes";
+	
+	public static final String PAGINA_DETALHES_FORM = "formulario/detalhes";
 
 	public static final String PAGINA_CADASTRAR_EQUIPE = "equipe/novaEquipe";
+	
+	public static final String PAGINA_LISTAR_FORMULARIOS = "formulario/listar";
+	
+	public static final String PAGINA_CADASTRAR_FORMULARIO = "formulario/formulario";
 	/** Redirecionamentos */
 
 	public static final String REDIRECT_PAGINA_LISTAR_JOGO = "redirect:/jogo/listar";
@@ -68,4 +74,8 @@ public class Constants {
 	public static final String MENSAGEM_USUARIOS_NAO_ASSOCIADOS = "Não existem participantes associados ao jogo!";
 	
 	public static final String MENSAGEM_EQUIPES_NAO_CRIADAS = "Não existem equipes no jogo. Crie equipes.";
+	
+	public static final String MENSAGEM_FORM_NAO_CRIADOS = "Não existem formulários no jogo. Crie formulários.";
+	
+	public static final String MENSAGEM_FORM_NAO_EXISTENTE = "Formulário não existe. Ou não está ativo.";
 }

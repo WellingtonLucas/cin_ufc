@@ -11,7 +11,7 @@
 <html>
 <head>
 <jsp:include page="../fragments/header-estrutura.jsp" />
-<title>Jogadores</title>
+<title>Equipes</title>
 
 </head>
 <body>

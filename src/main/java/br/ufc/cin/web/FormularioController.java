@@ -1,9 +1,17 @@
 package br.ufc.cin.web;
 
-import static br.ufc.cin.util.Constants.*;
+import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPE_INEXISTENTE;
+import static br.ufc.cin.util.Constants.MENSAGEM_FORM_NAO_EXISTENTE;
+import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
+import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
+import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_FORMULARIO;
+import static br.ufc.cin.util.Constants.PAGINA_DETALHES_FORM;
+import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
+import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -105,7 +113,7 @@ public class FormularioController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Formulario formulario = formularioService.find(Formulario.class, idForm);
-		if(formulario == null){
+			if(formulario == null){
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_FORM_NAO_EXISTENTE);
 			return "redirect:/formulario/listar";
 		}
@@ -121,6 +129,42 @@ public class FormularioController {
 		redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 		return REDIRECT_PAGINA_LISTAR_JOGO;
 	}
+	
+	@RequestMapping(value = "/{idJogo}/formulario/editar", method = RequestMethod.POST)
+	public String editar(@PathVariable("idJogo") Integer idJogo, @Valid Formulario formulario, 
+			Model model, HttpSession session, RedirectAttributes redirect, BindingResult result) {
+		
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		
+		if (jogo == null) {
+			redirect.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+	
+		if (result.hasErrors()) {
+			model.addAttribute("erro", "Erro ao editar formulário.");
+			return "formulario/formulario";
+		}
+		formulario.setProfessor(jogo.getProfessor());
+		
+		for (Pergunta pergunta : formulario.getPerguntas()) {
+				pergunta.setFormulario(formulario);
+		}
+		perguntaService.atualizar(formulario.getPerguntas());
+		
+		for (Pergunta pergunta : formulario.getPerguntas()) {
+			for (Opcao opcao : pergunta.getOpcoes()) {
+					opcao.setPergunta(pergunta);
+			}
+			opcaoService.atualizar(pergunta.getOpcoes());
+		}
+		
+		formularioService.update(formulario);
+		
+		redirect.addFlashAttribute("info", "Formulário atualizado com sucesso!");
+		return  "redirect:/jogo/"+jogo.getId()+"/formulario/"+formulario.getId();
+	}
+	
 	@RequestMapping(value = "/jogo/{idJogo}/formulario/{idForm}", method = RequestMethod.GET)
 	public String verDetalhes(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
 			Model model, HttpSession session, RedirectAttributes redirectAttributes) {

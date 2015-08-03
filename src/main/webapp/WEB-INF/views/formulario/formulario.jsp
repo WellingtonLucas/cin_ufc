@@ -13,11 +13,17 @@
 <head>
 <c:if test="${action eq 'cadastrar' }">
 	<c:set var="url" value="/${idJogo }/formulario/salvar"></c:set>
+	<c:set var="descricao" value="Crie seu formulário"></c:set>
+	<c:set var="subDescri" value="Esta funcionalidade permite a criação de um formulário com perguntas e alternativas."></c:set>
 	<c:set var="titulo" value="Novo Formulário"></c:set>
+	<c:set var="txtBtn" value="Cadastrar"></c:set>
 </c:if>
 <c:if test="${action eq 'editar' }">
-	<c:set var="url" value="/${idJogo }/formulario/${formulario.id }/editar"></c:set>
-	<c:set var="titulo" value="Editar - ${jogo.nomeDoCurso } "></c:set>
+	<c:set var="url" value="/${idJogo }/formulario/editar"></c:set>
+	<c:set var="descricao" value="Edite seu formulário"></c:set>
+	<c:set var="subDescri" value="Esta funcionalidade permite a edição do seu formulário."></c:set>
+	<c:set var="titulo" value="Editar - Formulário "></c:set>
+	<c:set var="txtBtn" value="Atualizar"></c:set>
 </c:if>
 
 <jsp:include page="../fragments/header-estrutura.jsp" />
@@ -38,15 +44,15 @@
 	<div class="container">
 
 		<div class="well well-lg">
-			<h2>Crie seu formulário</h2>
-			<h3>Esta funcionalidade permite a criação de um formulário com
-				perguntas e alternativas.</h3>
+			<h2>${descricao }</h2>
+			<h3>${subDescri }</h3>
 		</div>
 		<hr>
-		<form:form servletRelativeAction="${url }" commandName="formulario" method="POST" id="sign-up_area" role="form" class="form-horizontal">
+		<form:form id="sign-up_area" role="form" class="form-horizontal" servletRelativeAction="${url }" commandName="formulario" method="POST">
 			
 			<c:if test="${formulario.id != null}">
 				<form:input type="hidden" path="id" value="${formulario.id}" />
+				<%-- <form:input type="hidden" path="professor" value="${formulario.professor}" /> --%>
 			</c:if>
 			<c:if test="${formulario.id != null }">
 				<div class="form-group">
@@ -63,6 +69,7 @@
 								<div class="col-sm-9">
 									<input id="perguntas[${ questId.index}].descricao" name="perguntas[${ questId.index}].descricao" type="text" value="${pergunta.descricao }"
 									class="questao1 form-control" required />
+									<input type="hidden" name="perguntas[${ questId.index}].id" value="${pergunta.id }"/>
 								</div>
 							</div>
 						</div>
@@ -74,6 +81,7 @@
 								<div class="col-sm-6">
 									<input id="opcao1" name="perguntas[${ questId.index}].opcoes[0].descricao" type="text" 
 										value="${pergunta.opcoes[0].descricao }" class="opcao1 form-control" required />
+									<input type="hidden" name="perguntas[${ questId.index}].opcoes[0].id" value="${pergunta.opcoes[0].id }"/>	
 								</div>
 							</div>
 						</div>
@@ -85,6 +93,7 @@
 								<div class="col-xs-6">
 									<input id="opcao2" name="perguntas[${ questId.index}].opcoes[1].descricao" type="text" 
 										value="${pergunta.opcoes[1].descricao }" class="opcao2 form-control" required />
+									<input type="hidden" name="perguntas[${ questId.index}].opcoes[1].id" value="${pergunta.opcoes[1].id }"/>	
 								</div>
 							</div>
 						</div>
@@ -96,6 +105,7 @@
 								<div class="col-xs-6">
 									<input id="opcao3" name="perguntas[${ questId.index}].opcoes[2].descricao" type="text" 
 										value="${pergunta.opcoes[2].descricao }" class="opcao3 form-control" required />
+									<input type="hidden" name="perguntas[${ questId.index}].opcoes[2].id" value="${pergunta.opcoes[2].id }"/>	
 								</div>
 							</div>
 						</div>
@@ -107,6 +117,7 @@
 								<div class="col-xs-6">
 									<input id="opcao4" name="perguntas[${ questId.index}].opcoes[3].descricao" type="text" 
 										value="${pergunta.opcoes[3].descricao }" class="opcao4 form-control" required />
+									<input type="hidden" name="perguntas[${ questId.index}].opcoes[3].id" value="${pergunta.opcoes[3].id }"/>	
 								</div>
 							</div>
 						</div>
@@ -117,6 +128,7 @@
 								<div class="col-xs-6">
 									<input id="opcao5" name="perguntas[${ questId.index}].opcoes[4].descricao" type="text" 
 										value="${pergunta.opcoes[4].descricao }" class="opcao5 form-control" required />
+									<input type="hidden" name="perguntas[${ questId.index}].opcoes[4].id" value="${pergunta.opcoes[4].id }"/>	
 								</div>
 							</div>
 						</div>
@@ -241,7 +253,7 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<button id="submit_button" name="submit_button"
-						class="btn btn-primary btn-lg col-sm-2">Cadastrar</button>
+						class="btn btn-primary btn-lg col-sm-2">${txtBtn }</button>
 				</div>
 			</div>
 		</form:form>

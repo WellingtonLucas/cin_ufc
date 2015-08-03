@@ -12,7 +12,6 @@ $(function () {
         newElem.find('.questao1')
         	.attr('id', 'ID' + newNum + '_questao')
         	.attr('name', 'perguntas['+ (newNum -1) +'].descricao').val('');
-        //.attr('path', 'perguntas['+ (newNum -1) +'].descricao')
 
         // Opção 1 - text
         newElem.find('.opt1').attr('for', 'ID' + newNum + '_opcao');
@@ -20,7 +19,6 @@ $(function () {
         newElem.find('.opcao1')
         	.attr('id', 'ID' + newNum + '_opcao')
         	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[0].descricao').val('');
-        //.attr('path', 'perguntas['+ (newNum -1) +'].opcoes[0].descricao')
         
 		// Opção 2 - text
         newElem.find('.opt2').attr('for', 'ID' + newNum + '_opcao2');
@@ -28,7 +26,6 @@ $(function () {
         newElem.find('.opcao2')
         	.attr('id', 'ID' + newNum + '_opcao2')
         	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[1].descricao').val('');
-        //.attr('path', 'perguntas['+ (newNum -1) +'].opcoes[1].descricao')
         
 		// Opção 3 - text
         newElem.find('.opt3').attr('for', 'ID' + newNum + '_opcao3');
@@ -36,7 +33,6 @@ $(function () {
         newElem.find('.opcao3')
         	.attr('id', 'ID' + newNum + '_opcao3')
         	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[2].descricao').val('');
-        //.attr('path', 'perguntas['+ (newNum) +'].opcoes[2].descricao')
 
         // Opção 4 - text
         newElem.find('.opt4').attr('for', 'ID' + newNum + '_opcao4');
@@ -44,7 +40,6 @@ $(function () {
         newElem.find('.opcao4')
         	.attr('id', 'ID' + newNum + '_opcao4')
         	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[3].descricao').val('');
-        //.attr('path', 'perguntas['+ (newNum) +'].opcoes[3].descricao')
         
 		// Opção 5 - text
         newElem.find('.opt5').attr('for', 'ID' + newNum + '_opcao5');
@@ -52,16 +47,13 @@ $(function () {
         newElem.find('.opcao5')
         	.attr('id', 'ID' + newNum + '_opcao5')
         	.attr('name', 'perguntas['+ (newNum -1) +'].opcoes[4].descricao').val('');
-        	//.attr('path', 'perguntas['+ (newNum -1) +'].opcoes[4].descricao')
 		
     // Insert the new element after the last "duplicatable" input field
         $('#entry' + num).after(newElem);
         $('#ID' + newNum + '_questao').focus();
 
-    // Enable the "remove" button. This only shows once you have a duplicated section.
         $('#btnDel').attr('disabled', false);
 
-    // Right now you can only add 4 sections, for a total of 5. Change '5' below to the max number of sections you want to allow.
         if (newNum == 5)
         $('#btnAdd').attr('disabled', true).prop('value', "Você excedeu o limite de "+newNum+" perguntas."); // value here updates the text in the 'add' button when the limit is reached 
     });
@@ -81,8 +73,12 @@ $(function () {
             }
         return false; // Removes the last section you added
     });
-    // Enable the "add" button
+
     $('#btnAdd').attr('disabled', false);
-    // Disable the "remove" button
-    $('#btnDel').attr('disabled', true);
+    var num = $('.clonedInput').length;
+	if(num > 1){
+		$('#btnDel').attr('disabled', false);
+	}else{
+		$('#btnDel').attr('disabled', true);
+	}
 });

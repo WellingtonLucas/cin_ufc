@@ -7,4 +7,6 @@ import br.ufc.quixada.npi.service.GenericService;
 
 public interface PerguntaService extends GenericService<Pergunta>{
 	public abstract void salvar(List<Pergunta> perguntas);
+
+	public abstract void atualizar(List<Pergunta> perguntas);
 }

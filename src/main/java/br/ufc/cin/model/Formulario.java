@@ -25,7 +25,7 @@ public class Formulario {
 
 	private String titulo;
 
-	@OneToMany(mappedBy = "formulario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "formulario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Pergunta> perguntas;
 
 	@ManyToOne

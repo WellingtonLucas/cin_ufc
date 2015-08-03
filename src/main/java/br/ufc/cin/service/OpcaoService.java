@@ -7,4 +7,6 @@ import br.ufc.quixada.npi.service.GenericService;
 
 public interface OpcaoService extends GenericService<Opcao>{
 	public abstract void salvar(List<Opcao> opcoes);
+
+	public abstract void atualizar(List<Opcao> opcoes);
 }

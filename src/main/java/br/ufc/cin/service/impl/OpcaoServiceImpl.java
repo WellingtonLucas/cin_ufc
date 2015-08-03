@@ -19,4 +19,16 @@ public class OpcaoServiceImpl extends GenericServiceImpl<Opcao> implements Opcao
 		
 	}
 
+	@Override
+	public void atualizar(List<Opcao> opcoes) {
+		for (Opcao opcao : opcoes) {
+			if(opcao.getId() == null){
+				save(opcao);
+			}else{
+				update(opcao);
+			}
+		}
+		
+	}
+
 }

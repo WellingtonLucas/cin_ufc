@@ -16,7 +16,17 @@ public class PerguntaServiceImpl extends  GenericServiceImpl<Pergunta> implement
 		for (Pergunta pergunta : perguntas) {
 			save(pergunta);
 		}
-		
 	}
 
+	@Override
+	public void atualizar(List<Pergunta> perguntas) {
+		for (Pergunta pergunta : perguntas) {
+			if(pergunta.getId()==null){
+				save(pergunta);
+			}else{
+				update(pergunta);
+			}
+		}
+		
+	}
 }

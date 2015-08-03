@@ -23,7 +23,7 @@ public class Pergunta {
 	@Column(columnDefinition="TEXT")
 	private String descricao;
 	
-	@OneToMany(mappedBy="pergunta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="pergunta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Opcao> opcoes;
 	
 	@ManyToOne

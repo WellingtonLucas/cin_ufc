@@ -101,7 +101,7 @@ public class FormularioController {
 		}
 		
 		redirect.addFlashAttribute("info", "Formulário cadastrado com sucesso!");
-		return  "redirect:/jogo/"+jogo.getId()+"/detalhes";
+		return  "redirect:/jogo/"+jogo.getId()+"/formulario/"+formulario.getId();
 	}
 	@RequestMapping(value = "/jogo/{idJogo}/formulario/{idForm}/editar", method = RequestMethod.GET)
 	public String editarForm(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
@@ -164,6 +164,33 @@ public class FormularioController {
 		redirect.addFlashAttribute("info", "Formulário atualizado com sucesso!");
 		return  "redirect:/jogo/"+jogo.getId()+"/formulario/"+formulario.getId();
 	}
+
+	@RequestMapping(value = "/jogo/{idJogo}/formulario/{idForm}/copiar", method = RequestMethod.GET)
+	public String copiarForm(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
+			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Formulario formulario = formularioService.find(Formulario.class, idForm);
+			if(formulario == null){
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_FORM_NAO_EXISTENTE);
+			return "redirect:/formulario/listar";
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		
+		if (usuario.getId() == jogo.getProfessor().getId() && formulario.getProfessor().getId() == usuario.getId()) {
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("formulario", formulario);
+		 	model.addAttribute("action", "copiar");
+			return PAGINA_CADASTRAR_FORMULARIO;
+		}
+
+		redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+		return REDIRECT_PAGINA_LISTAR_JOGO;
+	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/formulario/{idForm}", method = RequestMethod.GET)
 	public String verDetalhes(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
@@ -191,6 +218,26 @@ public class FormularioController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 	}
+	
+	@RequestMapping(value = "/jogo/{idJogo}/formulario/{id}/excluir")
+	public String excluir(@PathVariable("id") Integer id,@PathVariable("idJogo") Integer idJogo, HttpSession session, RedirectAttributes redirectAttributes) {
+		Formulario formulario = formularioService.find(Formulario.class,id);
+		if (formulario == null) {
+			redirectAttributes.addFlashAttribute("erro", "Formulário inexistente");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		if (usuario.getId() == formulario.getProfessor().getId()) {
+			formularioService.delete(formulario);
+			redirectAttributes.addFlashAttribute("info", "Formulário removido com sucesso.");
+		} else {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+		}
+		
+		return "redirect:/jogo/"+ idJogo +"/formularios";
+
+	}
+	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

@@ -161,6 +161,11 @@ $(document).ready(function() {
 		$(this).find('.btn-danger').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
+	$('#confirm-delete3').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja excluir o formulário \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-danger').attr('href', $(e.relatedTarget).data('href'));
+	});
+	
 	$('#delete-file').on('show.bs.modal', function(e) {
 		$(this).find('.modal-body').text('Tem certeza de que deseja excluir o arquivo \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-danger').attr('data-id', $(e.relatedTarget).data('id'));

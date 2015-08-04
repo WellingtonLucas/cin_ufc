@@ -104,8 +104,13 @@
 										<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
 									</a>
 								</div>
+								<div class="col-sm-2">				
+									<a id="copiar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/copiar" ></c:url>">
+										<button class="btn btn-success btn-lg">Copiar&nbsp;<i class="fa fa-edit"></i></button>
+									</a>
+								</div>
 								<div class="col-sm-2">
-									<a id="excluir" data-toggle="modal" data-target="#confirm-delete2" href="#" 
+									<a id="excluir" data-toggle="modal" data-target="#confirm-delete3" href="#" 
 									data-href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/excluir"></c:url>" data-name="${formulario.titulo }">
 										<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
 									</a>					
@@ -118,8 +123,8 @@
 		</div>
 	</div>
 				
-	<!-- Modal Excluir JOGO -->
-	<div class="modal fade" id="confirm-delete2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<!-- Modal Excluir FORMULARIO -->
+	<div class="modal fade" id="confirm-delete3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">

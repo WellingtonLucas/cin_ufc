@@ -25,6 +25,13 @@
 	<c:set var="titulo" value="Editar - Formulário "></c:set>
 	<c:set var="txtBtn" value="Atualizar"></c:set>
 </c:if>
+<c:if test="${action eq 'copiar' }">
+	<c:set var="url" value="/${idJogo }/formulario/salvar"></c:set>
+	<c:set var="descricao" value="Você está copiando um formulário"></c:set>
+	<c:set var="subDescri" value="Esta funcionalidade permite a edição do seu formulário copiado."></c:set>
+	<c:set var="titulo" value="Copiar - Formulário "></c:set>
+	<c:set var="txtBtn" value="Salvar Cópia"></c:set>
+</c:if>
 
 <jsp:include page="../fragments/header-estrutura.jsp" />
 <title> ${titulo} </title>
@@ -51,8 +58,9 @@
 		<form:form id="sign-up_area" role="form" class="form-horizontal" servletRelativeAction="${url }" commandName="formulario" method="POST">
 			
 			<c:if test="${formulario.id != null}">
-				<form:input type="hidden" path="id" value="${formulario.id}" />
-				<%-- <form:input type="hidden" path="professor" value="${formulario.professor}" /> --%>
+				<c:if test="${action eq 'editar' }">							
+					<form:input type="hidden" path="id" value="${formulario.id}" />
+				</c:if>
 			</c:if>
 			<c:if test="${formulario.id != null }">
 				<div class="form-group">
@@ -69,7 +77,9 @@
 								<div class="col-sm-9">
 									<input id="perguntas[${ questId.index}].descricao" name="perguntas[${ questId.index}].descricao" type="text" value="${pergunta.descricao }"
 									class="questao1 form-control" required />
-									<input type="hidden" name="perguntas[${ questId.index}].id" value="${pergunta.id }"/>
+									<c:if test="${action eq 'editar' }">
+										<input type="hidden" name="perguntas[${ questId.index}].id" value="${pergunta.id }"/>
+									</c:if>
 								</div>
 							</div>
 						</div>
@@ -81,7 +91,9 @@
 								<div class="col-sm-6">
 									<input id="opcao1" name="perguntas[${ questId.index}].opcoes[0].descricao" type="text" 
 										value="${pergunta.opcoes[0].descricao }" class="opcao1 form-control" required />
-									<input type="hidden" name="perguntas[${ questId.index}].opcoes[0].id" value="${pergunta.opcoes[0].id }"/>	
+									<c:if test="${action eq 'editar' }">	
+										<input type="hidden" name="perguntas[${ questId.index}].opcoes[0].id" value="${pergunta.opcoes[0].id }"/>
+									</c:if>	
 								</div>
 							</div>
 						</div>
@@ -93,7 +105,9 @@
 								<div class="col-xs-6">
 									<input id="opcao2" name="perguntas[${ questId.index}].opcoes[1].descricao" type="text" 
 										value="${pergunta.opcoes[1].descricao }" class="opcao2 form-control" required />
-									<input type="hidden" name="perguntas[${ questId.index}].opcoes[1].id" value="${pergunta.opcoes[1].id }"/>	
+									<c:if test="${action eq 'editar' }">
+										<input type="hidden" name="perguntas[${ questId.index}].opcoes[1].id" value="${pergunta.opcoes[1].id }"/>
+									</c:if>	
 								</div>
 							</div>
 						</div>
@@ -105,7 +119,9 @@
 								<div class="col-xs-6">
 									<input id="opcao3" name="perguntas[${ questId.index}].opcoes[2].descricao" type="text" 
 										value="${pergunta.opcoes[2].descricao }" class="opcao3 form-control" required />
-									<input type="hidden" name="perguntas[${ questId.index}].opcoes[2].id" value="${pergunta.opcoes[2].id }"/>	
+									<c:if test="${action eq 'editar' }">
+										<input type="hidden" name="perguntas[${ questId.index}].opcoes[2].id" value="${pergunta.opcoes[2].id }"/>
+									</c:if>	
 								</div>
 							</div>
 						</div>
@@ -117,7 +133,9 @@
 								<div class="col-xs-6">
 									<input id="opcao4" name="perguntas[${ questId.index}].opcoes[3].descricao" type="text" 
 										value="${pergunta.opcoes[3].descricao }" class="opcao4 form-control" required />
-									<input type="hidden" name="perguntas[${ questId.index}].opcoes[3].id" value="${pergunta.opcoes[3].id }"/>	
+									<c:if test="${action eq 'editar' }">
+										<input type="hidden" name="perguntas[${ questId.index}].opcoes[3].id" value="${pergunta.opcoes[3].id }"/>
+									</c:if>	
 								</div>
 							</div>
 						</div>
@@ -128,7 +146,9 @@
 								<div class="col-xs-6">
 									<input id="opcao5" name="perguntas[${ questId.index}].opcoes[4].descricao" type="text" 
 										value="${pergunta.opcoes[4].descricao }" class="opcao5 form-control" required />
-									<input type="hidden" name="perguntas[${ questId.index}].opcoes[4].id" value="${pergunta.opcoes[4].id }"/>	
+									<c:if test="${action eq 'editar' }">
+										<input type="hidden" name="perguntas[${ questId.index}].opcoes[4].id" value="${pergunta.opcoes[4].id }"/>
+									</c:if>	
 								</div>
 							</div>
 						</div>

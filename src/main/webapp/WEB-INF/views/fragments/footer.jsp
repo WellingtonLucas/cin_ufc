@@ -26,7 +26,10 @@
 <script src="<c:url value="/resources/js/fileinput.min.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.MultiFile.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.fileupload.js" />"></script>
+<script src="<c:url value="/resources/js/jquery.fileupload-image.js" />"></script>
+<script src="<c:url value="/resources/js/jquery.fileupload-validate.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.iframe-transport.js" />"></script>
+<script src="<c:url value="/resources/js/jquery.ui.widget.js" />"></script>
 <%-- <script src="<c:url value="/resources/js/vendor/jquery.ui.widget.js.js" />"></script> --%>
 <script src="<c:url value="/resources/ckeditor/ckeditor.js"/>"></script>
 <script src="<c:url value="/resources/ckeditor/adapters/jquery.js"/>"></script>

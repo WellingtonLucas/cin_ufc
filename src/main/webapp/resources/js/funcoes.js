@@ -246,7 +246,8 @@ $(document).ready(function() {
 	    	}
 		})
 	});
+	
 	*/
-	/*$('article').readmore();*/
+		/*$('article').readmore();*/
 });
 

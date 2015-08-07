@@ -128,13 +128,10 @@
 					</div>
 				</div>		
 									
-				<div class="form-group form-item col-sm-12">
-					<label for="atividades" class="col-sm-2 control-label">Anexos:</label>
+				<div class="form-group form-item">
+					<label for="fileupload" class="col-sm-2 control-label">Anexos:</label>
 					<div class="col-sm-8">
-						<span class="btn btn-default btn-lg fileinput-button">
-							<span>Selecione</span>
-							<input type="file" name="anexos" class="multi btn btn-default" multiple="multiple" ></input>
-						</span>
+						<input type="file" id="fileupload" class="file" name="anexos" multiple></input>	
 						<c:if test="${not empty jogo.documentos }">
 							<table id="table-anexos" class="table table-striped">
 								<thead>
@@ -199,6 +196,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<jsp:include page="../fragments/footer.jsp" />
 	</body>
 </html>

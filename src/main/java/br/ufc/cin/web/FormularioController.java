@@ -195,7 +195,6 @@ public class FormularioController {
 	@RequestMapping(value = "/jogo/{idJogo}/formulario/{idForm}", method = RequestMethod.GET)
 	public String verDetalhes(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
 			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-		model.addAttribute("action", "detalhes");
 		
 		Formulario formulario = formularioService.find(Formulario.class, idForm);
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);

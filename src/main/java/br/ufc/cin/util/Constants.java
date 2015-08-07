@@ -5,7 +5,7 @@ public class Constants {
 
 	/** Páginas */
 
-	public static final String PAGINA_LISTAR_JOGO = "jogo/listar";
+	public static final String PAGINA_LISTAR_JOGO = "jogo/listar2";
 	
 	public static final String PAGINA_LISTAR_USUARIOS = "jogo/participantes";
 	

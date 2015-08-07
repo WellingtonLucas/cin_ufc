@@ -49,7 +49,7 @@
 									<c:forEach var="usuario" items="${usuarios}">
 										<tr>
 											<td>
-												<a href="<c:url value="/usuario/${usuario.id}/detalhes"></c:url>">${usuario.nome}</a>
+												<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
 											</td>
 											<td>	
 												${usuario.sobreNome}										

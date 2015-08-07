@@ -10,26 +10,35 @@
 			</c:if>
 			<hr>
 			<c:if test="${action != 'home'}">
-				<c:if test="${action eq 'participantes'}">
-					<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+				<c:if test="${action != 'detalhesUsuario'}">
+					<c:if test="${action eq 'participantes'}">
+						<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+					</c:if>
+					<c:if test="${action != 'participantes'}">
+						<li><a href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>">Participantes</a></li>
+					</c:if>
+					<c:if test="${action != 'equipes'}">
+						<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>">Equipes&nbsp;</a></li>
+					</c:if>
+					<c:if test="${action eq 'equipes'}">
+						<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+					</c:if>
+					<c:if test="${action != 'formularios'}">
+						<li><a href="<c:url value ="/jogo/${jogo.id}/formularios"></c:url>">Formulários&nbsp;</a></li>
+					</c:if>
+					<c:if test="${action eq 'formularios'}">
+						<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+					</c:if>
+					<hr>
+					<li><a href="<c:url value ="/jogo/${jogo.id}/formulario"></c:url>">Criar questionário</a></li>
 				</c:if>
-				<c:if test="${action != 'participantes'}">
+				<c:if test="${action == 'detalhesUsuario'}">
 					<li><a href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>">Participantes</a></li>
-				</c:if>
-				<c:if test="${action != 'equipes'}">
 					<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>">Equipes&nbsp;</a></li>
-				</c:if>
-				<c:if test="${action eq 'equipes'}">
 					<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+					<hr>
+					<li><a href="<c:url value ="/jogo/${jogo.id}/formulario"></c:url>">Criar questionário</a></li>
 				</c:if>
-				<c:if test="${action != 'formularios'}">
-					<li><a href="<c:url value ="/jogo/${jogo.id}/formularios"></c:url>">Formulários&nbsp;</a></li>
-				</c:if>
-				<c:if test="${action eq 'formularios'}">
-					<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
-				</c:if>
-				<hr>
-				<li><a href="<c:url value ="/jogo/${jogo.id}/formulario"></c:url>">Criar questionário</a></li>
 				<li><a href="<c:url value ="#"></c:url>">Rankings</a></li>
 				<li><a href="<c:url value ="#"></c:url>">Avaliações</a></li>
 				<li><a href="<c:url value ="#"></c:url>">Rodadas</a></li>

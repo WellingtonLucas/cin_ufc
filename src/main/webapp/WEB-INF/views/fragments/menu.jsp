@@ -13,6 +13,7 @@
 				<c:if test="${action != 'detalhesUsuario'}">
 					<c:if test="${action eq 'participantes'}">
 						<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+						<li><a href="<c:url value ="/jogo/${jogo.id}/vincular"></c:url>">Vincular Participantes</a></li>
 					</c:if>
 					<c:if test="${action != 'participantes'}">
 						<li><a href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>">Participantes</a></li>
@@ -38,6 +39,7 @@
 					<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
 					<hr>
 					<li><a href="<c:url value ="/jogo/${jogo.id}/formulario"></c:url>">Criar questionário</a></li>
+					<li><a href="<c:url value ="/usuario/${usuario.id}/submissoes"></c:url>">Submissões</a></li>
 				</c:if>
 				<li><a href="<c:url value ="#"></c:url>">Rankings</a></li>
 				<li><a href="<c:url value ="#"></c:url>">Avaliações</a></li>

@@ -1,7 +1,7 @@
 body {
 	font-family: 'Lato', Calibri, Arial, sans-serif !important;
 	background:
-		url('http://jrain.oscitas.netdna-cdn.com/wp-content/themes/zillapress/images/bg-body.png')
+		url('../imagens/bg-body.png')
 		repeat scroll 0% 0% transparent;
 	/* background: none repeat scroll 0% 0% #F2F2F2;*/
 }
@@ -264,3 +264,24 @@ div.file-caption {
   }
 }
 li { list-style-type:none;}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+
+.btn span.glyphicon {    			
+	opacity: 0;				
+}
+.btn.active span.glyphicon {				
+	opacity: 1;				
+}

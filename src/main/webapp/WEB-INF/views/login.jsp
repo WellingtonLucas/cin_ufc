@@ -9,7 +9,7 @@
 	<link rel="icon"
 		href="<c:url value="/resources/imagens/logo_ufc.png" />"
 		type="image/png" sizes="16x16" />
-	<link href="<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.min.css" />"	rel="stylesheet" />
+	<link href="<c:url value="/webjars/bootstrap/3.3.5/css/bootstrap.min.css" />"	rel="stylesheet" />
 	<link href="<c:url value="/resources/css/dashboard.css"/>"	rel="stylesheet" />
 	<link href="<c:url value="/resources/css/bootstrapValidator.css" />" rel="stylesheet" />
 	<link href="<c:url value="/resources/css/font-awesome.min.css"/>" rel="stylesheet"/>
@@ -115,7 +115,7 @@
 
 	</div>
 	<script src="<c:url value="/webjars/jquery/2.1.0/jquery.js" />"></script>
-	<script	src="<c:url value="/webjars/bootstrap/3.1.1/js/bootstrap.min.js" />"></script>
+	<script	src="<c:url value="/webjars/bootstrap/3.3.5/js/bootstrap.min.js" />"></script>
 	<script src="<c:url value="/resources/js/funcoes2.js" />"></script>
 	<script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
 	

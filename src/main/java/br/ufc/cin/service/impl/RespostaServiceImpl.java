@@ -8,5 +8,4 @@ import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
 public class RespostaServiceImpl extends GenericServiceImpl<Resposta> implements RespostaService{
-
 }

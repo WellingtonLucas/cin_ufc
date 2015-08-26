@@ -61,23 +61,6 @@
 						</div>
 					</div>
 				</div>
-				<!-- PARTICIPANTES -->
-				<div class="form-group form-item">
-					<label for="idParticipantes" class="col-sm-2 control-label">Participantes:</label>
-					<div class="col-sm-8">
-						<select id="participantes" name="idParticipantes" class="form-control" multiple="multiple">
-							<c:set var="part" value="${jogo.alunos }"></c:set>
-							<c:forEach items="${participantes }" var="participante">
-								<c:set var="selected" value=""></c:set>
-								<c:set var="idParticipante" value="id=${participante.id }"></c:set>
-								<c:if test="${fn:contains(part, participante)}">
-									<c:set var="selected" value="selected=\"selected\""></c:set>
-								</c:if>
-								<option value="${participante.id }" ${selected }>${participante.nome } ${participante.sobreNome } - ${participante.curso }</option>
-							</c:forEach>
-						</select>
-					</div>
-				</div>
 				
 				<div class="form-group">
 					<div class="form-item">

@@ -1,10 +1,12 @@
 package br.ufc.cin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.UsuarioRepository;
 import br.ufc.cin.service.UsuarioService;
@@ -38,11 +40,29 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 	public List<Usuario> getPossiveisParticipantes(Usuario usuario) {
 		return usuarioRepository.getPossiveisParticipantes(usuario);
 	}
-
+	
+	@Override
+	public List<Usuario> getPossiveisParticipantes(Usuario usuario, Jogo jogo) {
+		if(jogo.getAlunos().isEmpty()){
+			return usuarioRepository.getPossiveisParticipantes(usuario);
+		}else{
+			ArrayList<Usuario> usuarios = (ArrayList<Usuario>) usuarioRepository.getPossiveisParticipantes(usuario);
+			usuarios.removeAll(jogo.getAlunos());
+			return usuarios;
+		}
+	}
+	
 	@Override
 	public void salvar(List<Usuario> alunos) {
 		for(Usuario aluno : alunos) {
 			save(aluno);
+		}
+	}
+
+	@Override
+	public void atualizar(List<Usuario> alunos) {
+		for(Usuario aluno : alunos) {
+			update(aluno);
 		}
 	}
 }

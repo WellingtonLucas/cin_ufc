@@ -4,7 +4,7 @@
 <link rel="icon" href="<c:url value="/resources/imagens/logo_ufc.png" />" type="image/png" sizes="16x16" />
 <link href="<c:url value="/resources/css/datepicker3.css"/>" rel="stylesheet" />
 <link href="<c:url value="/resources/css/tabs.css"/>" rel="stylesheet" />
-<link href="<c:url value="/webjars/bootstrap/3.1.1/css/bootstrap.min.css" />" rel="stylesheet" />
+<link href="<c:url value="/webjars/bootstrap/3.3.5/css/bootstrap.min.css" />" rel="stylesheet" />
 <link href="<c:url value="/resources/css/dashboard.css"/>" rel="stylesheet" />
 <%-- <link href="<c:url value="/resources/css/estiloCin.css"/>" rel="stylesheet" /> --%>
 

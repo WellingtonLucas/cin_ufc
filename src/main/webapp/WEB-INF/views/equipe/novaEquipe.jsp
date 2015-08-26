@@ -12,10 +12,12 @@
 		<c:if test="${action eq 'cadastrar' }">
 			<c:set var="url" value="/${idJogo }/equipe/nova"></c:set>
 			<c:set var="titulo" value="Nova Equipe"></c:set>
+			<c:set var="txtBtn" value="Salvar"></c:set>
 		</c:if>
 		<c:if test="${action eq 'editar' }">
 			<c:set var="url" value="/${idJogo }/equipe/editar"></c:set>
 			<c:set var="titulo" value="Editar - ${equipe.nome } "></c:set>
+			<c:set var="txtBtn" value="Atualizar"></c:set>
 		</c:if>
 		
 		<jsp:include page="../fragments/header-estrutura.jsp" />	
@@ -38,9 +40,9 @@
 				<h2>${titulo}</h2>
 				<hr>
 			</div>
-			<form:form id="adicionarEquipeForm" role="form" class="form-horizontal" commandName="equipe" servletRelativeAction="${url }" method="POST">
-				<%-- <form:input type="hidden" name="idUsuario" value="${idUsuario}"/> --%>
-				<form:hidden id="id" name="id" path="id" />
+			<form:form id="adicionarEquipeForm" role="form" class="form-horizontal" commandName="equipe" 
+			servletRelativeAction="${url }" method="POST">
+				<form:hidden id="id" name="id" path="id" value="${equipe.id }"/>
 				
 				<div class="form-group">
 					<div class="form-item">
@@ -59,7 +61,7 @@
 					<div class="col-sm-8">
 						<select id="participantes" name="idParticipantes" class="form-control" multiple="multiple">
 							<c:set var="part" value="${equipe.alunos }"></c:set>
-							<c:forEach items="${participantes }" var="participante">
+							<c:forEach var="participante" items="${participantes }">
 								<c:set var="selected" value=""></c:set>
 								<c:set var="idParticipante" value="id=${participante.id }"></c:set>
 								<c:if test="${fn:contains(part, participante)}">
@@ -82,7 +84,7 @@
 					<div class="col-sm-2"></div>
 					<div class="col-sm-2">		
 						<button type="submit" class="btn btn-primary btn-lg" >
-							Salvar
+							${txtBtn }
 						</button>						
 					</div>
 					<div class="col-sm-2">

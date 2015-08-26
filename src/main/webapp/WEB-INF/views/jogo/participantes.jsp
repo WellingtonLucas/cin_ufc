@@ -33,6 +33,14 @@
 								<c:out value="${erro}"></c:out>
 							</div>
 						</c:if>
+						<c:if test="${not empty info}">
+							<div class="alert alert-success alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert">
+									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+								</button>
+								<c:out value="${info}"></c:out>
+							</div>
+						</c:if>
 					</div>
 					<div class="col-sm-12">
 						<c:if test="${not empty usuarios }">
@@ -43,6 +51,7 @@
 										<th>Sorenome</th>
 										<th>Curso</th>
 										<th>Email</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -56,12 +65,34 @@
 											</td>
 											<td>${usuario.curso } </td>
 											<td>${usuario.email } </td>
+											<td>
+												<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
+													data-href="<c:url value="participantes/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
+													<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
+												</a>
+											</td>
 										</tr>
 									</c:forEach>
 								</tbody>
 							</table>
 						</c:if>	
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal Desvincular aluno -->
+	<div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+        			<h4 class="modal-title" id="submeterModalLabel">Desvincular</h4>
+        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-primary">Desvincular</a>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 				</div>
 			</div>
 		</div>

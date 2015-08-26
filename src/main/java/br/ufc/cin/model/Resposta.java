@@ -49,34 +49,24 @@ public class Resposta {
 		this.usuario = usuario;
 	}
 
-	public List<Opcao> getOpcao() {
+	public List<Opcao> getOpcoes() {
 		return opcoes;
 	}
 
-	public void setOpcao(List<Opcao> opcao) {
-		this.opcoes = opcao;
+	public void setOpcoes(List<Opcao> opcoes) {
+		this.opcoes = opcoes;
 	}
 	
-	public void adcionarOpcaoId(Integer opcaoId){
-		if(this.opcoes == null)  
-			this.opcoes = new ArrayList<Opcao>();
-		Opcao opcao = new Opcao();
-		opcao.setId(opcaoId);
-		this.opcoes.add(opcao);
-	}
-
-	public Formulario getEnquete() {
+	public Formulario getFormulario() {
 		return formulario;
 	}
 
-	public void setEnquete(Formulario formulario) {
+	public void setFormulario(Formulario formulario) {
 		this.formulario = formulario;
 	}
 	
-	public void setEnqueteId(Integer enqueteId){
-		if(this.formulario == null) 
-			this.formulario = new Formulario();
-		
-		this.formulario.setId(enqueteId);
+	public String toString() {
+		return "Pergunta id: " + getId();
 	}
+	
 }

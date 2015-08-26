@@ -2,17 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%-- <div class="page-header">
-	<div class="row">
-		<div class="col-md-6">
-			<img width="370"
-				src="<c:url value="/resources/imagens/brasao-qxd.png" />"
-				alt="Brasão UFC Quixadá">
-		</div>
-		<div class="col-md-6"></div>
-	</div>
-
-</div> --%>
 <div class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">			
@@ -24,6 +13,19 @@
 			<ul class="nav navbar-nav navbar-right">			
 				<li><a class="glyphicon glyphicon-home btn-lg" data-tooggle="tooltip"  data-placement="bottom"
 				title="Principal" href="<c:url value="/jogo/listar" />"></a></li>
+				<li class="dropdown">
+	              <a href="#" class="dropdown-toggle glyphicon glyphicon-menu-down btn-lg" data-toggle="dropdown" role="button" 
+	              aria-haspopup="true" aria-expanded="false"></a>
+	              <ul class="dropdown-menu">
+	                <li><a href="<c:url value="/usuario/perfil" />">Perfil</a></li>
+	                <li><a href="#">Another action</a></li>
+	                <li><a href="#">Something else here</a></li>
+	                <li role="separator" class="divider"></li>
+	                <li class="dropdown-header">Nav header</li>
+	                <li><a href="#">Separated link</a></li>
+	                <li><a href="#">One more separated link</a></li>
+	              </ul>
+	            </li>
 				<li><a class="glyphicon glyphicon-log-out btn-lg" data-tooggle="tooltip"  data-placement="bottom"
 				title="Sair" href="<c:url value="/j_spring_security_logout" />"></a></li>
 			</ul>

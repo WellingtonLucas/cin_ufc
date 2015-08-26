@@ -41,78 +41,79 @@
 						</c:if>
 					</div>
 					<div class="col-sm-12">
-						<c:if test="${formulario != null }">
-							
-							<c:forEach var="pergunta" items="${formulario.perguntas}" varStatus="questId">
-								<div class="panel panel-default">
-									<div class="panel-heading">
-										<label>Questão ${questId.count}:
-											${pergunta.descricao }
-										</label>											
-									</div>
-									<div class="radio panel-body">
-										<label class="col-sm-10">
-											<input type="radio" name="opcaoR" id="opcaoR1" disabled="disabled">
-											${pergunta.opcoes[0].descricao }
-										</label>
-									
-										<label class="col-sm-10">
-											<input type="radio" name="opcaoR" id="opcaoR2" disabled="disabled">
-											${pergunta.opcoes[1].descricao }
-										</label>
-										<label class="col-sm-10">
-											<input type="radio" name="opcaoR" id="opcaoR3" disabled="disabled">
-											${pergunta.opcoes[2].descricao }
-										</label>
-										<label class="col-sm-10">
-											<input type="radio" name="opcaoR" id="opcaoR4" disabled="disabled">
-											${pergunta.opcoes[3].descricao }
-										</label>
-										<label class="col-sm-10">
-											<input type="radio" name="opcaoR" id="opcaoR5" disabled="disabled">
-											${pergunta.opcoes[4].descricao }
-										</label>
-									</div>
+						<c:forEach var="pergunta" items="${formulario.perguntas}" varStatus="questId">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<label>Questão ${questId.count}:
+										${pergunta.descricao }
+									</label>											
 								</div>
-							</c:forEach>
-							<label class="col-sm-1 field">Prazo:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty formulario.prazo }">
-									<label>-</label>
-								</c:if>
-								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${formulario.prazo }" /></label>
+								<div class="radio panel-body">
+									<label class="col-sm-10">
+										<input type="radio" name="opcaoR" id="opcaoR1" disabled="disabled">
+										${pergunta.opcoes[0].descricao }
+									</label>
+								
+									<label class="col-sm-10">
+										<input type="radio" name="opcaoR" id="opcaoR2" disabled="disabled">
+										${pergunta.opcoes[1].descricao }
+									</label>
+									<label class="col-sm-10">
+										<input type="radio" name="opcaoR" id="opcaoR3" disabled="disabled">
+										${pergunta.opcoes[2].descricao }
+									</label>
+									<label class="col-sm-10">
+										<input type="radio" name="opcaoR" id="opcaoR4" disabled="disabled">
+										${pergunta.opcoes[3].descricao }
+									</label>
+									<label class="col-sm-10">
+										<input type="radio" name="opcaoR" id="opcaoR5" disabled="disabled">
+										${pergunta.opcoes[4].descricao }
+									</label>
+								</div>
 							</div>
-							<div class="col-sm-12"></div>
-							<label class="col-sm-1 field">Nota:</label>
-							<div class="col-sm-11 field-value">
-								<c:if test="${empty formulario.nota }">
-									<label>-</label>
-								</c:if>
-								<label>${formulario.nota }</label>
-							</div>
-							
-						</c:if>	
+						</c:forEach>
+						<label class="col-sm-1 field">Prazo:</label>
+						<div class="col-sm-4 field-value">
+							<c:if test="${empty formulario.prazo }">
+								<label>-</label>
+							</c:if>
+							<label><fmt:formatDate pattern="dd/MM/yyyy" value="${formulario.prazo }" /></label>
+						</div>
+						<div class="col-sm-12"></div>
+						<label class="col-sm-1 field">Nota:</label>
+						<div class="col-sm-11 field-value">
+							<c:if test="${empty formulario.nota }">
+								<label>-</label>
+							</c:if>
+							<label>${formulario.nota }</label>
+						</div>
 					</div>
 					<div class="col-sm-12">
 						<div class="row placeholders">
 							<ul class="list-group">							
 								<li class="media"><hr></li>							
 							</ul>
-							<div class="form-group">					
+							<div class="form-group">
+								<div class="col-sm-2">				
+									<a id="editar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }" ></c:url>">
+										<button class="btn btn-primary btn-lg">Responder&nbsp;<i class="glyphicon glyphicon-floppy-disk"></i></button>
+									</a>
+								</div>
 								<div class="col-sm-2">				
 									<a id="editar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/editar" ></c:url>">
-										<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
+										<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
 									</a>
 								</div>
 								<div class="col-sm-2">				
 									<a id="copiar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/copiar" ></c:url>">
-										<button class="btn btn-success btn-lg">Copiar&nbsp;<i class="fa fa-edit"></i></button>
+										<button class="btn btn-success btn-lg">Copiar&nbsp;<i class="glyphicon glyphicon-duplicate"></i></button>
 									</a>
 								</div>
 								<div class="col-sm-2">
 									<a id="excluir" data-toggle="modal" data-target="#confirm-delete3" href="#" 
 									data-href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/excluir"></c:url>" data-name="${formulario.titulo }">
-										<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
+										<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="glyphicon glyphicon-trash"></i></button>
 									</a>					
 								</div>
 							</div>

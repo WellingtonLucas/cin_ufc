@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -39,207 +40,321 @@ import br.ufc.cin.service.UsuarioService;
 public class EquipeController {
 	@Inject
 	private UsuarioService usuarioService;
-	
+
 	@Inject
 	private EquipeService equipeService;
-	
+
 	@Inject
 	private JogoService jogoService;
-	
-	@RequestMapping(value ="/jogo/{id}/equipe/nova", method = RequestMethod.GET)
-	public String cadastrarFrom(@PathVariable("id") Integer id, Model model, HttpSession session){
+
+	@RequestMapping(value = "/jogo/{id}/equipe/nova", method = RequestMethod.GET)
+	public String cadastrarFrom(@PathVariable("id") Integer id, Model model,
+			HttpSession session) {
 		Jogo jogo = jogoService.find(Jogo.class, id);
-		
+
 		model.addAttribute("action", "cadastrar");
 		model.addAttribute("idJogo", id);
 		model.addAttribute("equipe", new Equipe());
 		model.addAttribute("participantes", equipeService.alunosSemEquipe(jogo));
-		
+
 		return PAGINA_CADASTRAR_EQUIPE;
 	}
-	
+
 	@RequestMapping(value = "/{id}/equipe/nova", method = RequestMethod.POST)
-	public  String cadastrar(@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
-			@PathVariable("id") Integer id,	@ModelAttribute("equipe") Equipe equipe, BindingResult result, HttpSession session, 
-			RedirectAttributes redirect, Model model){
+	public String cadastrar(
+			@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
+			@PathVariable("id") Integer id,
+			@ModelAttribute("equipe") Equipe equipe, BindingResult result,
+			HttpSession session, RedirectAttributes redirect, Model model) {
 		Jogo jogo = jogoService.find(Jogo.class, id);
-		
+
 		model.addAttribute("action", "cadastrar");
-		
+
 		if (result.hasErrors()) {
 			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
-			return "redirect:/jogo/"+ id +"/equipe/nova";
+			return "redirect:/jogo/" + id + "/equipe/nova";
 		}
-		
+
 		equipe.setJogo(jogo);
 		List<Usuario> alunos = new ArrayList<Usuario>();
 		equipe.setStatus(true);
 		equipeService.save(equipe);
-		
-		if(idAlunos != null && !idAlunos.isEmpty()) {
-			
-			for(String idaluno : idAlunos) {
-				Usuario aluno = usuarioService.find(Usuario.class, new Integer(idaluno));
+
+		if (idAlunos != null && !idAlunos.isEmpty()) {
+
+			for (String idaluno : idAlunos) {
+				Usuario aluno = usuarioService.find(Usuario.class, new Integer(
+						idaluno));
 				aluno.setEquipe(equipe);
 				alunos.add(aluno);
 			}
-			
+
 		}
-		if(!alunos.isEmpty()){
+		if (!alunos.isEmpty()) {
 			usuarioService.salvar(alunos);
 		}
 		redirect.addFlashAttribute("info", MENSAGEM_EQUIPE_CADASTRADA);
-		return "redirect:/jogo/"+ id +"/equipes";
+		return "redirect:/jogo/" + id + "/equipes";
 	}
-	
+
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}", method = RequestMethod.GET)
-	public String verDetalhes(@PathVariable("idJogo") Integer idJogo,@PathVariable("idEquipe") Integer idEquipe,
-			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String verDetalhes(@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("idEquipe") Integer idEquipe, Model model,
+			HttpSession session, RedirectAttributes redirectAttributes) {
 		model.addAttribute("action", "detalhes");
-		
+
 		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
 		model.addAttribute("action", "detalhes");
 		if (equipe == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/"+ idJogo +"/equipes";
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + idJogo + "/equipes";
 		}
-		if(jogo==null){
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId() &&  jogo.getEquipes().contains(equipe)) {			
+		if (usuario.getId() == jogo.getProfessor().getId()
+				&& jogo.getEquipes().contains(equipe)) {
 			model.addAttribute("equipe", equipe);
 			model.addAttribute("jogo", jogo);
 			return PAGINA_DETALHES_EQUIPE;
-		}else{			
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+		} else {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 	}
-	
-	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/excluir", method = RequestMethod.GET)
-	public String excluir(@PathVariable("idJogo") Integer idJogo, @PathVariable("idEquipe") Integer idEquipe, 
+
+	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEqui}/editar", method = RequestMethod.GET)
+	public String editarEquipe(@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("idEqui") Integer idEqui, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
-		
+
 		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Equipe equipe = equipeService.find(Equipe.class, idEqui);
+		if (equipe == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/equipe/equipes";
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		List<Usuario> participantes = new ArrayList<Usuario>();
+		participantes.addAll(equipe.getAlunos());
+		participantes.addAll(equipeService.alunosSemEquipe(jogo));
+
+		if (usuario.getId() == jogo.getProfessor().getId()) {
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("equipe", equipe);
+			model.addAttribute("participantes", participantes);
+			model.addAttribute("action", "editar");
+			return PAGINA_CADASTRAR_EQUIPE;
+		}
+
+		redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+		return REDIRECT_PAGINA_LISTAR_JOGO;
+	}
+
+	@RequestMapping(value = "/{id}/equipe/editar", method = RequestMethod.POST)
+	public String editar(
+			@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
+			@PathVariable("id") Integer id, @Valid Equipe equipe, BindingResult result, HttpSession session,
+			RedirectAttributes redirect, Model model) {
+		Jogo jogo = jogoService.find(Jogo.class, id);
+
+		model.addAttribute("action", "editar");
+
+		if (result.hasErrors()) {
+			model.addAttribute("erro", "Erro ao editar equipe.");
+			return "redirect:/jogo/" + id + "/equipe/" + equipe.getId()
+					+ "/editar";
+		}
+
+		if (jogo == null) {
+			redirect.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+
+		List<Usuario> alunos = new ArrayList<Usuario>();
+		equipe.setStatus(true);
+		equipe.setJogo(jogo);
+		equipeService.update(equipe);
+
+		if (idAlunos != null && !idAlunos.isEmpty()) {
+
+			for (String idaluno : idAlunos) {
+				Usuario aluno = usuarioService.find(Usuario.class, new Integer(
+						idaluno));
+				aluno.setEquipe(equipe);
+				alunos.add(aluno);
+			}
+
+		}
+		if (!alunos.isEmpty()) {
+			usuarioService.atualizar(alunos);
+		}
+		redirect.addFlashAttribute("info", "Equipe atualizada com sucesso.");
+		return "redirect:/jogo/" + id + "/equipes";
+	}
+
+	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/excluir", method = RequestMethod.GET)
+	public String excluir(@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("idEquipe") Integer idEquipe, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
+
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		if (equipe == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/"+ idJogo +"/equipes";
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + idJogo + "/equipes";
 		}
 		
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId() && jogo.getEquipes().contains(equipe)) {
-			
+		if (usuario.getId() == jogo.getProfessor().getId()
+				&& jogo.getEquipes().contains(equipe)) {
+
 			for (Usuario aluno : equipe.getAlunos()) {
 				aluno.setEquipe(null);
 				usuarioService.update(aluno);
 			}
 			jogo.getEquipes().remove(equipe);
 			jogoService.update(jogo);
-			equipeService.delete(equipe);	
-			redirectAttributes.addFlashAttribute("info", MENSAGEM_EQUIPE_REMOVIDA);
+			equipeService.delete(equipe);
+			redirectAttributes.addFlashAttribute("info",
+					MENSAGEM_EQUIPE_REMOVIDA);
 		} else {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
 		}
-		return "redirect:/jogo/"+ idJogo +"/equipes";
+		return "redirect:/jogo/" + idJogo + "/equipes";
 
 	}
-	
+
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/usuario/{idUsuario}/desvincular", method = RequestMethod.GET)
-	public String desvincularUsuario(@PathVariable("idUsuario") Integer idUsuario, @PathVariable("idEquipe") Integer idEquipe, 
-			@PathVariable("idJogo") Integer idJogo, HttpSession session, RedirectAttributes redirectAttributes) {
-	
+	public String desvincularUsuario(
+			@PathVariable("idUsuario") Integer idUsuario,
+			@PathVariable("idEquipe") Integer idEquipe,
+			@PathVariable("idJogo") Integer idJogo, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+
 		Usuario user = usuarioService.find(Usuario.class, idUsuario);
 		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		
+
 		if (user == null) {
-			redirectAttributes.addFlashAttribute("erro", "Participante inexistente");
-			return "redirect:/jogo/"+ jogo.getId() +"/equipes/"+equipe.getId();
+			redirectAttributes.addFlashAttribute("erro",
+					"Participante inexistente");
+			return "redirect:/jogo/" + jogo.getId() + "/equipes/"
+					+ equipe.getId();
 		}
 		if (equipe == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/"+ jogo.getId() +"/equipes";
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + jogo.getId() + "/equipes";
 		}
-		if(jogo==null){
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
+
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId() && jogo.getEquipes().contains(equipe)) {
+		if (usuario.getId() == jogo.getProfessor().getId()
+				&& jogo.getEquipes().contains(equipe)) {
 			user.setEquipe(null);
 			usuarioService.update(user);
-			redirectAttributes.addFlashAttribute("info", "Participante desvinculado com sucesso.");
+			redirectAttributes.addFlashAttribute("info",
+					"Participante desvinculado com sucesso.");
 		} else {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
 		}
-		return "redirect:/jogo/"+ idJogo +"/equipe/"+ idEquipe;
+		return "redirect:/jogo/" + idJogo + "/equipe/" + idEquipe;
 
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/inativar", method = RequestMethod.GET)
-	public String inativarEquipe(@PathVariable("idEquipe") Integer idEquipe, 
-			@PathVariable("idJogo") Integer idJogo, HttpSession session, RedirectAttributes redirectAttributes) {
-	
+	public String inativarEquipe(@PathVariable("idEquipe") Integer idEquipe,
+			@PathVariable("idJogo") Integer idJogo, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+
 		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		
+
 		if (equipe == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/"+ jogo.getId() +"/equipes";
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + jogo.getId() + "/equipes";
 		}
-		if(jogo==null){
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
+
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId() && jogo.getEquipes().contains(equipe)) {
+		if (usuario.getId() == jogo.getProfessor().getId()
+				&& jogo.getEquipes().contains(equipe)) {
 			equipe.setStatus(false);
 			equipeService.update(equipe);
-			redirectAttributes.addFlashAttribute("info", "Equipe inativada com sucesso.");
+			redirectAttributes.addFlashAttribute("info",
+					"Equipe inativada com sucesso.");
 		} else {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
 		}
-		return "redirect:/jogo/"+ idJogo +"/equipe/"+ idEquipe;
+		return "redirect:/jogo/" + idJogo + "/equipe/" + idEquipe;
 
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/ativar", method = RequestMethod.GET)
-	public String ativarEquipe(@PathVariable("idEquipe") Integer idEquipe, 
-			@PathVariable("idJogo") Integer idJogo, HttpSession session, RedirectAttributes redirectAttributes) {
-	
+	public String ativarEquipe(@PathVariable("idEquipe") Integer idEquipe,
+			@PathVariable("idJogo") Integer idJogo, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+
 		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		
+
 		if (equipe == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/"+ jogo.getId() +"/equipes";
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + jogo.getId() + "/equipes";
 		}
-		if(jogo==null){
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
+
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId() && jogo.getEquipes().contains(equipe)) {
+		if (usuario.getId() == jogo.getProfessor().getId()
+				&& jogo.getEquipes().contains(equipe)) {
 			equipe.setStatus(true);
 			equipeService.update(equipe);
-			redirectAttributes.addFlashAttribute("info", "Equipe ativada com sucesso.");
+			redirectAttributes.addFlashAttribute("info",
+					"Equipe ativada com sucesso.");
 		} else {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
 		}
-		return "redirect:/jogo/"+ idJogo +"/equipe/"+ idEquipe;
+		return "redirect:/jogo/" + idJogo + "/equipe/" + idEquipe;
 
 	}
+
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

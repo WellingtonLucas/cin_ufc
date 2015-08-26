@@ -1,10 +1,11 @@
 package br.ufc.cin.web;
 
 
-import static br.ufc.cin.util.Constants.*;
+import static br.ufc.cin.util.Constants.MENSAGEM_ADD_ANEXO;
 import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPES_NAO_CRIADAS;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_AO_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
+import static br.ufc.cin.util.Constants.MENSAGEM_FORM_NAO_CRIADOS;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_ATUALIZADO;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_CADASTRADO;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
@@ -14,6 +15,7 @@ import static br.ufc.cin.util.Constants.MENSAGEM_USUARIOS_NAO_ASSOCIADOS;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_DETALHES_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_EQUIPES;
+import static br.ufc.cin.util.Constants.PAGINA_LISTAR_FORMULARIOS;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_USUARIOS;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
@@ -88,17 +90,14 @@ public class JogoController {
 	
 	@RequestMapping(value ="/novo-jogo", method = RequestMethod.GET)
 	public String cadastrarFrom(Model model, HttpSession session){
-		Usuario usuario =  getUsuarioLogado(session);
 		model.addAttribute("action", "cadastrar");
 		model.addAttribute("jogo", new Jogo());	
-		model.addAttribute("participantes", usuarioService.getPossiveisParticipantes(usuario));
 		
 		return PAGINA_CADASTRAR_JOGO;
 	}
 	
 	@RequestMapping(value = "/novo-jogo", method = RequestMethod.POST)
-	public  String cadastrar(@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
-			@ModelAttribute("jogo") Jogo jogo, @RequestParam("anexos") List<MultipartFile> anexos, 
+	public  String cadastrar(@ModelAttribute("jogo") Jogo jogo, @RequestParam("anexos") List<MultipartFile> anexos, 
 			BindingResult result, HttpSession session, RedirectAttributes redirect, Model model){
 		
 		Usuario usuario = getUsuarioLogado(session);
@@ -110,14 +109,6 @@ public class JogoController {
 		}
 		
 		jogo.setProfessor(usuarioService.find(Usuario.class, usuario.getId()));
-		
-		if(idAlunos != null && !idAlunos.isEmpty()) {
-			List<Usuario> alunos = new ArrayList<Usuario>();
-			for(String idaluno : idAlunos) {
-				alunos.add(usuarioService.find(Usuario.class, new Integer(idaluno)));
-			}
-			jogo.setAlunos(alunos);
-		}
 		
 		List<Documento> documentos = new ArrayList<Documento>();
 		
@@ -149,7 +140,9 @@ public class JogoController {
 	}
 	
 	@RequestMapping(value = "/{id}/editar", method = RequestMethod.GET)
-	public String editarForm(@PathVariable("id") Integer id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {		
+	public String editarForm(@PathVariable("id") Integer id, Model model, HttpSession session, 
+			RedirectAttributes redirectAttributes) {
+		
 		Jogo jogo = jogoService.find(Jogo.class, id);
 		
 		if (jogo == null) {
@@ -161,7 +154,6 @@ public class JogoController {
 		
 		if (usuario.getId() == jogo.getProfessor().getId()) {
 			model.addAttribute("jogo", jogo);
-			model.addAttribute("participantes", usuarioService.getPossiveisParticipantes(usuario));
 		 	model.addAttribute("action", "editar");
 			return PAGINA_CADASTRAR_JOGO;
 		}
@@ -171,31 +163,16 @@ public class JogoController {
 	}
 	
 	@RequestMapping(value = "/editar", method = RequestMethod.POST)
-	public String editar(@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
-			@RequestParam("anexos") List<MultipartFile> anexos, @Valid Jogo jogo, 
+	public String editar(@RequestParam("anexos") List<MultipartFile> anexos, @Valid Jogo jogo, 
 			BindingResult result, Model model, HttpSession session,	RedirectAttributes redirect) {
 		
 		Usuario usuario = getUsuarioLogado(session);
-		model.addAttribute("participantes", usuarioService.getPossiveisParticipantes(usuario));
 		model.addAttribute("action", "editar");
 		if (result.hasErrors()) {
 			return PAGINA_CADASTRAR_JOGO;
 		}
 		
 		jogo.setProfessor(usuarioService.find(Usuario.class, usuario.getId()));
-		
-		if(idAlunos != null && !idAlunos.isEmpty()) {
-			List<Usuario> alunos = new ArrayList<Usuario>();
-			
-			for(String idaluno : idAlunos) {
-				
-				Usuario aluno = usuarioService.find(Usuario.class, new Integer(idaluno));
-				aluno.addJogoParticipa(jogo);
-				alunos.add(aluno);
-				
-			}
-			jogo.setAlunos(alunos);
-		}
 		
 		List<Documento> documentos = new ArrayList<Documento>();	
 		documentos = documentoService.getDocumentoByProjeto(jogo);
@@ -329,6 +306,99 @@ public class JogoController {
 		return PAGINA_LISTAR_FORMULARIOS;
 
 	}
+	
+	@RequestMapping(value = "/{id}/vincular", method = RequestMethod.GET)
+	public String vincularParticipantes(Model model, HttpSession session, @PathVariable("id") Integer id, 
+			RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class,id);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("action","vincular");
+		List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(getUsuarioLogado(session), jogo);
+		
+		if(usuarios == null || usuarios.isEmpty()){
+			model.addAttribute("erro", "Todos os usuários já estão cadastrados.");
+		}
+
+		model.addAttribute("usuarios", usuarios);
+		return "jogo/adicionarParticipante";
+	}
+	@RequestMapping(value = "/participantes/vincular", method = RequestMethod.POST)
+	public String vincular(Model model, HttpSession session, @ModelAttribute("jogo") Jogo jogo, 
+			RedirectAttributes redirectAttributes, BindingResult result) {
+		
+		Jogo jogoCompleto = jogoService.find(Jogo.class, jogo.getId());
+		List<Usuario> alunos = new ArrayList<Usuario>();
+		
+		if(result.hasErrors()){
+			redirectAttributes.addFlashAttribute("erro",
+					"Conceteu algum erro ao associar usuários.");
+			return "redirect:/jogo/"+jogo.getId()+"/vincular";
+		}
+		for (Usuario aluno : jogo.getAlunos()) {
+			if(aluno.getId() != null){
+				aluno = usuarioService.find(Usuario.class, aluno.getId());
+				aluno.addJogoParticipa(jogoCompleto);
+				alunos.add(aluno);
+			}
+		}
+		if(!alunos.isEmpty()){
+			jogo.getAlunos().addAll(alunos);
+			jogoService.update(jogoCompleto);
+			redirectAttributes.addFlashAttribute("info",
+					"Usuários associados ao jogo com sucesso!.");
+			return "redirect:/jogo/"+jogo.getId()+"/participantes";
+		}else{
+			redirectAttributes.addFlashAttribute("erro",
+					"Selecione usuários para associar ao jogo.");
+			return "redirect:/jogo/"+jogo.getId()+"/vincular";
+		}
+		
+	}
+	
+	@RequestMapping(value = "/{idJogo}/participantes/{idUsuario}/desvincular", method = RequestMethod.GET)
+	public String desvincularUsuario(@PathVariable("idUsuario") Integer idUsuario,			
+			@PathVariable("idJogo") Integer idJogo, HttpSession session,
+			RedirectAttributes redirectAttributes, Model model) {
+
+		Usuario user = usuarioService.find(Usuario.class, idUsuario);
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+
+		if (user == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					"Participante inexistente");
+			List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(getUsuarioLogado(session), jogo);
+			model.addAttribute("usuarios", usuarios);
+			return "redirect:/jogo/" + jogo.getId() + "/participantes";
+		}
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+
+		Usuario usuario = getUsuarioLogado(session);
+		if (usuario.getId() == jogo.getProfessor().getId()) {
+			user.getJogoParticipa().remove(jogo);
+			jogo.getAlunos().remove(user);
+			jogoService.update(jogo);
+			usuarioService.update(user);
+			redirectAttributes.addFlashAttribute("info",
+					"Participante desvinculado com sucesso.");
+		} else {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+		}
+		
+		List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(getUsuarioLogado(session), jogo);
+		model.addAttribute("usuarios", usuarios);
+		return "redirect:/jogo/" + idJogo + "/participantes";
+
+	}
+
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

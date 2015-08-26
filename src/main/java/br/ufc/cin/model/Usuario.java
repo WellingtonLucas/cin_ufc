@@ -43,12 +43,12 @@ public class Usuario {
 	@NotEmpty
 	private String senha;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	@NotEmpty
 	private String email;
 
 	@Column
-	private String login;
+	private String matricula;
 	
 	@Column
 	private String papel;
@@ -164,12 +164,12 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public String getLogin() {
-		return login;
+	public String getMatricula() {
+		return matricula;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 
 	public void setId(Integer id) {

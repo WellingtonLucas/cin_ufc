@@ -140,57 +140,6 @@
 			</div>
 		</div>
 	</div>
-	
-	<!-- Modal Desvincular aluno -->
-	<div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-        			<h4 class="modal-title" id="submeterModalLabel">Desvincular</h4>
-        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<a href="#" class="btn btn-primary">Desvincular</a>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<!-- Modal Inativar Equipe -->
-	<div class="modal fade" id="confirm-inativar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-        			<h4 class="modal-title" id="inativarModalLabel">Inativar</h4>
-        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<a href="#" class="btn btn-primary">Inativar</a>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<!-- Modal ativar Equipe -->
-	<div class="modal fade" id="confirm-ativar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-        			<h4 class="modal-title" id="ativarModalLabel">Ativar</h4>
-        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<a href="#" class="btn btn-primary">Ativar</a>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				</div>
-			</div>
-		</div>
-	</div>
 	<jsp:include page="../fragments/footer.jsp" />	
 </body>
 </html>

@@ -82,6 +82,13 @@
 			</div>	
 			
 			<div class="form-group">					
+				<div class="col-sm-4">
+					<div class="error-validation"><form:errors path="matricula"></form:errors></div>
+					<form:input id="matricula" path="matricula" type="text" cssClass="form-control" placeholder="Matricula" />
+				</div>
+			</div>
+				
+			<div class="form-group">					
 				<div class="col-sm-8">
 					<div class="error-validation"><form:errors path="curso"></form:errors></div>
 					<form:input id="curso" path="curso" type="text" cssClass="form-control" placeholder="Curso" />

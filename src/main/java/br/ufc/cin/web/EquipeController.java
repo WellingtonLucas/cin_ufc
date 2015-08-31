@@ -51,7 +51,8 @@ public class EquipeController {
 	public String cadastrarFrom(@PathVariable("id") Integer id, Model model,
 			HttpSession session) {
 		Jogo jogo = jogoService.find(Jogo.class, id);
-
+		
+		model.addAttribute("editor", "equipe");
 		model.addAttribute("action", "cadastrar");
 		model.addAttribute("idJogo", id);
 		model.addAttribute("equipe", new Equipe());
@@ -69,7 +70,7 @@ public class EquipeController {
 		Jogo jogo = jogoService.find(Jogo.class, id);
 
 		model.addAttribute("action", "cadastrar");
-
+		model.addAttribute("editor", "equipe");
 		if (result.hasErrors()) {
 			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
 			return "redirect:/jogo/" + id + "/equipe/nova";
@@ -101,11 +102,10 @@ public class EquipeController {
 	public String verDetalhes(@PathVariable("idJogo") Integer idJogo,
 			@PathVariable("idEquipe") Integer idEquipe, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
-		model.addAttribute("action", "detalhes");
 
 		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
+		model.addAttribute("action", "detalhesEquipe");
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		model.addAttribute("action", "detalhes");
 		if (equipe == null) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_EQUIPE_INEXISTENTE);
@@ -117,12 +117,22 @@ public class EquipeController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId()
-				&& jogo.getEquipes().contains(equipe)) {
+		if (usuario.getId() == jogo.getProfessor().getId() && jogo.getEquipes().contains(equipe)) {
 			model.addAttribute("equipe", equipe);
 			model.addAttribute("jogo", jogo);
+			model.addAttribute("permissao", "professor");
 			return PAGINA_DETALHES_EQUIPE;
-		} else {
+		}else if(equipe.getAlunos().contains(usuario) && jogo.getEquipes().contains(equipe)){
+			model.addAttribute("equipe", equipe);
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("permissao", "membro");
+			return PAGINA_DETALHES_EQUIPE;
+		}else if(jogo.getAlunos().contains(usuario)){
+			model.addAttribute("equipe", equipe);
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("permissao", "outro");
+			return PAGINA_DETALHES_EQUIPE;
+		}else {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -134,7 +144,7 @@ public class EquipeController {
 			@PathVariable("idEqui") Integer idEqui, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-
+		
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_JOGO_INEXISTENTE);
@@ -154,6 +164,7 @@ public class EquipeController {
 		if (usuario.getId() == jogo.getProfessor().getId()) {
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("equipe", equipe);
+			model.addAttribute("editor", "equipe");
 			model.addAttribute("participantes", participantes);
 			model.addAttribute("action", "editar");
 			return PAGINA_CADASTRAR_EQUIPE;
@@ -169,7 +180,7 @@ public class EquipeController {
 			@PathVariable("id") Integer id, @Valid Equipe equipe, BindingResult result, HttpSession session,
 			RedirectAttributes redirect, Model model) {
 		Jogo jogo = jogoService.find(Jogo.class, id);
-
+		model.addAttribute("editor", "equipe");
 		model.addAttribute("action", "editar");
 
 		if (result.hasErrors()) {
@@ -189,20 +200,18 @@ public class EquipeController {
 		equipeService.update(equipe);
 
 		if (idAlunos != null && !idAlunos.isEmpty()) {
-
 			for (String idaluno : idAlunos) {
 				Usuario aluno = usuarioService.find(Usuario.class, new Integer(
 						idaluno));
 				aluno.setEquipe(equipe);
 				alunos.add(aluno);
 			}
-
 		}
 		if (!alunos.isEmpty()) {
 			usuarioService.atualizar(alunos);
 		}
 		redirect.addFlashAttribute("info", "Equipe atualizada com sucesso.");
-		return "redirect:/jogo/" + id + "/equipes";
+		return "redirect:/jogo/" + id + "/equipe/"+equipe.getId();
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/excluir", method = RequestMethod.GET)
@@ -354,7 +363,71 @@ public class EquipeController {
 		return "redirect:/jogo/" + idJogo + "/equipe/" + idEquipe;
 
 	}
-
+	
+	@RequestMapping(value = "/jogo/{id}/equipe/{idEquipe}/vincular", method = RequestMethod.GET)
+	public String vincularParticipantes(Model model, HttpSession session, @PathVariable("id") Integer id, 
+			 @PathVariable("idEquipe") Integer idEquipe, RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class, id);
+		Equipe equipe = equipeService.find(Equipe.class,idEquipe);
+		Usuario usuario = getUsuarioLogado(session);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		if (equipe == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + id + "/equipes";
+		}
+		if(usuario.getId() == jogo.getProfessor().getId()){
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("equipe", equipe);
+			model.addAttribute("action","vincularEquipe");
+			List<Usuario> usuarios = equipeService.alunosSemEquipe(jogo);
+			
+			if(usuarios == null || usuarios.isEmpty()){
+				model.addAttribute("erro", "Todos os usuários já estão cadastrados.");
+			}
+	
+			model.addAttribute("usuarios", usuarios);
+			return "equipe/adicionarParticipante";
+		}
+		redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+		return "redirect:/jogo/" + id + "/equipe/"+equipe.getId();
+	}
+	
+	@RequestMapping(value = "jogo/equipe/participantes/vincular", method = RequestMethod.POST)
+	public String vincular(Model model, HttpSession session, @ModelAttribute("equipe") Equipe equipe, 
+			RedirectAttributes redirectAttributes, BindingResult result) {
+		
+		Equipe equipeCompleta = equipeService.find(Equipe.class, equipe.getId());
+		List<Usuario> alunos = new ArrayList<Usuario>();
+		
+		if(result.hasErrors()){
+			redirectAttributes.addFlashAttribute("erro",
+					"Conceteu algum erro ao associar usuários.");
+			return "redirect:/jogo/"+equipeCompleta.getJogo().getId()+"/equipe/"+equipeCompleta.getId()+"/vincular";
+		}
+		for (Usuario aluno : equipe.getAlunos()) {
+			if(aluno.getId() != null){
+				aluno = usuarioService.find(Usuario.class, aluno.getId());
+				aluno.setEquipe(equipeCompleta);
+				alunos.add(aluno);
+			}
+		}
+		if(!alunos.isEmpty()){
+			equipeCompleta.getAlunos().addAll(alunos);
+			equipeService.update(equipeCompleta);
+			redirectAttributes.addFlashAttribute("info",
+					"Usuários associados à equipe com sucesso!.");
+			return "redirect:/jogo/"+equipeCompleta.getJogo().getId()+"/equipe/"+equipeCompleta.getId();
+		}else{
+			redirectAttributes.addFlashAttribute("erro",
+					"Selecione usuários para associar à equipe.");
+			return "redirect:/jogo/"+equipeCompleta.getJogo().getId()+"/equipe/"+equipeCompleta.getId()+"/vincular";
+		}
+		
+	}
+	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

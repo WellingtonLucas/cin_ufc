@@ -17,6 +17,7 @@
 	<c:set var="subDescri" value="Esta funcionalidade permite a criação de um formulário com perguntas e alternativas."></c:set>
 	<c:set var="titulo" value="Novo Formulário"></c:set>
 	<c:set var="txtBtn" value="Cadastrar"></c:set>
+	<c:set var="cancelar" value="/jogo/${idJogo }/formularios"></c:set>
 </c:if>
 <c:if test="${action eq 'editar' }">
 	<c:set var="url" value="/${idJogo }/formulario/editar"></c:set>
@@ -24,6 +25,7 @@
 	<c:set var="subDescri" value="Esta funcionalidade permite a edição do seu formulário."></c:set>
 	<c:set var="titulo" value="Editar - Formulário "></c:set>
 	<c:set var="txtBtn" value="Atualizar"></c:set>
+	<c:set var="cancelar" value="/jogo/${idJogo }/formulario/${formulario.id }/detalhes"></c:set>
 </c:if>
 <c:if test="${action eq 'copiar' }">
 	<c:set var="url" value="/${idJogo }/formulario/salvar"></c:set>
@@ -31,6 +33,7 @@
 	<c:set var="subDescri" value="Esta funcionalidade permite a edição do seu formulário copiado."></c:set>
 	<c:set var="titulo" value="Copiar - Formulário "></c:set>
 	<c:set var="txtBtn" value="Salvar Cópia"></c:set>
+	<c:set var="cancelar" value="/jogo/${idJogo }/formulario/${formulario.id }/detalhes"></c:set>
 </c:if>
 
 <jsp:include page="../fragments/header-estrutura.jsp" />
@@ -274,9 +277,14 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<button id="submit_button" name="submit_button"
-						class="btn btn-primary btn-lg col-sm-2">${txtBtn }</button>
+						class="btn btn-primary btn-lg col-sm-2">${txtBtn }
+					</button>
+					<div class="col-sm-2">
+						<a href="<c:url value="${cancelar }"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
+					</div>
 				</div>
 			</div>
+			
 		</form:form>
 		<!-- end attribution -->
 	</div>

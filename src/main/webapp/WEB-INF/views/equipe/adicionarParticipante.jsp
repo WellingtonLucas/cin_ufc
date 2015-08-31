@@ -11,8 +11,8 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<c:if test="${action eq 'vincularAoJogo' }">
-		<c:set var="url" value="/jogo/participantes/vincular"></c:set>
+	<c:if test="${action eq 'vincularEquipe' }">
+		<c:set var="url" value="/jogo/equipe/participantes/vincular"></c:set>
 	</c:if>
 	<title>Vincular jogadores</title>
 
@@ -27,6 +27,7 @@
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<div class="col-sm-12">
 						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
+						<h2><strong>Equipe: ${equipe.nome }</strong> - <small>Vincule participantes à equipe</small></h2>
 						<hr>
 						<c:if test="${not empty erro}">
 							<div class="alert alert-warning alert-dismissible" role="alert">
@@ -54,11 +55,9 @@
 					            </span>
 					        </div>
 				        </div>
-				        <form:form id="responderForm" role="form" commandName="jogo" class="form-horizontal" method="POST"
+				        <form:form id="addParticipante" role="form" commandName="equipe" class="form-horizontal" method="POST"
 							servletRelativeAction="${url }">
-							<form:hidden path="id" value="${jogo.id }"/>
-							<form:hidden path="semestre" value="${jogo.semestre }"/>
-							<form:hidden path="nomeDoCurso" value="${jogo.nomeDoCurso }"/>
+							<form:hidden path="id" value="${equipe.id }"/>
 							<div class="col-sm-12">
 								<table id="table" class="table table-striped table-hover">
 									<thead>

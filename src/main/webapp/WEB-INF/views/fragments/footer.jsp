@@ -36,8 +36,16 @@
 <%-- <script src="<c:url value="/resources/js/vendor/jquery.ui.widget.js.js" />"></script> --%>
 <script src="<c:url value="/resources/ckeditor/ckeditor.js"/>"></script>
 <script src="<c:url value="/resources/ckeditor/adapters/jquery.js"/>"></script>
-<script>
-	CKEDITOR.replace('descricao');
-	CKEDITOR.replace('regras');
-	CKEDITOR.config.resize_enabled = false;
-</script>
+<c:if test="${editor eq 'equipe' }">
+	<script>
+		CKEDITOR.replace('ideiaDeNegocio');
+		CKEDITOR.config.resize_enabled = false;
+	</script>
+</c:if>
+<c:if test="${editor eq 'jogo' }">
+	<script>
+		CKEDITOR.replace('descricao');
+		CKEDITOR.replace('regras');
+		CKEDITOR.config.resize_enabled = false;
+	</script>
+</c:if>

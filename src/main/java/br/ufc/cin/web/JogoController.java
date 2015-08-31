@@ -48,6 +48,7 @@ import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.DocumentoService;
+import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.UsuarioService;
 
@@ -65,6 +66,9 @@ public class JogoController {
 	@Autowired
 	private DocumentoService documentoService;
 
+	@Autowired
+	private EquipeService equipeService;
+
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index() {
 		return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -76,9 +80,13 @@ public class JogoController {
 		Integer idUsuarioLogado = usuario.getId();
 		List<Jogo> jogos = jogoService.getJogoByProfessor(idUsuarioLogado);
 		if(jogos == null){
-			model.addAttribute("info", "Não existem jogos associados.");
+			model.addAttribute("info", "Você ainda não crirou jogos.");
+		}
+		if(usuario.getJogoParticipa().isEmpty() || usuario.getJogoParticipa() == null){
+			model.addAttribute("infoParticipa", "Você ainda não está participando de um jogo.");
 		}
 		model.addAttribute("jogos", jogos);
+		model.addAttribute("jogosParticipa", usuario.getJogoParticipa());
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "home");
 		if (usuarioService.isProfessor(usuario)) {
@@ -92,7 +100,7 @@ public class JogoController {
 	public String cadastrarFrom(Model model, HttpSession session){
 		model.addAttribute("action", "cadastrar");
 		model.addAttribute("jogo", new Jogo());	
-		
+		model.addAttribute("editor", "jogo");
 		return PAGINA_CADASTRAR_JOGO;
 	}
 	
@@ -103,6 +111,7 @@ public class JogoController {
 		Usuario usuario = getUsuarioLogado(session);
 		model.addAttribute("participantes", usuarioService.getPossiveisParticipantes(usuario));
 		model.addAttribute("action", "cadastrar");
+		model.addAttribute("editor", "jogo");
 		if (result.hasErrors()) {
 			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
 			return PAGINA_CADASTRAR_JOGO;
@@ -144,7 +153,7 @@ public class JogoController {
 			RedirectAttributes redirectAttributes) {
 		
 		Jogo jogo = jogoService.find(Jogo.class, id);
-		
+		model.addAttribute("editor", "jogo");
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -168,6 +177,7 @@ public class JogoController {
 		
 		Usuario usuario = getUsuarioLogado(session);
 		model.addAttribute("action", "editar");
+		model.addAttribute("editor", "jogo");
 		if (result.hasErrors()) {
 			return PAGINA_CADASTRAR_JOGO;
 		}
@@ -211,7 +221,7 @@ public class JogoController {
 	@RequestMapping(value = "/{id}/detalhes")
 	public String verDetalhes(@PathVariable("id") Integer id, Model model, HttpSession session,
 			RedirectAttributes redirectAttributes) {
-		model.addAttribute("action", "detalhes");
+		model.addAttribute("action", "detalhesJogo");
 		Jogo jogo = jogoService.find(Jogo.class, id);
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
@@ -220,6 +230,11 @@ public class JogoController {
 		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.getId() == jogo.getProfessor().getId()) {			
 			model.addAttribute("jogo", jogo);
+			model.addAttribute("permissao", "professor");
+			return PAGINA_DETALHES_JOGO;
+		}else if(jogo.getAlunos().contains(usuario)){
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("permissao", "aluno");
 			return PAGINA_DETALHES_JOGO;
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
@@ -258,15 +273,21 @@ public class JogoController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		model.addAttribute("jogo", jogo);
-		model.addAttribute("action","participantes");
+		model.addAttribute("action","participantesJogo");
 		List<Usuario> usuarios = jogo.getAlunos();
+
+		Usuario usuario = getUsuarioLogado(session);
+		if (usuario.getId() == jogo.getProfessor().getId()) {
+			model.addAttribute("permissao", "professor");
+		}else if(jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "membro");
+		}
 		if(usuarios == null || usuarios.isEmpty()){
 			model.addAttribute("erro", MENSAGEM_USUARIOS_NAO_ASSOCIADOS);
 		}
-		model.addAttribute("usuarios", usuarios);
-		
-		return PAGINA_LISTAR_USUARIOS;
 
+		model.addAttribute("usuarios", usuarios);
+		return PAGINA_LISTAR_USUARIOS;
 	}
 	
 	@RequestMapping(value = "/{id}/equipes", method = RequestMethod.GET)
@@ -276,16 +297,22 @@ public class JogoController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		model.addAttribute("jogo", jogo);
-		model.addAttribute("action","equipes");
 		List<Equipe> equipes = jogo.getEquipes();
 		if(equipes == null || equipes.isEmpty()){
 			model.addAttribute("erro", MENSAGEM_EQUIPES_NAO_CRIADAS);
 		}
+		
+		Usuario usuario = getUsuarioLogado(session);
+		if(usuario.equals(jogo.getProfessor())){
+			model.addAttribute("permissao","professor");
+		}else if(jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao","alunoDoJogo");
+		}
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("action","equipes");
 		model.addAttribute("equipes", equipes);
 		
 		return PAGINA_LISTAR_EQUIPES;
-
 	}
 	
 	@RequestMapping(value = "/{id}/formularios", method = RequestMethod.GET)
@@ -297,14 +324,22 @@ public class JogoController {
 		}
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("action","formularios");
-		List<Formulario> formularios = jogo.getProfessor().getFormulario();
-		if(formularios == null || formularios.isEmpty()){
-			model.addAttribute("erro", MENSAGEM_FORM_NAO_CRIADOS);
-		}
-		model.addAttribute("formularios", formularios);
 		
-		return PAGINA_LISTAR_FORMULARIOS;
+		Usuario usuario = getUsuarioLogado(session);
+		if(usuario.equals(jogo.getProfessor())){
+			model.addAttribute("permissao","professor");
+			List<Formulario> formularios = jogo.getProfessor().getFormulario();
+			if(formularios == null || formularios.isEmpty()){
+				model.addAttribute("erro", MENSAGEM_FORM_NAO_CRIADOS);
+			}
+			model.addAttribute("formularios", formularios);
 
+		}else if(jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("info", "Você não possui permissão de acesso.");
+			return "redirect/jogo/"+jogo.getId()+"/detalhes";
+			
+		}
+		return PAGINA_LISTAR_FORMULARIOS;
 	}
 	
 	@RequestMapping(value = "/{id}/vincular", method = RequestMethod.GET)
@@ -315,17 +350,25 @@ public class JogoController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		model.addAttribute("jogo", jogo);
-		model.addAttribute("action","vincular");
-		List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(getUsuarioLogado(session), jogo);
-		
-		if(usuarios == null || usuarios.isEmpty()){
-			model.addAttribute("erro", "Todos os usuários já estão cadastrados.");
-		}
+		Usuario usuario = getUsuarioLogado(session);
+		if(usuario.equals(jogo.getProfessor())){
+			model.addAttribute("permissao","professor");
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("action","vincularAoJogo");
+			List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(getUsuarioLogado(session), jogo);
+			
+			if(usuarios == null || usuarios.isEmpty()){
+				model.addAttribute("erro", "Todos os usuários já estão cadastrados.");
+			}
+			model.addAttribute("usuarios", usuarios);
+			return "jogo/adicionarParticipante";
 
-		model.addAttribute("usuarios", usuarios);
-		return "jogo/adicionarParticipante";
+		}else{
+			redirectAttributes.addFlashAttribute("info", "Você não possui permissão de acesso.");
+			return "redirect/jogo/"+jogo.getId()+"/detalhes";
+		}
 	}
+	
 	@RequestMapping(value = "/participantes/vincular", method = RequestMethod.POST)
 	public String vincular(Model model, HttpSession session, @ModelAttribute("jogo") Jogo jogo, 
 			RedirectAttributes redirectAttributes, BindingResult result) {
@@ -383,6 +426,9 @@ public class JogoController {
 		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.getId() == jogo.getProfessor().getId()) {
 			user.getJogoParticipa().remove(jogo);
+			user.getEquipe().getAlunos().remove(user);
+			equipeService.update(user.getEquipe());
+			user.setEquipe(null);
 			jogo.getAlunos().remove(user);
 			jogoService.update(jogo);
 			usuarioService.update(user);

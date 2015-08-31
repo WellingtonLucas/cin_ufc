@@ -157,7 +157,7 @@
 						</button>						
 					</div>
 					<div class="col-sm-2">
-						<a href="<c:url value="/jogo/index"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
+						<a href="<c:url value="/jogo/${jogo.id }/detalhes"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
 					</div>
 				</div>
 			</form:form>

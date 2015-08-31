@@ -47,5 +47,4 @@ public class JpaJogoRepository extends JpaGenericRepositoryImpl<Jogo> implements
 		}
 		return null;
 	}
-
 }

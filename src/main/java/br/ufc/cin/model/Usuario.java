@@ -17,14 +17,14 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-
 @Entity
-@Table(name="usuario")
+@Table(name = "usuario")
 public class Usuario {
-	
+
 	public Usuario() {
 		jogoParticipa = new ArrayList<Jogo>();
 	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -32,15 +32,14 @@ public class Usuario {
 	@Column(nullable = false)
 	@NotEmpty
 	private String nome;
-	
+
 	@Column
-	private String sobreNome;	
-	
-	@Column 
+	private String sobreNome;
+
+	@Column
 	private String curso;
-	
-	@Column(nullable = false)
-	@NotEmpty
+
+	@Column(nullable=false)
 	private String senha;
 
 	@Column(nullable = false, unique = true)
@@ -49,26 +48,26 @@ public class Usuario {
 
 	@Column
 	private String matricula;
-	
+
 	@Column
 	private String papel;
-	
+
 	@Column
-	private boolean habilitado;	
-	
+	private boolean habilitado;
+
 	@ManyToOne
 	@JoinColumn(name = "id_equipe")
 	private Equipe equipe;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
-	private List<Jogo> jogos; 
-	
-	@ManyToMany(mappedBy="alunos")
+	private List<Jogo> jogos;
+
+	@ManyToMany(mappedBy = "alunos")
 	private List<Jogo> jogoParticipa;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
 	private List<Formulario> formulario;
-	
+
 	public List<Formulario> getFormulario() {
 		return formulario;
 	}
@@ -81,18 +80,19 @@ public class Usuario {
 		return jogoParticipa;
 	}
 
-	public void addJogoParticipa(Jogo jogo){
-		if(!getJogoParticipa().contains(jogo)){
+	public void addJogoParticipa(Jogo jogo) {
+		if (!getJogoParticipa().contains(jogo)) {
 			getJogoParticipa().add(jogo);
 		}
-		if(!jogo.getAlunos().contains(this)){
+		if (!jogo.getAlunos().contains(this)) {
 			jogo.getAlunos().add(this);
 		}
 	}
+
 	public void setJogoParticipa(List<Jogo> jogoParticipa) {
 		this.jogoParticipa = jogoParticipa;
 	}
-	
+
 	public String getCurso() {
 		return curso;
 	}
@@ -100,14 +100,15 @@ public class Usuario {
 	public void setCurso(String curso) {
 		this.curso = curso;
 	}
-	
+
 	public List<Jogo> getJogos() {
 		return jogos;
 	}
 
 	public void setJogos(List<Jogo> jogos) {
 		this.jogos = jogos;
-	}	
+	}
+
 	public Equipe getEquipe() {
 		return equipe;
 	}
@@ -115,7 +116,7 @@ public class Usuario {
 	public void setEquipe(Equipe equipe) {
 		this.equipe = equipe;
 	}
-	
+
 	public boolean isHabilitado() {
 		return habilitado;
 	}
@@ -139,7 +140,7 @@ public class Usuario {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public String getSobreNome() {
 		return sobreNome;
 	}
@@ -179,13 +180,23 @@ public class Usuario {
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public boolean isNew() {
 		return (this.id == null);
 	}
-	
-	 public String toString() {
-        return "Usuario id: " + getId() + 
-               ", nome: " + getNome();
-	 }
+
+	public String toString() {
+		return "Usuario id: " + getId() + ", nome: " + getNome();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Usuario)){
+			return false;
+		}
+		Usuario user = (Usuario) obj;
+		
+		return toString().equals(user.toString());
+	}
+
 }

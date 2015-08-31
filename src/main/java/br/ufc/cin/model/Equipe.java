@@ -3,12 +3,15 @@ package br.ufc.cin.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -24,6 +27,11 @@ public class Equipe {
 	
 	@Column
 	private String nome;
+	
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@Column
+	private String ideiaDeNegocio;
 	
 	@Column
 	private boolean status;
@@ -43,6 +51,14 @@ public class Equipe {
 			}
 			aluno.setEquipe(this);
 		}
+	}
+
+	public String getIdeiaDeNegocio() {
+		return ideiaDeNegocio;
+	}
+
+	public void setIdeiaDeNegocio(String ideiaDeNegocio) {
+		this.ideiaDeNegocio = ideiaDeNegocio;
 	}
 	
 	public Jogo getJogo() {
@@ -91,5 +107,14 @@ public class Equipe {
 	
 	public String toString(){
 		return "Equipe id: "+getId()+ " nome: " +getNome() ;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Equipe)){
+			return false;
+		}
+		Equipe equipe = (Equipe) obj;
+		
+		return toString().equals(equipe.toString());
 	}
 }

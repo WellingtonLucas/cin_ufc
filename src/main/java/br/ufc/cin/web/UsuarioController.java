@@ -61,7 +61,7 @@ public class UsuarioController {
 		Usuario usuario = usuarioService.find(Usuario.class, id);
 		if (usuario == null) {
 			redirectAttributes.addFlashAttribute("erro", "Usuário inexistente");
-			return "redirect:/usuario/" + id + "/detalhes";
+			return "redirect:/jogo/" + idJogo + "/participantes";
 		}
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("action", "detalhesUsuario");
@@ -80,17 +80,22 @@ public class UsuarioController {
 	@RequestMapping(value = "/atualizar", method = RequestMethod.POST)
 	public String atualizar(Model model, HttpSession session, RedirectAttributes redirectAttributes, 
 			@Valid Usuario usuario, BindingResult result) {
-		
+		Usuario perfilAnterior = usuarioService.find(Usuario.class,usuario.getId());
 		if (result.hasErrors()) {
-			model.addAttribute("usuario", getUsuarioLogado(session));
-			model.addAttribute("erro", "Erro ao atualizar seus dados.");
-			return "jogador/perfil";
+			redirectAttributes.addFlashAttribute("erro", "Erro ao atualizar seus dados.");
+			return "redirect:/usuario/perfil";
 		}
-		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
-		usuario.setSenha(encoder.encodePassword(usuario.getSenha(), ""));
-		usuarioService.update(usuario);
-		model.addAttribute("usuario", usuarioService.find(Usuario.class,usuario.getId()));
-		return "jogador/perfil";
+		if(!usuario.getSenha().isEmpty() || !(usuario.getSenha() == null)){
+			ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
+			perfilAnterior.setSenha(encoder.encodePassword(usuario.getSenha(), ""));
+		}
+		perfilAnterior.setNome(usuario.getNome());
+		perfilAnterior.setSobreNome(usuario.getSobreNome());
+		perfilAnterior.setMatricula(usuario.getMatricula());
+		perfilAnterior.setCurso(usuario.getCurso());
+		perfilAnterior.setEmail(usuario.getEmail());
+		usuarioService.update(perfilAnterior);
+		return "redirect:/usuario/perfil";
 	}
 	
 	private Usuario getUsuarioLogado(HttpSession session) {

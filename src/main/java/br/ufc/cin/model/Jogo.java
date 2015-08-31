@@ -201,4 +201,13 @@ public class Jogo implements Serializable {
 	public String toString() {
 		return "Jogo id: " + getId() + ", nome: " + getNomeDoCurso();
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Jogo)){
+			return false;
+		}
+		Jogo jogo = (Jogo) obj;
+		
+		return toString().equals(jogo.toString());
+	}
 }

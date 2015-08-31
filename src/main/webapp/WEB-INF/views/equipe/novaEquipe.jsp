@@ -55,6 +55,14 @@
 						</div>
 					</div>
 				</div>
+				<div class="form-group">
+					<div class="form-item">
+						<label for="ideiaDeNegocio" class="col-sm-2 control-label">Ideia de negócio:</label>
+						<div class="col-sm-8">
+							<form:textarea name="ideiaDeNegocio" id="ideiaDeNegocio" path="ideiaDeNegocio" class="form-control" />
+						</div>
+					</div>
+				</div>
 				<!-- PARTICIPANTES -->
 				<div class="form-group form-item">
 					<label for="idParticipantes" class="col-sm-2 control-label">Participantes:</label>
@@ -88,7 +96,7 @@
 						</button>						
 					</div>
 					<div class="col-sm-2">
-						<a href="<c:url value="/jogo/index"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
+						<a href="<c:url value="/jogo/${idJogo }/equipes"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
 					</div>
 				</div>
 			</form:form>

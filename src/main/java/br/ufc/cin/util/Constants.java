@@ -35,7 +35,7 @@ public class Constants {
 
 	public static final String MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE = "Aconteceu algum erro ao cadastrar uma nova equipe";
 	
-	public static final String MENSAGEM_PERMISSAO_NEGADA = "Permissão negada";
+	public static final String MENSAGEM_PERMISSAO_NEGADA = "Você não possui permissão de acesso.";
 
 	public static final String MENSAGEM_CAMPO_OBRIGATORIO = "Campo obrigatório";
 

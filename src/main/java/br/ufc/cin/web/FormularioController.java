@@ -206,7 +206,7 @@ public class FormularioController {
 		
 		Formulario formulario = formularioService.find(Formulario.class, idForm);
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		model.addAttribute("action", "detalhes");
+		model.addAttribute("action", "detalhesFormulario");
 		if (formulario == null) {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
 			return "redirect:/jogo/"+ idJogo +"/formularios";

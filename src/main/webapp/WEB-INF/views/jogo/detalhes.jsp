@@ -9,7 +9,7 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<title>Informações do Projeto</title>
+	<title>Informações do Jogo</title>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
 	<jsp:include page="../fragments/menu.jsp" />		
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	
 			<input id="jogoId" type="hidden" value="${jogo.id }"/>
-			<h2>${jogo.nomeDoCurso } ${jogo.semestre }</h2>	
+			<h2><strong>${jogo.nomeDoCurso }</strong> <small> ${jogo.semestre }</small></h2>	
 			<c:if test="${not empty erro}">
 				<div class="alert alert-warning alert-dismissible" role="alert">
 					<button type="button" class="close" data-dismiss="alert">
@@ -28,7 +28,7 @@
 					<c:out value="${erro}"></c:out>
 				</div>
 			</c:if>		
-			<h3>Informações</h3><hr>						
+			<h3>Informações </h3><hr>						
 			<div class="form-group">
 				<label class="col-sm-2 control-label field">Início:</label>
 				<div class="col-sm-4 field-value">
@@ -49,7 +49,7 @@
 			<div class="form-group">
 				<label class="col-sm-2 control-label field">Descrição:</label>
 				<div class="col-sm-10 field-value">
-					<article><label>${jogo.descricao }</label></article>
+					<label>${jogo.descricao }</label>
 				</div>						
 			</div>
 			<br>
@@ -60,15 +60,11 @@
 						<label>-</label>
 					</c:if>
 					<c:if test="${not empty jogo.regras }">
-						<article>
-							<label>							
-							${jogo.regras }
-							</label>
-						</article>
+						<label>							
+						${jogo.regras }
+						</label>
 					</c:if>
-					
 				</div>		
-						
 			</div>
 			<br>			
 			
@@ -80,33 +76,44 @@
 					</c:if>				
 					<c:if test="${not empty jogo.documentos }">
 						<c:forEach items="${jogo.documentos }" var="documento">
-							<label><a href="<c:url value="/documento/downloadDocumento/${documento.id }" ></c:url>">${documento.nomeOriginal }</a></label><br>							
+							<label><a href="<c:url value="/documento/downloadDocumento/${documento.id }" ></c:url>">${documento.nomeOriginal }</a></label> - 							
 						</c:forEach>
 					</c:if>
 				</div>
-			</div>				
-			
+			</div>		
+			<br>		
+			<div class="form-group">
+				<label class="col-sm-2 control-label field">Criador:</label>
+				<div class="col-sm-4 field-value">
+					<label>${jogo.professor.nome} ${jogo.professor.sobreNome}</label>
+				</div>
+				<label class="col-sm-2 control-label field">Email:</label>
+				<div class="col-sm-4 field-value">
+					<label>${jogo.professor.email}</label>
+				</div>
+			</div>
 			<div class="col-sm-12">
 				<div class="row placeholders">
 					<ul class="list-group">							
 						<li class="media"><hr></li>							
 					</ul>
-					<div class="form-group">					
-						<div class="col-sm-2">				
-							<a id="editar" href="<c:url value="/jogo/${jogo.id}/editar" ></c:url>">
-								<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
-							</a>
+					<c:if test="${permissao == 'professor' }">
+						<div class="form-group">					
+							<div class="col-sm-2">				
+								<a id="editar" href="<c:url value="/jogo/${jogo.id}/editar" ></c:url>">
+									<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
+								</a>
+							</div>
+							<div class="col-sm-2">
+								<a id="excluir" data-toggle="modal" data-target="#confirm-delete" href="#" 
+								data-href="<c:url value="/jogo/${jogo.id}/excluir"></c:url>" data-name="${jogo.nomeDoCurso }">
+									<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
+								</a>					
+							</div>
 						</div>
-						<div class="col-sm-2">
-							<a id="excluir" data-toggle="modal" data-target="#confirm-delete" href="#" 
-							data-href="<c:url value="/jogo/${jogo.id}/excluir"></c:url>" data-name="${jogo.nomeDoCurso }">
-								<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
-							</a>					
-						</div>
-					</div>
+					</c:if>
 				</div>
 			</div>
-						
 		</div>
 	</div>
 	<!-- Modal Excluir JOGO -->

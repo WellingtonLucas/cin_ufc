@@ -41,8 +41,8 @@
 						</c:if>
 					</div>
 					
-					<label class="col-sm-2 control-label field">Ideia de Negócio:</label>
-					<div class="col-sm-10 field-value">
+					<h3><strong class="col-sm-3">Ideia de Negócio:</strong></h3>
+					<div class="col-sm-9 field-value">
 						<c:if test="${empty equipe.ideiaDeNegocio }">
 							<label>-</label>
 						</c:if>

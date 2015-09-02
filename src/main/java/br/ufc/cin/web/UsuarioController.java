@@ -65,7 +65,6 @@ public class UsuarioController {
 		}
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("action", "detalhesUsuario");
-		model.addAttribute("equipe", usuario.getEquipe());
 		model.addAttribute("usuario", usuario);
 		return "jogador/usuario";
 	}
@@ -85,7 +84,7 @@ public class UsuarioController {
 			redirectAttributes.addFlashAttribute("erro", "Erro ao atualizar seus dados.");
 			return "redirect:/usuario/perfil";
 		}
-		if(!usuario.getSenha().isEmpty() || !(usuario.getSenha() == null)){
+		if(!(usuario.getSenha().isEmpty())){
 			ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 			perfilAnterior.setSenha(encoder.encodePassword(usuario.getSenha(), ""));
 		}

@@ -39,8 +39,8 @@
 						<label>${usuario.curso }</label>
 					</c:if>
 				</div>
-				<label class="col-sm-2 control-label field">Email:</label>
-				<div class="col-sm-4 field-value">
+				<label class="col-sm-1 control-label field">Email:</label>
+				<div class="col-sm-5 field-value">
 					<c:if test="${empty usuario.email }">
 						<label>-</label>
 					</c:if>
@@ -48,7 +48,20 @@
 						<label>${usuario.email }</label>
 					</c:if>
 				</div>
-			</div>				
+			</div>
+			<br>
+			<div class="form-group">
+				<label class="col-sm-2 control-label field" for="matricula">Matricula:</label>
+				<div class="field-value col-sm-3" id="matricula">
+					<c:if test="${empty usuario.matricula }">
+						<label>-</label>
+					</c:if>
+					<c:if test="${not empty usuario.matricula }">
+						${usuario.matricula }
+					</c:if>
+				</div>
+			</div>		
+			<br>				
 			<div class="form-group">
 				<label class="col-sm-2 control-label field">Equipe:</label>
 				<div class="col-sm-10 field-value">
@@ -58,11 +71,8 @@
 					<c:if test="${not empty usuario.equipe.nome }">
 						${usuario.equipe.nome }
 					</c:if>
-					
 				</div>		
-						
 			</div>
-			<br>			
 		</div>
 	</div>
 	<jsp:include page="../fragments/footer.jsp" />	

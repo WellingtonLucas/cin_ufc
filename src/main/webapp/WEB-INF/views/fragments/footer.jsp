@@ -13,7 +13,12 @@
 <script src="<c:url value="/webjars/datatables/1.9.4/media/js/jquery.dataTables.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.pt-BR.js" />"></script>
-<script src="<c:url value="/resources/js/funcoes.js" />"></script>
+<c:if test="${editor != 'rodada' }">
+	<script src="<c:url value="/resources/js/funcoes.js" />"></script>
+</c:if>
+<c:if test="${editor eq 'rodada' }">
+	<script src="<c:url value="/resources/js/rodada.js" />"></script>
+</c:if>
 <script src="<c:url value="/resources/js/funcoes2.js" />"></script>
 <script src="<c:url value="/resources/js/formulario.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
@@ -46,6 +51,12 @@
 	<script>
 		CKEDITOR.replace('descricao');
 		CKEDITOR.replace('regras');
+		CKEDITOR.config.resize_enabled = false;
+	</script>
+</c:if>
+<c:if test="${editor eq 'rodada' }">
+	<script>
+		CKEDITOR.replace('descricao');
 		CKEDITOR.config.resize_enabled = false;
 	</script>
 </c:if>

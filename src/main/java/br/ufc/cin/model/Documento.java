@@ -2,9 +2,11 @@ package br.ufc.cin.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Type;
@@ -28,6 +30,22 @@ public class Documento {
 	
 	@ManyToOne
 	private Jogo jogo;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_entrega")
+	private Entrega entrega;
+
+	public Entrega getEntrega() {
+		return entrega;
+	}
+
+	public void setEntrega(Entrega entrega) {
+		this.entrega = entrega;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getNomeOriginal() {
 		return nomeOriginal;
@@ -71,6 +89,11 @@ public class Documento {
 
 	public Integer getId() {
 		return id;
+	}
+	
+	@Override
+	public String toString() {
+		return "Documento id: "+getId()+"; Nome: "+getNomeOriginal()+"; Extensão: "+ getExtensao();
 	}
 	
 	@Override

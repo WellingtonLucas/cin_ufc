@@ -9,7 +9,7 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<title>Informações do Projeto</title>
+	<title>Rodada</title>
 </head>
 
 <body>
@@ -21,7 +21,7 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<div class="col-sm-12">
-						<h2><strong>${equipe.nome }</strong></h2>						
+						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>						
 						<hr>				
 						<c:if test="${not empty erro}">
 							<div class="alert alert-warning alert-dismissible" role="alert">
@@ -41,56 +41,45 @@
 						</c:if>
 					</div>
 					
-					<h3><strong class="col-sm-3">Ideia de Negócio:</strong></h3>
-					<div class="col-sm-9 field-value">
-						<c:if test="${empty equipe.ideiaDeNegocio }">
+					<div class="form-group">
+						<label class="col-sm-2 control-label field">Nome:</label>
+						<div class="col-sm-10 field-value">
+							<c:if test="${empty rodada.nome }">
+								<label>-</label>
+							</c:if>
+							<c:if test="${not empty rodada.nome }">
+								<label>							
+									${rodada.nome }
+								</label>
+							</c:if>
+						</div>		
+					</div>
+					<br>
+					<div class="form-group">
+						<label class="col-sm-2 control-label field">Início:</label>
+						<div class="col-sm-4 field-value">
+							<c:if test="${empty rodada.inicio }">
+								<label>-</label>
+							</c:if>
+							<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.inicio }" /></label>
+						</div>
+						<label class="col-sm-2 control-label field">Término:</label>
+						<div class="col-sm-4 field-value">
+							<c:if test="${empty rodada.termino }">
+								<label>-</label>
+							</c:if>
+							<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.termino }" /></label>
+						</div>
+					</div>
+					<br>
+					<div class="form-group">
+						<label class="col-sm-2 control-label field">Descrição:</label>
+						<c:if test="${empty rodada.descricao }">
 							<label>-</label>
 						</c:if>
-						<c:if test="${not empty equipe.ideiaDeNegocio }">
-							<article>
-								<label>							
-									${equipe.ideiaDeNegocio }
-								</label>
-							</article>
-						</c:if>
-					</div>		
-				
-					<div class="col-sm-12">
-						<c:if test="${not empty equipe.alunos }">
-							<table id="table_id" class="table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>Nome</th>
-										<th>Sorenome</th>
-										<th>Curso</th>
-										<th>Email</th>
-										<c:if test="${permissao eq 'professor' }">
-											<th></th>
-										</c:if>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="usuario" items="${equipe.alunos}">
-										<tr>
-											<td>
-												<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
-											</td>
-											<td>${usuario.sobreNome}</td>
-											<td>${usuario.curso } </td>
-											<td>${usuario.email } </td>
-											<c:if test="${permissao eq 'professor' }">
-												<td>
-													<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
-														data-href="<c:url value="${equipe.id }/usuario/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
-														<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
-													</a>
-												</td>
-											</c:if>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</c:if>	
+						<div class="col-sm-10 field-value">
+							<label>${rodada.descricao }</label>
+						</div>						
 					</div>
 					<div class="col-sm-12">
 						<hr>
@@ -98,26 +87,26 @@
 							<div class="form-group">	
 								<c:if test="${(permissao eq 'professor') || (permissao eq 'membro') }">			
 									<div class="col-sm-2">				
-										<a id="editar" href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/editar" ></c:url>">
+										<a id="editar" href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/editar" ></c:url>">
 											<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
 										</a>
 									</div>
 								</c:if>
 								<c:if test="${permissao eq 'professor' }">
 									<div class="col-sm-2">
-										<c:if test="${equipe.status == true}">									
-											<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-equipe" href="#" 
-												data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/inativar">
-												</c:url>" data-name="${equipe.nome }">
+										<c:if test="${rodada.status == true}">									
+											<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-rodada" href="#" 
+												data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/inativar">
+												</c:url>" data-name="${rodada.nome }">
 												<button class="btn btn-warning btn-lg">
 													Inativar&nbsp;<i class="glyphicon glyphicon-ban-circle"></i>
 												</button>
 											</a>
 										</c:if>
-										<c:if test="${equipe.status == false }">
-											<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-equipe" href="#" 
-												data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/ativar">
-												</c:url>" data-name="${equipe.nome }">
+										<c:if test="${rodada.status == false }">
+											<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-rodada" href="#" 
+												data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/ativar">
+												</c:url>" data-name="${rodada.nome }">
 												<button class="btn btn-success btn-lg">
 													Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>
 												</button>
@@ -125,8 +114,8 @@
 										</c:if>
 									</div>
 									<div class="col-sm-2">
-										<a id="excluir" data-toggle="modal" data-target="#confirm-delete2" href="#" 
-										data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/excluir"></c:url>" data-name="${equipe.nome }">
+										<a id="excluir" data-toggle="modal" data-target="#confirm-delete-rodada" href="#" 
+										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/excluir"></c:url>" data-name="${rodada.nome }">
 											<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
 										</a>					
 									</div>
@@ -139,8 +128,8 @@
 		</div>
 	</div>
 	<c:if test="${permissao eq 'professor' }">			
-		<!-- Modal Excluir EQUIPE -->
-		<div class="modal fade" id="confirm-delete2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<!-- Modal Excluir Rodada -->
+		<div class="modal fade" id="confirm-delete-rodada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -156,25 +145,8 @@
 			</div>
 		</div>
 		
-		<!-- Modal Desvincular aluno -->
-		<div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-	        			<h4 class="modal-title" id="submeterModalLabel">Desvincular</h4>
-	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					</div>
-					<div class="modal-body"></div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-primary">Desvincular</a>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<!-- Modal Inativar Equipe -->
-		<div class="modal fade" id="confirm-inativar-equipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<!-- Modal Inativar Rodada -->
+		<div class="modal fade" id="confirm-inativar-rodada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -190,8 +162,8 @@
 			</div>
 		</div>
 		
-		<!-- Modal ativar Equipe -->
-		<div class="modal fade" id="confirm-ativar-equipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<!-- Modal ativar Rodada -->
+		<div class="modal fade" id="confirm-ativar-rodada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">

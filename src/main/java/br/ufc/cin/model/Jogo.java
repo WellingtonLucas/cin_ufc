@@ -33,6 +33,7 @@ public class Jogo implements Serializable {
 	public Jogo() {
 		alunos = new ArrayList<Usuario>();
 		equipes = new ArrayList<Equipe>();
+		rodadas = new ArrayList<Rodada>();
 	}
 
 	@Id
@@ -83,6 +84,17 @@ public class Jogo implements Serializable {
 	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
 	private List<Equipe> equipes;
 
+	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	private List<Rodada> rodadas;
+
+	public List<Rodada> getRodadas() {
+		return rodadas;
+	}
+
+	public void setRodadas(List<Rodada> rodadas) {
+		this.rodadas = rodadas;
+	}
+
 	public void addEquipe(Equipe equipe){
 		if(!getEquipes().contains(equipe)){
 			getEquipes().add(equipe);
@@ -90,6 +102,16 @@ public class Jogo implements Serializable {
 				equipe.getJogo().getEquipes().remove(equipe);
 			}
 			equipe.setJogo(this);
+		}
+	}
+	
+	public void addRodada(Rodada rodada){
+		if(!getRodadas().contains(rodada)){
+			getRodadas().add(rodada);
+			if(rodada.getJogo()!=null){
+				rodada.getJogo().getRodadas().remove(rodada);
+			}
+			rodada.setJogo(this);
 		}
 	}
 	
@@ -201,6 +223,7 @@ public class Jogo implements Serializable {
 	public String toString() {
 		return "Jogo id: " + getId() + ", nome: " + getNomeDoCurso();
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof Jogo)){

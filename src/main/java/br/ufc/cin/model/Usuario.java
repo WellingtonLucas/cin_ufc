@@ -67,6 +67,17 @@ public class Usuario {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
 	private List<Formulario> formulario;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
+	private List<Entrega> entregas;
+
+	public List<Entrega> getEntregas() {
+		return entregas;
+	}
+
+	public void setEntregas(List<Entrega> entregas) {
+		this.entregas = entregas;
+	}
 
 	public List<Formulario> getFormulario() {
 		return formulario;

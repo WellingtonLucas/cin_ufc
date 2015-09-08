@@ -103,18 +103,19 @@ public class EquipeController {
 			@PathVariable("idEquipe") Integer idEquipe, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 
-		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
-		model.addAttribute("action", "detalhesEquipe");
+		
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if (equipe == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/" + idJogo + "/equipes";
-		}
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
+		model.addAttribute("action", "detalhesEquipe");
+		if (equipe == null || !jogo.getEquipes().contains(equipe)) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + idJogo + "/equipes";
 		}
 		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.getId() == jogo.getProfessor().getId() && jogo.getEquipes().contains(equipe)) {
@@ -151,7 +152,7 @@ public class EquipeController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Equipe equipe = equipeService.find(Equipe.class, idEqui);
-		if (equipe == null) {
+		if (equipe == null || !jogo.getEquipes().contains(equipe)) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_EQUIPE_INEXISTENTE);
 			return "redirect:/equipe/equipes";
@@ -195,7 +196,6 @@ public class EquipeController {
 		}
 
 		List<Usuario> alunos = new ArrayList<Usuario>();
-		equipe.setStatus(true);
 		equipe.setJogo(jogo);
 		equipeService.update(equipe);
 

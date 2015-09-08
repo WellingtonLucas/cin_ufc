@@ -1,0 +1,131 @@
+package br.ufc.cin.model;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Entity
+public class Rodada {
+	
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	
+	@Column
+	@NotEmpty
+	private String nome;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date inicio;
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date termino;
+	
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@Column
+	private String descricao;
+	
+	@ManyToOne
+	private Jogo jogo;
+	
+	@Column
+	private boolean status;
+	
+	@OneToMany(mappedBy = "rodada", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	private List<Entrega> entregas;
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Jogo getJogo() {
+		return jogo;
+	}
+
+	public void setJogo(Jogo jogo) {
+		this.jogo = jogo;
+	}
+	
+	public Date getInicio() {
+		return inicio;
+	}
+
+	public void setInicio(Date inicio) {
+		this.inicio = inicio;
+	}
+	
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public Date getTermino() {
+		return termino;
+	}
+
+	public void setTermino(Date termino) {
+		this.termino = termino;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public List<Entrega> getEntregas() {
+		return entregas;
+	}
+
+	public void setEntregas(List<Entrega> entregas) {
+		this.entregas = entregas;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Rodada)){
+			return false;
+		}
+		Rodada rodada = (Rodada) obj;
+		
+		return toString().equals(rodada.toString());
+	}	
+
+	@Override
+	public String toString() {
+		return "Nome: "+getNome()+" Id: "+getId();
+	}	
+}

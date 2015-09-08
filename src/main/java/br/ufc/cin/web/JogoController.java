@@ -82,11 +82,18 @@ public class JogoController {
 		if(jogos == null){
 			model.addAttribute("info", "Você ainda não crirou jogos.");
 		}
+		List<Jogo> jogosParticipa = new ArrayList<Jogo>();
 		if(usuario.getJogoParticipa().isEmpty() || usuario.getJogoParticipa() == null){
 			model.addAttribute("infoParticipa", "Você ainda não está participando de um jogo.");
+		}else{
+			for (Jogo jogo : usuario.getJogoParticipa()) {
+				if (jogo.isStatus()) {
+					jogosParticipa.add(jogo);
+				}
+			}
 		}
 		model.addAttribute("jogos", jogos);
-		model.addAttribute("jogosParticipa", usuario.getJogoParticipa());
+		model.addAttribute("jogosParticipa", jogosParticipa);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "home");
 		if (usuarioService.isProfessor(usuario)) {
@@ -445,6 +452,58 @@ public class JogoController {
 
 	}
 
+	@RequestMapping(value = "/{idJogo}/ativar", method = RequestMethod.GET)
+	public String ativarJogo(@PathVariable("idJogo") Integer idJogo, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+
+		Usuario usuario = getUsuarioLogado(session);
+		if (usuario.equals(jogo.getProfessor())) {
+			jogo.setStatus(true);
+			jogoService.update(jogo);
+			redirectAttributes.addFlashAttribute("info",
+					"Jogo ativado com sucesso.");
+		} else {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+		}
+		return "redirect:/jogo/" + idJogo + "/detalhes";
+
+	}
+
+	@RequestMapping(value = "/{idJogo}/inativar", method = RequestMethod.GET)
+	public String inativarJogo(@PathVariable("idJogo") Integer idJogo, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+
+		Usuario usuario = getUsuarioLogado(session);
+		if (usuario.equals(jogo.getProfessor())) {
+			jogo.setStatus(false);
+			jogoService.update(jogo);
+			redirectAttributes.addFlashAttribute("info",
+					"Jogo inativado com sucesso.");
+		} else {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+		}
+		return "redirect:/jogo/" + idJogo + "/detalhes";
+
+	}
+	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

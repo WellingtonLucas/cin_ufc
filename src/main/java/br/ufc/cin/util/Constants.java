@@ -73,7 +73,7 @@ public class Constants {
 	
 	public static final String MENSAGEM_USUARIOS_NAO_ASSOCIADOS = "Não existem participantes associados ao jogo!";
 	
-	public static final String MENSAGEM_EQUIPES_NAO_CRIADAS = "Não existem equipes no jogo. Crie equipes.";
+	public static final String MENSAGEM_EQUIPES_NAO_CRIADAS = "Não existem equipes no jogo.";
 	
 	public static final String MENSAGEM_FORM_NAO_CRIADOS = "Não existem formulários no jogo. Crie formulários.";
 	

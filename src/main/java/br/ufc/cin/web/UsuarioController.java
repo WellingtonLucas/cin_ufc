@@ -63,9 +63,12 @@ public class UsuarioController {
 			redirectAttributes.addFlashAttribute("erro", "Usuário inexistente");
 			return "redirect:/jogo/" + idJogo + "/participantes";
 		}
+		Usuario logado = getUsuarioLogado(session);
+		model.addAttribute("usuario", logado);
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("action", "detalhesUsuario");
-		model.addAttribute("usuario", usuario);
+		model.addAttribute("usuarioParticipante", usuario);
+		model.addAttribute("equipe", usuario.getEquipe());
 		return "jogador/usuario";
 	}
 

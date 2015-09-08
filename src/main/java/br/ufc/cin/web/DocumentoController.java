@@ -52,7 +52,7 @@ public class DocumentoController {
 			if(documento != null && jogo != null && (getUsuarioLogado(session).equals(jogo.getProfessor()))) {
 				InputStream is = new ByteArrayInputStream(documento.getArquivo());
 				response.setContentType(documento.getExtensao());
-				response.setHeader("Content-Disposition", "attachment; filename=" + documento.getNome());
+				response.setHeader("Content-Disposition", "attachment; filename=" + documento.getNomeOriginal());
 				IOUtils.copy(is, response.getOutputStream());
 				response.flushBuffer();
 			}
@@ -69,12 +69,17 @@ public class DocumentoController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType(tipo[0], tipo[1]));
-		headers.set("Content-Disposition", "attachment; filename=" + documento.getNome().replace(" ", "_"));
+		headers.set("Content-Disposition", "attachment; filename=" + documento.getNomeOriginal().replace(" ", "_"));
 		headers.setContentLength(arquivo.length);
 
 		redirectAttributes.addFlashAttribute("success", "Download do Documento realizado com sucesso");
 		return new HttpEntity<byte[]>(arquivo, headers);
-
+	}
+	
+	@RequestMapping(value = {"/{id}"}, method = RequestMethod.GET)
+	public String documento(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes){
+		Documento documento = documentoService.find(Documento.class, id);
+		return "redirect:/documento/"+documento.getJogo().getId()+"/"+documento.getId();	
 	}
 	
 	@RequestMapping(value = "/ajax/remover/{id}", method = RequestMethod.POST)

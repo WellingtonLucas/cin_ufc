@@ -191,13 +191,23 @@ $(document).ready(function() {
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
-	$('#confirm-inativar').on('show.bs.modal', function(e) {
+	$('#confirm-inativar-equipe').on('show.bs.modal', function(e) {
 		$(this).find('.modal-body').text('Tem certeza de que deseja inativar a equipe \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
-	$('#confirm-ativar').on('show.bs.modal', function(e) {
+	$('#confirm-ativar-equipe').on('show.bs.modal', function(e) {
 		$(this).find('.modal-body').text('Tem certeza de que deseja ativar a equipe \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
+	});
+	
+	$('#confirm-inativar-jogo').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja inativar o jogo \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
+	});
+	
+	$('#confirm-ativar-jogo').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja ativar o jogo \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
 	

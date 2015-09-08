@@ -42,7 +42,6 @@ public class Equipe {
 	@ManyToOne
 	private Jogo jogo;
 
-	
 	public void addAluno(Usuario aluno){
 		if(!getAlunos().contains(aluno)){
 			getAlunos().add(aluno);

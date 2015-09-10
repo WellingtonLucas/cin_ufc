@@ -102,14 +102,20 @@ $(document).ready(function() {
 	});
 	
 	$('#confirm-inativar-rodada').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja inativar a rodada \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.modal-body').text('Tem certeza de que deseja encerrar a rodada \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$('#confirm-ativar-rodada').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja ativar a rodada \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.modal-body').text('Tem certeza de que deseja iniciar a rodada \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
+	
+	$('#desvincular-equipe').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja desvincular a equipe \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
+	});
+	
 	
 });
 

@@ -11,9 +11,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,6 +51,14 @@ public class Rodada {
 	@Column
 	private boolean status;
 	
+	@OneToOne(fetch = FetchType.LAZY)
+	private Documento modelo;
+	
+	@ManyToMany
+	@JoinTable(name = "equipe_rodada", joinColumns = { @JoinColumn(name = "rodada_id", referencedColumnName = "id") }, 
+	inverseJoinColumns = { @JoinColumn(name = "equipe_id", referencedColumnName = "id") })
+	private List<Equipe> equipesAtivas;
+	
 	@OneToMany(mappedBy = "rodada", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
 	private List<Entrega> entregas;
 	
@@ -56,6 +68,14 @@ public class Rodada {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Documento getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(Documento modelo) {
+		this.modelo = modelo;
 	}
 
 	public Jogo getJogo() {
@@ -114,6 +134,14 @@ public class Rodada {
 		this.status = status;
 	}
 	
+	public List<Equipe> getEquipesAtivas() {
+		return equipesAtivas;
+	}
+
+	public void setEquipesAtivas(List<Equipe> equipesAtivas) {
+		this.equipesAtivas = equipesAtivas;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof Rodada)){

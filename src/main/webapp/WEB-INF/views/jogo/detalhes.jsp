@@ -109,7 +109,7 @@
 						<div class="form-group">					
 							<div class="col-sm-2">				
 								<a id="editar" href="<c:url value="/jogo/${jogo.id}/editar" ></c:url>">
-									<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
+									<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
 								</a>
 							</div>
 							<div class="col-sm-2">
@@ -135,7 +135,7 @@
 							<div class="col-sm-2">
 								<a id="excluir" data-toggle="modal" data-target="#confirm-delete" href="#" 
 								data-href="<c:url value="/jogo/${jogo.id}/excluir"></c:url>" data-name="${jogo.nomeDoCurso }">
-									<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
+									<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="glyphicon glyphicon-trash"></i></button>
 								</a>					
 							</div>
 						</div>

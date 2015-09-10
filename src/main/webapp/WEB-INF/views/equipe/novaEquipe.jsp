@@ -43,7 +43,7 @@
 			<form:form id="adicionarEquipeForm" role="form" class="form-horizontal" commandName="equipe" 
 			servletRelativeAction="${url }" method="POST">
 				<form:hidden id="id" name="id" path="id" value="${equipe.id }"/>
-				<form:hidden path="satus" value="${equipe.status }"/>
+				<form:hidden path="status" value="${equipe.status }"/>
 				<div class="form-group">
 					<div class="form-item">
 						<label for="nomeDoCurso" class="col-sm-2 control-label" >Nome da Equipe:<span class="required">*</span></label>
@@ -92,7 +92,7 @@
 					<div class="col-sm-2"></div>
 					<div class="col-sm-2">		
 						<button type="submit" class="btn btn-primary btn-lg" >
-							${txtBtn }
+							${txtBtn } <i class="glyphicon glyphicon-floppy-disk"></i>
 						</button>						
 					</div>
 					<div class="col-sm-2">

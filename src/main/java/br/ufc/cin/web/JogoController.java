@@ -77,6 +77,7 @@ public class JogoController {
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public String listar(Model model, HttpSession session) {
 		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Integer idUsuarioLogado = usuario.getId();
 		List<Jogo> jogos = jogoService.getJogoByProfessor(idUsuarioLogado);
 		if(jogos == null){

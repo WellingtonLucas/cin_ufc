@@ -61,7 +61,16 @@
 		</c:if>
 		<c:if test="${(action == 'detalhesRodada')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
-			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>">Rodadas</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>">Rodadas</a></li>
+			<c:if test="${ (permissao == 'professor') }">
+				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincular"></c:url>">Vincular Equipes</a></li>		
+			</c:if>	
+		</c:if>
+		
+		<c:if test="${(action =='vincularEquipeRodada') && (permissao == 'professor')}">
+			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/detalhes"></c:url>">${rodada.nome }</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>">Rodadas</a></li>
 		</c:if>
 	</ul>
 </div>

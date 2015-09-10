@@ -8,6 +8,7 @@ import javax.inject.Named;
 
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.EquipeRepository;
 import br.ufc.cin.service.EquipeService;
@@ -47,5 +48,10 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 	public List<Equipe> getEquipesByJogo(Jogo jogo) {
 		return equipeRepository.getEquipeByJogo(jogo);
 	}
-
+	
+	@Override
+	public List<Equipe> equipesDesvinculadas(Jogo jogo, Rodada rodada) {
+		jogo.getEquipes().removeAll(rodada.getEquipesAtivas());
+		return jogo.getEquipes();
+	}
 }

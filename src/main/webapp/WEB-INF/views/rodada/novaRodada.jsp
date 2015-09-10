@@ -114,11 +114,11 @@
 					<div class="col-sm-2"></div>
 					<div class="col-sm-2">		
 						<button type="submit" class="btn btn-primary btn-lg" >
-							Salvar
+							Salvar <i class="glyphicon glyphicon-floppy-disk"></i>
 						</button>						
 					</div>
 					<div class="col-sm-2">
-						<a href="<c:url value="/jogo/${jogo.id }/detalhes"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
+						<a href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id }/detalhes"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
 					</div>
 				</div>
 			</form:form>

@@ -267,7 +267,7 @@ public class EquipeController {
 		if (user == null) {
 			redirectAttributes.addFlashAttribute("erro",
 					"Participante inexistente");
-			return "redirect:/jogo/" + jogo.getId() + "/equipes/"
+			return "redirect:/jogo/" + jogo.getId() + "/equipe/"
 					+ equipe.getId();
 		}
 		if (equipe == null) {
@@ -293,7 +293,6 @@ public class EquipeController {
 					MENSAGEM_PERMISSAO_NEGADA);
 		}
 		return "redirect:/jogo/" + idJogo + "/equipe/" + idEquipe;
-
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/inativar", method = RequestMethod.GET)
@@ -404,7 +403,7 @@ public class EquipeController {
 		
 		if(result.hasErrors()){
 			redirectAttributes.addFlashAttribute("erro",
-					"Conceteu algum erro ao associar usuários.");
+					"Aconceteu algum erro ao associar usuários.");
 			return "redirect:/jogo/"+equipeCompleta.getJogo().getId()+"/equipe/"+equipeCompleta.getId()+"/vincular";
 		}
 		for (Usuario aluno : equipe.getAlunos()) {

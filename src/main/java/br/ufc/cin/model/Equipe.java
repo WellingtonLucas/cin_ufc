@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -41,7 +42,10 @@ public class Equipe {
 	
 	@ManyToOne
 	private Jogo jogo;
-
+	
+	@ManyToMany(mappedBy = "equipesAtivas")
+	private List<Rodada> rodadas;
+	
 	public void addAluno(Usuario aluno){
 		if(!getAlunos().contains(aluno)){
 			getAlunos().add(aluno);
@@ -84,10 +88,6 @@ public class Equipe {
 		this.nome = nome;
 	}
 
-	public boolean isAtivo() {
-		return status;
-	}
-
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
@@ -104,6 +104,14 @@ public class Equipe {
 		return id;
 	}
 	
+	public List<Rodada> getRodadas() {
+		return rodadas;
+	}
+
+	public void setRodadas(List<Rodada> rodadas) {
+		this.rodadas = rodadas;
+	}
+
 	public String toString(){
 		return "Equipe id: "+getId()+ " nome: " +getNome() ;
 	}

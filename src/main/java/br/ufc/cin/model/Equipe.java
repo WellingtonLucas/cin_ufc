@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Equipe {
@@ -37,22 +37,22 @@ public class Equipe {
 	@Column
 	private boolean status;
 	
-	@OneToMany(mappedBy = "equipe", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
-	private List<Usuario> alunos;
-	
 	@ManyToOne
 	private Jogo jogo;
 	
 	@ManyToMany(mappedBy = "equipesAtivas")
 	private List<Rodada> rodadas;
 	
-	public void addAluno(Usuario aluno){
-		if(!getAlunos().contains(aluno)){
-			getAlunos().add(aluno);
-			if(aluno.getEquipe() != null){
-				aluno.getEquipe().getAlunos().remove(aluno);
-			}
-			aluno.setEquipe(this);
+	@ManyToMany
+	@JoinTable(name = "equipe_aluno", joinColumns = { @JoinColumn(name = "equipe_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "aluno_id", referencedColumnName = "id") })
+	private List<Usuario> alunos;
+	
+	public void addAluno(Usuario usuario) {
+		if (!getAlunos().contains(usuario)) {
+			getAlunos().add(usuario);
+		}
+		if (!usuario.getEquipes().contains(this)) {
+			usuario.getEquipes().add(this);
 		}
 	}
 
@@ -96,8 +96,8 @@ public class Equipe {
 		return alunos;
 	}
 
-	public void setAlunos(List<Usuario> usuarios) {
-		this.alunos.addAll(usuarios);
+	public void setAlunos(List<Usuario> alunos) {
+		this.alunos = alunos;
 	}
 
 	public Integer getId() {

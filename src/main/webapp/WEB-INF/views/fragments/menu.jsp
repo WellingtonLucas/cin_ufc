@@ -6,13 +6,13 @@
 		<c:if test="${action == 'home'}">
 			<li class="active"><a href="<c:url value ="/jogo/novo-jogo"></c:url>">Novo Jogo</a></li>
 		</c:if>
-		<c:if test="${(action == 'detalhesJogo')}">
+		<c:if test="${(action == 'detalhesJogo') && ((permissao == 'professor')||(permissao == 'aluno'))}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>">Participantes</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>">Equipes&nbsp;</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>">Rodadas</a></li>
 		</c:if>
 		<c:if test="${(action == 'detalhesJogo') && (permissao == 'professor')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/formularios"></c:url>">Formulários&nbsp;</a></li>
-			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>">Rodadas</a></li>
 		</c:if>
 		<c:if test="${(action == 'participantesJogo')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
@@ -27,7 +27,8 @@
 			</c:if>	
 		</c:if>
 		<c:if test="${(action == 'vincularAoJogo')}">
-			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
+			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>">Participantes</a></li>
 		</c:if>
 		<c:if test="${(action == 'detalhesEquipe')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>

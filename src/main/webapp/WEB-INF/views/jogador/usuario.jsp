@@ -65,11 +65,11 @@
 			<div class="form-group">
 				<label class="col-sm-2 control-label field">Equipe:</label>
 				<div class="col-sm-10 field-value">
-					<c:if test="${empty usuarioParticipante.equipe.nome }">
+					<c:if test="${empty equipe.nome }">
 						<label>-</label>
 					</c:if>
-					<c:if test="${not empty usuarioParticipante.equipe.nome }">
-						${usuarioParticipante.equipe.nome }
+					<c:if test="${not empty equipe.nome }">
+						${equipe.nome }
 					</c:if>
 				</div>		
 			</div>

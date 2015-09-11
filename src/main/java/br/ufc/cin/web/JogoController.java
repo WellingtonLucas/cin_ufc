@@ -78,28 +78,30 @@ public class JogoController {
 	public String listar(Model model, HttpSession session) {
 		Usuario usuario = getUsuarioLogado(session);
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
-		Integer idUsuarioLogado = usuario.getId();
-		List<Jogo> jogos = jogoService.getJogoByProfessor(idUsuarioLogado);
+		List<Jogo> jogos = jogoService.getJogoByProfessor(usuario.getId());
 		if(jogos == null){
 			model.addAttribute("info", "Você ainda não crirou jogos.");
 		}
 		List<Jogo> jogosParticipa = new ArrayList<Jogo>();
+		boolean flag = false;
 		if(usuario.getJogoParticipa().isEmpty() || usuario.getJogoParticipa() == null){
 			model.addAttribute("infoParticipa", "Você ainda não está participando de um jogo.");
 		}else{
 			for (Jogo jogo : usuario.getJogoParticipa()) {
 				if (jogo.isStatus()) {
 					jogosParticipa.add(jogo);
+					flag = true;
 				}
+			}
+			if(!flag){
+				model.addAttribute("infoParticipa", "Nenhum jogo em que você participa está ativo no momento.");
 			}
 		}
 		model.addAttribute("jogos", jogos);
 		model.addAttribute("jogosParticipa", jogosParticipa);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "home");
-		if (usuarioService.isProfessor(usuario)) {
-			return PAGINA_LISTAR_JOGO;
-		}
+		
 		return PAGINA_LISTAR_JOGO;
 
 	}
@@ -431,12 +433,16 @@ public class JogoController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 
-		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId()) {
+		Usuario usuario = usuarioService.find(Usuario.class, getUsuarioLogado(session).getId());
+		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		
+		if (usuario.equals(jogo.getProfessor())) {
 			user.getJogoParticipa().remove(jogo);
-			user.getEquipe().getAlunos().remove(user);
-			equipeService.update(user.getEquipe());
-			user.setEquipe(null);
+			if(equipe != null){
+				equipe.getAlunos().remove(user);
+				equipeService.update(equipe);
+				user.getEquipes().remove(equipe);
+			}
 			jogo.getAlunos().remove(user);
 			jogoService.update(jogo);
 			usuarioService.update(user);
@@ -447,7 +453,7 @@ public class JogoController {
 					MENSAGEM_PERMISSAO_NEGADA);
 		}
 		
-		List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(getUsuarioLogado(session), jogo);
+		List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(usuario, jogo);
 		model.addAttribute("usuarios", usuarios);
 		return "redirect:/jogo/" + idJogo + "/participantes";
 

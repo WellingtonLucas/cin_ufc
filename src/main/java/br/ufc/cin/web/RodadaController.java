@@ -1,10 +1,13 @@
 package br.ufc.cin.web;
 
+import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
+import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,12 +26,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.ufc.cin.model.Documento;
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.DocumentoService;
+import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.RodadaService;
@@ -48,6 +57,12 @@ public class RodadaController {
 
 	@Inject
 	private EquipeService equipeService;
+	
+	@Inject
+	private EntregaService entregaService;
+	
+	@Inject
+	private DocumentoService documentoService;
 	
 	@RequestMapping(value ="/jogo/{id}/rodadas", method = RequestMethod.GET)
 	public String rodadas(@PathVariable("id") Integer id, Model model, HttpSession session,
@@ -433,7 +448,68 @@ public class RodadaController {
 		return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
 
 	}
+	@RequestMapping(value = "/jogo/{idJogo}/rodada/entrega", method = RequestMethod.POST)
+	public String entregaDeUmaRodada(@ModelAttribute("rodada") Rodada rodada, @RequestParam("anexos") List<MultipartFile> anexos, 
+			BindingResult result, @PathVariable("idJogo") Integer idJogo,
+			 HttpSession session, RedirectAttributes redirect, Model model){
+		
+		
+		if (result.hasErrors()) {
+			redirect.addFlashAttribute("erro", "Erro ao efetuar entrega.");
+			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+		}
+		
+		rodada = rodadaService.find(Rodada.class, rodada.getId());
+		Usuario usuario = getUsuarioLogado(session);
+		
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		
+		List<Documento> documentos = new ArrayList<Documento>();		
+		Entrega entrega = new Entrega();
+		if(anexos != null && !anexos.isEmpty()) {
+			for(MultipartFile anexo : anexos) {
+				try {
+					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
+						Documento documento = new Documento();
+						documento.setArquivo(anexo.getBytes());
+						documento.setNomeOriginal(anexo.getOriginalFilename());
+						documento.setNome(equipe.getNome()+"-"+rodada.getNome());
+						documento.setExtensao(anexo.getContentType());
+						documento.setEntrega(entrega);
+						documentos.add(documento);
+					}
+				} catch (IOException e) {
+					model.addAttribute("erro", MENSAGEM_ERRO_UPLOAD);
+					return PAGINA_CADASTRAR_JOGO;
+				}
+			}
+		}
+		if(!documentos.isEmpty()) {
+			entrega.setDocumentos(documentos);
+			entrega.setRodada(rodada);
+			entrega.setUsuario(usuario);
+			
+			Calendar calendario = Calendar.getInstance();
+			Date data =  calendario.getTime();
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss");
+			simpleDateFormat.format(data);
+			entrega.setDia(data);
 
+			entregaService.save(entrega);
+			documentoService.salvar(documentos);
+			
+			redirect.addFlashAttribute("info", "Entrega efetuada com sucesso.");
+			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+		}else{
+			redirect.addFlashAttribute("erro", "Selecione um documento!");
+			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+		}
+		
+
+	}
+	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

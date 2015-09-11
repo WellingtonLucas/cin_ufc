@@ -62,12 +62,29 @@
 	</div>
 	<div class="col-lg-6"></div>
 	<div class="col-lg-6">
+		
 		<form:form id="cadastro" class="form-horizontal" role="form" commandName="usuario" 
 		modelAttribute="usuario" method="POST" servletRelativeAction="/usuario/cadastre-se" >			
 			<div></div>
 			<!-- Form Name -->
 			<h1>Crie uma conta</h1>
 			<hr>
+			<c:if test="${not empty erro}">
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<c:out value="${erro}"></c:out>
+			</div>
+			</c:if>
+			<c:if test="${not empty info}">
+				<div class="alert alert-success alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<c:out value="${info}"></c:out>
+				</div>
+			</c:if>
 			
 			<div class="form-group">					
 				<div class="col-sm-4">

@@ -14,5 +14,8 @@ public interface EquipeService extends GenericService<Equipe>{
 	
 	public abstract List<Usuario> alunosSemEquipe(Jogo jogo);
 
-	List<Equipe> equipesDesvinculadas(Jogo jogo, Rodada rodada);
+	public abstract List<Equipe> equipesDesvinculadas(Jogo jogo, Rodada rodada);
+	
+	public abstract Equipe equipePorAlunoNoJogo(Usuario aluno, Jogo jogo);
+
 }

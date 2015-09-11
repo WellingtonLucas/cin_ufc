@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.UsuarioService;
 
@@ -33,16 +34,25 @@ public class UsuarioController {
 	@Inject
 	private JogoService jogoService;
 
+	@Inject
+	private EquipeService equipeService;
+
 	@RequestMapping(value = "/cadastre-se", method = RequestMethod.POST)
 	public String cadastrarPessoa(HttpSession session, Model model,
 			@Valid @ModelAttribute("usuario") Usuario usuario,
 			BindingResult result, RedirectAttributes redirect) {
-		usuario.setHabilitado(true);
+		
 		if (result.hasErrors()) {
 			model.addAttribute("cadastro", true);
 			return "login";
 		}
-
+		if(usuarioService.getUsuarioByEmail(usuario.getEmail()) != null){
+			redirect.addFlashAttribute("erro",
+					"Erro, já existe um usuário cadastrado com esse email, por favor escolha outro.");
+			return REDIRECT_PAGINA_LOGIN;
+		}
+			
+		usuario.setHabilitado(true);
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		usuario.setSenha(encoder.encodePassword(usuario.getSenha(), ""));
 		usuario.setPapel("ROLE_USUARIO");
@@ -68,7 +78,7 @@ public class UsuarioController {
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("action", "detalhesUsuario");
 		model.addAttribute("usuarioParticipante", usuario);
-		model.addAttribute("equipe", usuario.getEquipe());
+		model.addAttribute("equipe", equipeService.equipePorAlunoNoJogo(usuario, jogo));
 		return "jogador/usuario";
 	}
 

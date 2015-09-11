@@ -39,8 +39,9 @@
 				<hr>
 			</div>
 			<form:form id="adicionarJogoForm" role="form" class="form-horizontal" commandName="jogo" enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
-				<%-- <form:input type="hidden" name="idUsuario" value="${idUsuario}"/> --%>
-				<form:hidden id="id" name="id" path="id" />
+				<form:hidden path="id" />
+				<form:hidden path="status" />
+
 				<div class="form-group">
 					<div class="form-item">
 						<label for="nomeDoCurso" class="col-sm-2 control-label" >Nome do Curso:<span class="required">*</span></label>

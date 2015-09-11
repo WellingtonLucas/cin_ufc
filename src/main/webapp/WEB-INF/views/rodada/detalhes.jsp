@@ -9,7 +9,10 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<title>Rodada</title>
+	<c:if test="${action eq 'cadastrar' }">
+		<c:set var="url" value="/rodada/${rodada.id}/entrega"></c:set>
+	</c:if>
+	<title>${rodada.nome }</title>
 </head>
 
 <body>
@@ -82,7 +85,22 @@
 							<label>${rodada.descricao }</label>
 						</div>						
 					</div>
+					<c:if test="${rodada.status == true}">
+						<form:form id="adicionarEntregaForm" role="form" class="form-horizontal" commandName="rodada"
+						 	enctype="multipart/form-data" servletRelativeAction="/jogo/${jogo.id }/rodada/entrega" method="POST">
+							<form:hidden path="id" value="${rodada.id }"/>
+							<div class="form-group form-item">
+								<label for="fileupload" class="col-sm-2 control-label field">Entrega:</label>
+								<div class="col-sm-8">
+									<input type="file" id="fileupload" class="file" name="anexos" multiple></input>	
+								</div>
+							</div>
+							
+						</form:form>
+					</c:if>	
+					
 					<div class="col-sm-12">
+						<hr>
 						<c:if test="${not empty rodada.equipesAtivas }">
 							<h3><strong>Equipes na Rodada</strong></h3>
 							<table id="table_id" class="table table-striped table-hover">

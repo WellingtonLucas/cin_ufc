@@ -9,9 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,6 +21,7 @@ public class Usuario {
 
 	public Usuario() {
 		jogoParticipa = new ArrayList<Jogo>();
+		equipes = new ArrayList<Equipe>();
 	}
 
 	@Id
@@ -55,15 +54,14 @@ public class Usuario {
 	@Column
 	private boolean habilitado;
 
-	@ManyToOne
-	@JoinColumn(name = "id_equipe")
-	private Equipe equipe;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
 	private List<Jogo> jogos;
 
 	@ManyToMany(mappedBy = "alunos")
 	private List<Jogo> jogoParticipa;
+
+	@ManyToMany(mappedBy = "alunos")
+	private List<Equipe> equipes;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
 	private List<Formulario> formulario;
@@ -100,6 +98,15 @@ public class Usuario {
 		}
 	}
 
+	public void addEquipe(Equipe equipe) {
+		if (!getEquipes().contains(equipe)) {
+			getEquipes().add(equipe);
+		}
+		if (!equipe.getAlunos().contains(this)) {
+			equipe.getAlunos().add(this);
+		}
+	}
+
 	public void setJogoParticipa(List<Jogo> jogoParticipa) {
 		this.jogoParticipa = jogoParticipa;
 	}
@@ -120,12 +127,12 @@ public class Usuario {
 		this.jogos = jogos;
 	}
 
-	public Equipe getEquipe() {
-		return equipe;
+	public List<Equipe> getEquipes() {
+		return equipes;
 	}
 
-	public void setEquipe(Equipe equipe) {
-		this.equipe = equipe;
+	public void setEquipes(List<Equipe> equipes) {
+		this.equipes = equipes;
 	}
 
 	public boolean isHabilitado() {

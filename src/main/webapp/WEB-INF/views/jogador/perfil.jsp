@@ -42,10 +42,10 @@
 
 				<div id="myTabContent" class="tab-content">
 					<div class="tab-pane active in" id="geral">
-						<form:hidden path="id" value="${usuario.id }" />
-						<form:hidden path="papel" value="${usuario.papel }" />
-						<form:hidden path="habilitado" value="${usuario.habilitado }" />
-						<form:hidden path="email" value="${usuario.email }" />
+						<form:hidden path="id"/>
+						<form:hidden path="papel"/>
+						<form:hidden path="habilitado"/>
+						<form:hidden path="email"/>
 						<br>
 						<div class="form-group">
 							<label for="nome" class="col-sm-1 control-label">Nome:</label>

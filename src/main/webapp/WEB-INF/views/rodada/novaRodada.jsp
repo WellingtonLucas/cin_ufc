@@ -47,8 +47,8 @@
 				<hr>
 			</div>
 			<form:form id="adicionarRodadaForm" role="form" class="form-horizontal" commandName="rodada" servletRelativeAction="${url }" method="POST">
-				<form:hidden name="id" path="id" value="${rodada.id }"/>
-				<form:hidden path="status" value="${rodada.status }"/>
+				<form:hidden path="id"/>
+				<form:hidden path="status"/>
 				<div class="form-group">
 					<div class="form-item">
 						<label for="nome" class="col-sm-2 control-label" >Nome da Rodada:<span class="required">*</span></label>

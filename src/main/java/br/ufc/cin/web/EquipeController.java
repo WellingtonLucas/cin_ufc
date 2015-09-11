@@ -34,6 +34,7 @@ import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
@@ -47,6 +48,9 @@ public class EquipeController {
 	@Inject
 	private JogoService jogoService;
 
+	@Inject
+	private RodadaService rodadaService;
+	
 	@RequestMapping(value = "/jogo/{id}/equipe/nova", method = RequestMethod.GET)
 	public String cadastrarFrom(@PathVariable("id") Integer id, Model model,
 			HttpSession session) {
@@ -86,7 +90,7 @@ public class EquipeController {
 			for (String idaluno : idAlunos) {
 				Usuario aluno = usuarioService.find(Usuario.class, new Integer(
 						idaluno));
-				aluno.setEquipe(equipe);
+				aluno.addEquipe(equipe);
 				alunos.add(aluno);
 			}
 
@@ -185,7 +189,7 @@ public class EquipeController {
 		model.addAttribute("action", "editar");
 
 		if (result.hasErrors()) {
-			model.addAttribute("erro", "Erro ao editar equipe.");
+			redirect.addFlashAttribute("erro", "Erro ao editar equipe.");
 			return "redirect:/jogo/" + id + "/equipe/" + equipe.getId()
 					+ "/editar";
 		}
@@ -194,22 +198,10 @@ public class EquipeController {
 			redirect.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-
-		List<Usuario> alunos = new ArrayList<Usuario>();
-		equipe.setJogo(jogo);
-		equipeService.update(equipe);
-
-		if (idAlunos != null && !idAlunos.isEmpty()) {
-			for (String idaluno : idAlunos) {
-				Usuario aluno = usuarioService.find(Usuario.class, new Integer(
-						idaluno));
-				aluno.setEquipe(equipe);
-				alunos.add(aluno);
-			}
-		}
-		if (!alunos.isEmpty()) {
-			usuarioService.atualizar(alunos);
-		}
+		Equipe oldEquipe = equipeService.find(Equipe.class, equipe.getId());
+		oldEquipe.setNome(equipe.getNome());
+		oldEquipe.setIdeiaDeNegocio(equipe.getIdeiaDeNegocio());
+		equipeService.update(oldEquipe);
 		redirect.addFlashAttribute("info", "Equipe atualizada com sucesso.");
 		return "redirect:/jogo/" + id + "/equipe/"+equipe.getId();
 	}
@@ -233,16 +225,25 @@ public class EquipeController {
 		}
 		
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId()
+		if (usuario.equals(jogo.getProfessor())
 				&& jogo.getEquipes().contains(equipe)) {
 
 			for (Usuario aluno : equipe.getAlunos()) {
-				aluno.setEquipe(null);
+				aluno.getEquipes().remove(equipe);
 				usuarioService.update(aluno);
 			}
 			jogo.getEquipes().remove(equipe);
 			jogoService.update(jogo);
-			equipeService.delete(equipe);
+			if(jogo.getRodadas()!= null)
+				rodadaService.removerEquipeDasRodadas(jogo.getRodadas(), equipe);
+			
+			try{
+				equipeService.delete(equipe);
+			}catch(Exception e){
+				redirectAttributes.addFlashAttribute("erro",
+						"Erro ao remover equipe. Contacte o administrador do sistema.");
+				return "redirect:/jogo/" + idJogo + "/equipes";
+			}
 			redirectAttributes.addFlashAttribute("info",
 					MENSAGEM_EQUIPE_REMOVIDA);
 		} else {
@@ -282,12 +283,13 @@ public class EquipeController {
 		}
 
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId()
-				&& jogo.getEquipes().contains(equipe)) {
-			user.setEquipe(null);
+		if (usuario.equals(jogo.getProfessor())	&& jogo.getEquipes().contains(equipe)) {
+			equipe.getAlunos().remove(user);
+			equipeService.update(equipe);
+			user.getEquipes().remove(equipe);
 			usuarioService.update(user);
 			redirectAttributes.addFlashAttribute("info",
-					"Participante desvinculado com sucesso.");
+					"Participante \""+user.getNome()+"\" desvinculado com sucesso.");
 		} else {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_PERMISSAO_NEGADA);
@@ -399,22 +401,20 @@ public class EquipeController {
 			RedirectAttributes redirectAttributes, BindingResult result) {
 		
 		Equipe equipeCompleta = equipeService.find(Equipe.class, equipe.getId());
-		List<Usuario> alunos = new ArrayList<Usuario>();
-		
 		if(result.hasErrors()){
 			redirectAttributes.addFlashAttribute("erro",
 					"Aconceteu algum erro ao associar usuários.");
 			return "redirect:/jogo/"+equipeCompleta.getJogo().getId()+"/equipe/"+equipeCompleta.getId()+"/vincular";
 		}
+		boolean flag = false;
 		for (Usuario aluno : equipe.getAlunos()) {
 			if(aluno.getId() != null){
 				aluno = usuarioService.find(Usuario.class, aluno.getId());
-				aluno.setEquipe(equipeCompleta);
-				alunos.add(aluno);
+				aluno.addEquipe(equipeCompleta);
+				flag = true;
 			}
 		}
-		if(!alunos.isEmpty()){
-			equipeCompleta.getAlunos().addAll(alunos);
+		if(flag){
 			equipeService.update(equipeCompleta);
 			redirectAttributes.addFlashAttribute("info",
 					"Usuários associados à equipe com sucesso!.");

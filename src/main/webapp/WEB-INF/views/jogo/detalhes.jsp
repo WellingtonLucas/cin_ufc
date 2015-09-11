@@ -36,68 +36,64 @@
 					<c:out value="${info}"></c:out>
 				</div>
 			</c:if>
-			<h3>Informações </h3><hr>						
-			<div class="form-group">
-				<label class="col-sm-2 control-label field">Início:</label>
-				<div class="col-sm-4 field-value">
-					<c:if test="${empty jogo.inicio }">
-						<label>-</label>
-					</c:if>
-					<label><fmt:formatDate pattern="dd/MM/yyyy" value="${jogo.inicio }" /></label>
+			<h3>Informações </h3><hr>				
+			<div class="form-horizontal">		
+				<div class="form-group">
+					<label class="col-sm-2 control-label field">Início:</label>
+					<div class="col-sm-4 field-value">
+						<c:if test="${empty jogo.inicio }">
+							<label>-</label>
+						</c:if>
+						<label><fmt:formatDate pattern="dd/MM/yyyy" value="${jogo.inicio }" /></label>
+					</div>
+					<label class="col-sm-2 control-label field">Término:</label>
+					<div class="col-sm-4 field-value">
+						<c:if test="${empty jogo.termino }">
+							<label>-</label>
+						</c:if>
+						<label><fmt:formatDate pattern="dd/MM/yyyy" value="${jogo.termino }" /></label>
+					</div>
+				</div>				
+				<div class="form-group">
+					<label class="col-sm-2 control-label field">Descrição:</label>
+					<div class="col-sm-10 value-label">
+						<label>${jogo.descricao }</label>
+					</div>						
 				</div>
-				<label class="col-sm-2 control-label field">Término:</label>
-				<div class="col-sm-4 field-value">
-					<c:if test="${empty jogo.termino }">
-						<label>-</label>
-					</c:if>
-					<label><fmt:formatDate pattern="dd/MM/yyyy" value="${jogo.termino }" /></label>
+				<div class="form-group">
+					<label class="col-sm-2 control-label field">Regras:</label>
+					<div class="col-sm-10 field-value">
+						<c:if test="${empty jogo.regras }">
+							<label>-</label>
+						</c:if>
+						<c:if test="${not empty jogo.regras }">
+							<label>${jogo.regras }</label>
+						</c:if>
+					</div>		
 				</div>
-			</div>				
-			<br>			
-			<div class="form-group">
-				<label class="col-sm-2 control-label field">Descrição:</label>
-				<div class="col-sm-10 field-value">
-					<label>${jogo.descricao }</label>
-				</div>						
-			</div>
-			<br>
-			<div class="form-group">
-				<label class="col-sm-2 control-label field">Regras:</label>
-				<div class="col-sm-10 field-value">
-					<c:if test="${empty jogo.regras }">
-						<label>-</label>
-					</c:if>
-					<c:if test="${not empty jogo.regras }">
-						<label>							
-						${jogo.regras }
-						</label>
-					</c:if>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label field">Anexos:</label>
+					<div class="col-sm-10 field-value">
+						<c:if test="${empty jogo.documentos }">
+							<label>-</label>						
+						</c:if>				
+						<c:if test="${not empty jogo.documentos }">
+							<c:forEach items="${jogo.documentos }" var="documento">
+								<label><a href="<c:url value="/documento/downloadDocumento/${documento.id }" ></c:url>">${documento.nomeOriginal }</a></label> - 							
+							</c:forEach>
+						</c:if>
+					</div>
 				</div>		
-			</div>
-			<br>			
-			
-			<div class="form-group">
-				<label class="col-sm-2 control-label field">Anexos:</label>
-				<div class="col-sm-10 field-value">
-					<c:if test="${empty jogo.documentos }">
-						<label>-</label>						
-					</c:if>				
-					<c:if test="${not empty jogo.documentos }">
-						<c:forEach items="${jogo.documentos }" var="documento">
-							<label><a href="<c:url value="/documento/downloadDocumento/${documento.id }" ></c:url>">${documento.nomeOriginal }</a></label> - 							
-						</c:forEach>
-					</c:if>
-				</div>
-			</div>		
-			<br>		
-			<div class="form-group">
-				<label class="col-sm-2 control-label field">Criador:</label>
-				<div class="col-sm-4 field-value">
-					<label>${jogo.professor.nome} ${jogo.professor.sobreNome}</label>
-				</div>
-				<label class="col-sm-2 control-label field">Email:</label>
-				<div class="col-sm-4 field-value">
-					<label>${jogo.professor.email}</label>
+				<div class="form-group">
+					<label class="col-sm-2 control-label field">Criador:</label>
+					<div class="col-sm-4 field-value">
+						<label>${jogo.professor.nome} ${jogo.professor.sobreNome}</label>
+					</div>
+					<label class="col-sm-2 control-label field">Email:</label>
+					<div class="col-sm-4 field-value">
+						<label>${jogo.professor.email}</label>
+					</div>
 				</div>
 			</div>
 			<div class="col-sm-12">

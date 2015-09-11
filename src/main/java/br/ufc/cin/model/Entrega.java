@@ -70,6 +70,14 @@ public class Entrega {
 	public void setRodada(Rodada rodada) {
 		this.rodada = rodada;
 	}
+
+	public Date getDia() {
+		return dia;
+	}
+
+	public void setDia(Date dia) {
+		this.dia = dia;
+	}
 	
 	
 }

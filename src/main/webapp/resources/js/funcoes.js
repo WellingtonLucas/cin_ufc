@@ -232,33 +232,7 @@ $(document).ready(function() {
 		msgLoading: "Carregando arquivo {index} de {files} &hellip;"
 	});
 	
-	/*$('#comentar').on('click', function(e){
-		var texto = $('#comentario').val();
-	    var projetoId = $('#projetoId').val();
-	       
-	    $.ajax({
-	    	type: "POST",
-	    	url: '/cin_ufc/comentario/comentar',
-	        data : {
-	        	texto : texto,
-	        	projetoId : projetoId
-			}
-	    })
-	    .success(function(comentario) {
-	    	if(comentario.id) {
-	    		var data = moment(comentario.data).format('DD/MM/YYYY');
-	    		var hora = moment(comentario.data).format('HH:mm');
-	    		$('#comentario').val('');
-	    		$('ul.cbp_tmtimeline').append(
-    				'<li><time class="cbp_tmtime"><span>' + data + '</span><span>' + hora + '</span></time>' +
-    				'<div class="cbp_tmlabel"><h2>' + comentario.autor.nome + '</h2><p>' + comentario.texto + '</p></div></li>'
-	    		);
-	    	}
-		})
-	});
-	
-	*/
-		/*$('article').readmore();*/
+	/*$('article').readmore();*/
 	
 });
 

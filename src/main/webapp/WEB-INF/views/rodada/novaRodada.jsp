@@ -49,6 +49,7 @@
 			<form:form id="adicionarRodadaForm" role="form" class="form-horizontal" commandName="rodada" servletRelativeAction="${url }" method="POST">
 				<form:hidden path="id"/>
 				<form:hidden path="status"/>
+				<form:hidden path="statusPrazo"/>
 				<div class="form-group">
 					<div class="form-item">
 						<label for="nome" class="col-sm-2 control-label" >Nome da Rodada:<span class="required">*</span></label>
@@ -65,7 +66,7 @@
 					<div class="form-item">
 						<label for="inicio" class="col-sm-2 control-label">Data de Início:<span class="required">*</span></label>
 						<div class="col-sm-2">
-							<form:input id="inicio" type="text" path="inicio" cssClass="form-control data" data-date-format="dd/mm/yyyy HH:mm:ss" placeholder="DD/MM/YYYY"/>
+							<form:input id="inicio" type="text" path="inicio" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
 							<div class="error-validation">
 								<form:errors path="inicio"></form:errors>
 							</div>
@@ -87,6 +88,22 @@
 							<c:if test="${not empty error_termino}">
 								<div class="error-validation">
 									<span>${error_termino}</span>
+								</div>
+							</c:if>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-item">
+						<label for="prazoSubmissao" class="col-sm-2 control-label">Prazo de submissão:<span class="required">*</span></label>
+						<div class="col-sm-2">
+							<form:input type="text" path="prazoSubmissao" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
+							<div class="error-validation">
+								<form:errors path="prazoSubmissao"></form:errors>
+							</div>
+							<c:if test="${not empty error_prazoSubmissao}">
+								<div class="error-validation">
+									<span>${error_prazoSubmissao}</span>
 								</div>
 							</c:if>
 						</div>

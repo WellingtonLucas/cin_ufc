@@ -9,9 +9,9 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<title>Formulario</title>
+	<title>${entrega.rodada.nome }</title>
 	<c:if test="${action eq 'responder' }">
-		<c:set var="url" value="/${jogo.id}/formulario/${formulario.id }/responder"></c:set>
+		<c:set var="url" value="/${jogo.id}/entrega/${entrega.id }/formulario/${formulario.id }/responder"></c:set>
 	</c:if>
 </head>
 
@@ -24,7 +24,7 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<div class="col-sm-12">
-						<h2><strong>${formulario.titulo }</strong></h2>						
+						<h2><strong>${formulario.titulo }</strong> - <small>Equipe: ${entrega.equipe.nome }</small></h2>						
 						<hr>				
 						<c:if test="${not empty erro}">
 							<div class="alert alert-warning alert-dismissible" role="alert">
@@ -81,13 +81,7 @@
 											</div>
 									</div>
 								</c:forEach>
-								<label class="col-sm-1 field">Prazo:</label>
-								<div class="col-sm-4 field-value">
-									<c:if test="${empty formulario.prazo }">
-										<label>-</label>
-									</c:if>
-									<label><fmt:formatDate pattern="dd/MM/yyyy" value="${formulario.prazo }" /></label>
-								</div>
+							
 								<div class="col-sm-12"></div>
 								<label class="col-sm-1 field">Nota:</label>
 								<div class="col-sm-11 field-value">

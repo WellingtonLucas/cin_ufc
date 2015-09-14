@@ -96,7 +96,7 @@
 							</ul>
 							<div class="form-group">
 								<div class="col-sm-2">				
-									<a id="editar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }" ></c:url>">
+									<a id="salvar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }" ></c:url>">
 										<button class="btn btn-primary btn-lg">Responder&nbsp;<i class="glyphicon glyphicon-floppy-disk"></i></button>
 									</a>
 								</div>

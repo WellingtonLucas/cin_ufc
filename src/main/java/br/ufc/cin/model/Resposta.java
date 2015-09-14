@@ -1,6 +1,7 @@
 package br.ufc.cin.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Resposta {
@@ -27,11 +30,17 @@ public class Resposta {
 	@OneToOne
 	private Usuario usuario;
 	
+	@DateTimeFormat(pattern = "dd/MM/yyyy'T'HH:mm:ss")
+	private Date dia;
+	
 	@ManyToMany (cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Opcao> opcoes;
 	
 	@ManyToOne
 	private Formulario formulario;
+	
+	@ManyToOne
+	private Entrega entrega;
 
 	public Integer getId() {
 		return id;
@@ -39,6 +48,14 @@ public class Resposta {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Entrega getEntrega() {
+		return entrega;
+	}
+
+	public void setEntrega(Entrega entrega) {
+		this.entrega = entrega;
 	}
 
 	public Usuario getUsuario() {
@@ -63,6 +80,14 @@ public class Resposta {
 
 	public void setFormulario(Formulario formulario) {
 		this.formulario = formulario;
+	}
+	
+	public Date getDia() {
+		return dia;
+	}
+
+	public void setDia(Date dia) {
+		this.dia = dia;
 	}
 	
 	public String toString() {

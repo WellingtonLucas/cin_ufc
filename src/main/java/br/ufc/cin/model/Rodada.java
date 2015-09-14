@@ -40,6 +40,9 @@ public class Rodada {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date termino;
 	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date prazoSubmissao;
+	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column
@@ -50,10 +53,17 @@ public class Rodada {
 	
 	@Column
 	private boolean status;
+
+	@Column
+	private boolean statusPrazo;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private Documento modelo;
 	
+	@OneToOne
+	@JoinColumn(name = "FORM_ID")
+	private Formulario formulario;
+
 	@ManyToMany
 	@JoinTable(name = "equipe_rodada", joinColumns = { @JoinColumn(name = "rodada_id", referencedColumnName = "id") }, 
 	inverseJoinColumns = { @JoinColumn(name = "equipe_id", referencedColumnName = "id") })
@@ -76,6 +86,14 @@ public class Rodada {
 
 	public void setModelo(Documento modelo) {
 		this.modelo = modelo;
+	}
+
+	public Formulario getFormulario() {
+		return formulario;
+	}
+
+	public void setFormulario(Formulario formulario) {
+		this.formulario = formulario;
 	}
 
 	public Jogo getJogo() {
@@ -140,6 +158,23 @@ public class Rodada {
 
 	public void setEquipesAtivas(List<Equipe> equipesAtivas) {
 		this.equipesAtivas = equipesAtivas;
+	}
+
+	public Date getPrazoSubmissao() {
+		return prazoSubmissao;
+	}
+
+	public void setPrazoSubmissao(Date prazoSubmissao) {
+		this.prazoSubmissao = prazoSubmissao;
+	}
+
+	
+	public boolean isStatusPrazo() {
+		return statusPrazo;
+	}
+
+	public void setStatusPrazo(boolean statusPrazo) {
+		this.statusPrazo = statusPrazo;
 	}
 
 	@Override

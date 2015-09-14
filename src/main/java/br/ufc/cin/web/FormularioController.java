@@ -9,7 +9,10 @@ import static br.ufc.cin.util.Constants.PAGINA_DETALHES_FORM;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,12 +29,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Opcao;
 import br.ufc.cin.model.Pergunta;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.OpcaoService;
@@ -60,22 +65,27 @@ public class FormularioController {
 	@Inject
 	private RespostaService respostaService;
 	
+	@Inject
+	private EntregaService entregaService;
+	
+	
 	@RequestMapping(value = "/jogo/{id}/formulario", method = RequestMethod.GET)
-	public String novoFormulario(Model model, HttpSession session, @PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+	public String novoFormulario(Model model, HttpSession session, @PathVariable("id") Integer id,
+			 RedirectAttributes redirectAttributes) {
 		Jogo jogo = jogoService.find(Jogo.class,id);
+		
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		Formulario formulario = new Formulario();
 		
 		model.addAttribute("idJogo", id);
-		model.addAttribute("formulario", formulario);
+		model.addAttribute("formulario", new Formulario());
 		model.addAttribute("action","cadastrar");
 		
 		return "formulario/formulario";
-
 	}
+	
 	@RequestMapping(value = "/{idJogo}/formulario/salvar", method = RequestMethod.POST)
 	public String cadastroFormulario(@PathVariable("idJogo") Integer idJogo,
 			@ModelAttribute("formulario") Formulario formulario, Model model,
@@ -226,26 +236,33 @@ public class FormularioController {
 		}
 	}
 	
-	@RequestMapping(value = "/jogo/{idJogo}/formulario/{idForm}", method = RequestMethod.GET)
+	@RequestMapping(value = "/jogo/{idJogo}/entrega/{id}/formulario/{idForm}", method = RequestMethod.GET)
 	public String modoResponder(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
-			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-		
-		Formulario formulario = formularioService.find(Formulario.class, idForm);
+			@PathVariable("id") Integer id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		model.addAttribute("action", "responder");
-		if (formulario == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/"+ idJogo +"/formularios";
-		}
 		if(jogo==null){
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		Formulario formulario = formularioService.find(Formulario.class, idForm);
+		if (formulario == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/"+ idJogo +"/formularios";
+		}
+		Entrega entrega = entregaService.find(Entrega.class, id);
+		if (entrega == null) {
+			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
+			return "redirect:/jogo/"+ idJogo +"/rodadas";
+		}
+		model.addAttribute("action", "responder");
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId() &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
+		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
 			model.addAttribute("formulario", formulario);
 			model.addAttribute("jogo", jogo);
+			model.addAttribute("entrega", entrega);
 			model.addAttribute("resposta", new Resposta());
+			
 			return "formulario/responder";
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
@@ -253,41 +270,47 @@ public class FormularioController {
 		}
 	}
 	
-	@RequestMapping(value = "/{idJogo}/formulario/{idForm}/responder", method = RequestMethod.POST)
-	public String responder(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,	Model model, 
-			HttpSession session, @ModelAttribute("resposta") Resposta resposta, RedirectAttributes redirectAttributes,
+	@RequestMapping(value = "/{idJogo}/entrega/{id}/formulario/{idForm}/responder", method = RequestMethod.POST)
+	public String responder(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,	
+			@PathVariable("id") Integer id, Model model, HttpSession session,
+			@ModelAttribute("resposta") Resposta resposta, RedirectAttributes redirectAttributes,
 			BindingResult result) {
 		
-		Formulario formulario = formularioService.find(Formulario.class, idForm);
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		model.addAttribute("action", "responder");
-		model.addAttribute("formulario", formulario);
-		model.addAttribute("jogo", jogo);
-		
 		if (result.hasErrors()) {
-			model.addAttribute("erro", "Erro ao cadastrar um formulário.");
-			return "formulario/detalhes";
+			redirectAttributes.addFlashAttribute("erro", "Erro ao cadastrar um formulário.");
+			return "redirect:/jogo/"+idJogo+"/formulario/"+idForm;
 		}
-		
-		if (formulario == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/"+ idJogo +"/formularios";
-		}
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
 		if(jogo==null){
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		Formulario formulario = formularioService.find(Formulario.class, idForm);
+		if (formulario == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/"+ idJogo +"/formularios";
+		}
+		Entrega entrega = entregaService.find(Entrega.class, id);
+		
 		List<Opcao> opcoes = new ArrayList<Opcao>();
 		for (Opcao opcao : resposta.getOpcoes()) {
 			opcoes.add(opcaoService.find(Opcao.class, opcao.getId()));
 		}
-		resposta.setOpcoes(opcoes);
 		Usuario usuario = getUsuarioLogado(session);
+		Calendar calendario = Calendar.getInstance();
+		Date data =  calendario.getTime();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss");
+		simpleDateFormat.format(data);
+		
+		resposta.setOpcoes(opcoes);
 		resposta.setFormulario(formulario);
 		resposta.setUsuario(usuario);
-		respostaService.save(resposta);	
-		redirectAttributes.addFlashAttribute("info", "Formulário respondido com sucesso!");
-		return  "redirect:/jogo/"+jogo.getId()+"/formulario/"+formulario.getId()+"/detalhes";
+		resposta.setEntrega(entrega);
+		resposta.setDia(data);
+		respostaService.save(resposta);
+		
+		redirectAttributes.addFlashAttribute("info", "Entrega da equipe "+entrega.getEquipe().getNome()+" avalidada.");
+		return  "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/submissoes";
 	}
 	
 	

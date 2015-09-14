@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -34,9 +33,6 @@ public class Formulario {
 
 	@OneToMany(mappedBy = "formulario", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Resposta> respostas;
-
-	@Transient
-	private boolean respondida;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date prazo;
@@ -99,14 +95,6 @@ public class Formulario {
 
 	public void setRespostas(List<Resposta> respostas) {
 		this.respostas = respostas;
-	}
-
-	public boolean isRespondida() {
-		return respondida;
-	}
-
-	public void setRespondida(boolean respondida) {
-		this.respondida = respondida;
 	}
 
 	public Date getPrazo() {

@@ -3,7 +3,6 @@ package br.ufc.cin.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -35,9 +36,49 @@ public class Entrega {
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
 
-	@OneToMany(mappedBy = "entrega", cascade = { CascadeType.REMOVE,
-			CascadeType.PERSIST })
-	private List<Documento> documentos;
+	@OneToOne
+	@JoinColumn(name = "DOC_ID")
+	private Documento documento;
+
+	@OneToOne
+	@JoinColumn(name = "EQUIPE_ID")
+	private Equipe equipe;
+
+	@OneToMany(mappedBy ="entrega")
+	private List<Resposta> respostas;
+	
+	@Transient
+	private boolean respondida;
+	
+	public boolean isRespondida() {
+		return respondida;
+	}
+
+	public void setRespondida(boolean respondida) {
+		this.respondida = respondida;
+	}
+	
+	public List<Resposta> getRespostas() {
+		return respostas;
+	}
+
+	public void setRespostas(List<Resposta> respostas) {
+		this.respostas = respostas;
+	}
+	
+	public void addResposta(Resposta resposta){
+		if(!getRespostas().contains(resposta)){
+			getRespostas().add(resposta);
+		}
+	}
+	
+	public Equipe getEquipe() {
+		return equipe;
+	}
+	
+	public void setEquipe(Equipe equipe) {
+		this.equipe = equipe;
+	}
 
 	public Usuario getUsuario() {
 		return usuario;
@@ -47,12 +88,12 @@ public class Entrega {
 		this.usuario = usuario;
 	}
 
-	public List<Documento> getDocumentos() {
-		return documentos;
+	public Documento getDocumento() {
+		return documento;
 	}
 
-	public void setDocumentos(List<Documento> documentos) {
-		this.documentos = documentos;
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
 	}
 
 	public Integer getId() {
@@ -79,5 +120,18 @@ public class Entrega {
 		this.dia = dia;
 	}
 	
+	@Override
+	public String toString() {
+		return "ID: "+getId()+" dia: "+getDia().getTime();
+	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Entrega)){
+			return false;
+		}
+		Entrega entrega = (Entrega) obj;
+		
+		return toString().equals(entrega.toString());
+	}	
 }

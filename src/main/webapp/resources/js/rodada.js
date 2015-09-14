@@ -59,11 +59,31 @@ $(document).ready(function() {
             		}
             	}
             }, 
-            
             termino: {
             	validators:{
             		notEmpty:{
             			message: 'Data de termino é obrigatória.'
+            		}
+            	}
+            },
+            prazoSubmissao :{
+            	validators: {
+            		callback: {
+                        message: 'O prazo deve ser anterior ao término da rodada.',
+                        callback: function(value, validator) {
+                        	var termino = validator.getFieldElements('termino').val();
+                        	if(value != "" && termino != "") {
+                        		termino = moment(termino, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var prazoSubmissao = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(termino, "DD/MM/YYYY").isBefore(moment(prazoSubmissao, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
+                    notEmpty:{
+            			message: 'Prazo é obrigatório?.'
             		}
             	}
             },
@@ -91,7 +111,20 @@ $(document).ready(function() {
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'termino');
     });
-        
+    
+    $("#prazoSubmissao").datepicker({
+		format : "dd/mm/yyyy",
+		todayBtn : "linked",
+		language : "pt-BR",
+		todayHighlight : true,
+		startDate: new Date()
+	}).on('changeDate', function(e) {
+		$(this).datepicker('hide');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'termino');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'prazoSubmissao');
+    });
+    
     $('div.error-validation:has(span)').find('span').css('color', '#a94442');
     
 	$('div.error-validation:has(span)').find('span').parent().parent().parent().addClass('has-error has-feedback');

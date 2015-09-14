@@ -103,7 +103,6 @@ public class JogoController {
 		model.addAttribute("action", "home");
 		
 		return PAGINA_LISTAR_JOGO;
-
 	}
 	
 	@RequestMapping(value ="/novo-jogo", method = RequestMethod.GET)
@@ -185,19 +184,15 @@ public class JogoController {
 	public String editar(@RequestParam("anexos") List<MultipartFile> anexos, @Valid Jogo jogo, 
 			BindingResult result, Model model, HttpSession session,	RedirectAttributes redirect) {
 		
-		Usuario usuario = getUsuarioLogado(session);
 		model.addAttribute("action", "editar");
 		model.addAttribute("editor", "jogo");
 		if (result.hasErrors()) {
 			return PAGINA_CADASTRAR_JOGO;
 		}
-		
-		jogo.setProfessor(usuarioService.find(Usuario.class, usuario.getId()));
+		Jogo oldJogo = jogoService.find(Jogo.class, jogo.getId());
 		
 		List<Documento> documentos = new ArrayList<Documento>();	
-		documentos = documentoService.getDocumentoByProjeto(jogo);
 		if(anexos != null && !anexos.isEmpty()) {
-			
 			for(MultipartFile anexo : anexos) {
 				try {
 					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
@@ -206,7 +201,7 @@ public class JogoController {
 						documento.setNomeOriginal(anexo.getOriginalFilename());
 						documento.setExtensao(anexo.getContentType());
 						documento.setNome(anexo.getName());
-						documento.setJogo(jogo);						
+						documento.setJogo(oldJogo);						
 						documentos.add(documento);
 					}
 				} catch (IOException e) {
@@ -221,9 +216,19 @@ public class JogoController {
 			model.addAttribute("erro", MENSAGEM_ADD_ANEXO);
 			return PAGINA_CADASTRAR_JOGO;
 		}
+		oldJogo.setDescricao(jogo.getDescricao());
+		oldJogo.setRegras(jogo.getRegras());
+		oldJogo.setNomeDoCurso(jogo.getNomeDoCurso());
+		oldJogo.setSemestre(jogo.getSemestre());
+		oldJogo.setInicio(jogo.getInicio());
+		oldJogo.setTermino(jogo.getTermino());
 		
-		jogoService.update(jogo);
-		
+		try{
+			jogoService.update(oldJogo);
+		}catch(Exception e){
+			redirect.addFlashAttribute("erro", "Erro ao atualizar os dados do jogo.");
+			return "redirect:/jogo/"+jogo.getId()+"/editar";
+		}
 		redirect.addFlashAttribute("info", MENSAGEM_JOGO_ATUALIZADO);
 		return "redirect:/jogo/"+jogo.getId()+"/detalhes";
 	}

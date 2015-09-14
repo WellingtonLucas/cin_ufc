@@ -33,12 +33,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
+import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
@@ -63,6 +65,9 @@ public class RodadaController {
 	
 	@Inject
 	private DocumentoService documentoService;
+
+	@Inject
+	private FormularioService formularioService;
 	
 	@RequestMapping(value ="/jogo/{id}/rodadas", method = RequestMethod.GET)
 	public String rodadas(@PathVariable("id") Integer id, Model model, HttpSession session,
@@ -129,6 +134,7 @@ public class RodadaController {
 		try{
 			rodada.setJogo(jogo);
 			rodada.setStatus(false);
+			rodada.setStatusPrazo(true);
 			rodadaService.save(rodada);
 		}catch(Exception e){
 			redirectAttributes.addFlashAttribute("erro", "Erro ao tentar persistir os dados.");
@@ -166,14 +172,21 @@ public class RodadaController {
 		if((termino < tempoAtual) && rodada.isStatus()){
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/inativar";
 		}
+		if(tempoAtual > rodada.getPrazoSubmissao().getTime()){
+			rodada.setStatusPrazo(false);
+		}
+		rodada.setStatusPrazo(true);
+		
 		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		model.addAttribute("editor", "rodada");
-		if (usuario.getId() == jogo.getProfessor().getId() && jogo.getRodadas().contains(rodada)) {
+		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
 			model.addAttribute("rodada", rodada);
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("permissao", "professor");
 			return "rodada/detalhes";
-		}else if(jogo.getAlunos().contains(usuario)){
+		}else if(rodada.getEquipesAtivas().contains(equipe)){
 			model.addAttribute("rodada", rodada);
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("permissao", "participante");
@@ -231,6 +244,14 @@ public class RodadaController {
 			redirect.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		if((rodada.getPrazoSubmissao().getTime() < rodada.getInicio().getTime()) 
+				|| (rodada.getPrazoSubmissao().getTime() > rodada.getTermino().getTime())){
+			redirect.addFlashAttribute("error_prazoSubmissao", "O prazo deve está entre o Início e Término da rodada .");
+			redirect.addFlashAttribute("erro", "Não foi possível atualizar a rodada.");
+			return "redirect:/jogo/" + id + "/rodada/" + rodada.getId()
+					+ "/editar";
+		}
+		
 		Rodada roAnterior = rodadaService.find(Rodada.class, rodada.getId());
 		rodada.setEquipesAtivas(roAnterior.getEquipesAtivas());
 		rodada.setJogo(jogo);
@@ -461,13 +482,11 @@ public class RodadaController {
 		
 		rodada = rodadaService.find(Rodada.class, rodada.getId());
 		Usuario usuario = getUsuarioLogado(session);
-		
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
-		
-		List<Documento> documentos = new ArrayList<Documento>();		
 		Entrega entrega = new Entrega();
+		List<Documento> documentos = new ArrayList<Documento>();
+		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		if(anexos != null && !anexos.isEmpty()) {
 			for(MultipartFile anexo : anexos) {
 				try {
@@ -475,9 +494,12 @@ public class RodadaController {
 						Documento documento = new Documento();
 						documento.setArquivo(anexo.getBytes());
 						documento.setNomeOriginal(anexo.getOriginalFilename());
-						documento.setNome(equipe.getNome()+"-"+rodada.getNome());
+						if(!usuario.equals(jogo.getProfessor())){
+							documento.setNome(equipe.getNome()+"-"+rodada.getNome());
+						}else{
+							documento.setNome("MODELO-"+rodada.getNome());
+						}
 						documento.setExtensao(anexo.getContentType());
-						documento.setEntrega(entrega);
 						documentos.add(documento);
 					}
 				} catch (IOException e) {
@@ -487,27 +509,143 @@ public class RodadaController {
 			}
 		}
 		if(!documentos.isEmpty()) {
-			entrega.setDocumentos(documentos);
+			if(usuario.equals(jogo.getProfessor())){
+				rodada.setModelo(documentos.get(0));
+				rodadaService.update(rodada);
+			}
+			entrega.setDocumento(documentos.get(0));
 			entrega.setRodada(rodada);
 			entrega.setUsuario(usuario);
-			
+			if(!usuario.equals(jogo.getProfessor())){
+				entrega.setEquipe(equipe);
+			}
 			Calendar calendario = Calendar.getInstance();
 			Date data =  calendario.getTime();
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss");
 			simpleDateFormat.format(data);
 			entrega.setDia(data);
-
-			entregaService.save(entrega);
-			documentoService.salvar(documentos);
 			
-			redirect.addFlashAttribute("info", "Entrega efetuada com sucesso.");
+			documentoService.save(documentos.get(0));
+			entregaService.save(entrega);
+			if(!usuario.equals(jogo.getProfessor())){
+				redirect.addFlashAttribute("info", "Entrega efetuada com sucesso.");
+			}else{
+				redirect.addFlashAttribute("info", "Modelo salvo com sucesso.");
+			}
 			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 		}else{
 			redirect.addFlashAttribute("erro", "Selecione um documento!");
 			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 		}
-		
+	}
+	
+	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/submissoes", method = RequestMethod.GET)
+	public String verSubmissoes(@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("id") Integer id, Model model,
+			HttpSession session, RedirectAttributes redirectAttributes) {
 
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Rodada rodada = rodadaService.find(Rodada.class, id);
+		model.addAttribute("action", "submissoes");
+		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
+			redirectAttributes.addFlashAttribute("erro",
+					"Rodada solicitada não existe.");
+			return "redirect:/jogo/" + idJogo + "/rodadas";
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		List<Entrega> entregas = entregaService.getUltimasEntregasDaRodada(rodada);
+		entregas = entregaService.verificaSeRespondidas(entregas, usuario);
+		
+		model.addAttribute("editor", "rodada");
+		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
+			model.addAttribute("rodada", rodada);
+			model.addAttribute("entregas", entregas);
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("permissao", "professor");
+			return "rodada/submissoes";
+		}else if(rodada.getEquipesAtivas().contains(equipe)){
+			model.addAttribute("rodada", rodada);
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("permissao", "participante");
+			return "rodada/submissoes";
+		}else {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+	}
+	
+	@RequestMapping(value = "/jogo/{id}/rodada/{idRodada}/vincularFormulario", method = RequestMethod.GET)
+	public String vincularFormulario(Model model, HttpSession session, @PathVariable("id") Integer id, 
+			 @PathVariable("idRodada") Integer idRodada, RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class, id);
+		Rodada rodada = rodadaService.find(Rodada.class,idRodada);
+		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
+			redirectAttributes.addFlashAttribute("erro", "Rodada inexistente");
+			return "redirect:/jogo/" + id + "/rodadas";
+		}
+		if(usuario.equals(jogo.getProfessor())){
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("rodada", rodada);
+			model.addAttribute("action","vincularFormularioRodada");
+			model.addAttribute("permissao","professor");
+			model.addAttribute("formularios", usuario.getFormulario());
+			return "formulario/adicionarFormulario";
+		}
+		redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+		return "redirect:/jogo/" + id + "/rodada/"+rodada.getId()+"/detalhes";
+	}
+	
+	@RequestMapping(value = "/jogo/rodada/formulario/vincular", method = RequestMethod.POST)
+	public String vincularFormulario(Model model, HttpSession session, @ModelAttribute("rodada") Rodada rodada, 
+			RedirectAttributes redirectAttributes, BindingResult result) {
+		
+		Rodada rodadaCompleta = rodadaService.find(Rodada.class, rodada.getId());
+		
+		if(result.hasErrors()){
+			redirectAttributes.addFlashAttribute("erro",
+					"Aconceteu algum erro ao associar formulario à rodada.");
+			return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/"+rodadaCompleta.getId()+"/vincular";
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		if(usuario.equals(rodadaCompleta.getJogo().getProfessor())){
+			Formulario formulario = rodada.getFormulario();
+			if(formulario != null){
+				formulario = formularioService.find(Formulario.class, formulario.getId());
+				rodadaCompleta.setFormulario(formulario);
+				try{
+					rodadaService.update(rodadaCompleta);
+				}catch(Exception e){
+					redirectAttributes.addFlashAttribute("erro",
+							"Houve um problema tecnico ao vincular o formulário à rodada!.");
+					return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/"+rodadaCompleta.getId()+"/vincular";
+				}
+				redirectAttributes.addFlashAttribute("info",
+						"Formulário associado à rodada com sucesso!.");
+				return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/"+rodadaCompleta.getId()+"/detalhes";
+			}else{
+				redirectAttributes.addFlashAttribute("erro",
+						"Selecione o formulário para associar à rodada.");
+				return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/"+rodadaCompleta.getId()+"/vincular";
+			}
+		}else{
+			redirectAttributes.addFlashAttribute("erro",
+					"Você não possui permissão de acesso.");
+			return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/detalhes";
+		}
 	}
 	
 	private Usuario getUsuarioLogado(HttpSession session) {

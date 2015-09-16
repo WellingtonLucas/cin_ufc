@@ -30,4 +30,16 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 		return documentoRepository.getDocumentosByJogo(jogo);
 	}
 
+	@Override
+	public boolean verificaExtensao(String extensao) {
+		String teste[] = extensao.split("/");
+		extensao = teste[1];
+		if(extensao.equals("odt") || extensao.equals("fodt") || extensao.equals("pdf") 
+				|| extensao.equals("doc")|| extensao.equals("docx")){
+			return true;
+		}
+		return false;
+		
+	}
+
 }

@@ -9,7 +9,7 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<title>Informações do Projeto</title>
+	<title>Informações da Equipe</title>
 </head>
 
 <body>

@@ -11,4 +11,6 @@ public interface DocumentoService extends GenericService<Documento> {
 	public abstract void salvar(List<Documento> documentos);
 
 	List<Documento> getDocumentoByProjeto(Jogo jogo);
+
+	public abstract boolean verificaExtensao(String extensao);
 }

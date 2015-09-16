@@ -30,6 +30,9 @@ public class Resposta {
 	@OneToOne
 	private Usuario usuario;
 	
+	@OneToOne
+	private Entrega entregaGabarito;
+	
 	@DateTimeFormat(pattern = "dd/MM/yyyy'T'HH:mm:ss")
 	private Date dia;
 	
@@ -48,6 +51,14 @@ public class Resposta {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Entrega getEntregaGabarito() {
+		return entregaGabarito;
+	}
+
+	public void setEntregaGabarito(Entrega entregaGabarito) {
+		this.entregaGabarito = entregaGabarito;
 	}
 
 	public Entrega getEntrega() {

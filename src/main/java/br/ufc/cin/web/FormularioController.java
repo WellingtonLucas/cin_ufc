@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.cin.model.Entrega;
+import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Opcao;
@@ -37,6 +38,7 @@ import br.ufc.cin.model.Pergunta;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.EntregaService;
+import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.OpcaoService;
@@ -68,6 +70,8 @@ public class FormularioController {
 	@Inject
 	private EntregaService entregaService;
 	
+	@Inject
+	private EquipeService equipeService;
 	
 	@RequestMapping(value = "/jogo/{id}/formulario", method = RequestMethod.GET)
 	public String novoFormulario(Model model, HttpSession session, @PathVariable("id") Integer id,
@@ -78,6 +82,7 @@ public class FormularioController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		
 		
 		model.addAttribute("idJogo", id);
 		model.addAttribute("formulario", new Formulario());
@@ -226,7 +231,7 @@ public class FormularioController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId() &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
+		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
 			model.addAttribute("formulario", formulario);
 			model.addAttribute("jogo", jogo);
 			return PAGINA_DETALHES_FORM;
@@ -305,9 +310,18 @@ public class FormularioController {
 		resposta.setOpcoes(opcoes);
 		resposta.setFormulario(formulario);
 		resposta.setUsuario(usuario);
-		resposta.setEntrega(entrega);
+		if(usuario.equals(jogo.getProfessor())){
+			resposta.setEntregaGabarito(entrega);
+		}else{
+			resposta.setEntrega(entrega);
+		}
 		resposta.setDia(data);
 		respostaService.save(resposta);
+		
+		if(usuario.equals(jogo.getProfessor())){
+			entrega.setGabarito(respostaService.getRespostaByEntrega(entrega));
+			entregaService.update(entrega);
+		}
 		
 		redirectAttributes.addFlashAttribute("info", "Entrega da equipe "+entrega.getEquipe().getNome()+" avalidada.");
 		return  "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/submissoes";
@@ -331,6 +345,57 @@ public class FormularioController {
 		
 		return "redirect:/jogo/"+ idJogo +"/formularios";
 
+	}
+	
+	@RequestMapping(value = "/jogo/{idJogo}/entrega/{id}/formulario/{idForm}/avaliacao", method = RequestMethod.GET)
+	public String avaliacao(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
+			@PathVariable("id") Integer id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if(jogo==null){
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Formulario formulario = formularioService.find(Formulario.class, idForm);
+		if (formulario == null) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/"+ idJogo +"/formularios";
+		}
+		Entrega entrega = entregaService.find(Entrega.class, id);
+		if (entrega == null) {
+			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
+			return "redirect:/jogo/"+ idJogo +"/rodadas";
+		}
+		
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		model.addAttribute("action", "avaliacao");
+		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+
+		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
+			model.addAttribute("permissao", "professor");
+		}else if(equipe != null){
+			model.addAttribute("permissao", "aluno");
+		}else{			
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+
+		model.addAttribute("formulario", formulario);
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("entrega", entrega);
+
+		return "equipe/avaliacao";
 	}
 	
 	private Usuario getUsuarioLogado(HttpSession session) {

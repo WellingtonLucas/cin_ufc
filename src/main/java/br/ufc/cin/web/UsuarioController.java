@@ -1,5 +1,8 @@
 package br.ufc.cin.web;
 
+import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
+import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
+import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.EquipeService;
@@ -68,18 +72,42 @@ public class UsuarioController {
 			@PathVariable("idJogo") Integer idJogo, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Usuario logado = getUsuarioLogado(session);
+		logado = usuarioService.find(Usuario.class, logado.getId());
+		
+		if(!jogo.isStatus() && jogo.getAlunos().contains(logado)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getAlunos().contains(logado) && !jogo.getProfessor().equals(logado)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
 		Usuario usuario = usuarioService.find(Usuario.class, id);
 		if (usuario == null) {
 			redirectAttributes.addFlashAttribute("erro", "Usuário inexistente");
 			return "redirect:/jogo/" + idJogo + "/participantes";
 		}
-		Usuario logado = getUsuarioLogado(session);
-		model.addAttribute("usuario", logado);
-		model.addAttribute("jogo", jogo);
-		model.addAttribute("action", "detalhesUsuario");
-		model.addAttribute("usuarioParticipante", usuario);
-		model.addAttribute("equipe", equipeService.equipePorAlunoNoJogo(usuario, jogo));
-		return "jogador/usuario";
+		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		
+		if(logado.equals(jogo.getProfessor()) || logado.getEquipes().contains(equipe)){
+			model.addAttribute("usuario", logado);
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("action", "detalhesUsuario");
+			model.addAttribute("usuarioParticipante", usuario);
+			model.addAttribute("equipe", equipe);
+			return "jogador/usuario";
+		}else{
+			redirectAttributes.addFlashAttribute("erro", "Você não possui permissão de acesso.");
+			return "redirect:/jogo/" + idJogo + "/equipe/"+equipe.getId();
+		}
 	}
 
 	@RequestMapping(value = "/perfil", method = RequestMethod.GET)

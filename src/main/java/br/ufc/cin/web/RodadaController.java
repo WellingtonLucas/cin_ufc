@@ -78,7 +78,16 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro", "Jogo inexistente.");
 			return "redirect:/jogo/listar";
 		}
-		if(jogo.getProfessor().equals(usuario)){
+		if(!jogo.getProfessor().equals(usuario) && !jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro", "Você não possui permissão de acesso.");
+			return "redirect:/jogo/listar";
+		}
+		if(jogo.getAlunos().contains(usuario) && !jogo.isStatus()){
+			redirectAttributes.addFlashAttribute("erro", "Jogo não está ativo no momento. "
+					+ "Para maiores informações "+jogo.getProfessor().getEmail());
+			return "redirect:/jogo/listar";
+			
+		}else if(jogo.getProfessor().equals(usuario)){
 			model.addAttribute("action", "rodadas");
 			model.addAttribute("permissao", "professor");
 			if((jogo.getRodadas() == null) || (jogo.getRodadas().isEmpty())){
@@ -155,6 +164,16 @@ public class RodadaController {
 					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativo no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getProfessor().equals(usuario) && !jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Você não possui permissão de acesso");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
 		Rodada rodada = rodadaService.find(Rodada.class, id);
 		model.addAttribute("action", "detalhesRodada");
 		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
@@ -174,10 +193,9 @@ public class RodadaController {
 		}
 		if(tempoAtual > rodada.getPrazoSubmissao().getTime()){
 			rodada.setStatusPrazo(false);
+		}else{
+			rodada.setStatusPrazo(true);
 		}
-		rodada.setStatusPrazo(true);
-		
-		Usuario usuario = getUsuarioLogado(session);
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		model.addAttribute("editor", "rodada");
@@ -186,7 +204,7 @@ public class RodadaController {
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("permissao", "professor");
 			return "rodada/detalhes";
-		}else if(rodada.getEquipesAtivas().contains(equipe)){
+		}else if(rodada.getEquipesAtivas().contains(equipe) && rodada.isStatus()){
 			model.addAttribute("rodada", rodada);
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("permissao", "participante");
@@ -217,7 +235,7 @@ public class RodadaController {
 		}
 		Usuario usuario = getUsuarioLogado(session);
 		
-		if (usuario.getId() == jogo.getProfessor().getId()) {
+		if (usuario.equals(jogo.getProfessor())) {
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("rodada", rodada);
 			model.addAttribute("editor", "rodada");
@@ -255,6 +273,7 @@ public class RodadaController {
 		Rodada roAnterior = rodadaService.find(Rodada.class, rodada.getId());
 		rodada.setEquipesAtivas(roAnterior.getEquipesAtivas());
 		rodada.setJogo(jogo);
+		rodada.setFormulario(roAnterior.getFormulario());
 		try{
 			rodadaService.update(rodada);
 			redirect.addFlashAttribute("info", "Rodada atualizada com sucesso.");
@@ -473,8 +492,7 @@ public class RodadaController {
 	public String entregaDeUmaRodada(@ModelAttribute("rodada") Rodada rodada, @RequestParam("anexos") List<MultipartFile> anexos, 
 			BindingResult result, @PathVariable("idJogo") Integer idJogo,
 			 HttpSession session, RedirectAttributes redirect, Model model){
-		
-		
+
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro ao efetuar entrega.");
 			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
@@ -488,6 +506,10 @@ public class RodadaController {
 		List<Documento> documentos = new ArrayList<Documento>();
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		if(anexos != null && !anexos.isEmpty()) {
+			if(anexos.size() > 1){
+				redirect.addFlashAttribute("erro", "Selecione apenas um anexo!");
+				return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+			}
 			for(MultipartFile anexo : anexos) {
 				try {
 					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
@@ -500,6 +522,11 @@ public class RodadaController {
 							documento.setNome("MODELO-"+rodada.getNome());
 						}
 						documento.setExtensao(anexo.getContentType());
+						if(!documentoService.verificaExtensao(documento.getExtensao())){
+							redirect.addFlashAttribute("erro", "O arquivo deve está com algum desses formatos: "
+									+ "doc, docx, pdf, odt ou fodt! da" + documento.getExtensao());
+							return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+						}
 						documentos.add(documento);
 					}
 				} catch (IOException e) {
@@ -550,6 +577,16 @@ public class RodadaController {
 					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
 		Rodada rodada = rodadaService.find(Rodada.class, id);
 		model.addAttribute("action", "submissoes");
 		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
@@ -557,10 +594,14 @@ public class RodadaController {
 					"Rodada solicitada não existe.");
 			return "redirect:/jogo/" + idJogo + "/rodadas";
 		}
-		Usuario usuario = getUsuarioLogado(session);
+		
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		List<Entrega> entregas = entregaService.getUltimasEntregasDaRodada(rodada);
+		if(entregas.isEmpty() || entregas == null){
+			redirectAttributes.addFlashAttribute("erro", "Não existem entregas para está rodada até o momento.");
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/detalhes";
+		}
 		entregas = entregaService.verificaSeRespondidas(entregas, usuario);
 		
 		model.addAttribute("editor", "rodada");

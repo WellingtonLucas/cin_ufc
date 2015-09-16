@@ -22,7 +22,10 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 		List<Entrega> ultimasEntregas = new ArrayList<Entrega>();
 	
 		for (Equipe equipe : rodada.getEquipesAtivas()) {
-			ultimasEntregas.add(getUltimaEntrega(rodada, equipe));
+			Entrega entrega = getUltimaEntrega(rodada, equipe);
+			if(entrega != null){
+				ultimasEntregas.add(entrega);
+			}
 		}
 		return ultimasEntregas;
 	}
@@ -45,18 +48,39 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 
 	@Override
 	public List<Entrega> verificaSeRespondidas(List<Entrega> entregas, Usuario usuario) {
-		List<Entrega> entregasComStatus = new ArrayList<Entrega>();
-		for (Entrega entrega : entregas) {
-			entrega.setRespondida(false);
-			for (Resposta resposta : entrega.getRespostas()) {
-				if(resposta.getUsuario().equals(usuario)){
+		if((entregas != null) && !entregas.isEmpty()){
+			List<Entrega> entregasComStatus = new ArrayList<Entrega>();
+			for (Entrega entrega : entregas) {
+				entrega.setRespondida(false);
+				for (Resposta resposta : entrega.getRespostas()) {
+					if(resposta.getUsuario().equals(usuario)){
+						entrega.setRespondida(true);
+						break;
+					}
+				}
+				if(entrega.getGabarito() != null && entrega.getGabarito().getUsuario().equals(usuario)){
 					entrega.setRespondida(true);
-					break;
+				}
+				entregasComStatus.add(entrega);
+			}
+			return entregasComStatus;
+		}else{
+			return entregas;
+		}
+	}
+
+	@Override
+	public List<Entrega> getUltimasEntregasDaEquipe(Equipe equipe) {
+		List<Entrega> entregas = new ArrayList<Entrega>();
+		for (Rodada rodada : equipe.getRodadas()) {
+			if(rodada.isStatus()){
+				Entrega entrega = getUltimaEntrega(rodada, equipe);
+				if(entrega!=null){
+					entregas.add(entrega);
 				}
 			}
-			entregasComStatus.add(entrega);
 		}
-		return entregasComStatus;
+		return entregas;
 	}
 
 }

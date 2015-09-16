@@ -103,8 +103,15 @@
 										<input type="file" id="fileupload" class="file" name="anexos" multiple></input>	
 									</div>
 								</div>
-								
 							</form:form>
+						</c:if>
+						<c:if test="${rodada.statusPrazo == false}">
+							<div class="form-group form-item">
+								<label for="fileupload" class="col-sm-2 control-label field">Entrega:</label>
+								<div class="col-sm-7">
+									<input type="file" id="fileupload" class="file" name="anexos" multiple disabled="disabled"></input>	
+								</div>
+							</div>
 						</c:if>
 						<div class="form-group">
 							<label class="col-sm-2 control-label field">Formulário:</label>

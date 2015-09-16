@@ -33,6 +33,9 @@
 		<c:if test="${(action == 'detalhesEquipe')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>">Equipes&nbsp;</a></li>	
+			<c:if test="${ (permissao == 'professor') || (permissao == 'membro') }">
+				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/avaliacoes"></c:url>">Avaliações</a></li>
+			</c:if>
 			<c:if test="${ (permissao == 'professor') }">
 				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/vincular"></c:url>">Vincular Membros</a></li>
 			</c:if>

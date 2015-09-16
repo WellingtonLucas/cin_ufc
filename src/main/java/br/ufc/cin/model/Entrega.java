@@ -44,6 +44,9 @@ public class Entrega {
 	@JoinColumn(name = "EQUIPE_ID")
 	private Equipe equipe;
 
+	@OneToOne
+	private Resposta gabarito;
+
 	@OneToMany(mappedBy ="entrega")
 	private List<Resposta> respostas;
 	
@@ -56,6 +59,14 @@ public class Entrega {
 
 	public void setRespondida(boolean respondida) {
 		this.respondida = respondida;
+	}
+	
+	public Resposta getGabarito() {
+		return gabarito;
+	}
+
+	public void setGabarito(Resposta gabarito) {
+		this.gabarito = gabarito;
 	}
 	
 	public List<Resposta> getRespostas() {

@@ -170,7 +170,7 @@ public class JogoController {
 		
 		Usuario usuario = getUsuarioLogado(session);
 		
-		if (usuario.getId() == jogo.getProfessor().getId()) {
+		if (usuario.equals(jogo.getProfessor())) {
 			model.addAttribute("jogo", jogo);
 		 	model.addAttribute("action", "editar");
 			return PAGINA_CADASTRAR_JOGO;
@@ -243,11 +243,11 @@ public class JogoController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId()) {			
+		if (usuario.equals(jogo.getProfessor())) {			
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("permissao", "professor");
 			return PAGINA_DETALHES_JOGO;
-		}else if(jogo.getAlunos().contains(usuario)){
+		}else if(jogo.getAlunos().contains(usuario) && jogo.isStatus()){
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("permissao", "aluno");
 			return PAGINA_DETALHES_JOGO;
@@ -265,7 +265,7 @@ public class JogoController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId()) {
+		if (usuario.equals(jogo.getProfessor())) {
 			if(jogo.getEquipes().isEmpty()){
 				jogoService.delete(jogo);
 				redirectAttributes.addFlashAttribute("info", MENSAGEM_JOGO_REMOVIDO);
@@ -292,7 +292,7 @@ public class JogoController {
 		List<Usuario> usuarios = jogo.getAlunos();
 
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.getId() == jogo.getProfessor().getId()) {
+		if (usuario.equals(jogo.getProfessor())) {
 			model.addAttribute("permissao", "professor");
 		}else if(jogo.getAlunos().contains(usuario)){
 			model.addAttribute("permissao", "membro");
@@ -425,19 +425,17 @@ public class JogoController {
 		Usuario user = usuarioService.find(Usuario.class, idUsuario);
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
 
-		if (user == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					"Participante inexistente");
-			List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(getUsuarioLogado(session), jogo);
-			model.addAttribute("usuarios", usuarios);
-			return "redirect:/jogo/" + jogo.getId() + "/participantes";
-		}
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-
+		if (user == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					"Participante inexistente");
+			return "redirect:/jogo/" + jogo.getId() + "/participantes";
+		}
+		
 		Usuario usuario = usuarioService.find(Usuario.class, getUsuarioLogado(session).getId());
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		
@@ -458,8 +456,6 @@ public class JogoController {
 					MENSAGEM_PERMISSAO_NEGADA);
 		}
 		
-		List<Usuario> usuarios = usuarioService.getPossiveisParticipantes(usuario, jogo);
-		model.addAttribute("usuarios", usuarios);
 		return "redirect:/jogo/" + idJogo + "/participantes";
 
 	}

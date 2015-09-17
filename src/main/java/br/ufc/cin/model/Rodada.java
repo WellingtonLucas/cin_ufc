@@ -12,9 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -24,6 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Rodada {
+	
 	
 	@Id
 	@Column(name = "id")
@@ -63,11 +62,6 @@ public class Rodada {
 	@OneToOne
 	@JoinColumn(name = "FORM_ID")
 	private Formulario formulario;
-
-	@ManyToMany
-	@JoinTable(name = "equipe_rodada", joinColumns = { @JoinColumn(name = "rodada_id", referencedColumnName = "id") }, 
-	inverseJoinColumns = { @JoinColumn(name = "equipe_id", referencedColumnName = "id") })
-	private List<Equipe> equipesAtivas;
 	
 	@OneToMany(mappedBy = "rodada", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
 	private List<Entrega> entregas;
@@ -150,14 +144,6 @@ public class Rodada {
 
 	public void setStatus(boolean status) {
 		this.status = status;
-	}
-	
-	public List<Equipe> getEquipesAtivas() {
-		return equipesAtivas;
-	}
-
-	public void setEquipesAtivas(List<Equipe> equipesAtivas) {
-		this.equipesAtivas = equipesAtivas;
 	}
 
 	public Date getPrazoSubmissao() {

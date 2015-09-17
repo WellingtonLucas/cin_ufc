@@ -74,7 +74,7 @@
 												<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
 											</td>
 											<td>
-												<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${entrega.gabarito.id }/avaliacao" ></c:url>">
+												<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/entrega/${entrega.id }/formulario/${entrega.gabarito.formulario.id }/avaliacao" ></c:url>">
 													<button class="btn btn-primary">Ver avaliação</button>
 												</a>
 											</td>

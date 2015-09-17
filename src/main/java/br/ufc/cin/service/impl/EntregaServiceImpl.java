@@ -21,7 +21,7 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 	public List<Entrega> getUltimasEntregasDaRodada(Rodada rodada) {
 		List<Entrega> ultimasEntregas = new ArrayList<Entrega>();
 	
-		for (Equipe equipe : rodada.getEquipesAtivas()) {
+		for (Equipe equipe : rodada.getJogo().getEquipes()) {
 			Entrega entrega = getUltimaEntrega(rodada, equipe);
 			if(entrega != null){
 				ultimasEntregas.add(entrega);
@@ -72,7 +72,7 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 	@Override
 	public List<Entrega> getUltimasEntregasDaEquipe(Equipe equipe) {
 		List<Entrega> entregas = new ArrayList<Entrega>();
-		for (Rodada rodada : equipe.getRodadas()) {
+		for (Rodada rodada : equipe.getJogo().getRodadas()) {
 			if(rodada.isStatus()){
 				Entrega entrega = getUltimaEntrega(rodada, equipe);
 				if(entrega!=null){

@@ -48,7 +48,6 @@
 						<c:forEach var="formulario" items="${formularios}">
 							<div class="col-xs-6 col-sm-3 placeholder">
 								<a class="btn btn-info" href="<c:url value="formulario/${formulario.id }/detalhes" />">Detalhes</a>	
-								<a class="btn btn-success" href="<c:url value="formulario/${formulario.id }" />">Responder</a>
 								<h4>${formulario.titulo }</h4>
 								<span class="text-muted">Alguma informação</span>
 							</div>

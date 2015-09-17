@@ -51,7 +51,7 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 	
 	@Override
 	public List<Equipe> equipesDesvinculadas(Jogo jogo, Rodada rodada) {
-		jogo.getEquipes().removeAll(rodada.getEquipesAtivas());
+		jogo.getEquipes().removeAll(rodada.getJogo().getEquipes());
 		return jogo.getEquipes();
 	}
 

@@ -91,23 +91,35 @@ public class UsuarioController {
 		}
 		
 		Usuario usuario = usuarioService.find(Usuario.class, id);
+		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		if (usuario == null) {
 			redirectAttributes.addFlashAttribute("erro", "Usuário inexistente");
 			return "redirect:/jogo/" + idJogo + "/participantes";
 		}
-		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		if(!jogo.getAlunos().contains(usuario)) {
+			redirectAttributes.addFlashAttribute("erro", "Usuário não faz parte do jogo.");
+			return "redirect:/jogo/" + idJogo + "/participantes";
+		}
+		if(!jogo.getEquipes().contains(equipe)) {
+			redirectAttributes.addFlashAttribute("erro", "Usuário não faz parte de equipe no jogo.");
+			return "redirect:/jogo/" + idJogo + "/participantes";
+		}
 		
-		if(logado.equals(jogo.getProfessor()) || logado.getEquipes().contains(equipe)){
-			model.addAttribute("usuario", logado);
-			model.addAttribute("jogo", jogo);
-			model.addAttribute("action", "detalhesUsuario");
-			model.addAttribute("usuarioParticipante", usuario);
-			model.addAttribute("equipe", equipe);
-			return "jogador/usuario";
+		if(logado.equals(jogo.getProfessor())){
+			model.addAttribute("permissao", "professor");
+		}else  if(logado.getEquipes().contains(equipe)){
+			model.addAttribute("permissao", "aluno");
 		}else{
 			redirectAttributes.addFlashAttribute("erro", "Você não possui permissão de acesso.");
 			return "redirect:/jogo/" + idJogo + "/equipe/"+equipe.getId();
 		}
+		model.addAttribute("usuario", logado);
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("action", "detalhesUsuario");
+		model.addAttribute("usuarioParticipante", usuario);
+		model.addAttribute("equipe", equipe);
+		return "jogador/usuario";
+		
 	}
 
 	@RequestMapping(value = "/perfil", method = RequestMethod.GET)

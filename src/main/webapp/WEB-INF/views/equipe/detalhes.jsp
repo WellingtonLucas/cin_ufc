@@ -96,7 +96,7 @@
 						<hr>
 						<div class="row placeholders">
 							<div class="form-group">	
-								<c:if test="${(permissao eq 'professor') || (permissao eq 'membro') }">			
+								<c:if test="${(permissao eq 'professor') || (permissao eq 'aluno') }">			
 									<div class="col-sm-2">				
 										<a id="editar" href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/editar" ></c:url>">
 											<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>

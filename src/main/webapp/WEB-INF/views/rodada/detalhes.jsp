@@ -93,19 +93,19 @@
 								<label>${rodada.descricao }</label>
 							</div>						
 						</div>
-						<c:if test="${rodada.statusPrazo == true}">
+						<c:if test="${(rodada.statusPrazo && rodada.status) || (permissao == 'professor')}">
 							<form:form id="adicionarEntregaForm" role="form" class="form-horizontal" commandName="rodada"
 							 	enctype="multipart/form-data" servletRelativeAction="/jogo/${jogo.id }/rodada/entrega" method="POST">
 								<form:hidden path="id" value="${rodada.id }"/>
 								<div class="form-group form-item">
 									<label for="fileupload" class="col-sm-2 control-label field">Entrega:</label>
-									<div class="col-sm-8">
+									<div class="col-sm-7">
 										<input type="file" id="fileupload" class="file" name="anexos" multiple></input>	
 									</div>
 								</div>
 							</form:form>
 						</c:if>
-						<c:if test="${rodada.statusPrazo == false}">
+						<c:if test="${(!rodada.statusPrazo || !rodada.status) && permissao != 'professor'}">
 							<div class="form-group form-item">
 								<label for="fileupload" class="col-sm-2 control-label field">Entrega:</label>
 								<div class="col-sm-7">
@@ -133,7 +133,7 @@
 					</div>	
 					<div class="col-sm-12">
 						<hr>
-						<c:if test="${not empty rodada.equipesAtivas }">
+						<c:if test="${not empty rodada.jogo.equipes }">
 							<h3><strong>Equipes na Rodada</strong></h3>
 							<table id="table_id" class="table table-striped table-hover">
 								<thead>
@@ -145,7 +145,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="equipe" items="${rodada.equipesAtivas}">
+									<c:forEach var="equipe" items="${rodada.jogo.equipes}">
 										<tr>
 											<td>
 												<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome}</a>
@@ -169,14 +169,12 @@
 						<hr>
 						<div class="row placeholders">
 							<div class="form-group">	
-								<c:if test="${(permissao eq 'professor') || (permissao eq 'membro') }">			
+								<c:if test="${(permissao eq 'professor')}">			
 									<div class="col-sm-2">				
 										<a id="editar" href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/editar" ></c:url>">
 											<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
 										</a>
 									</div>
-								</c:if>
-								<c:if test="${permissao eq 'professor' }">
 									<div class="col-sm-2">
 										<c:if test="${rodada.status == true}">									
 											<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-rodada" href="#" 

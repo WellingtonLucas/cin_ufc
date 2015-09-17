@@ -82,23 +82,22 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro", "Você não possui permissão de acesso.");
 			return "redirect:/jogo/listar";
 		}
+		model.addAttribute("action", "rodadas");
 		if(jogo.getAlunos().contains(usuario) && !jogo.isStatus()){
 			redirectAttributes.addFlashAttribute("erro", "Jogo não está ativo no momento. "
 					+ "Para maiores informações "+jogo.getProfessor().getEmail());
 			return "redirect:/jogo/listar";
 			
 		}else if(jogo.getProfessor().equals(usuario)){
-			model.addAttribute("action", "rodadas");
 			model.addAttribute("permissao", "professor");
 			if((jogo.getRodadas() == null) || (jogo.getRodadas().isEmpty())){
 				model.addAttribute("info", "Nenhuma rodada cadastrada no momento.");
 			}else{
 				model.addAttribute("rodadas", jogo.getRodadas());
 			}
-			model.addAttribute("jogo", jogo);
-			return "rodada/listar";
+		}else if(jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "aluno");
 		}
-		model.addAttribute("action", "rodadas");
 		if((jogo.getRodadas() == null) || (jogo.getRodadas().isEmpty())){
 			model.addAttribute("info", "Nenhuma rodada cadastrada no momento.");
 		}else{
@@ -117,10 +116,12 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro", "Jogo inexistente.");
 			return "redirect:/jogo/listar";
 		}
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		if(jogo.getProfessor().equals(usuario)){
 			model.addAttribute("action", "cadastrar");
 			model.addAttribute("editor", "rodada");
 			model.addAttribute("jogo", jogo);
+			model.addAttribute("formularios", usuario.getFormulario());
 			model.addAttribute("rodada", new Rodada());
 			return "rodada/novaRodada";
 		}
@@ -144,6 +145,12 @@ public class RodadaController {
 			rodada.setJogo(jogo);
 			rodada.setStatus(false);
 			rodada.setStatusPrazo(true);
+			if( rodada.getFormulario() == null){
+				redirectAttributes.addFlashAttribute("erro", "Primeiramente crie formulários para associar a uma rodada.");
+				return "redirect:/jogo/"+id+"/formularios";
+			}
+			Formulario formulario = formularioService.find(Formulario.class, rodada.getFormulario().getId());
+			rodada.setFormulario(formulario);
 			rodadaService.save(rodada);
 		}catch(Exception e){
 			redirectAttributes.addFlashAttribute("erro", "Erro ao tentar persistir os dados.");
@@ -198,22 +205,22 @@ public class RodadaController {
 		}
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
-		model.addAttribute("editor", "rodada");
+		
 		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
-			model.addAttribute("rodada", rodada);
-			model.addAttribute("jogo", jogo);
 			model.addAttribute("permissao", "professor");
-			return "rodada/detalhes";
-		}else if(rodada.getEquipesAtivas().contains(equipe) && rodada.isStatus()){
-			model.addAttribute("rodada", rodada);
-			model.addAttribute("jogo", jogo);
-			model.addAttribute("permissao", "participante");
-			return "rodada/detalhes";
+		}else if(rodada.getJogo().getEquipes().contains(equipe) && rodada.isStatus() && jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "aluno");
+		}else if(jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "jogador");			
 		}else {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		model.addAttribute("editor", "rodada");
+		model.addAttribute("rodada", rodada);
+		model.addAttribute("jogo", jogo);
+		return "rodada/detalhes";
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/editar", method = RequestMethod.GET)
@@ -271,7 +278,6 @@ public class RodadaController {
 		}
 		
 		Rodada roAnterior = rodadaService.find(Rodada.class, rodada.getId());
-		rodada.setEquipesAtivas(roAnterior.getEquipesAtivas());
 		rodada.setJogo(jogo);
 		rodada.setFormulario(roAnterior.getFormulario());
 		try{
@@ -342,7 +348,7 @@ public class RodadaController {
 		
 		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.equals(jogo.getProfessor())
-				&& jogo.getRodadas().contains(rodada)) {
+				&& jogo.getRodadas().contains(rodada) || jogo.getAlunos().contains(usuario)) {
 			rodada.setStatus(false);
 			rodadaService.update(rodada);
 			redirectAttributes.addFlashAttribute("info",
@@ -429,14 +435,13 @@ public class RodadaController {
 					"Aconceteu algum erro ao associar equipe(s) a rodada.");
 			return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/"+rodadaCompleta.getId()+"/vincular";
 		}
-		for (Equipe equipe : rodada.getEquipesAtivas()) {
+		for (Equipe equipe : rodada.getJogo().getEquipes()) {
 			if(equipe.getId() != null){
 				equipe = equipeService.find(Equipe.class, equipe.getId());
 				equipes.add(equipe);
 			}
 		}
 		if(!equipes.isEmpty()){
-			rodadaCompleta.getEquipesAtivas().addAll(equipes);
 			rodadaService.update(rodadaCompleta);
 			redirectAttributes.addFlashAttribute("info",
 					"Equipes associados à rodada com sucesso!.");
@@ -476,8 +481,7 @@ public class RodadaController {
 		}
 
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.equals(jogo.getProfessor())	&& rodada.getEquipesAtivas().contains(equipe)) {
-			rodada.getEquipesAtivas().remove(equipe);
+		if (usuario.equals(jogo.getProfessor())	&& rodada.getJogo().getEquipes().contains(equipe)) {
 			rodadaService.update(rodada);
 			redirectAttributes.addFlashAttribute("info",
 					"Equipe desvinculada com sucesso.");
@@ -524,7 +528,7 @@ public class RodadaController {
 						documento.setExtensao(anexo.getContentType());
 						if(!documentoService.verificaExtensao(documento.getExtensao())){
 							redirect.addFlashAttribute("erro", "O arquivo deve está com algum desses formatos: "
-									+ "doc, docx, pdf, odt ou fodt! da" + documento.getExtensao());
+									+ "doc, docx, pdf, odt ou fodt!");
 							return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 						}
 						documentos.add(documento);
@@ -537,10 +541,11 @@ public class RodadaController {
 		}
 		if(!documentos.isEmpty()) {
 			if(usuario.equals(jogo.getProfessor())){
+				documentoService.save(documentos.get(0));
 				rodada.setModelo(documentos.get(0));
 				rodadaService.update(rodada);
 			}
-			entrega.setDocumento(documentos.get(0));
+			entrega.setDocumento(rodada.getModelo());
 			entrega.setRodada(rodada);
 			entrega.setUsuario(usuario);
 			if(!usuario.equals(jogo.getProfessor())){
@@ -552,7 +557,6 @@ public class RodadaController {
 			simpleDateFormat.format(data);
 			entrega.setDia(data);
 			
-			documentoService.save(documentos.get(0));
 			entregaService.save(entrega);
 			if(!usuario.equals(jogo.getProfessor())){
 				redirect.addFlashAttribute("info", "Entrega efetuada com sucesso.");
@@ -604,23 +608,20 @@ public class RodadaController {
 		}
 		entregas = entregaService.verificaSeRespondidas(entregas, usuario);
 		
-		model.addAttribute("editor", "rodada");
 		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
-			model.addAttribute("rodada", rodada);
-			model.addAttribute("entregas", entregas);
-			model.addAttribute("jogo", jogo);
 			model.addAttribute("permissao", "professor");
-			return "rodada/submissoes";
-		}else if(rodada.getEquipesAtivas().contains(equipe)){
-			model.addAttribute("rodada", rodada);
-			model.addAttribute("jogo", jogo);
-			model.addAttribute("permissao", "participante");
-			return "rodada/submissoes";
+		}else if(rodada.getJogo().getEquipes().contains(equipe)){
+			model.addAttribute("permissao", "aluno");
 		}else {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		model.addAttribute("editor", "rodada");
+		model.addAttribute("rodada", rodada);
+		model.addAttribute("entregas", entregas);
+		model.addAttribute("jogo", jogo);
+		return "rodada/submissoes";
 	}
 	
 	@RequestMapping(value = "/jogo/{id}/rodada/{idRodada}/vincularFormulario", method = RequestMethod.GET)

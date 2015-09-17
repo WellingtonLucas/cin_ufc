@@ -40,9 +40,6 @@ public class Equipe {
 	@ManyToOne
 	private Jogo jogo;
 	
-	@ManyToMany(mappedBy = "equipesAtivas")
-	private List<Rodada> rodadas;
-	
 	@ManyToMany
 	@JoinTable(name = "equipe_aluno", joinColumns = { @JoinColumn(name = "equipe_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "aluno_id", referencedColumnName = "id") })
 	private List<Usuario> alunos;
@@ -104,14 +101,6 @@ public class Equipe {
 		return id;
 	}
 	
-	public List<Rodada> getRodadas() {
-		return rodadas;
-	}
-
-	public void setRodadas(List<Rodada> rodadas) {
-		this.rodadas = rodadas;
-	}
-
 	public String toString(){
 		return "Equipe id: "+getId()+ " nome: " +getNome() ;
 	}

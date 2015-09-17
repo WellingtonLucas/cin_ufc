@@ -83,7 +83,6 @@ public class FormularioController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		
-		
 		model.addAttribute("idJogo", id);
 		model.addAttribute("formulario", new Formulario());
 		model.addAttribute("action","cadastrar");
@@ -124,7 +123,7 @@ public class FormularioController {
 		}
 		
 		redirect.addFlashAttribute("info", "Formulário cadastrado com sucesso!");
-		return  "redirect:/jogo/"+jogo.getId()+"/formulario/"+formulario.getId();
+		return  "redirect:/jogo/"+jogo.getId()+"/formulario/"+formulario.getId()+"/detalhes";
 	}
 	@RequestMapping(value = "/jogo/{idJogo}/formulario/{idForm}/editar", method = RequestMethod.GET)
 	public String editarForm(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
@@ -234,6 +233,7 @@ public class FormularioController {
 		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
 			model.addAttribute("formulario", formulario);
 			model.addAttribute("jogo", jogo);
+			model.addAttribute("permissao", "professor");
 			return PAGINA_DETALHES_FORM;
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
@@ -260,19 +260,24 @@ public class FormularioController {
 			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
 			return "redirect:/jogo/"+ idJogo +"/rodadas";
 		}
-		model.addAttribute("action", "responder");
+		
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
-			model.addAttribute("formulario", formulario);
-			model.addAttribute("jogo", jogo);
-			model.addAttribute("entrega", entrega);
-			model.addAttribute("resposta", new Resposta());
-			
-			return "formulario/responder";
+		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)
+				&& entrega.getRodada().isStatus()) {			
+			model.addAttribute("permissao", "professor");
+		}else if(jogo.getAlunos().contains(usuario) && jogo.getProfessor().getFormulario().contains(formulario)
+				&& entrega.getRodada().isStatus()) {
+			model.addAttribute("permissao", "aluno");
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		model.addAttribute("action", "responder");
+		model.addAttribute("formulario", formulario);
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("entrega", entrega);
+		model.addAttribute("resposta", new Resposta());
+		return "formulario/responder";
 	}
 	
 	@RequestMapping(value = "/{idJogo}/entrega/{id}/formulario/{idForm}/responder", method = RequestMethod.POST)
@@ -347,18 +352,25 @@ public class FormularioController {
 
 	}
 	
-	@RequestMapping(value = "/jogo/{idJogo}/entrega/{id}/formulario/{idForm}/avaliacao", method = RequestMethod.GET)
+	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/entrega/{id}/formulario/{idForm}/avaliacao", method = RequestMethod.GET)
 	public String avaliacao(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
-			@PathVariable("id") Integer id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+			@PathVariable("id") Integer id, Model model, HttpSession session, @PathVariable("idEquipe") Integer idEquipe,
+			RedirectAttributes redirectAttributes) {
 
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if(jogo==null){
+		if(jogo == null){
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
+		if (equipe == null || !jogo.getEquipes().contains(equipe)) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + idJogo + "/equipes";
+		}
 		Formulario formulario = formularioService.find(Formulario.class, idForm);
 		if (formulario == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
+			redirectAttributes.addFlashAttribute("erro","Formulário inexistente.");
 			return "redirect:/jogo/"+ idJogo +"/formularios";
 		}
 		Entrega entrega = entregaService.find(Entrega.class, id);
@@ -379,18 +391,19 @@ public class FormularioController {
 		}
 		
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
-		model.addAttribute("action", "avaliacao");
-		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		Equipe equipeAluno = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 
 		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
 			model.addAttribute("permissao", "professor");
-		}else if(equipe != null){
+			model.addAttribute("equipe", equipe);
+		}else if(equipeAluno != null){
 			model.addAttribute("permissao", "aluno");
+			model.addAttribute("equipe", equipeAluno);
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-
+		model.addAttribute("action", "avaliacao");
 		model.addAttribute("formulario", formulario);
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("entrega", entrega);

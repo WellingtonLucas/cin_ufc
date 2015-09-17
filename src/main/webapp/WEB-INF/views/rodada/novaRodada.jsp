@@ -50,7 +50,6 @@
 				<form:hidden path="id"/>
 				<form:hidden path="status"/>
 				<form:hidden path="statusPrazo"/>
-				<form:hidden path="formulario.id"/>
 				<div class="form-group">
 					<div class="form-item">
 						<label for="nome" class="col-sm-2 control-label" >Nome da Rodada:<span class="required">*</span></label>
@@ -120,6 +119,18 @@
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-item">
+						<label for="prazoSubmissao" class="col-sm-2 control-label">Formulário da Rodada:<span class="required">*</span></label>
+						<div class="col-sm-8">
+							<form:select id="selec" path="formulario.id" class="form-control">
+								<c:forEach var="formulario" items="${formularios}">
+							     	<form:option value="${formulario.id }">${formulario.titulo}</form:option>
+							    </c:forEach>
+							</form:select>
+						</div>
+				 	</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-2"></div>

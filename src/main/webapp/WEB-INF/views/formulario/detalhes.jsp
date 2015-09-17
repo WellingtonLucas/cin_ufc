@@ -73,13 +73,6 @@
 								</div>
 							</div>
 						</c:forEach>
-						<label class="col-sm-1 field">Prazo:</label>
-						<div class="col-sm-4 field-value">
-							<c:if test="${empty formulario.prazo }">
-								<label>-</label>
-							</c:if>
-							<label><fmt:formatDate pattern="dd/MM/yyyy" value="${formulario.prazo }" /></label>
-						</div>
 						<div class="col-sm-12"></div>
 						<label class="col-sm-1 field">Nota:</label>
 						<div class="col-sm-11 field-value">
@@ -95,11 +88,6 @@
 								<li class="media"><hr></li>							
 							</ul>
 							<div class="form-group">
-								<div class="col-sm-2">				
-									<a id="salvar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }" ></c:url>">
-										<button class="btn btn-primary btn-lg">Responder&nbsp;<i class="glyphicon glyphicon-floppy-disk"></i></button>
-									</a>
-								</div>
 								<div class="col-sm-2">				
 									<a id="editar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/editar" ></c:url>">
 										<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>

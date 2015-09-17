@@ -321,7 +321,7 @@ public class JogoController {
 		if(usuario.equals(jogo.getProfessor())){
 			model.addAttribute("permissao","professor");
 		}else if(jogo.getAlunos().contains(usuario)){
-			model.addAttribute("permissao","alunoDoJogo");
+			model.addAttribute("permissao","aluno");
 		}
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("action","equipes");
@@ -331,7 +331,8 @@ public class JogoController {
 	}
 	
 	@RequestMapping(value = "/{id}/formularios", method = RequestMethod.GET)
-	public String listarFormularios(Model model, HttpSession session, @PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+	public String listarFormularios(Model model, HttpSession session,
+			@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 		Jogo jogo = jogoService.find(Jogo.class,id);
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);

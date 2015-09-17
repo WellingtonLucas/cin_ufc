@@ -32,14 +32,12 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 
 	@Override
 	public boolean verificaExtensao(String extensao) {
-		String teste[] = extensao.split("/");
-		extensao = teste[1];
-		if(extensao.equals("odt") || extensao.equals("fodt") || extensao.equals("pdf") 
-				|| extensao.equals("doc")|| extensao.equals("docx")){
+		if(extensao.equals("application/vnd.oasis.opendocument.text") || extensao.equals("application/pdf") 
+				|| extensao.equals("application/msword") 
+				 || extensao.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")){
 			return true;
 		}
 		return false;
-		
 	}
 
 }

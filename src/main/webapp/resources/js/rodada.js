@@ -87,6 +87,13 @@ $(document).ready(function() {
             		}
             	}
             },
+            selec: {
+                validators: {
+                    notEmpty: {
+                        message: 'Selecione um formulário para esta rodada.'
+                    }
+                }
+            }
         }
        
 	});

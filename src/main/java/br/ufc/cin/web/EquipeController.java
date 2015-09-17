@@ -36,7 +36,6 @@ import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
-import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
@@ -50,9 +49,6 @@ public class EquipeController {
 	@Inject
 	private JogoService jogoService;
 
-	@Inject
-	private RodadaService rodadaService;
-	
 	@Inject
 	private EntregaService entregaService;
 	
@@ -149,10 +145,10 @@ public class EquipeController {
 			model.addAttribute("permissao", "professor");
 			return PAGINA_DETALHES_EQUIPE;
 		}else if(equipe.getAlunos().contains(usuario) && jogo.getEquipes().contains(equipe)){
-			model.addAttribute("permissao", "membro");
+			model.addAttribute("permissao", "aluno");
 			return PAGINA_DETALHES_EQUIPE;
 		}else if(jogo.getAlunos().contains(usuario)){
-			model.addAttribute("permissao", "outro");
+			model.addAttribute("permissao", "jogador");
 			return PAGINA_DETALHES_EQUIPE;
 		}else {
 			redirectAttributes.addFlashAttribute("erro",
@@ -266,8 +262,6 @@ public class EquipeController {
 			}
 			jogo.getEquipes().remove(equipe);
 			jogoService.update(jogo);
-			if(jogo.getRodadas()!= null)
-				rodadaService.removerEquipeDasRodadas(jogo.getRodadas(), equipe);
 			
 			try{
 				equipeService.delete(equipe);
@@ -448,7 +442,7 @@ public class EquipeController {
 		if(flag){
 			equipeService.update(equipeCompleta);
 			redirectAttributes.addFlashAttribute("info",
-					"Usuários associados à equipe com sucesso!.");
+					"Usuários associados à equipe com sucesso!");
 			return "redirect:/jogo/"+equipeCompleta.getJogo().getId()+"/equipe/"+equipeCompleta.getId();
 		}else{
 			redirectAttributes.addFlashAttribute("erro",
@@ -497,13 +491,13 @@ public class EquipeController {
 		if (usuario.equals(jogo.getProfessor()) && jogo.getEquipes().contains(equipe)) {
 			model.addAttribute("permissao", "professor");
 		}else if(equipe.getAlunos().contains(usuario) && jogo.getEquipes().contains(equipe)){
-			model.addAttribute("permissao", "membro");
+			model.addAttribute("permissao", "aluno");
 		}else {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		model.addAttribute("action", "detalhesEquipe");
+		model.addAttribute("action", "avaliacoes");
 		model.addAttribute("equipe", equipe);
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("entregas", entregas);

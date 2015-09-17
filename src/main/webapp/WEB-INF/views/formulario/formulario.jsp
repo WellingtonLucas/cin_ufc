@@ -250,20 +250,6 @@
 			
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<div class="form-group">
-						<label for="termino" class="col-sm-2 control-label">Aberto até:</label>
-						<div class="col-sm-2">
-							<form:input id="termino" type="text" path="prazo" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
-							<div class="error-validation">
-								<form:errors path="prazo"></form:errors>
-							</div>
-							<c:if test="${not empty error_termino}">
-								<div class="error-validation">
-									<span>${error_termino}</span>
-								</div>
-							</c:if>
-						</div>
-					</div>
 					
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="nota">Nota:</label>

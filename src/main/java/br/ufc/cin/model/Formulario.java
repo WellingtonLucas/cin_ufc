@@ -1,6 +1,5 @@
 package br.ufc.cin.model;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Formulario {
@@ -33,9 +30,6 @@ public class Formulario {
 
 	@OneToMany(mappedBy = "formulario", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Resposta> respostas;
-
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private Date prazo;
 
 	private String nota;
 
@@ -97,14 +91,6 @@ public class Formulario {
 		this.respostas = respostas;
 	}
 
-	public Date getPrazo() {
-		return prazo;
-	}
-
-	public void setPrazo(Date disponivelAte) {
-		this.prazo = disponivelAte;
-	}
-	
 	public String toString() {
 		return "Formulario id: " + getId() + ", titulo: " + getTitulo();
 	}

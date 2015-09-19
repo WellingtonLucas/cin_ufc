@@ -287,11 +287,21 @@ public class JogoController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativo no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getProfessor().equals(usuario) && !jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Você não possui permissão de acesso");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("action","participantesJogo");
 		List<Usuario> usuarios = jogo.getAlunos();
 
-		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.equals(jogo.getProfessor())) {
 			model.addAttribute("permissao", "professor");
 		}else if(jogo.getAlunos().contains(usuario)){
@@ -342,6 +352,15 @@ public class JogoController {
 		model.addAttribute("action","formularios");
 		
 		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativo no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getProfessor().equals(usuario) && !jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Você não possui permissão de acesso");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
 		if(usuario.equals(jogo.getProfessor())){
 			model.addAttribute("permissao","professor");
 			List<Formulario> formularios = jogo.getProfessor().getFormulario();

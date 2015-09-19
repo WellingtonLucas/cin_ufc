@@ -260,7 +260,15 @@ public class FormularioController {
 			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
 			return "redirect:/jogo/"+ idJogo +"/rodadas";
 		}
-		
+		Calendar calendario = Calendar.getInstance();
+		Date data =  calendario.getTime();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		simpleDateFormat.format(data);
+		long tempoAtual = data.getTime();
+		if(tempoAtual < entrega.getRodada().getPrazoSubmissao().getTime()){
+			redirectAttributes.addFlashAttribute("erro", "Período de submissão ainda não se encerrou!");
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
+		}
 		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)
 				&& entrega.getRodada().isStatus()) {			

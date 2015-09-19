@@ -465,6 +465,7 @@ public class EquipeController {
 		}
 		
 		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
 			redirectAttributes.addFlashAttribute("erro",
 					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
@@ -474,15 +475,23 @@ public class EquipeController {
 					MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
+
 		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
-		if (equipe == null || !jogo.getEquipes().contains(equipe)) {
+		if(!jogo.getProfessor().equals(usuario)){
+			Equipe equipeUsuarioLogado = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+			if(!equipe.equals(equipeUsuarioLogado)){
+				redirectAttributes.addFlashAttribute("erro",
+						"Você não possui permissão de acesso à avaliações de outras equipes!");
+				return "redirect:/jogo/"+jogo.getId()+"/equipe/"+equipeUsuarioLogado.getId();
+			}
+		}else if (equipe == null || !jogo.getEquipes().contains(equipe)) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_EQUIPE_INEXISTENTE);
 			return "redirect:/jogo/" + idJogo + "/equipes";
 		}
 
 		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
+		
 		if(entregas.isEmpty() || entregas == null){
 			redirectAttributes.addFlashAttribute("erro",
 					"Ainda não existem avaliações para esta equipe.");

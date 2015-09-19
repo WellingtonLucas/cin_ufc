@@ -208,7 +208,7 @@ public class RodadaController {
 		
 		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
 			model.addAttribute("permissao", "professor");
-		}else if(rodada.getJogo().getEquipes().contains(equipe) && rodada.isStatus() && jogo.getAlunos().contains(usuario)){
+		}else if(rodada.getJogo().getEquipes().contains(equipe)){
 			model.addAttribute("permissao", "aluno");
 		}else if(jogo.getAlunos().contains(usuario)){
 			model.addAttribute("permissao", "jogador");			
@@ -241,12 +241,13 @@ public class RodadaController {
 			return "redirect:/jogo/"+jogo.getId()+"/rodadas";
 		}
 		Usuario usuario = getUsuarioLogado(session);
-		
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		if (usuario.equals(jogo.getProfessor())) {
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("rodada", rodada);
 			model.addAttribute("editor", "rodada");
 			model.addAttribute("action", "editar");
+			model.addAttribute("formularios", usuario.getFormulario());
 			return "rodada/novaRodada";
 		}
 		redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
@@ -444,7 +445,7 @@ public class RodadaController {
 		if(!equipes.isEmpty()){
 			rodadaService.update(rodadaCompleta);
 			redirectAttributes.addFlashAttribute("info",
-					"Equipes associados à rodada com sucesso!.");
+					"Equipes associados à rodada com sucesso!");
 			return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/"+rodadaCompleta.getId()+"/detalhes";
 		}else{
 			redirectAttributes.addFlashAttribute("erro",
@@ -598,7 +599,15 @@ public class RodadaController {
 					"Rodada solicitada não existe.");
 			return "redirect:/jogo/" + idJogo + "/rodadas";
 		}
-		
+		Calendar calendario = Calendar.getInstance();
+		Date data =  calendario.getTime();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		simpleDateFormat.format(data);
+		long tempoAtual = data.getTime();
+		if(tempoAtual < rodada.getPrazoSubmissao().getTime()){
+			redirectAttributes.addFlashAttribute("erro", "Período de submissão ainda não se encerrou!");
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/detalhes";
+		}
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		List<Entrega> entregas = entregaService.getUltimasEntregasDaRodada(rodada);
@@ -672,11 +681,11 @@ public class RodadaController {
 					rodadaService.update(rodadaCompleta);
 				}catch(Exception e){
 					redirectAttributes.addFlashAttribute("erro",
-							"Houve um problema tecnico ao vincular o formulário à rodada!.");
+							"Houve um problema tecnico ao vincular o formulário à rodada!");
 					return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/"+rodadaCompleta.getId()+"/vincular";
 				}
 				redirectAttributes.addFlashAttribute("info",
-						"Formulário associado à rodada com sucesso!.");
+						"Formulário associado à rodada com sucesso!");
 				return "redirect:/jogo/"+rodadaCompleta.getJogo().getId()+"/rodada/"+rodadaCompleta.getId()+"/detalhes";
 			}else{
 				redirectAttributes.addFlashAttribute("erro",

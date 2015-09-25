@@ -312,8 +312,14 @@ public class FormularioController {
 		
 		List<Opcao> opcoes = new ArrayList<Opcao>();
 		for (Opcao opcao : resposta.getOpcoes()) {
-			opcoes.add(opcaoService.find(Opcao.class, opcao.getId()));
+			if(!(opcao.getId()==null))
+				opcoes.add(opcaoService.find(Opcao.class, opcao.getId()));
 		}
+		if(opcoes.size()==0 || (formulario.getPerguntas().size() > opcoes.size())){
+			redirectAttributes.addFlashAttribute("erro", "É necessário responder todas às perguntas para efetuar uma avaliação.");
+			return  "redirect:/jogo/"+jogo.getId()+"/entrega/"+entrega.getId()+"/formulario/"+formulario.getId();
+		}
+		
 		Usuario usuario = getUsuarioLogado(session);
 		Calendar calendario = Calendar.getInstance();
 		Date data =  calendario.getTime();

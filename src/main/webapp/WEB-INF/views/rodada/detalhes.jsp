@@ -115,7 +115,7 @@
 						</c:if>
 						<div class="form-group">
 							<label class="col-sm-2 control-label field">Formulário:</label>
-							<div class="col-sm-10 field-value">
+							<div class="col-sm-4 field-value">
 								<c:if test="${empty rodada.formulario.titulo }">
 									<label>
 										-
@@ -129,6 +129,19 @@
 									</label>
 								</c:if>
 							</div>		
+							<label class="col-sm-2 control-label field">Modelo:</label>
+							<div class="col-sm-4 field-value">
+								<c:if test="${empty rodada.modelo }">
+									<label>
+										-
+									</label>
+								</c:if>
+								<c:if test="${not empty rodada.modelo }">
+									<label>
+										<a href="<c:url value="/documento/downloadDocumento/${rodada.modelo.id }" ></c:url>">${rodada.modelo.nomeOriginal }</a>
+									</label> 
+								</c:if>
+							</div>
 						</div>	
 					</div>	
 					<div class="col-sm-12">

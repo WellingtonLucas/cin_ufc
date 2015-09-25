@@ -78,22 +78,6 @@ $(document).ready(function() {
             		}
             	}
             },
-            anexos :{
-            	validators: {
-            		callback: {
-                        message: 'Adicione pelo menos um anexo',
-                        callback: function(value, validator) {
-                        	var lines = $('#table-anexos').find('tr').length;
-                        	if(lines == 0 || lines == 1) {
-                        		if(validator.getFieldElements('anexos').val() == "") {
-                        			return false;
-                        		}
-                        	}
-                        	return true;
-                        }
-                    }
-            	}
-            }
         }
        
 	});

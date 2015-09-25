@@ -3,7 +3,6 @@ package br.ufc.cin.web;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
-import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
@@ -130,7 +129,8 @@ public class RodadaController {
 	}
 	
 	@RequestMapping(value = "/jogo/{id}/nova-rodada", method = RequestMethod.POST)
-	public  String cadastrar(@PathVariable("id") Integer id, @ModelAttribute("rodada") Rodada rodada,  
+	public  String cadastrar(@PathVariable("id") Integer id, @ModelAttribute("rodada") Rodada rodada, 
+			@RequestParam("anexos") List<MultipartFile> anexos,  
 			BindingResult result, HttpSession session, RedirectAttributes redirectAttributes){
 		Jogo jogo = jogoService.find(Jogo.class, id);
 		if(jogo == null){
@@ -141,6 +141,7 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro", "Erro ao tentar salvar uma nova rodada.");
 			return "redirect:/jogo/"+id+"/rodada/nova";
 		}
+		
 		try{
 			rodada.setJogo(jogo);
 			rodada.setStatus(false);
@@ -281,6 +282,7 @@ public class RodadaController {
 		Rodada roAnterior = rodadaService.find(Rodada.class, rodada.getId());
 		rodada.setJogo(jogo);
 		rodada.setFormulario(roAnterior.getFormulario());
+		rodada.setModelo(documentoService.find(Documento.class, rodada.getModelo().getId()));
 		try{
 			rodadaService.update(rodada);
 			redirect.addFlashAttribute("info", "Rodada atualizada com sucesso.");
@@ -535,8 +537,8 @@ public class RodadaController {
 						documentos.add(documento);
 					}
 				} catch (IOException e) {
-					model.addAttribute("erro", MENSAGEM_ERRO_UPLOAD);
-					return PAGINA_CADASTRAR_JOGO;
+					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
+					return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 				}
 			}
 		}

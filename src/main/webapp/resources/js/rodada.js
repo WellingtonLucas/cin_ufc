@@ -156,6 +156,25 @@ $(document).ready(function() {
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
+	$('#delete-file').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja excluir o arquivo \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-danger').attr('data-id', $(e.relatedTarget).data('id'));
+	});
+	
+	$('.confirm-delete-file').on('click', function(e) {
+		var id = $(this).attr('data-id');
+		$.ajax({
+			type: "POST",
+			url: "/cin_ufc/documento/ajax/remover/" + id
+		})
+		.success(function( result ) {
+			if(result.result == 'ok') {
+				$('#documento-'+id).remove();
+			} else {
+				
+			}
+		});
+	});
 	
 });
 

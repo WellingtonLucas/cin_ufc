@@ -50,6 +50,7 @@
 				<form:hidden path="id"/>
 				<form:hidden path="status"/>
 				<form:hidden path="statusPrazo"/>
+				<form:hidden path="modelo.id"/>
 				<div class="form-group">
 					<div class="form-item">
 						<label for="nome" class="col-sm-2 control-label" >Nome da Rodada:<span class="required">*</span></label>
@@ -147,7 +148,7 @@
 						</button>						
 					</div>
 					<div class="col-sm-2">
-						<a href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id }/detalhes"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
+						<a href="<c:url value="/jogo/${jogo.id }/rodadas"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
 					</div>
 				</div>
 			</form:form>

@@ -56,7 +56,7 @@
 		</c:if>
 		<c:if test="${(action == 'detalhesRodada')}">
 			<c:if test="${ (permissao == 'professor') }">
-				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincular"></c:url>">Vincular Equipes</a></li>		
+				<%-- <li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincular"></c:url>">Vincular Equipes</a></li> --%>		
 				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincularFormulario"></c:url>">Vincular Formulario</a></li>
 				<hr>
 			</c:if>	

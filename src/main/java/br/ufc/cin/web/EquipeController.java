@@ -139,7 +139,9 @@ public class EquipeController {
 					MENSAGEM_EQUIPE_INEXISTENTE);
 			return "redirect:/jogo/" + idJogo + "/equipes";
 		}
+		List<Entrega>  entregas = equipeService.getEntregasOrdenadasPorEquipe(equipe, jogo);
 		model.addAttribute("equipe", equipe);
+		model.addAttribute("entregas", entregas);
 		model.addAttribute("jogo", jogo);
 		if (usuario.getId() == jogo.getProfessor().getId() && jogo.getEquipes().contains(equipe)) {
 			model.addAttribute("permissao", "professor");

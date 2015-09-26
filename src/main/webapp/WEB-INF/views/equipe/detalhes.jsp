@@ -134,6 +134,76 @@
 							</div>
 						</div>
 					</div>
+					<c:if test="${not empty entregas }">
+						<div class="col-sm-12">
+							<hr>
+							<h3><strong>Histórico de submissões</strong></h3>
+							<div class="row placeholders">
+								<div class="timeline-centered">
+	    							<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
+										<c:if test="${entregaId.index == 0 }">
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<time class="timeline-time" datetime="${entrega.dia }">
+														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
+														<span>Hora: <span><fmt:formatDate pattern="HH:mm:ss" value="${entrega.dia }" /></span></span>
+													</time>
+													<div class="timeline-icon bg-success">
+														<i class="entypo-feather"></i>
+													</div>
+													<div class="timeline-label">
+														<h2>${entrega.usuario.nome } ${entrega.usuario.sobreNome }:
+													    	<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
+														</h2>
+														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
+													</div>
+												</div>
+											</article>
+										</c:if>
+										<c:if test="${(entregaId.index != 0) && (entregaId.index % 2 == 1) }">	
+											<article class="timeline-entry left-aligned">
+												<div class="timeline-entry-inner">
+													<time class="timeline-time" datetime="${entrega.dia }">
+														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
+														<span>Hora: <span><fmt:formatDate pattern="HH:mm:ss" value="${entrega.dia }" /></span></span>
+													</time>
+													<div class="timeline-icon bg-secondary">
+														<i class="entypo-suitcase"></i>
+													</div>
+													<div class="timeline-label">
+														<h2>${entrega.usuario.nome } ${entrega.usuario.sobreNome }:
+													    	<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
+														</h2>
+														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
+													</div>
+												</div>
+											</article>
+										</c:if>
+										<c:if test="${(entregaId.index != 0) && (entregaId.index % 2 == 0) }">	
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<time class="timeline-time" datetime="${entrega.dia }">
+														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
+														<span>Hora: <span><fmt:formatDate pattern="HH:mm:ss" value="${entrega.dia }" /></span></span>
+													</time>
+													<div class="timeline-icon bg-secondary">
+														<i class="entypo-suitcase"></i>
+													</div>
+													<div class="timeline-label">
+														<h2>${entrega.usuario.nome } ${entrega.usuario.sobreNome }:
+													    	<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
+														</h2>
+														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
+													</div>
+												</div>
+											</article>
+										</c:if>
+							
+									</c:forEach>
+								</div>
+							</div>
+						</div>
+					</c:if>
 				</div>
 			</div>
 		</div>

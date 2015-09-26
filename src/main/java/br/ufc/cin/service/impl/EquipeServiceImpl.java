@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Rodada;
@@ -64,4 +65,33 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 		return null;
 	}
 
+	@Override
+	public List<Entrega> getEntregasOrdenadasPorEquipe(Equipe equipe, Jogo jogo) {
+		List<Entrega> entregas =  new ArrayList<Entrega>();
+		for (Usuario aluno : equipe.getAlunos()) {
+			for (Entrega entrega : aluno.getEntregas()) {
+				if(entrega.getRodada().getJogo().equals(jogo)){
+					entregas.add(entrega);		
+				}
+			}
+		}
+		if(entregas.size()==0)
+			return null;
+		return ordenaEntregas(entregas);
+	}
+	
+	private List<Entrega> ordenaEntregas(List<Entrega> entregas){
+		for (int i = 0; i < entregas.size(); i++) {
+			for (int j = i+1; j < entregas.size(); j++) {
+				if(entregas.get(i).getDia().getTime() < entregas.get(j).getDia().getTime()){
+					Entrega aux = entregas.get(i);
+					entregas.add(i, entregas.get(j));
+					entregas.remove(i+1);
+					entregas.add(j, aux);
+					entregas.remove(j+1);
+				}
+			}
+		}
+		return entregas;
+	}	
 }

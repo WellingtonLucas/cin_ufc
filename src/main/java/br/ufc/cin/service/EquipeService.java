@@ -2,6 +2,7 @@ package br.ufc.cin.service;
 
 import java.util.List;
 
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Rodada;
@@ -17,5 +18,7 @@ public interface EquipeService extends GenericService<Equipe>{
 	public abstract List<Equipe> equipesDesvinculadas(Jogo jogo, Rodada rodada);
 	
 	public abstract Equipe equipePorAlunoNoJogo(Usuario aluno, Jogo jogo);
+
+	public abstract List<Entrega> getEntregasOrdenadasPorEquipe(Equipe equipe, Jogo jogo);
 
 }

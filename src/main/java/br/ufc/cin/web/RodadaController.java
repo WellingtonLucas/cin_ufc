@@ -130,7 +130,6 @@ public class RodadaController {
 	
 	@RequestMapping(value = "/jogo/{id}/nova-rodada", method = RequestMethod.POST)
 	public  String cadastrar(@PathVariable("id") Integer id, @ModelAttribute("rodada") Rodada rodada, 
-			@RequestParam("anexos") List<MultipartFile> anexos,  
 			BindingResult result, HttpSession session, RedirectAttributes redirectAttributes){
 		Jogo jogo = jogoService.find(Jogo.class, id);
 		if(jogo == null){
@@ -258,15 +257,14 @@ public class RodadaController {
 	@RequestMapping(value = "/{id}/rodada/editar", method = RequestMethod.POST)
 	public String editar(@PathVariable("id") Integer id, @Valid Rodada rodada, BindingResult result, HttpSession session,
 			RedirectAttributes redirect, Model model) {
-		Jogo jogo = jogoService.find(Jogo.class, id);
-		model.addAttribute("editor", "rodada");
-		model.addAttribute("action", "editar");
 
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro ao editar rodada.");
 			return "redirect:/jogo/" + id + "/rodada/" + rodada.getId()
 					+ "/editar";
 		}
+		
+		Jogo jogo = jogoService.find(Jogo.class, id);
 		if (jogo == null) {
 			redirect.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -282,7 +280,8 @@ public class RodadaController {
 		Rodada roAnterior = rodadaService.find(Rodada.class, rodada.getId());
 		rodada.setJogo(jogo);
 		rodada.setFormulario(roAnterior.getFormulario());
-		rodada.setModelo(documentoService.find(Documento.class, rodada.getModelo().getId()));
+		if(rodada.getModelo()!= null)
+			rodada.setModelo(documentoService.find(Documento.class, rodada.getModelo().getId()));
 		try{
 			rodadaService.update(rodada);
 			redirect.addFlashAttribute("info", "Rodada atualizada com sucesso.");
@@ -543,12 +542,12 @@ public class RodadaController {
 			}
 		}
 		if(!documentos.isEmpty()) {
+			documentoService.save(documentos.get(0));
 			if(usuario.equals(jogo.getProfessor())){
-				documentoService.save(documentos.get(0));
 				rodada.setModelo(documentos.get(0));
 				rodadaService.update(rodada);
 			}
-			entrega.setDocumento(rodada.getModelo());
+			entrega.setDocumento(documentos.get(0));
 			entrega.setRodada(rodada);
 			entrega.setUsuario(usuario);
 			if(!usuario.equals(jogo.getProfessor())){

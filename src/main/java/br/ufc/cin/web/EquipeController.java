@@ -4,6 +4,7 @@ import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPE_CADASTRADA;
 import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPE_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPE_REMOVIDA;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE;
+import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_EQUIPE;
@@ -11,7 +12,9 @@ import static br.ufc.cin.util.Constants.PAGINA_DETALHES_EQUIPE;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,12 +30,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
@@ -51,6 +57,9 @@ public class EquipeController {
 
 	@Inject
 	private EntregaService entregaService;
+
+	@Inject
+	private DocumentoService documentoService;
 	
 	@RequestMapping(value = "/jogo/{id}/equipe/nova", method = RequestMethod.GET)
 	public String cadastrarFrom(@PathVariable("id") Integer id, Model model,
@@ -76,36 +85,54 @@ public class EquipeController {
 
 	@RequestMapping(value = "/{id}/equipe/nova", method = RequestMethod.POST)
 	public String cadastrar(
-			@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
 			@PathVariable("id") Integer id,
 			@ModelAttribute("equipe") Equipe equipe, BindingResult result,
+			@RequestParam("anexos") List<MultipartFile> anexos,
 			HttpSession session, RedirectAttributes redirect, Model model) {
 		Jogo jogo = jogoService.find(Jogo.class, id);
-
 		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
 			return "redirect:/jogo/" + id + "/equipe/nova";
 		}
-
+		
+		List<Documento> documentos = new ArrayList<Documento>();
+		if(anexos != null && !anexos.isEmpty()) {
+			if(anexos.size() > 1){
+				redirect.addFlashAttribute("erro", "Selecione apenas um logo!");
+				return "redirect:/jogo/"+id+"/equipe/nova";
+			}
+			for(MultipartFile anexo : anexos) {
+				try {
+					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
+						Documento documento = new Documento();
+						documento.setArquivo(anexo.getBytes());
+						String data = new Date().getTime()+"";
+						documento.setNomeOriginal(data+"-"+anexo.getOriginalFilename());
+						documento.setNome(equipe.getNome()+"-"+"logo");
+						documento.setExtensao(anexo.getContentType());
+						if(!documentoService.verificaSeImagem(documento.getExtensao())){
+							redirect.addFlashAttribute("erro", "O arquivo deve está com algum desses formatos: PNG ou JPEG "
+									);
+							return "redirect:/jogo/"+id+"/equipe/nova";
+						}
+						documentos.add(documento);
+					}
+				} catch (IOException e) {
+					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
+					return "redirect:/jogo/"+id+"/equipe/nova";
+				}
+			}
+		}
+		if(!documentos.isEmpty()){
+			documentoService.save(documentos.get(0));
+			equipe.setLogo(documentos.get(0));
+			
+		}
 		equipe.setJogo(jogo);
-		List<Usuario> alunos = new ArrayList<Usuario>();
 		equipe.setStatus(true);
 		equipeService.save(equipe);
 
-		if (idAlunos != null && !idAlunos.isEmpty()) {
-
-			for (String idaluno : idAlunos) {
-				Usuario aluno = usuarioService.find(Usuario.class, new Integer(
-						idaluno));
-				aluno.addEquipe(equipe);
-				alunos.add(aluno);
-			}
-
-		}
-		if (!alunos.isEmpty()) {
-			usuarioService.salvar(alunos);
-		}
 		redirect.addFlashAttribute("info", MENSAGEM_EQUIPE_CADASTRADA);
 		return "redirect:/jogo/" + id + "/equipes";
 	}
@@ -212,11 +239,10 @@ public class EquipeController {
 	@RequestMapping(value = "/{id}/equipe/editar", method = RequestMethod.POST)
 	public String editar(
 			@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
+			@RequestParam("anexos") List<MultipartFile> anexos, 
 			@PathVariable("id") Integer id, @Valid Equipe equipe, BindingResult result, HttpSession session,
-			RedirectAttributes redirect, Model model) {
+			RedirectAttributes redirect) {
 		Jogo jogo = jogoService.find(Jogo.class, id);
-		model.addAttribute("editor", "equipe");
-		model.addAttribute("action", "editar");
 
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro ao editar equipe.");
@@ -228,7 +254,40 @@ public class EquipeController {
 			redirect.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		List<Documento> documentos = new ArrayList<Documento>();
+		if(anexos != null && !anexos.isEmpty()) {
+			if(anexos.size() > 1){
+				redirect.addFlashAttribute("erro", "Selecione apenas um logo!");
+				return "redirect:/jogo/"+id+"/equipe/nova";
+			}
+			for(MultipartFile anexo : anexos) {
+				try {
+					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
+						Documento documento = new Documento();
+						documento.setArquivo(anexo.getBytes());
+						String data = new Date().getTime()+"";
+						documento.setNomeOriginal(data+"-"+anexo.getOriginalFilename());
+						documento.setNome(equipe.getNome()+"-"+"logo");
+						documento.setExtensao(anexo.getContentType());
+						if(!documentoService.verificaSeImagem(documento.getExtensao())){
+							redirect.addFlashAttribute("erro", "O arquivo deve está com algum desses formatos: PNG ou JPEG "
+									);
+							return "redirect:/jogo/"+id+"/equipe/nova";
+						}
+						documentos.add(documento);
+					}
+				} catch (IOException e) {
+					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
+					return "redirect:/jogo/"+id+"/equipe/nova";
+				}
+			}
+		}
 		Equipe oldEquipe = equipeService.find(Equipe.class, equipe.getId());
+		if(!documentos.isEmpty()){
+			documentoService.save(documentos.get(0));
+			oldEquipe.setLogo(documentos.get(0));
+			
+		}
 		oldEquipe.setNome(equipe.getNome());
 		oldEquipe.setIdeiaDeNegocio(equipe.getIdeiaDeNegocio());
 		equipeService.update(oldEquipe);

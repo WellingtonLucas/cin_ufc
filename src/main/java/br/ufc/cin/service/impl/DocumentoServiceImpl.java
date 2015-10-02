@@ -40,4 +40,12 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 		return false;
 	}
 
+	@Override
+	public boolean verificaSeImagem(String extensao) {
+		if(extensao.equals("image/jpeg") || extensao.equals("image/png")){
+			return true;
+		}
+		return false;
+	}
+
 }

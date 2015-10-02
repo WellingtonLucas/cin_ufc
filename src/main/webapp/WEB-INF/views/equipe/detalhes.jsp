@@ -40,7 +40,18 @@
 							</div>
 						</c:if>
 					</div>
-					
+					<c:if test="${ equipe.logo != null}">
+						<div  class="col-sm-12">
+							<img class="img-thumbnail" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }" alt="Logo da equipe" width="200" height="200" />
+						</div>
+					</c:if>
+					<c:if test="${ equipe.logo == null}">
+						<div  class="col-sm-12">
+							<img class="img-thumbnail"  src="<c:url value="/resources/imagens/equipe.png" />" alt="Logo da equipe" width="200" height="200" />
+						</div>
+					</c:if>
+					<div  class="col-sm-12">
+					</div>
 					<h3><strong class="col-sm-3">Ideia de Negócio:</strong></h3>
 					<div class="col-sm-9 field-value">
 						<c:if test="${empty equipe.ideiaDeNegocio }">
@@ -54,7 +65,7 @@
 							</article>
 						</c:if>
 					</div>		
-				
+					
 					<div class="col-sm-12">
 						<c:if test="${not empty equipe.alunos }">
 							<table id="table_id" class="table table-striped table-hover">

@@ -41,7 +41,7 @@
 				<br>				
 			</div>
 			<form:form id="adicionarEquipeForm" role="form" class="form-horizontal" commandName="equipe" 
-			servletRelativeAction="${url }" method="POST">
+			enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
 			
 				<form:hidden path="id"/>
 				<form:hidden path="status"/>
@@ -65,6 +65,20 @@
 					</div>
 				</div>
 				
+				<div class="form-group form-item">
+					<label for="fileupload" class="col-sm-2 control-label">Logo:</label>
+					<div class="col-sm-8">
+						<input type="file" id="fileupload" class="file" name="anexos" multiple></input>
+					</div>
+				</div>
+				<c:if test="${action eq 'editar' }">
+					<div class="form-group">
+						<div class="col-sm-2"></div>
+						<div class="col-sm-8">
+							<p class="bg-info">Para mudar o logo da sua equipe escolha outra imagem.</p>
+						</div>
+					</div>
+				</c:if>
 				<div class="form-group">
 					<div class="col-sm-2"></div>
 					<div class="col-sm-2">

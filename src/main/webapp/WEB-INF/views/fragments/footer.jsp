@@ -22,6 +22,9 @@
 <c:if test="${editor eq 'rodada' && (action == 'cadastrar' || action == 'editar') }">
 	<script src="<c:url value="/resources/js/rodada.file.js" />"></script>
 </c:if>
+<c:if test="${editor eq 'equipe' && (action == 'cadastrar' || action == 'editar') }">
+	<script src="<c:url value="/resources/js/validatorEquipe.js" />"></script>
+</c:if>
 <script src="<c:url value="/resources/js/funcoes2.js" />"></script>
 <script src="<c:url value="/resources/js/formulario.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
@@ -41,6 +44,7 @@
 <script src="<c:url value="/resources/js/jquery.ui.widget.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.searchable.js" />"></script>
 <script src="<c:url value="/resources/js/searchable.js" />"></script>
+<script src="<c:url value="/resources/js/dynamic-avatar-blur.js" />"></script>
 <%-- <script src="<c:url value="/resources/js/vendor/jquery.ui.widget.js.js" />"></script> --%>
 <script src="<c:url value="/resources/ckeditor/ckeditor.js"/>"></script>
 <script src="<c:url value="/resources/ckeditor/adapters/jquery.js"/>"></script>

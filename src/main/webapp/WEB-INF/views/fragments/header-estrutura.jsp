@@ -6,8 +6,6 @@
 <link href="<c:url value="/resources/css/tabs.css"/>" rel="stylesheet" />
 <link href="<c:url value="/webjars/bootstrap/3.3.5/css/bootstrap.min.css" />" rel="stylesheet" />
 <link href="<c:url value="/resources/css/dashboard.css"/>" rel="stylesheet" />
-<%-- <link href="<c:url value="/resources/css/estiloCin.css"/>" rel="stylesheet" /> --%>
-
 <link href="<c:url value="/resources/css/bootstrapValidator.css" />" rel="stylesheet" />
 <link href="<c:url value="/resources/css/bootstrap-select.min.css" />" rel="stylesheet" />
 <link href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet"/>
@@ -16,6 +14,9 @@
 <link href="<c:url value="/resources/css/font-awesome.min.css"/>" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/estilo.css"/>" rel="stylesheet" />
 <link href="<c:url value="/resources/css/timeline-dotted.css"/>" rel="stylesheet" />
-<%-- <link href="<c:url value="/resources/css/menu.css"/>" rel="stylesheet" /> --%>
+<link href="<c:url value="/resources/css/dynamic-avatar-blur.css"/>" rel="stylesheet" />
+<c:if test="${action == 'rodadas' }">
+	<link href="<c:url value="/resources/css/smooth-animated-thumbnails.css"/>" rel="stylesheet" />
+</c:if>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 

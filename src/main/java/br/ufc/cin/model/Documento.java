@@ -6,8 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
+import org.springframework.security.crypto.codec.Base64;
 
 @Entity
 public class Documento {
@@ -15,17 +17,30 @@ public class Documento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(name="nome_original")
+
+	@Column(name = "nome_original")
 	private String nomeOriginal;
-	
+
 	private String nome;
-	
+
 	private String extensao;
-	
-	@Type(type="org.hibernate.type.BinaryType") 
+
+	@Type(type = "org.hibernate.type.BinaryType")
 	private byte[] arquivo;
-	
+
+	@Transient
+	private String encode;
+
+	public String getEncode() {
+		byte[] encoded = Base64.encode(arquivo);
+		String encodedString = new String(encoded);
+		return encodedString;
+	}
+
+	public void setEncode(String encode) {
+		this.encode = encode;
+	}
+
 	@ManyToOne
 	private Jogo jogo;
 
@@ -76,22 +91,23 @@ public class Documento {
 	public Integer getId() {
 		return id;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Documento id: "+getId()+"; Nome: "+getNomeOriginal()+"; Extensão: "+ getExtensao();
+		return "Documento id: " + getId() + "; Nome: " + getNomeOriginal()
+				+ "; Extensão: " + getExtensao();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Documento) {
+		if (obj instanceof Documento) {
 			Documento other = (Documento) obj;
-			if (other != null && other.getId() != null && this.id != null && other.getId().equals(this.id)) {
+			if (other != null && other.getId() != null && this.id != null
+					&& other.getId().equals(this.id)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	
+
 }

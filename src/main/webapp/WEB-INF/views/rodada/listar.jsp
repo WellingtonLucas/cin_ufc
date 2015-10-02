@@ -46,10 +46,15 @@
 				<div class="row placeholders">
 					<c:if test="${not empty rodadas }">
 						<c:forEach var="rodada" items="${rodadas}">
-							<div class="col-xs-6 col-sm-3 placeholder">
-								<a class="btn btn-info" href="<c:url value="rodada/${rodada.id }/detalhes" />">Detalhes</a>	
-								<h4>${rodada.nome }</h4>
-								<span class="text-muted">Alguma informação</span>
+							<div class="col-lg-4">
+								<h2>${rodada.nome }</h2>
+								<p>
+									Início: <fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.inicio }" /> - 
+									Término: <fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.termino }" />
+								</p>
+								<p>
+									<a class="btn btn-primary" role="button" href="<c:url value="rodada/${rodada.id }/detalhes" />">Detalhes »</a>	
+								</p>	
 							</div>
 						</c:forEach>
 					</c:if>

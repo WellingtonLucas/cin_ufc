@@ -46,19 +46,34 @@
 				<div class="row placeholders">
 					<c:if test="${not empty equipes }">
 						<c:forEach var="equipe" items="${equipes}">
-							<div class="col-xs-6 col-sm-3 placeholder">
-								<%-- <img data-src="holder.js/200x200/auto/sky"
-									class="img-responsive" alt="Logo da equipe ${equipe.nome }"> --%>
-								<a class="btn btn-info" href="<c:url value="equipe/${equipe.id }" />">Detalhes</a>	
-								<h4>${equipe.nome }</h4>
-								<span class="text-muted">Alguma informação</span>
-							</div>
+							<div class="col-sm-3">
+					            <div class="card">
+					                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+					                <div class="avatar">
+					                    <img src="" alt="Logo da Equipe" />
+					                </div>
+					                <div class="content">
+					                    <h4>${equipe.nome }</h4> <br>
+					                    
+					                    <p> Veja mais detalhes
+					                    </p>    
+					                    <p><a class="btn btn-info" href="<c:url value="equipe/${equipe.id }" />">Detalhes</a></p>
+					                </div>
+					            </div>
+					        </div>
+					        <c:if test="${equipe.logo ==null }">
+					       		<img class="src-image"  src="<c:url value="/resources/imagens/equipe.png" />"/>
+					       	</c:if>
+					        <c:if test="${equipe.logo !=null }">
+					        	<img class="src-image" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }"/>
+					        </c:if>
 						</c:forEach>
 					</c:if>
 				</div>
 			</div>
 		</div>
 	</div>
+	
 	<jsp:include page="../fragments/footer.jsp" />
 </body>
 </html>

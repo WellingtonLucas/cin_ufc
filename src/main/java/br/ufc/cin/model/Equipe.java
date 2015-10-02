@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Equipe {
@@ -44,6 +45,10 @@ public class Equipe {
 	@JoinTable(name = "equipe_aluno", joinColumns = { @JoinColumn(name = "equipe_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "aluno_id", referencedColumnName = "id") })
 	private List<Usuario> alunos;
 	
+	@OneToOne
+	@JoinColumn(name = "LOGO_ID")
+	private Documento logo;
+	
 	public void addAluno(Usuario usuario) {
 		if (!getAlunos().contains(usuario)) {
 			getAlunos().add(usuario);
@@ -61,6 +66,14 @@ public class Equipe {
 		this.ideiaDeNegocio = ideiaDeNegocio;
 	}
 	
+	public Documento getLogo() {
+		return logo;
+	}
+
+	public void setLogo(Documento logo) {
+		this.logo = logo;
+	}
+
 	public Jogo getJogo() {
 		return jogo;
 	}

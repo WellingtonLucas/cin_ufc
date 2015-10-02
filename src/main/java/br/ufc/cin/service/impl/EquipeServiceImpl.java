@@ -21,7 +21,7 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 
 	@Inject
 	private EquipeRepository equipeRepository;
-
+	
 	@Override
 	public List<Usuario> alunosSemEquipe(Jogo jogo) {
 		List<Usuario> alunosSemEquipe = new ArrayList<Usuario>();
@@ -93,5 +93,6 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 			}
 		}
 		return entregas;
-	}	
+	}
+
 }

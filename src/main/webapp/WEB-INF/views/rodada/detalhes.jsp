@@ -93,7 +93,7 @@
 								<label>${rodada.descricao }</label>
 							</div>						
 						</div>
-						<c:if test="${(rodada.statusPrazo && rodada.status) || (permissao == 'professor')}">
+						<c:if test="${(permissao == 'professor') || (rodada.statusPrazo) || (rodada.status && rodadaEquipe.ativa)}">
 							<form:form id="adicionarEntregaForm" role="form" class="form-horizontal" commandName="rodada"
 							 	enctype="multipart/form-data" servletRelativeAction="/jogo/${jogo.id }/rodada/entrega" method="POST">
 								<form:hidden path="id" value="${rodada.id }"/>
@@ -105,7 +105,7 @@
 								</div>
 							</form:form>
 						</c:if>
-						<c:if test="${(!rodada.statusPrazo || !rodada.status) && permissao != 'professor'}">
+						<c:if test="${(permissao != 'professor') && (!rodada.statusPrazo) && (!rodada.status || !rodadaEquipe.ativa)}">
 							<div class="form-group form-item">
 								<label for="fileupload" class="col-sm-2 control-label field">Entrega:</label>
 								<div class="col-sm-7">
@@ -153,23 +153,81 @@
 									<tr>
 										<th>Nome</th>
 										<c:if test="${permissao eq 'professor' }">
-											<th></th>
+											<th>Submissão</th>
+											<th>Reabertura</th>
 										</c:if>
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="equipe" items="${rodada.jogo.equipes}">
+									<c:forEach var="equipe" items="${equipes}">
 										<tr>
 											<td>
 												<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome}</a>
 											</td>
-											<c:if test="${permissao eq 'professor' }">
+											<c:if test="${(!equipe.statusNaRodada && !rodada.statusPrazo) && (permissao eq 'professor') }">
 												<td>
-													<a id="submeter" data-toggle="modal" data-target="#desvincular-equipe" href="#"
-														data-href="<c:url value="equipe/${equipe.id}/desvincular" ></c:url>" data-name="${equipe.nome }">
-														<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
+													<a id="submeter" data-toggle="modal" data-target="#ativar-equipe" href="#"
+														data-href="<c:url value="equipe/${equipe.id}/ativar" ></c:url>" data-name="${equipe.nome }">
+														<button class="btn btn-primary" data-toggle="tooltip" data-placement="right" 
+														title="Clique aqui para reabrir as submissões para esta equipe.">
+															&nbsp;&nbsp;&nbsp;Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;&nbsp;&nbsp;
+														</button>
 													</a>
 												</td>
+												<c:if test="${equipe.statusReabertura }">
+													<td>
+														<span>
+															<i class="glyphicon glyphicon-star" data-toggle="tooltip" data-placement="right" 
+																title="Ha solicitação de reabertura de submissão.">
+															</i>
+														</span>
+													</td>
+												</c:if>
+												<c:if test="${!equipe.statusReabertura }">
+													<td>
+														<span>
+															<i class="glyphicon glyphicon-star-empty" data-toggle="tooltip" data-placement="right" 
+																title="Não ha solicitação de reabertura de submissão.">
+															</i>
+														</span>
+													</td>
+												</c:if>
+											</c:if>
+											<c:if test="${(equipe.statusNaRodada || rodada.statusPrazo) && (permissao eq 'professor') }">
+												<c:if test="${!rodada.statusPrazo }">
+													<td>
+														<a id="submeter" data-toggle="modal" data-target="#inativar-equipe" href="#"
+															data-href="<c:url value="equipe/${equipe.id}/inativar" ></c:url>" data-name="${equipe.nome }">
+															<button class="btn btn-warning" data-toggle="tooltip" data-placement="right" 
+															title="Clique aqui para encerrar as submissões para esta equipe.">
+																Desativar&nbsp;<i class="glyphicon glyphicon-remove"></i>
+															</button>
+														</a>
+													</td>
+												</c:if>
+												<c:if test="${rodada.statusPrazo }">
+												<td>
+													<span class="label label-info">Submissões ativas</span>
+												</td>
+												</c:if>
+												<c:if test="${equipe.statusReabertura }">
+													<td>
+														<span>
+															<i class="glyphicon glyphicon-star" data-toggle="tooltip" data-placement="right" 
+																title="Ha solicitação de reabertura de submissão.">
+															</i>
+														</span>
+													</td>
+												</c:if>
+												<c:if test="${!equipe.statusReabertura }">
+													<td>
+														<span>
+															<i class="glyphicon glyphicon-star-empty" data-toggle="tooltip" data-placement="right" 
+																title="Não ha solicitação de reabertura de submissão.">
+															</i>
+														</span>
+													</td>
+												</c:if>
 											</c:if>
 										</tr>
 									</c:forEach>
@@ -274,23 +332,42 @@
 			</div>
 		</div>
 		
-		<!-- Modal Desvincular equipe -->
-		<div class="modal fade" id="desvincular-equipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<!-- Modal ativar equipe -->
+		<div class="modal fade" id="ativar-equipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-	        			<h4 class="modal-title" id="submeterModalLabel">Desvincular</h4>
+	        			<h4 class="modal-title" id="submeterModalLabel">Ativar</h4>
 	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					</div>
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<a href="#" class="btn btn-primary">Desvincular</a>
+						<a href="#" class="btn btn-primary">Ativar</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal desativar equipe -->
+		<div class="modal fade" id="inativar-equipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+	        			<h4 class="modal-title" id="submeterModalLabel">Inativar</h4>
+	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-warning">Inativar</a>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</c:if>	
+	<c:if test="${permissao == 'aluno' }">
+		<jsp:include page="solicitarReabertura.jsp" />
+	</c:if>
 	<jsp:include page="../fragments/footer.jsp" />	
 </body>
 </html>

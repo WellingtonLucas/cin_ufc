@@ -6,6 +6,8 @@ import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -23,9 +25,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.RespostaService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
@@ -41,6 +45,9 @@ public class UsuarioController {
 	@Inject
 	private EquipeService equipeService;
 
+	@Inject
+	private RespostaService respostaService;
+	
 	@RequestMapping(value = "/cadastre-se", method = RequestMethod.POST)
 	public String cadastrarPessoa(HttpSession session, Model model,
 			@Valid @ModelAttribute("usuario") Usuario usuario,
@@ -150,6 +157,102 @@ public class UsuarioController {
 		return "redirect:/usuario/perfil";
 	}
 	
+	@RequestMapping(value = "/{id}/jogo/{idJogo}/avaliacoes", method = RequestMethod.GET)
+	public String avaliacoes(@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("id") Integer id, Model model,
+			HttpSession session, RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
+		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+
+		Usuario usuarioRequisitado = usuarioService.find(Usuario.class, id);
+		List<Resposta> respostas = respostaService.find(usuarioRequisitado, jogo);
+		
+		if(respostas.isEmpty() || respostas == null){
+			redirectAttributes.addFlashAttribute("erro",
+					"Ainda não existem avaliações efetuadas pelo aluno neste jogo.");
+			return "redirect:/usuario/"+usuarioRequisitado.getId()+"/detalhes/"+jogo.getId();
+		}
+		if (usuario.equals(jogo.getProfessor())) {
+			model.addAttribute("permissao", "professor");
+		}else {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		model.addAttribute("action", "avaliacoesDoAluno");
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("respostas", respostas);
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("usuarioRequisitado", usuarioRequisitado);
+		return "jogador/avaliacoes";
+	}
+
+	@RequestMapping(value = "/{id}/jogo/{idJogo}/resposta/{idRes}/avaliacao", method = RequestMethod.GET)
+	public String avaliacao(@PathVariable("idJogo") Integer idJogo, @PathVariable("idRes") Integer idRes,
+			@PathVariable("id") Integer id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if(jogo == null){
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
+		Resposta resposta = respostaService.find(Resposta.class, idRes);
+		if (resposta == null) {
+			redirectAttributes.addFlashAttribute("erro", "Avaliação inexistente.");
+			return "redirect:/jogo/"+ idJogo +"/rodadas";
+		}
+		Usuario requisitado = usuarioService.find(Usuario.class, id);
+		if(!jogo.getAlunos().contains(requisitado)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Aluno não existe ou não pertence ao jogo.");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		
+		if (usuario.equals(jogo.getProfessor())) {			
+			model.addAttribute("permissao", "professor");
+		}else{			
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("usuarioRequisitado", requisitado);
+		model.addAttribute("action", "avaliacaoDoAluno");
+		model.addAttribute("formulario", resposta.getFormulario());
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("entrega", resposta.getEntrega());
+		return "jogador/avaliacao";
+	}
+
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

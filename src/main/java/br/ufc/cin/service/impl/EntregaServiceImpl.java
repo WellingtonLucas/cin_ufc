@@ -83,4 +83,22 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 		return entregas;
 	}
 
+	@Override
+	public List<Entrega> getUltimasEntregasDaEquipeComGabarito(Equipe equipe) {
+		List<Entrega> entregas = new ArrayList<Entrega>();
+		for (Rodada rodada : equipe.getJogo().getRodadas()) {
+			Entrega entrega = getUltimaEntregaComGabarito(rodada, equipe);
+			if(entrega!=null){
+				entregas.add(entrega);
+			}
+		}
+		return entregas;
+	}
+
+	private Entrega getUltimaEntregaComGabarito(Rodada rodada, Equipe equipe) {
+		Entrega entrega = getUltimaEntrega(rodada, equipe);
+		if(entrega!= null && entrega.getGabarito()!= null)
+			return entrega;
+		return null;
+	}
 }

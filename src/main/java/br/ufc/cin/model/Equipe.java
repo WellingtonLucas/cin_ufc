@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,12 +16,15 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class Equipe {
 	public Equipe() {
 		alunos = new ArrayList<Usuario>();
+		statusRodadaEquipes = new ArrayList<StatusRodadaEquipe>();
 	}
 	
 	@Id
@@ -49,6 +53,42 @@ public class Equipe {
 	@JoinColumn(name = "LOGO_ID")
 	private Documento logo;
 	
+	@OneToMany(mappedBy = "equipe", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE})
+	private List<StatusRodadaEquipe> statusRodadaEquipes;
+	
+	@OneToMany(mappedBy = "equipe", cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE})
+	private List<ReaberturaSubmissao> reaberturaSubmissao;
+	
+	@Transient
+	private boolean statusNaRodada;
+	
+	@Transient
+	private boolean statusReabertura;
+	
+	public boolean isStatusReabertura() {
+		return statusReabertura;
+	}
+
+	public void setStatusReabertura(boolean statusReabertura) {
+		this.statusReabertura = statusReabertura;
+	}
+
+	public boolean isStatusNaRodada() {
+		return statusNaRodada;
+	}
+
+	public void setStatusNaRodada(boolean statusNaRodada) {
+		this.statusNaRodada = statusNaRodada;
+	}
+	
+	public List<ReaberturaSubmissao> getReaberturaSubmissao() {
+		return reaberturaSubmissao;
+	}
+
+	public void setReaberturaSubmissao(List<ReaberturaSubmissao> reaberturaSubmissao) {
+		this.reaberturaSubmissao = reaberturaSubmissao;
+	}
+	
 	public void addAluno(Usuario usuario) {
 		if (!getAlunos().contains(usuario)) {
 			getAlunos().add(usuario);
@@ -58,6 +98,17 @@ public class Equipe {
 		}
 	}
 
+	public void addStatusRodadaEquipe(StatusRodadaEquipe statusRodadaEquipe){
+		if(!getStatusRodadaEquipes().contains(statusRodadaEquipe)){
+			getStatusRodadaEquipes().add(statusRodadaEquipe);
+		}
+	}
+	
+	public void addReaberturaSubmissao(ReaberturaSubmissao reaberturaSubmissao){
+		if(!getReaberturaSubmissao().contains(reaberturaSubmissao))
+			getReaberturaSubmissao().add(reaberturaSubmissao);
+	}
+	
 	public String getIdeiaDeNegocio() {
 		return ideiaDeNegocio;
 	}
@@ -114,6 +165,14 @@ public class Equipe {
 		return id;
 	}
 	
+	public List<StatusRodadaEquipe> getStatusRodadaEquipes() {
+		return statusRodadaEquipes;
+	}
+
+	public void setStatusRodadaEquipes(List<StatusRodadaEquipe> statusRodadaEquipes) {
+		this.statusRodadaEquipes = statusRodadaEquipes;
+	}
+
 	public String toString(){
 		return "Equipe id: "+getId()+ " nome: " +getNome() ;
 	}

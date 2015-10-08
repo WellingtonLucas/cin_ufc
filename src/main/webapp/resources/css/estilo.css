@@ -293,4 +293,9 @@ div.file-caption {
 .btn.active span.glyphicon {				
 	opacity: 1;				
 }
-
+.glyphicon-star{
+	color: rgb(217, 83, 79);
+}
+.glyphicon-star-empty{
+	color: rgb(66, 139, 202);
+}

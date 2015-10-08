@@ -11,10 +11,7 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<c:if test="${action eq 'vincularEquipeRodada' }">
-		<c:set var="url" value="/jogo/rodada/equipes/vincular"></c:set>
-	</c:if>
-	<title>Vincular Equipe</title>
+	<title>Avaliações do aluno</title>
 
 </head>
 <body>
@@ -27,7 +24,7 @@
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<div class="col-sm-12">
 						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Vincule equipes à rodada</small></h2>
+						<h2><strong>Aluno: ${usuarioRequisitado.nome }</strong> - <small>Avaliações efetuadas pelo aluno</small></h2>
 						<hr>
 						<c:if test="${not empty erro}">
 							<div class="alert alert-warning alert-dismissible" role="alert">
@@ -46,7 +43,7 @@
 							</div>
 						</c:if>
 					</div>
-					<c:if test="${not empty equipes }">
+					<c:if test="${not empty respostas }">
 						<div class="col-lg-4">
 							<div class="input-group">
 					            <input type="search" id="search" value="" class="form-control" placeholder="Pesquisar">
@@ -55,42 +52,38 @@
 					            </span>
 					        </div>
 				        </div>
-				        <form:form id="addEquipe" role="form" commandName="rodada" class="form-horizontal" method="POST"
-							servletRelativeAction="${url }">
-							<form:hidden path="id" value="${rodada.id }"/>
-							<div class="col-sm-12">
-								<table id="table" class="table table-striped table-hover">
-									<thead>
+				       	<div class="col-sm-12">
+							<table id="table" class="table table-striped table-hover">
+								<thead>
+									<tr>
+										<th>Rodada</th>
+										<th>Equipe</th>
+										<th>Entrega</th>
+										<th>Avaliação</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="resposta" items="${respostas}" varStatus="respostaId">
 										<tr>
-											<th>Nome</th>
-											<th>Marque aqui</th>
+											<td>
+												<a href="<c:url value="/jogo/${jogo.id}/rodada/${resposta.entrega.rodada.id }/detalhes"></c:url>">${resposta.entrega.rodada.nome}</a>
+											</td>
+											<td>
+												<a href="<c:url value="/jogo/${jogo.id}/equipe/${resposta.entrega.equipe.id }"></c:url>">${resposta.entrega.equipe.nome}</a>
+											</td>
+											<td>
+												<a href="<c:url value="/documento/downloadDocumento/${resposta.entrega.documento.id }"></c:url>">${resposta.entrega.documento.nomeOriginal}</a>
+											</td>
+											<td>
+												<a href="<c:url value="/usuario/${usuarioRequisitado.id }/jogo/${jogo.id}/resposta/${resposta.id }/avaliacao" ></c:url>">
+													<button class="btn btn-primary">Ver avaliação</button>
+												</a>
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="equipe" items="${equipes}" varStatus="equipeId">
-											<tr>
-												<td>
-													<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome}</a>
-												</td>
-												<td>
-													<div class="btn-group" data-toggle="buttons">
-														<label class="btn btn-primary">
-															<input name="equipesAtivas[${equipeId.index }].id" type="checkbox" autocomplete="off" value="${equipe.id }">
-															<span class="glyphicon glyphicon-ok"></span>
-														</label>
-													</div>
-												</td>
-											</tr>
-										</c:forEach>
-									</tbody>
-								</table>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-2">				
-									<button type="submit" class="btn btn-primary btn-lg">Vincular&nbsp;<i class="glyphicon glyphicon-floppy-disk"></i></button>
-								</div>
-							</div>
-						</form:form>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
 					</c:if>	
 				</div>
 			</div>

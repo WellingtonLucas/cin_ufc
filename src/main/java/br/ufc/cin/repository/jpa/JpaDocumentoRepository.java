@@ -19,7 +19,7 @@ public class JpaDocumentoRepository extends JpaGenericRepositoryImpl<Documento> 
 	public List<Documento> getDocumentosByJogo(Jogo jogo) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", jogo.getId());
-		return find(QueryType.JPQL, "select d from Documento as d where d.jogo.id = :id" , params);
+		return find(QueryType.JPQL, "from Documento as d where d.jogo.id = :id" , params);
 	}
 	
 }

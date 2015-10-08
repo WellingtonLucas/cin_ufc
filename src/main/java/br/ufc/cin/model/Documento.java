@@ -28,6 +28,9 @@ public class Documento {
 	@Type(type = "org.hibernate.type.BinaryType")
 	private byte[] arquivo;
 
+	@ManyToOne
+	private Jogo jogo;
+
 	@Transient
 	private String encode;
 
@@ -40,9 +43,6 @@ public class Documento {
 	public void setEncode(String encode) {
 		this.encode = encode;
 	}
-
-	@ManyToOne
-	private Jogo jogo;
 
 	public void setId(Integer id) {
 		this.id = id;

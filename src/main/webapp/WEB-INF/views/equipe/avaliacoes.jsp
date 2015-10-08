@@ -11,9 +11,6 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<c:if test="${action eq 'vincularEquipeRodada' }">
-		<c:set var="url" value="/jogo/rodada/equipes/vincular"></c:set>
-	</c:if>
 	<title>Avaliações</title>
 
 </head>

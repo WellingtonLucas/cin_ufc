@@ -276,6 +276,9 @@ public class FormularioController {
 		}else if(jogo.getAlunos().contains(usuario) && jogo.getProfessor().getFormulario().contains(formulario)
 				&& entrega.getRodada().isStatus()) {
 			model.addAttribute("permissao", "aluno");
+		}else if(!entrega.getRodada().isStatus()){
+			redirectAttributes.addFlashAttribute("erro", "A rodada se encerrou!");
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -345,8 +348,7 @@ public class FormularioController {
 		redirectAttributes.addFlashAttribute("info", "Entrega da equipe "+entrega.getEquipe().getNome()+" avalidada.");
 		return  "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/submissoes";
 	}
-	
-	
+
 	@RequestMapping(value = "/jogo/{idJogo}/formulario/{id}/excluir")
 	public String excluir(@PathVariable("id") Integer id,@PathVariable("idJogo") Integer idJogo, HttpSession session, RedirectAttributes redirectAttributes) {
 		Formulario formulario = formularioService.find(Formulario.class,id);

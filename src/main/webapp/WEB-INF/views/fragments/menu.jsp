@@ -15,6 +15,7 @@
 		<c:if test="${permissao == 'professor'}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>">Participantes do Jogo</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/formularios"></c:url>">Formulários&nbsp;</a></li>
+			<hr>
 		</c:if>
 		
 		<c:if test="${(action == 'participantesJogo')}">
@@ -47,6 +48,9 @@
 			<li><a href="<c:url value ="/jogo/${jogo.id}/formulario"></c:url>">Criar questionário</a></li>
 		</c:if>
 		<c:if test="${(action == 'detalhesUsuario')}">
+			<c:if test="${ (permissao == 'professor') }">
+				<li><a href="<c:url value ="/usuario/${usuarioParticipante.id}/jogo/${jogo.id}/avaliacoes"></c:url>">Avaliações Realizadas</a></li>
+			</c:if>
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome }</a></li>
 		</c:if>
 		<c:if test="${(action == 'rodadas')}">
@@ -56,9 +60,15 @@
 		</c:if>
 		<c:if test="${(action == 'detalhesRodada')}">
 			<c:if test="${ (permissao == 'professor') }">
-				<%-- <li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincular"></c:url>">Vincular Equipes</a></li> --%>		
-				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincularFormulario"></c:url>">Vincular Formulario</a></li>
+				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincularFormulario"></c:url>">Vincular Formulario (x)</a></li>
 				<hr>
+			</c:if>	
+			<c:if test="${ (permissao == 'aluno') && rodada.statusPrazo}">
+				<li>
+					<a data-toggle="modal" data-target="#squarespaceModal" data-toggle="tooltip" data-placement="right"
+					title="Esta funcionalidade permite que você solicite a reabertura desta rodada para sua equipe." 
+					href="<c:url value ="/#"></c:url>">Solicitar Reabertura</a>
+				</li>
 			</c:if>	
 			<c:if test="${(permissao == 'professor')||(permissao == 'aluno') }">
 				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/submissoes"></c:url>">Submissões da rodada</a></li>
@@ -84,6 +94,11 @@
 		</c:if>
 		<c:if test="${(action =='avaliacao') && ((permissao == 'professor')||(permissao == 'aluno'))}">
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id}/avaliacoes"></c:url>">Avaliações</a></li>
+		</c:if>
+		
+		<c:if test="${(action =='avaliacaoDoAluno') && (permissao == 'professor')}">
+			<li><a href="<c:url value ="/usuario/${usuarioRequisitado.id }/detalhes/${jogo.id}"></c:url>">${usuarioRequisitado.nome }</a></li>
+			<li class="active"><a href="<c:url value ="/usuario/${usuarioRequisitado.id }/jogo/${jogo.id}/avaliacoes"></c:url>">Avaliações</a></li>
 		</c:if>
 	</ul>
 </div>

@@ -97,6 +97,22 @@ $(document).ready(function() {
         }
        
 	});
+	$('#reaberturaForm').bootstrapValidator({
+        feedbackIcons: {
+        	valid: 'glyphicon glyphicon-ok',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+        	quantidadeDia:{
+            	validators:{
+            		notEmpty:{
+            			message: 'Selecione um valor para submeter um pedido.'
+            		}
+            	}
+            }        	
+        }
+	});
+	
     $("#inicio").datepicker({
 		format : "dd/mm/yyyy",
 		todayBtn : "linked",
@@ -151,9 +167,14 @@ $(document).ready(function() {
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
-	$('#desvincular-equipe').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja desvincular a equipe \"' + $(e.relatedTarget).data('name') + '\"?');
+	$('#ativar-equipe').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja ativar a equipe \"' + $(e.relatedTarget).data('name') + '\"? Isso fará com que a equipe possa efetuar novas entregas.');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
+	});
+	
+	$('#inativar-equipe').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza de que deseja inativar a equipe \"' + $(e.relatedTarget).data('name') + '\"? Isso fará com que a equipe não possa efetuar novas entregas após o prazo.');
+		$(this).find('.btn-warning').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$('#delete-file').on('show.bs.modal', function(e) {

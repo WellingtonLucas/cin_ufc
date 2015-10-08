@@ -16,4 +16,6 @@ public interface EntregaService extends GenericService<Entrega>{
 	
 	List<Entrega> getUltimasEntregasDaEquipe(Equipe equipe);
 
+	List<Entrega> getUltimasEntregasDaEquipeComGabarito(Equipe equipe);
+
 }

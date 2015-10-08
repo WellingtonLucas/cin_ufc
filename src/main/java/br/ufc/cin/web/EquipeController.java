@@ -551,11 +551,11 @@ public class EquipeController {
 			return "redirect:/jogo/" + idJogo + "/equipes";
 		}
 
-		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
+		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipeComGabarito(equipe);
 		
 		if(entregas.isEmpty() || entregas == null){
 			redirectAttributes.addFlashAttribute("erro",
-					"Ainda não existem avaliações para esta equipe.");
+					"Ainda não existem avaliações efetuadas pelo docente para esta equipe.");
 			return "redirect:/jogo/"+jogo.getId()+"/equipe/"+equipe.getId();
 		}
 		if (usuario.equals(jogo.getProfessor()) && jogo.getEquipes().contains(equipe)) {

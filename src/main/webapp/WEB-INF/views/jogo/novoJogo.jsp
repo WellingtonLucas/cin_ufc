@@ -24,20 +24,21 @@
 	<body>
 	
 		<jsp:include page="../fragments/header.jsp" />
-		<c:if test="${not empty erro}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<c:out value="${erro}"></c:out>
-			</div>
-		</c:if>
-		<br>
 		<div class ="container">
 			<div class="col-sm-12">
 				<h2>${titulo}</h2>
 				<hr>
 			</div>
+			<c:if test="${not empty erro}">
+				<div class="col-sm-12">
+					<div class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<c:out value="${erro}"></c:out>
+					</div>
+				</div>
+			</c:if>
 			<form:form id="adicionarJogoForm" role="form" class="form-horizontal" commandName="jogo" enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
 				<form:hidden path="id" />
 				<form:hidden path="status" />
@@ -102,6 +103,11 @@
 							<div class="error-validation">
 									<form:errors path="descricao"></form:errors>
 							</div>
+							<c:if test="${not empty error_descricao}">
+								<div class="error-validation">
+									<span>${error_descricao}</span>
+								</div>
+							</c:if>
 						</div>
 					</div>
 				</div>

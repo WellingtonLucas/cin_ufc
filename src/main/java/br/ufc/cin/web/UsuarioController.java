@@ -1,11 +1,14 @@
 package br.ufc.cin.web;
 
+import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,12 +24,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.RespostaService;
@@ -47,6 +54,9 @@ public class UsuarioController {
 
 	@Inject
 	private RespostaService respostaService;
+
+	@Inject
+	private DocumentoService documentoService;
 	
 	@RequestMapping(value = "/cadastre-se", method = RequestMethod.POST)
 	public String cadastrarPessoa(HttpSession session, Model model,
@@ -67,8 +77,13 @@ public class UsuarioController {
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		usuario.setSenha(encoder.encodePassword(usuario.getSenha(), ""));
 		usuario.setPapel("ROLE_USUARIO");
-		usuarioService.save(usuario);
-
+		try {
+			usuarioService.save(usuario);	
+		} catch (Exception e) {
+			redirect.addFlashAttribute("erro",
+					"Erro, ocorreu um problema ao tentar criar sua conta. Tente novamente em instantes");
+			return REDIRECT_PAGINA_LOGIN;
+		}
 		redirect.addFlashAttribute("info",
 				"Parabéns, seu cadastro esta realizado.");
 		return REDIRECT_PAGINA_LOGIN;
@@ -130,20 +145,72 @@ public class UsuarioController {
 	}
 
 	@RequestMapping(value = "/perfil", method = RequestMethod.GET)
-	public String perfil(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String perfil(Model model, HttpSession session) {
 		Usuario usuario = getUsuarioLogado(session);
 		model.addAttribute("usuario", usuario);
+		model.addAttribute("action", "perfil");
 		return "jogador/perfil";
 	}
 	
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public String profile(Model model, HttpSession session) {
+		Usuario usuario = getUsuarioLogado(session);
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("action", "profile");
+		return "jogador/profile";
+	}
+	
 	@RequestMapping(value = "/atualizar", method = RequestMethod.POST)
-	public String atualizar(Model model, HttpSession session, RedirectAttributes redirectAttributes, 
+	public String atualizar(@RequestParam("anexos") List<MultipartFile> anexos, Model model, 
+			HttpSession session, RedirectAttributes redirect, 
 			@Valid Usuario usuario, BindingResult result) {
 		Usuario perfilAnterior = usuarioService.find(Usuario.class,usuario.getId());
 		if (result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("erro", "Erro ao atualizar seus dados.");
+			redirect.addFlashAttribute("erro", "Erro ao atualizar seus dados.");
 			return "redirect:/usuario/perfil";
 		}
+		Documento documento = new Documento();
+		if(anexos != null && !anexos.isEmpty()) {
+			if(anexos.size() > 1){
+				redirect.addFlashAttribute("erro", "Selecione apenas uma foto!");
+				return "redirect:/usuario/perfil";
+			}
+			for(MultipartFile anexo : anexos) {
+				try {
+					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
+						documento.setArquivo(anexo.getBytes());
+						String data = new Date().getTime()+"";
+						documento.setNomeOriginal(data+"-"+anexo.getOriginalFilename());
+						documento.setNome(usuario.getNome()+"-"+"foto");
+						documento.setExtensao(anexo.getContentType());
+						if(!documentoService.verificaSeImagem(documento.getExtensao())){
+							redirect.addFlashAttribute("erro", "O arquivo deve está com algum desses formatos: PNG ou JPEG "
+									);
+							return "redirect:/usuario/perfil";
+						}
+					}
+				} catch (IOException e) {
+					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
+					return "redirect:/usuario/perfil";
+				}
+			}
+		}
+		try {
+			documentoService.save(documento);	
+		} catch (Exception e) {
+			redirect.addFlashAttribute("erro", "Erro ao persistir a foto.");
+			return "redirect:/usuario/perfil";
+		}
+		if(perfilAnterior.getFoto() != null){
+			try {
+				documentoService.delete(perfilAnterior.getFoto());	
+			} catch (Exception e) {
+				redirect.addFlashAttribute("erro", "Erro na troca de fotos.");
+				return "redirect:/usuario/perfil";
+			}
+		}
+		
+		perfilAnterior.setFoto(documento);
 		if(!(usuario.getSenha().isEmpty())){
 			ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 			perfilAnterior.setSenha(encoder.encodePassword(usuario.getSenha(), ""));

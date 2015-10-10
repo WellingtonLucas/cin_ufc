@@ -9,8 +9,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -68,6 +70,10 @@ public class Usuario {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
 	private List<Entrega> entregas;
+	
+	@OneToOne
+	@JoinColumn(name = "FOTO_ID")
+	private Documento foto;
 
 	public List<Entrega> getEntregas() {
 		return entregas;
@@ -75,6 +81,14 @@ public class Usuario {
 
 	public void setEntregas(List<Entrega> entregas) {
 		this.entregas = entregas;
+	}
+
+	public Documento getFoto() {
+		return foto;
+	}
+
+	public void setFoto(Documento foto) {
+		this.foto = foto;
 	}
 
 	public List<Formulario> getFormulario() {

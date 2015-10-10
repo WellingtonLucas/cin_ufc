@@ -216,7 +216,5 @@ $(document).ready(function() {
 		msgLoading: "Carregando arquivo {index} de {files} &hellip;"
 	});
 	
-	/*$('article').readmore();*/
-	
 });
 

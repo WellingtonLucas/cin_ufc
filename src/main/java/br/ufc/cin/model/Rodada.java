@@ -63,7 +63,7 @@ public class Rodada {
 	@JoinColumn(name = "FORM_ID")
 	private Formulario formulario;
 	
-	@OneToMany(mappedBy = "rodada", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	@OneToMany(mappedBy = "rodada", cascade={CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.REFRESH,CascadeType.MERGE})
 	private List<Entrega> entregas;
 	
 	public Integer getId() {

@@ -18,4 +18,6 @@ public interface RodadaEquipeService extends GenericService<StatusRodadaEquipe>{
 			Rodada rodada);
 
 	public abstract StatusRodadaEquipe atualizaStatusRodadaEquipe(ReaberturaSubmissao find);
+
+	public abstract void deletePor(Rodada rodada);
 }

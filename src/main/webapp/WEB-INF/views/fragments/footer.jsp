@@ -45,8 +45,8 @@
 <script src="<c:url value="/resources/js/jquery.searchable.js" />"></script>
 <script src="<c:url value="/resources/js/searchable.js" />"></script>
 <script src="<c:url value="/resources/js/dynamic-avatar-blur.js" />"></script>
-<script src="<c:url value="/resources/js/number-spinner.js" />"></script>
-<%-- <script src="<c:url value="/resources/js/vendor/jquery.ui.widget.js.js" />"></script> --%>
+<script src="<c:url value="/resources/js/readmore.min.js" />"></script>
+<script src="<c:url value="/resources/js/simple-user-profie.js" />"></script>
 <script src="<c:url value="/resources/ckeditor/ckeditor.js"/>"></script>
 <script src="<c:url value="/resources/ckeditor/adapters/jquery.js"/>"></script>
 <c:if test="${editor eq 'equipe' }">
@@ -69,3 +69,6 @@
 	</script>
 </c:if>
 
+<script>
+	$('article').readmore();
+</script>

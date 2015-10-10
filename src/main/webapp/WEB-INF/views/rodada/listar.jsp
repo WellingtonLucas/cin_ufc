@@ -47,7 +47,7 @@
 					<c:if test="${not empty rodadas }">
 						<c:forEach var="rodada" items="${rodadas}">
 							<div class="col-lg-4">
-								<h2>${rodada.nome }</h2>
+								<article><h2>${rodada.nome }</h2></article>
 								<p>
 									Início: <fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.inicio }" /> - 
 									Término: <fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.termino }" />

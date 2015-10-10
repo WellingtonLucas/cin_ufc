@@ -23,7 +23,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<div class="col-sm-12">
 					<h2>
-						<strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small>
+						<strong>Seus Formulários</strong> - <small>${usuario.nome } estes são os formulários criados por você.</small>
 					</h2>
 					<hr>
 					<c:if test="${not empty erro}">
@@ -46,10 +46,11 @@
 				<div class="row placeholders">
 					<c:if test="${not empty formularios }">
 						<c:forEach var="formulario" items="${formularios}">
-							<div class="col-xs-6 col-sm-3 placeholder">
-								<a class="btn btn-info" href="<c:url value="formulario/${formulario.id }/detalhes" />">Detalhes</a>	
-								<h4>${formulario.titulo }</h4>
-								<span class="text-muted">Alguma informação</span>
+							<div class="col-xs-6 col-sm-4 placeholder">
+								<article><h2>${formulario.titulo }</h2></article>
+								<p>								
+									<a class="btn btn-primary" href="<c:url value="formulario/${formulario.id }/detalhes" />">Detalhes »</a>
+								</p>	
 							</div>
 						</c:forEach>
 					</c:if>

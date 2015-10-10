@@ -57,7 +57,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label field">Descrição:</label>
 					<div class="col-sm-10 value-label" id="desc">
-						${jogo.descricao }
+						<article><label>${jogo.descricao }</label></article>
 					</div>						
 				</div>
 				<div class="form-group">
@@ -67,7 +67,7 @@
 							<label>-</label>
 						</c:if>
 						<c:if test="${not empty jogo.regras }">
-							<label>${jogo.regras }</label>
+							<article><label>${jogo.regras }</label></article>
 						</c:if>
 					</div>		
 				</div>

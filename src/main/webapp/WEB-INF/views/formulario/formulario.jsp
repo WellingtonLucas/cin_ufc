@@ -12,28 +12,28 @@
 <html>
 <head>
 <c:if test="${action eq 'cadastrar' }">
-	<c:set var="url" value="/${idJogo }/formulario/salvar"></c:set>
+	<c:set var="url" value="/formulario/salvar"></c:set>
 	<c:set var="descricao" value="Crie seu formulário"></c:set>
 	<c:set var="subDescri" value="Esta funcionalidade permite a criação de um formulário com perguntas e alternativas."></c:set>
 	<c:set var="titulo" value="Novo Formulário"></c:set>
 	<c:set var="txtBtn" value="Cadastrar"></c:set>
-	<c:set var="cancelar" value="/jogo/${idJogo }/formularios"></c:set>
+	<c:set var="cancelar" value="/formularios"></c:set>
 </c:if>
 <c:if test="${action eq 'editar' }">
-	<c:set var="url" value="/${idJogo }/formulario/editar"></c:set>
+	<c:set var="url" value="/formulario/editar"></c:set>
 	<c:set var="descricao" value="Edite seu formulário"></c:set>
 	<c:set var="subDescri" value="Esta funcionalidade permite a edição do seu formulário."></c:set>
 	<c:set var="titulo" value="Editar - Formulário "></c:set>
 	<c:set var="txtBtn" value="Atualizar"></c:set>
-	<c:set var="cancelar" value="/jogo/${idJogo }/formulario/${formulario.id }/detalhes"></c:set>
+	<c:set var="cancelar" value="/formulario/${formulario.id }/detalhes"></c:set>
 </c:if>
 <c:if test="${action eq 'copiar' }">
-	<c:set var="url" value="/${idJogo }/formulario/salvar"></c:set>
+	<c:set var="url" value="/formulario/salvar"></c:set>
 	<c:set var="descricao" value="Você está copiando um formulário"></c:set>
 	<c:set var="subDescri" value="Esta funcionalidade permite a edição do seu formulário copiado."></c:set>
 	<c:set var="titulo" value="Copiar - Formulário "></c:set>
 	<c:set var="txtBtn" value="Salvar Cópia"></c:set>
-	<c:set var="cancelar" value="/jogo/${idJogo }/formulario/${formulario.id }/detalhes"></c:set>
+	<c:set var="cancelar" value="/formulario/${formulario.id }/detalhes"></c:set>
 </c:if>
 
 <jsp:include page="../fragments/header-estrutura.jsp" />
@@ -90,8 +90,9 @@
 						
 						<div class="form-group">
 							<div class="radio panel-body">
-								<label class="col-sm-2 opt1 control-label" for="opcao1"></label>
-								<input type="radio" name="opcaoR" id="opcaoR" class="optR" disabled="disabled">
+								<label class="col-sm-2 opt1 control-label" for="opcao1">
+									<input type="radio" name="opcaoR" id="opcaoR" class="optR" disabled="disabled">
+								</label>
 								<div class="col-sm-6">
 									<input id="opcao1" name="perguntas[${ questId.index}].opcoes[0].descricao" type="text" 
 										value="${pergunta.opcoes[0].descricao }" class="opcao1 form-control" required />
@@ -104,8 +105,8 @@
 						<div class="form-group">
 							<div class="radio panel-body">
 								<label class="col-xs-2 opt2 control-label" for="opcao2">
+									<input	type="radio" name="opcaoR" id="opcaoR2" class="optR" disabled="disabled">
 								</label>
-								 <input	type="radio" name="opcaoR" id="opcaoR2" class="optR" disabled="disabled">
 								<div class="col-xs-6">
 									<input id="opcao2" name="perguntas[${ questId.index}].opcoes[1].descricao" type="text" 
 										value="${pergunta.opcoes[1].descricao }" class="opcao2 form-control" required />
@@ -118,8 +119,8 @@
 						<div class="form-group">
 							<div class="radio panel-body">
 								<label class="col-xs-2 opt3 control-label" for="opcao3"> 
+									<input type="radio" name="opcaoR" id="opcaoR3" class="optR" disabled="disabled">
 								</label>
-								<input type="radio" name="opcaoR" id="opcaoR3" class="optR" disabled="disabled">
 								<div class="col-xs-6">
 									<input id="opcao3" name="perguntas[${ questId.index}].opcoes[2].descricao" type="text" 
 										value="${pergunta.opcoes[2].descricao }" class="opcao3 form-control" required />
@@ -132,8 +133,8 @@
 						<div class="form-group">
 							<div class="radio panel-body">
 								<label class="col-xs-2 opt4 control-label" for="opcao4"> 
+									<input type="radio" name="opcaoR" id="opcaoR4" class="optR" disabled="disabled">
 								</label>
-								<input type="radio" name="opcaoR" id="opcaoR4" class="optR" disabled="disabled">
 								<div class="col-xs-6">
 									<input id="opcao4" name="perguntas[${ questId.index}].opcoes[3].descricao" type="text" 
 										value="${pergunta.opcoes[3].descricao }" class="opcao4 form-control" required />
@@ -145,8 +146,9 @@
 						</div>
 						<div class="form-group">
 							<div class="radio panel-body">
-								<label class="col-xs-2 opt5 control-label" for="opcao5"></label>
-								<input	type="radio" name="opcaoR" id="opcaoR5" class="optR" disabled="disabled">
+								<label class="col-xs-2 opt5 control-label" for="opcao5">
+									<input	type="radio" name="opcaoR" id="opcaoR5" class="optR" disabled="disabled">
+								</label>
 								<div class="col-xs-6">
 									<input id="opcao5" name="perguntas[${ questId.index}].opcoes[4].descricao" type="text" 
 										value="${pergunta.opcoes[4].descricao }" class="opcao5 form-control" required />
@@ -181,8 +183,9 @@
 					<!-- Text input-->
 					<div class="form-group">
 						<div class="radio panel-body">
-							<label class="col-sm-2 opt1 control-label" for="opcao1"></label>
-							<input type="radio" name="opcaoR" id="opcaoR" class="optR" disabled="disabled">
+							<label class="col-sm-2 opt1 control-label" for="opcao1">
+								<input type="radio" name="opcaoR" id="opcaoR" class="optR" disabled="disabled">
+							</label>
 							<div class="col-sm-6">
 								<input id="opcao1" name="perguntas[0].opcoes[0].descricao" type="text" placeholder=""
 									class="opcao1 form-control" required />
@@ -192,8 +195,8 @@
 					<div class="form-group">
 						<div class="radio panel-body">
 							<label class="col-xs-2 opt2 control-label" for="opcao2">
+								<input	type="radio" name="opcaoR" id="opcaoR2" class="optR" disabled="disabled">
 							</label>
-							 <input	type="radio" name="opcaoR" id="opcaoR2" class="optR" disabled="disabled">
 							<div class="col-xs-6">
 								<input id="opcao2" name="perguntas[0].opcoes[1].descricao" type="text" placeholder=""
 									class="opcao2 form-control" required />
@@ -203,8 +206,8 @@
 					<div class="form-group">
 						<div class="radio panel-body">
 							<label class="col-xs-2 opt3 control-label" for="opcao3"> 
+								<input type="radio" name="opcaoR" id="opcaoR3" class="optR" disabled="disabled">
 							</label>
-							<input type="radio" name="opcaoR" id="opcaoR3" class="optR" disabled="disabled">
 							<div class="col-xs-6">
 								<input id="opcao3" name="perguntas[0].opcoes[2].descricao" type="text" placeholder=""
 									class="opcao3 form-control" required />
@@ -214,8 +217,8 @@
 					<div class="form-group">
 						<div class="radio panel-body">
 							<label class="col-xs-2 opt4 control-label" for="opcao4"> 
+								<input type="radio" name="opcaoR" id="opcaoR4" class="optR" disabled="disabled">
 							</label>
-							<input type="radio" name="opcaoR" id="opcaoR4" class="optR" disabled="disabled">
 							<div class="col-xs-6">
 								<input id="opcao4" name="perguntas[0].opcoes[3].descricao" type="text" placeholder=""
 									class="opcao4 form-control" required />
@@ -224,8 +227,9 @@
 					</div>
 					<div class="form-group">
 						<div class="radio panel-body">
-							<label class="col-xs-2 opt5 control-label" for="opcao5"></label>
-							<input	type="radio" name="opcaoR" id="opcaoR5" class="optR" disabled="disabled">
+							<label class="col-xs-2 opt5 control-label" for="opcao5">
+								<input	type="radio" name="opcaoR" id="opcaoR5" class="optR" disabled="disabled">
+							</label>
 							<div class="col-xs-6">
 								<input id="opcao5" name="perguntas[0].opcoes[4].descricao" type="text" placeholder=""
 									class="opcao5 form-control" required />

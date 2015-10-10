@@ -89,18 +89,18 @@
 							</ul>
 							<div class="form-group">
 								<div class="col-sm-2">				
-									<a id="editar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/editar" ></c:url>">
+									<a id="editar" href="<c:url value="/formulario/${formulario.id }/editar" ></c:url>">
 										<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
 									</a>
 								</div>
 								<div class="col-sm-2">				
-									<a id="copiar" href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/copiar" ></c:url>">
+									<a id="copiar" href="<c:url value="/formulario/${formulario.id }/copiar" ></c:url>">
 										<button class="btn btn-success btn-lg">Copiar&nbsp;<i class="glyphicon glyphicon-duplicate"></i></button>
 									</a>
 								</div>
 								<div class="col-sm-2">
 									<a id="excluir" data-toggle="modal" data-target="#confirm-delete3" href="#" 
-									data-href="<c:url value="/jogo/${jogo.id}/formulario/${formulario.id }/excluir"></c:url>" data-name="${formulario.titulo }">
+									data-href="<c:url value="/formulario/${formulario.id }/excluir"></c:url>" data-name="${formulario.titulo }">
 										<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="glyphicon glyphicon-trash"></i></button>
 									</a>					
 								</div>

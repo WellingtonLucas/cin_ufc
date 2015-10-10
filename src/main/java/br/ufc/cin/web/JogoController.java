@@ -5,7 +5,6 @@ import static br.ufc.cin.util.Constants.MENSAGEM_ADD_ANEXO;
 import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPES_NAO_CRIADAS;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_AO_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
-import static br.ufc.cin.util.Constants.MENSAGEM_FORM_NAO_CRIADOS;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_ATUALIZADO;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_CADASTRADO;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
@@ -15,7 +14,6 @@ import static br.ufc.cin.util.Constants.MENSAGEM_USUARIOS_NAO_ASSOCIADOS;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_DETALHES_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_EQUIPES;
-import static br.ufc.cin.util.Constants.PAGINA_LISTAR_FORMULARIOS;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_USUARIOS;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
@@ -44,7 +42,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Equipe;
-import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.DocumentoService;
@@ -94,7 +91,7 @@ public class JogoController {
 				}
 			}
 			if(!flag){
-				model.addAttribute("infoParticipa", "Nenhum jogo em que você participa está ativo no momento.");
+				model.addAttribute("infoParticipa", "Nenhum jogo em que você é participante está ativo no momento.");
 			}
 		}
 		model.addAttribute("jogos", jogos);
@@ -110,22 +107,28 @@ public class JogoController {
 		model.addAttribute("action", "cadastrar");
 		model.addAttribute("jogo", new Jogo());	
 		model.addAttribute("editor", "jogo");
+		model.addAttribute("usuario", getUsuarioLogado(session));
 		return PAGINA_CADASTRAR_JOGO;
 	}
 	
 	@RequestMapping(value = "/novo-jogo", method = RequestMethod.POST)
-	public  String cadastrar(@ModelAttribute("jogo") Jogo jogo, @RequestParam("anexos") List<MultipartFile> anexos, 
+	public String cadastrar(@ModelAttribute("jogo") Jogo jogo, @RequestParam("anexos") List<MultipartFile> anexos, 
 			BindingResult result, HttpSession session, RedirectAttributes redirect, Model model){
 		
-		Usuario usuario = getUsuarioLogado(session);
-		model.addAttribute("participantes", usuarioService.getPossiveisParticipantes(usuario));
-		model.addAttribute("action", "cadastrar");
-		model.addAttribute("editor", "jogo");
 		if (result.hasErrors()) {
-			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
+			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
+			return "redirect:/jogo/novo-jogo";
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		if(jogo.getDescricao() == null || jogo.getRegras().isEmpty()){
+			model.addAttribute("erro", "A descrição do jogo é obrigatória!");
+			model.addAttribute("error_descricao", "A descrição do jogo é obrigatória!");
+			model.addAttribute("action", "cadastrar");
+			model.addAttribute("jogo", jogo);	
+			model.addAttribute("editor", "jogo");
+			model.addAttribute("usuario", usuario);
 			return PAGINA_CADASTRAR_JOGO;
 		}
-		
 		jogo.setProfessor(usuarioService.find(Usuario.class, usuario.getId()));
 		
 		List<Documento> documentos = new ArrayList<Documento>();
@@ -143,15 +146,27 @@ public class JogoController {
 						documentos.add(documento);
 					}
 				} catch (IOException e) {
-					model.addAttribute("erro", MENSAGEM_ERRO_UPLOAD);
-					return PAGINA_CADASTRAR_JOGO;
+					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
+					return "redirect:/jogo/novo-jogo";
 				}
 			}
 		}
-		jogoService.save(jogo);	
+		try {
+			jogoService.save(jogo);	
+		} catch (Exception e) {
+			redirect.addFlashAttribute("erro", "Erro ao tentar salvar o jogo.");
+			return "redirect:/jogo/novo-jogo";
+
+		}
 		
 		if(!documentos.isEmpty()) {
-			documentoService.salvar(documentos);
+			try {
+				documentoService.salvar(documentos);	
+			} catch (Exception e) {
+				redirect.addFlashAttribute("erro", "Erro ao tentar persistir os documentos.");
+				return "redirect:/jogo/novo-jogo";
+			}
+			
 		}
 		redirect.addFlashAttribute("info", MENSAGEM_JOGO_CADASTRADO);
 		return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -182,15 +197,19 @@ public class JogoController {
 	
 	@RequestMapping(value = "/editar", method = RequestMethod.POST)
 	public String editar(@RequestParam("anexos") List<MultipartFile> anexos, @Valid Jogo jogo, 
-			BindingResult result, Model model, HttpSession session,	RedirectAttributes redirect) {
+			BindingResult result, HttpSession session,	RedirectAttributes redirect) {
 		
-		model.addAttribute("action", "editar");
-		model.addAttribute("editor", "jogo");
 		if (result.hasErrors()) {
-			return PAGINA_CADASTRAR_JOGO;
+			redirect.addFlashAttribute("erro", "Erro ao na edição do jogo");
+			return "redirect:/jogo/"+jogo.getId()+"/editar";
 		}
-		Jogo oldJogo = jogoService.find(Jogo.class, jogo.getId());
+		if(jogo.getDescricao() == null || jogo.getRegras().isEmpty()){
+			redirect.addFlashAttribute("erro", "A descrição do jogo é obrigatória!");
+			redirect.addFlashAttribute("error_descricao", "A descrição do jogo é obrigatória!");
+			return "redirect:/jogo/"+jogo.getId()+"/editar";
+		}
 		
+		Jogo oldJogo = jogoService.find(Jogo.class, jogo.getId());
 		List<Documento> documentos = new ArrayList<Documento>();	
 		if(anexos != null && !anexos.isEmpty()) {
 			for(MultipartFile anexo : anexos) {
@@ -205,16 +224,21 @@ public class JogoController {
 						documentos.add(documento);
 					}
 				} catch (IOException e) {
-					model.addAttribute("erro", MENSAGEM_ERRO_UPLOAD);
-					return PAGINA_CADASTRAR_JOGO;
+					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
+					return "redirect:/jogo/"+jogo.getId()+"/editar";
 				}
 			}
 			if(!documentos.isEmpty()) {
-				documentoService.salvar(documentos);
+				try {
+					documentoService.salvar(documentos);	
+				} catch (Exception e) {
+					redirect.addFlashAttribute("erro", "Erro ao tentar salvar os arquivos.");
+					return "redirect:/jogo/"+jogo.getId()+"/editar";
+				}
 			}
 		}else{
-			model.addAttribute("erro", MENSAGEM_ADD_ANEXO);
-			return PAGINA_CADASTRAR_JOGO;
+			redirect.addFlashAttribute("erro", MENSAGEM_ADD_ANEXO);
+			return "redirect:/jogo/"+jogo.getId()+"/editar";
 		}
 		oldJogo.setDescricao(jogo.getDescricao());
 		oldJogo.setRegras(jogo.getRegras());
@@ -340,43 +364,7 @@ public class JogoController {
 		return PAGINA_LISTAR_EQUIPES;
 	}
 	
-	@RequestMapping(value = "/{id}/formularios", method = RequestMethod.GET)
-	public String listarFormularios(Model model, HttpSession session,
-			@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
-		Jogo jogo = jogoService.find(Jogo.class,id);
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		model.addAttribute("jogo", jogo);
-		model.addAttribute("action","formularios");
 		
-		Usuario usuario = getUsuarioLogado(session);
-		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
-			redirectAttributes.addFlashAttribute("erro",
-					"Jogo inativo no momento. Para mais informações "+jogo.getProfessor().getEmail());
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}else if(!jogo.getProfessor().equals(usuario) && !jogo.getAlunos().contains(usuario)){
-			redirectAttributes.addFlashAttribute("erro",
-					"Você não possui permissão de acesso");
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		if(usuario.equals(jogo.getProfessor())){
-			model.addAttribute("permissao","professor");
-			List<Formulario> formularios = jogo.getProfessor().getFormulario();
-			if(formularios == null || formularios.isEmpty()){
-				model.addAttribute("erro", MENSAGEM_FORM_NAO_CRIADOS);
-			}
-			model.addAttribute("formularios", formularios);
-
-		}else if(jogo.getAlunos().contains(usuario)){
-			redirectAttributes.addFlashAttribute("info", "Você não possui permissão de acesso.");
-			return "redirect/jogo/"+jogo.getId()+"/detalhes";
-			
-		}
-		return PAGINA_LISTAR_FORMULARIOS;
-	}
-	
 	@RequestMapping(value = "/{id}/vincular", method = RequestMethod.GET)
 	public String vincularParticipantes(Model model, HttpSession session, @PathVariable("id") Integer id, 
 			RedirectAttributes redirectAttributes) {

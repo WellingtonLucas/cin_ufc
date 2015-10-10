@@ -37,7 +37,7 @@
 				<li><a href="#profile" data-toggle="tab">Password</a></li>
 			</ul>
 			<form:form id="perfil" role="form" class="form-horizontal"
-				commandName="usuario" servletRelativeAction="atualizar"
+				commandName="usuario" enctype="multipart/form-data" servletRelativeAction="atualizar"
 				method="POST">
 
 				<div id="myTabContent" class="tab-content">
@@ -49,14 +49,14 @@
 						<br>
 						<div class="form-group">
 							<label for="nome" class="col-sm-1 control-label">Nome:</label>
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 								<div class="error-validation">
 									<form:errors path="nome"></form:errors>
 								</div>
 								<form:input id="nome" path="nome" type="text"
 									class="form-control" name="nome" placeholder="Nome" />
 							</div>
-							<label for="snome" class="col-sm-2 control-label">Sobrenome:</label>
+							<label for="snome" class="col-sm-1 control-label">Sobrenome:</label>
 							<div class="col-sm-4">
 								<div class="error-validation">
 									<form:errors path="sobreNome"></form:errors>
@@ -67,7 +67,7 @@
 						</div>
 						<div class="form-group">
 							<label for="curso" class="col-sm-1 control-label">Matricula:</label>
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 								<div class="error-validation">
 									<form:errors path="matricula"></form:errors>
 								</div>
@@ -96,6 +96,20 @@
 									placeholder="Email" class="form-control" disabled="true" />
 							</div>
 						</div>
+						<div class="form-group">
+							<label for="fileupload" class="col-sm-1 control-label">Foto:</label>
+							<div class="col-sm-8">
+								<input type="file" id="fileupload" class="file" name="anexos" multiple></input>
+							</div>
+						</div>
+						<c:if test="${action eq 'perfil' }">
+							<div class="form-group">
+								<div class="col-sm-1"></div>
+								<div class="col-sm-8">
+									<p class="bg-info">Para mudar sua foto escolha outra imagem.</p>
+								</div>
+							</div>
+						</c:if>
 
 					</div>
 					<div class="tab-pane fade" id="profile">

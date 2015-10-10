@@ -27,4 +27,15 @@ public class JpaRodadaEquipeRepository extends JpaGenericRepositoryImpl<StatusRo
 		}
 		return null;
 	}
+
+	@Override
+	public List<StatusRodadaEquipe> find(Rodada rodada) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("idR", rodada.getId());
+		List<StatusRodadaEquipe> result = find(QueryType.JPQL, "from rodada_equipe where RODADA_ID = :idR " , params);
+		if(!result.isEmpty() && result != null){
+			return result;
+		}
+		return null;
+	}
 }

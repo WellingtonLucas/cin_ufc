@@ -81,17 +81,18 @@ public class RodadaController {
 	@RequestMapping(value ="/jogo/{id}/rodadas", method = RequestMethod.GET)
 	public String rodadas(@PathVariable("id") Integer id, Model model, HttpSession session,
 			RedirectAttributes redirectAttributes){
-		Usuario usuario = getUsuarioLogado(session);
+		
 		Jogo jogo = jogoService.find(Jogo.class, id);
 		if(jogo == null){
 			redirectAttributes.addFlashAttribute("erro", "Jogo inexistente.");
 			return "redirect:/jogo/listar";
 		}
+		Usuario usuario = getUsuarioLogado(session);
 		if(!jogo.getProfessor().equals(usuario) && !jogo.getAlunos().contains(usuario)){
 			redirectAttributes.addFlashAttribute("erro", "Você não possui permissão de acesso.");
 			return "redirect:/jogo/listar";
 		}
-		model.addAttribute("action", "rodadas");
+		
 		if(jogo.getAlunos().contains(usuario) && !jogo.isStatus()){
 			redirectAttributes.addFlashAttribute("erro", "Jogo não está ativo no momento. "
 					+ "Para maiores informações "+jogo.getProfessor().getEmail());
@@ -110,8 +111,10 @@ public class RodadaController {
 		if((jogo.getRodadas() == null) || (jogo.getRodadas().isEmpty())){
 			model.addAttribute("info", "Nenhuma rodada cadastrada no momento.");
 		}else{
-			model.addAttribute("rodadas", jogo.getRodadas());
+			List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
+			model.addAttribute("rodadas", rodadas);
 		}
+		model.addAttribute("action", "rodadas");
 		model.addAttribute("jogo", jogo);
 		return "rodada/listar";
 	}
@@ -162,7 +165,7 @@ public class RodadaController {
 			Formulario formulario = formularioService.find(Formulario.class, rodada.getFormulario().getId());
 			rodada.setFormulario(formulario);
 			rodadaService.save(rodada);
-			rodadaEquipeService.setStatusEquipeRodada(rodada, jogo.getEquipes(), true);
+			rodadaEquipeService.setStatusEquipeRodada(rodada, jogo.getEquipes(), false);
 		}catch(Exception e){
 			redirectAttributes.addFlashAttribute("erro", "Erro ao tentar persistir os dados.");
 			return "redirect:/jogo/"+id+"/rodada/nova";
@@ -259,7 +262,7 @@ public class RodadaController {
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/editar", method = RequestMethod.GET)
-	public String editarEquipe(@PathVariable("idJogo") Integer idJogo,
+	public String editarRodada(@PathVariable("idJogo") Integer idJogo,
 			@PathVariable("id") Integer id, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 		
@@ -311,10 +314,10 @@ public class RodadaController {
 			return "redirect:/jogo/" + id + "/rodada/" + rodada.getId()
 					+ "/editar";
 		}
-		
-		Rodada roAnterior = rodadaService.find(Rodada.class, rodada.getId());
+
+		Formulario formulario = formularioService.find(Formulario.class, rodada.getFormulario().getId());
+		rodada.setFormulario(formulario);
 		rodada.setJogo(jogo);
-		rodada.setFormulario(roAnterior.getFormulario());
 		if(rodada.getModelo()!= null)
 			rodada.setModelo(documentoService.find(Documento.class, rodada.getModelo().getId()));
 		try{
@@ -328,16 +331,16 @@ public class RodadaController {
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/excluir", method = RequestMethod.GET)
 	public String excluir(@PathVariable("idJogo") Integer idJogo,
-			@PathVariable("idEquipe") Integer id, HttpSession session,
+			@PathVariable("id") Integer id, HttpSession session,
 			RedirectAttributes redirectAttributes) {
+		
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		Rodada rodada = rodadaService.find(Rodada.class, id);
-
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		Rodada rodada = rodadaService.find(Rodada.class, id);
 		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
 			redirectAttributes.addFlashAttribute("erro",
 					"Rodada inexistente");
@@ -350,10 +353,12 @@ public class RodadaController {
 			try{
 				jogo.getRodadas().remove(rodada);
 				jogoService.update(jogo);
+				rodadaEquipeService.deletePor(rodada);
 				rodadaService.delete(rodada);
 			}catch(Exception e){
 				redirectAttributes.addFlashAttribute("erro",
 						"Houve algum problema ao tentar remover uma rodada.");
+				return "redirect:/jogo/" + jogo.getId() + "/rodada/"+rodada.getId()+"/detalhes";
 			}
 			redirectAttributes.addFlashAttribute("info",
 					"Rodada removida com sucesso.");

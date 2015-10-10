@@ -28,6 +28,8 @@ public class Constants {
 
 	public static final String REDIRECT_PAGINA_LISTAR_JOGO = "redirect:/jogo/listar";
 	
+	public static final String REDIRECT_PAGINA_LISTAR_FORMULARIOS = "redirect:/formularios";
+	
 	public static final String REDIRECT_PAGINA_LOGIN = "redirect:/login";
 	
 	/** Mensagens */

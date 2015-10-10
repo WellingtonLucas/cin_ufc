@@ -17,17 +17,19 @@
 	              <a href="#" class="dropdown-toggle glyphicon glyphicon-menu-down btn-lg" data-toggle="dropdown" role="button" 
 	              aria-haspopup="true" aria-expanded="false"></a>
 	              <ul class="dropdown-menu">
-	                <li><a href="<c:url value="/usuario/perfil" />">Perfil</a></li>
-	                <li><a href="#">Another action</a></li>
-	                <li><a href="#">Something else here</a></li>
+	              	<li><a class="glyphicon glyphicon-user" href="<c:url value="/usuario/profile" />">&nbsp;Perfil</a></li>
+	                <li><a class="glyphicon glyphicon-edit" href="<c:url value="/usuario/perfil" />">&nbsp;Editar&nbsp;Perfil</a></li>
 	                <li role="separator" class="divider"></li>
-	                <li class="dropdown-header">Nav header</li>
-	                <li><a href="#">Separated link</a></li>
-	                <li><a href="#">One more separated link</a></li>
+	                <!-- <li class="dropdown-header">Nav header</li> -->
+	                <li>
+	                	<a class="glyphicon glyphicon-log-out btn-lg" data-tooggle="tooltip"  data-placement="bottom"
+							title="Sair" href="<c:url value="/j_spring_security_logout" />">
+							Sair
+						</a>
+					</li>
+					<li></li>
 	              </ul>
 	            </li>
-				<li><a class="glyphicon glyphicon-log-out btn-lg" data-tooggle="tooltip"  data-placement="bottom"
-				title="Sair" href="<c:url value="/j_spring_security_logout" />"></a></li>
 			</ul>
 			<p class="navbar-right navbar-text">
 				Bem Vindo ${usuario.nome}!<br>

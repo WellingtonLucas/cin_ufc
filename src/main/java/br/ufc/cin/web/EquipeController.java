@@ -9,6 +9,7 @@ import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_EQUIPE;
 import static br.ufc.cin.util.Constants.PAGINA_DETALHES_EQUIPE;
+import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
@@ -36,11 +37,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
+import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.UsuarioService;
 
@@ -60,6 +63,9 @@ public class EquipeController {
 
 	@Inject
 	private DocumentoService documentoService;
+	
+	@Inject
+	private FormularioService formularioService;
 	
 	@RequestMapping(value = "/jogo/{id}/equipe/nova", method = RequestMethod.GET)
 	public String cadastrarFrom(@PathVariable("id") Integer id, Model model,
@@ -574,6 +580,65 @@ public class EquipeController {
 		return "equipe/avaliacoes";
 	}
 	
+	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/entrega/{id}/formulario/{idForm}/avaliacao", method = RequestMethod.GET)
+	public String avaliacao(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
+			@PathVariable("id") Integer id, Model model, HttpSession session, @PathVariable("idEquipe") Integer idEquipe,
+			RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if(jogo == null){
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
+		if (equipe == null || !jogo.getEquipes().contains(equipe)) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_EQUIPE_INEXISTENTE);
+			return "redirect:/jogo/" + idJogo + "/equipes";
+		}
+		Formulario formulario = formularioService.find(Formulario.class, idForm);
+		if (formulario == null) {
+			redirectAttributes.addFlashAttribute("erro","Formulário inexistente.");
+			return REDIRECT_PAGINA_LISTAR_FORMULARIOS;
+		}
+		Entrega entrega = entregaService.find(Entrega.class, id);
+		if (entrega == null) {
+			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
+			return "redirect:/jogo/"+ idJogo +"/rodadas";
+		}
+		
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		Equipe equipeAluno = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+
+		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
+			model.addAttribute("permissao", "professor");
+			model.addAttribute("equipe", equipe);
+		}else if(equipeAluno != null){
+			model.addAttribute("permissao", "aluno");
+			model.addAttribute("equipe", equipeAluno);
+		}else{			
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		model.addAttribute("action", "avaliacao");
+		model.addAttribute("formulario", formulario);
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("entrega", entrega);
+
+		return "equipe/avaliacao";
+	}
+
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

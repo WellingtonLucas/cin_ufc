@@ -3,8 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <div class="col-sm-3 col-md-2 sidebar">
 	<ul class="nav nav-sidebar">
-		<c:if test="${action == 'home'}">
+		<c:if test="${action == 'home' || action == 'perfil' || action == 'profile'}">
 			<li class="active"><a href="<c:url value ="/jogo/novo-jogo"></c:url>">Novo Jogo</a></li>
+			<li><a href="<c:url value ="/formularios"></c:url>">Formulários&nbsp;</a></li>
 		</c:if>
 		<c:if test="${(permissao == 'professor')||(permissao == 'aluno') || (permissao == 'jogador')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
@@ -14,8 +15,11 @@
 		</c:if>
 		<c:if test="${permissao == 'professor'}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>">Participantes do Jogo</a></li>
-			<li><a href="<c:url value ="/jogo/${jogo.id}/formularios"></c:url>">Formulários&nbsp;</a></li>
+			<li><a href="<c:url value ="/formularios"></c:url>">Formulários&nbsp;</a></li>
 			<hr>
+		</c:if>
+		<c:if test="${permissao == 'professorForm'}">
+			<li><a href="<c:url value ="/formularios"></c:url>">Formulários&nbsp;</a></li>
 		</c:if>
 		
 		<c:if test="${(action == 'participantesJogo')}">
@@ -41,11 +45,11 @@
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome }</a></li>
 		</c:if>
-		<c:if test="${(action == 'formularios') && (permissao == 'professor')}">
-			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/formulario"></c:url>">Criar questionário</a></li>
+		<c:if test="${(action == 'formularios') && (permissao == 'professorForm')}">
+			<li class="active"><a href="<c:url value ="/formulario"></c:url>">Criar Formulário</a></li>
 		</c:if>
-		<c:if test="${permissao== 'professor' && ((action == 'detalhesFormulario') || (action == 'responder'))}">
-			<li><a href="<c:url value ="/jogo/${jogo.id}/formulario"></c:url>">Criar questionário</a></li>
+		<c:if test="${permissao== 'professorForm' && ((action == 'detalhesFormulario') || (action == 'responder'))}">
+			<li class="active"><a href="<c:url value ="/formulario"></c:url>">Criar Formulário</a></li>
 		</c:if>
 		<c:if test="${(action == 'detalhesUsuario')}">
 			<c:if test="${ (permissao == 'professor') }">
@@ -84,7 +88,7 @@
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/detalhes"></c:url>">${rodada.nome }</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>">Rodadas</a></li>
 			<hr>
-			<li><a href="<c:url value ="/jogo/${jogo.id}/formularios"></c:url>">Formulários&nbsp;</a></li>
+			<li><a href="<c:url value ="/formularios"></c:url>">Formulários&nbsp;</a></li>
 		</c:if>
 		<c:if test="${(action =='submissoes') && ((permissao == 'professor')||(permissao == 'aluno'))}">
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/detalhes"></c:url>">${rodada.nome }</a></li>

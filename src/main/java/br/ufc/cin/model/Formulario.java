@@ -94,4 +94,14 @@ public class Formulario {
 	public String toString() {
 		return "Formulario id: " + getId() + ", titulo: " + getTitulo();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Formulario)){
+			return false;
+		}
+		Formulario formulario = (Formulario) obj;
+		
+		return toString().equals(formulario.toString());
+	}
 }

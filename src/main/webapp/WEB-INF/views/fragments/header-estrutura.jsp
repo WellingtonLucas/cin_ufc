@@ -15,6 +15,7 @@
 <link href="<c:url value="/resources/css/estilo.css"/>" rel="stylesheet" />
 <link href="<c:url value="/resources/css/timeline-dotted.css"/>" rel="stylesheet" />
 <link href="<c:url value="/resources/css/dynamic-avatar-blur.css"/>" rel="stylesheet" />
+<link href="<c:url value="/resources/css/simple-user-profile.css"/>" rel="stylesheet" />
 <c:if test="${action == 'rodadas' }">
 	<link href="<c:url value="/resources/css/smooth-animated-thumbnails.css"/>" rel="stylesheet" />
 </c:if>

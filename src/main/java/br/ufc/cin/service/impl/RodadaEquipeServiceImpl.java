@@ -92,4 +92,14 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 		return true;
 	}
 
+	@Override
+	public void deletePor(Rodada rodada) {
+		List<StatusRodadaEquipe> rodadaEquipe = rodadaEquipeRepository.find(rodada);
+		if(rodadaEquipe != null){
+			for (StatusRodadaEquipe statusRodadaEquipe : rodadaEquipe) {
+				delete(statusRodadaEquipe);
+			}
+		}
+	}
+
 }

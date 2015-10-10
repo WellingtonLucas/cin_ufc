@@ -102,7 +102,17 @@ public class Resposta {
 	}
 	
 	public String toString() {
-		return "Pergunta id: " + getId();
+		return "Resposta id: " + getId();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Resposta)){
+			return false;
+		}
+		Resposta resposta = (Resposta) obj;
+		
+		return toString().equals(resposta.toString());
 	}
 	
 }

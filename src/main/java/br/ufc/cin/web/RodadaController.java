@@ -222,12 +222,18 @@ public class RodadaController {
 			rodada.setStatusPrazo(true);
 		}
 		
-		
 		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
 			model.addAttribute("permissao", "professor");
 		}else if(rodada.getJogo().getEquipes().contains(equipe)){
-			StatusRodadaEquipe rodadaEquipe = rodadaEquipeService.atualizaStatusRodadaEquipe(reaberturaSubmissaoService.find(equipe, rodada));
-			model.addAttribute("rodadaEquipe", rodadaEquipe);
+			ReaberturaSubmissao reaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
+			if(reaberturaSubmissao != null){
+				StatusRodadaEquipe rodadaEquipe = rodadaEquipeService.atualizaStatusRodadaEquipe(reaberturaSubmissao);
+				model.addAttribute("rodadaEquipe", rodadaEquipe);
+			}else{
+				StatusRodadaEquipe rodadaEquipe =new StatusRodadaEquipe();
+				rodadaEquipe.setAtiva(false);
+				model.addAttribute("rodadaEquipe", rodadaEquipe);
+			}
 			model.addAttribute("equipe", equipe);
 			model.addAttribute("permissao", "aluno");
 			model.addAttribute("reaberturaSubmissao", new ReaberturaSubmissao());

@@ -54,7 +54,7 @@
 												<a
 													href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
 													<img class="img-circle"
-													src="<c:url value="/resources/imagens/equipe.png" />"
+													src="<c:url value="/resources/imagens/boxvazia.gif" />"
 													alt="" width="200" height="200" >
 												</a>
 												<div class="caption">
@@ -83,7 +83,7 @@
 												<a
 													href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
 													<img class="img-circle"
-													src="<c:url value="/resources/imagens/equipe.png" />"
+													src="<c:url value="/resources/imagens/boxvazia.gif" />"
 													alt="" width="200" height="200" >
 												</a>
 												<div class="caption">

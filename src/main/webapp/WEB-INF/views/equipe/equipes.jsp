@@ -62,7 +62,7 @@
 					            </div>
 					        </div>
 					        <c:if test="${equipe.logo ==null }">
-					       		<img class="src-image"  src="<c:url value="/resources/imagens/equipe.png" />"/>
+					       		<img class="src-image"  src="<c:url value="/resources/imagens/boxvazia.gif" />"/>
 					       	</c:if>
 					        <c:if test="${equipe.logo !=null }">
 					        	<img class="src-image" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }"/>

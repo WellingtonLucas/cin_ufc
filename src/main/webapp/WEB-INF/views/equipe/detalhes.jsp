@@ -47,7 +47,7 @@
 					</c:if>
 					<c:if test="${ equipe.logo == null}">
 						<div  class="col-sm-12">
-							<img class="img-thumbnail"  src="<c:url value="/resources/imagens/equipe.png" />" alt="Logo da equipe" width="200" height="200" />
+							<img class="img-thumbnail"  src="<c:url value="/resources/imagens/boxvazia.gif" />" alt="Logo da equipe" width="200" height="200" />
 						</div>
 					</c:if>
 					<div  class="col-sm-12">
@@ -153,7 +153,7 @@
 								<div class="timeline-centered">
 	    							<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
 										<c:if test="${entregaId.index == 0 }">
-											<article class="timeline-entry">
+											<div class="timeline-entry">
 												<div class="timeline-entry-inner">
 													<time class="timeline-time" datetime="${entrega.dia }">
 														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
@@ -169,7 +169,7 @@
 														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
 													</div>
 												</div>
-											</article>
+											</div>
 										</c:if>
 										<c:if test="${(entregaId.index != 0) && (entregaId.index % 2 == 1) }">	
 											<article class="timeline-entry left-aligned">

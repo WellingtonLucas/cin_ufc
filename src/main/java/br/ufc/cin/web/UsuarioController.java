@@ -316,7 +316,7 @@ public class UsuarioController {
 		model.addAttribute("action", "avaliacaoDoAluno");
 		model.addAttribute("formulario", resposta.getFormulario());
 		model.addAttribute("jogo", jogo);
-		model.addAttribute("entrega", resposta.getEntrega());
+		model.addAttribute("resposta", resposta);
 		return "jogador/avaliacao";
 	}
 

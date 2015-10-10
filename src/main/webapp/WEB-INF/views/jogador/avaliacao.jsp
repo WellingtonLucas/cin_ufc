@@ -50,47 +50,47 @@
 								</div>
 								<div class="radio panel-body">
 									<label class="col-sm-10">
-										<c:if test="${pergunta.opcoes[0].id == entrega.gabarito.opcoes[questId.index].id }">
+										<c:if test="${pergunta.opcoes[0].id == resposta.opcoes[questId.index].id }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR1" disabled="disabled" checked="checked">										
 										</c:if>
-										<c:if test="${!(pergunta.opcoes[0].id == entrega.gabarito.opcoes[questId.index].id) }">
+										<c:if test="${!(pergunta.opcoes[0].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR1" disabled="disabled">
 										</c:if>
 										${pergunta.opcoes[0].descricao }
 									</label>
 								
 									<label class="col-sm-10">
-										<c:if test="${pergunta.opcoes[1].id == entrega.gabarito.opcoes[questId.index].id }">
+										<c:if test="${pergunta.opcoes[1].id == resposta.opcoes[questId.index].id }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR2" disabled="disabled" checked="checked">										
 										</c:if>
-										<c:if test="${!(pergunta.opcoes[1].id == entrega.gabarito.opcoes[questId.index].id) }">
+										<c:if test="${!(pergunta.opcoes[1].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR2" disabled="disabled">
 										</c:if>
 										${pergunta.opcoes[1].descricao }
 									</label>
 									<label class="col-sm-10">
-										<c:if test="${pergunta.opcoes[2].id == entrega.gabarito.opcoes[questId.index].id }">
+										<c:if test="${pergunta.opcoes[2].id == resposta.opcoes[questId.index].id }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR3" disabled="disabled" checked="checked">										
 										</c:if>
-										<c:if test="${!(pergunta.opcoes[2].id == entrega.gabarito.opcoes[questId.index].id) }">
+										<c:if test="${!(pergunta.opcoes[2].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR3" disabled="disabled">
 										</c:if>
 										${pergunta.opcoes[2].descricao }
 									</label>
 									<label class="col-sm-10">
-										<c:if test="${pergunta.opcoes[3].id == entrega.gabarito.opcoes[questId.index].id }">
+										<c:if test="${pergunta.opcoes[3].id == resposta.opcoes[questId.index].id }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR4" disabled="disabled" checked="checked">										
 										</c:if>
-										<c:if test="${!(pergunta.opcoes[3].id == entrega.gabarito.opcoes[questId.index].id) }">
+										<c:if test="${!(pergunta.opcoes[3].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR4" disabled="disabled">
 										</c:if>
 										${pergunta.opcoes[3].descricao }
 									</label>
 									<label class="col-sm-10">
-										<c:if test="${pergunta.opcoes[4].id == entrega.gabarito.opcoes[questId.index].id }">
+										<c:if test="${pergunta.opcoes[4].id == resposta.opcoes[questId.index].id }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR5" disabled="disabled" checked="checked">										
 										</c:if>
-										<c:if test="${!(pergunta.opcoes[4].id == entrega.gabarito.opcoes[questId.index].id) }">
+										<c:if test="${!(pergunta.opcoes[4].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR5" disabled="disabled">
 										</c:if>
 										${pergunta.opcoes[4].descricao }

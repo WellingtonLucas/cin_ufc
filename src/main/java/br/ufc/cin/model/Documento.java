@@ -100,14 +100,12 @@ public class Documento {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Documento) {
-			Documento other = (Documento) obj;
-			if (other != null && other.getId() != null && this.id != null
-					&& other.getId().equals(this.id)) {
-				return true;
-			}
+		if(!(obj instanceof Documento)){
+			return false;
 		}
-		return false;
+		Documento documento = (Documento) obj;
+		
+		return toString().equals(documento.toString());
 	}
 
 }

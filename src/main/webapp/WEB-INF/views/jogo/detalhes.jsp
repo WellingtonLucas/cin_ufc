@@ -67,7 +67,7 @@
 							<label>-</label>
 						</c:if>
 						<c:if test="${not empty jogo.regras }">
-							<article><label>${jogo.regras }</label></article>
+							<article><p class="text-justify">${jogo.regras }</p></article>
 						</c:if>
 					</div>		
 				</div>

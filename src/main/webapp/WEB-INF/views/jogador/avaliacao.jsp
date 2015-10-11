@@ -21,7 +21,10 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<div class="col-sm-12">
-						<h2><strong>${formulario.titulo }</strong> - <small>Repondido por ${usuarioRequisitado.nome }</small></h2>						
+						<h2><strong>${formulario.titulo }</strong> - <small> Equipe: ${resposta.entrega.equipe.nome }. 
+						Rodada: ${resposta.entrega.rodada.nome }. 
+							</small>
+						</h2>						
 						<hr>				
 						<c:if test="${not empty erro}">
 							<div class="alert alert-warning alert-dismissible" role="alert">
@@ -56,7 +59,17 @@
 										<c:if test="${!(pergunta.opcoes[0].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR1" disabled="disabled">
 										</c:if>
-										${pergunta.opcoes[0].descricao }
+										<c:if test="${pergunta.opcoes[0].id == resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<c:if test="${liberaGaba }">
+												<p class="bg-success">${pergunta.opcoes[0].descricao }</p>
+											</c:if>
+											<c:if test="${!liberaGaba }">
+												<p>${pergunta.opcoes[0].descricao }</p>
+											</c:if>
+										</c:if>
+										<c:if test="${pergunta.opcoes[0].id != resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<p>${pergunta.opcoes[0].descricao }</p>
+										</c:if>
 									</label>
 								
 									<label class="col-sm-10">
@@ -66,7 +79,17 @@
 										<c:if test="${!(pergunta.opcoes[1].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR2" disabled="disabled">
 										</c:if>
-										${pergunta.opcoes[1].descricao }
+										<c:if test="${pergunta.opcoes[1].id == resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<c:if test="${liberaGaba }">
+												<p class="bg-success">${pergunta.opcoes[1].descricao }</p>
+											</c:if>
+											<c:if test="${!liberaGaba }">
+												<p>${pergunta.opcoes[3].descricao }</p>
+											</c:if>
+										</c:if>
+										<c:if test="${pergunta.opcoes[1].id != resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<p>${pergunta.opcoes[1].descricao }</p>
+										</c:if>
 									</label>
 									<label class="col-sm-10">
 										<c:if test="${pergunta.opcoes[2].id == resposta.opcoes[questId.index].id }">
@@ -75,7 +98,17 @@
 										<c:if test="${!(pergunta.opcoes[2].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR3" disabled="disabled">
 										</c:if>
-										${pergunta.opcoes[2].descricao }
+										<c:if test="${pergunta.opcoes[2].id == resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<c:if test="${liberaGaba }">
+												<p class="bg-success">${pergunta.opcoes[2].descricao }</p>
+											</c:if>
+											<c:if test="${!liberaGaba }">
+												<p>${pergunta.opcoes[3].descricao }</p>
+											</c:if>
+										</c:if>
+										<c:if test="${pergunta.opcoes[2].id != resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<p>${pergunta.opcoes[2].descricao }</p>
+										</c:if>
 									</label>
 									<label class="col-sm-10">
 										<c:if test="${pergunta.opcoes[3].id == resposta.opcoes[questId.index].id }">
@@ -84,7 +117,17 @@
 										<c:if test="${!(pergunta.opcoes[3].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR4" disabled="disabled">
 										</c:if>
-										${pergunta.opcoes[3].descricao }
+										<c:if test="${pergunta.opcoes[3].id == resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<c:if test="${liberaGaba }">
+												<p class="bg-success">${pergunta.opcoes[3].descricao }</p>
+											</c:if>
+											<c:if test="${!liberaGaba }">
+												<p>${pergunta.opcoes[3].descricao }</p>
+											</c:if>
+										</c:if>
+										<c:if test="${pergunta.opcoes[3].id != resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<p>${pergunta.opcoes[3].descricao }</p>
+										</c:if>
 									</label>
 									<label class="col-sm-10">
 										<c:if test="${pergunta.opcoes[4].id == resposta.opcoes[questId.index].id }">
@@ -93,7 +136,17 @@
 										<c:if test="${!(pergunta.opcoes[4].id == resposta.opcoes[questId.index].id) }">
 											<input type="radio" name="opcao${questId.index}" id="opcaoR5" disabled="disabled">
 										</c:if>
-										${pergunta.opcoes[4].descricao }
+										<c:if test="${pergunta.opcoes[4].id == resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<c:if test="${liberaGaba }">
+												<p class="bg-success">${pergunta.opcoes[4].descricao }</p>
+											</c:if>
+											<c:if test="${!liberaGaba }">
+												<p>${pergunta.opcoes[4].descricao }</p>
+											</c:if>
+										</c:if>
+										<c:if test="${pergunta.opcoes[4].id != resposta.entrega.gabarito.opcoes[questId.index].id }">
+											<p>${pergunta.opcoes[4].descricao }</p>
+										</c:if>
 									</label>
 								</div>
 							</div>

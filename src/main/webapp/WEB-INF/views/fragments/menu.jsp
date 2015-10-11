@@ -7,7 +7,7 @@
 			<li class="active"><a href="<c:url value ="/jogo/novo-jogo"></c:url>">Novo Jogo</a></li>
 			<li><a href="<c:url value ="/formularios"></c:url>">Formulários&nbsp;</a></li>
 		</c:if>
-		<c:if test="${(permissao == 'professor')||(permissao == 'aluno') || (permissao == 'jogador')}">
+		<c:if test="${(permissao == 'professor')||(permissao == 'aluno') ||(permissao == 'alunoLogado') || (permissao == 'jogador')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>">Equipes&nbsp;</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>">Rodadas</a></li>
@@ -52,7 +52,7 @@
 			<li class="active"><a href="<c:url value ="/formulario"></c:url>">Criar Formulário</a></li>
 		</c:if>
 		<c:if test="${(action == 'detalhesUsuario')}">
-			<c:if test="${ (permissao == 'professor') }">
+			<c:if test="${ (permissao == 'professor' || permissao== 'alunoLogado') }">
 				<li><a href="<c:url value ="/usuario/${usuarioParticipante.id}/jogo/${jogo.id}/avaliacoes"></c:url>">Avaliações Realizadas</a></li>
 			</c:if>
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome }</a></li>
@@ -98,11 +98,15 @@
 		</c:if>
 		<c:if test="${(action =='avaliacao') && ((permissao == 'professor')||(permissao == 'aluno'))}">
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id}/avaliacoes"></c:url>">Avaliações</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome }</a></li>
 		</c:if>
 		
-		<c:if test="${(action =='avaliacaoDoAluno') && (permissao == 'professor')}">
+		<c:if test="${(action =='avaliacaoDoAluno') && (permissao == 'professor' || permissao== 'alunoLogado')}">
 			<li><a href="<c:url value ="/usuario/${usuarioRequisitado.id }/detalhes/${jogo.id}"></c:url>">${usuarioRequisitado.nome }</a></li>
 			<li class="active"><a href="<c:url value ="/usuario/${usuarioRequisitado.id }/jogo/${jogo.id}/avaliacoes"></c:url>">Avaliações</a></li>
+		</c:if>
+		<c:if test="${(action =='avaliacoesDoAluno') && (permissao == 'professor' || permissao== 'alunoLogado')}">
+			<li class="active"><a href="<c:url value ="/usuario/${usuarioRequisitado.id }/detalhes/${jogo.id}"></c:url>">${usuarioRequisitado.nome }</a></li>
 		</c:if>
 	</ul>
 </div>

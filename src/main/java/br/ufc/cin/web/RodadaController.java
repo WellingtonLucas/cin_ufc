@@ -207,11 +207,8 @@ public class RodadaController {
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		
 		Calendar calendario = Calendar.getInstance();
-		Date data =  calendario.getTime();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		simpleDateFormat.format(data);
 		long termino = rodada.getTermino().getTime();
-		long tempoAtual = data.getTime();
+		long tempoAtual = calendario.getTimeInMillis();
 		
 		if((termino < tempoAtual) && rodada.isStatus()){
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/inativar";

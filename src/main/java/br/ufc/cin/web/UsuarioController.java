@@ -8,6 +8,7 @@ import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -129,8 +130,10 @@ public class UsuarioController {
 		
 		if(logado.equals(jogo.getProfessor())){
 			model.addAttribute("permissao", "professor");
-		}else  if(logado.getEquipes().contains(equipe)){
+		}else  if(logado.getEquipes().contains(equipe) && !logado.equals(usuario)){
 			model.addAttribute("permissao", "aluno");
+		}else if(logado.equals(usuario) && logado.getEquipes().contains(equipe)){
+			model.addAttribute("permissao", "alunoLogado");
 		}else{
 			redirectAttributes.addFlashAttribute("erro", "Você não possui permissão de acesso.");
 			return "redirect:/jogo/" + idJogo + "/equipe/"+equipe.getId();
@@ -240,7 +243,7 @@ public class UsuarioController {
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
 			redirectAttributes.addFlashAttribute("erro",
-					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+					"Jogo inativo no momento. Para mais informações "+jogo.getProfessor().getEmail());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
 			redirectAttributes.addFlashAttribute("erro",
@@ -258,6 +261,8 @@ public class UsuarioController {
 		}
 		if (usuario.equals(jogo.getProfessor())) {
 			model.addAttribute("permissao", "professor");
+		}else if(usuario.equals(usuarioRequisitado) && jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "alunoLogado");
 		}else {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_PERMISSAO_NEGADA);
@@ -307,19 +312,32 @@ public class UsuarioController {
 		
 		if (usuario.equals(jogo.getProfessor())) {			
 			model.addAttribute("permissao", "professor");
+		}else if(usuario.equals(requisitado) && jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "alunoLogado");
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
+		
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("usuarioRequisitado", requisitado);
 		model.addAttribute("action", "avaliacaoDoAluno");
 		model.addAttribute("formulario", resposta.getFormulario());
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("resposta", resposta);
+		model.addAttribute("liberaGaba", verificaPrazo(resposta));
 		return "jogador/avaliacao";
 	}
-
+	
+	private boolean verificaPrazo(Resposta resposta){
+		Calendar calendario = Calendar.getInstance();
+		long termino = resposta.getEntrega().getRodada().getTermino().getTime();
+		long tempoAtual = calendario.getTimeInMillis();
+		if(termino<tempoAtual)
+			return true;
+		return false;
+	}
+	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

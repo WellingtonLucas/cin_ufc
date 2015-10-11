@@ -52,7 +52,7 @@
 											<td>Curso:</td>
 											<td>${usuarioParticipante.curso }</td>
 										</tr>
-										<c:if test="${permissao == 'professor' }">
+										<c:if test="${permissao == 'professor' || permissao == 'alunoLogado'}">
 											<tr>
 												<td>Matricula:</td>
 												<td>${usuarioParticipante.matricula }</td>
@@ -68,7 +68,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<c:if test="${permissao == 'professor' }">
+								<c:if test="${permissao == 'professor' || permissao == 'alunoLogado' }">
 									<a href="<c:url value="/usuario/${usuarioParticipante.id }/jogo/${jogo.id }/avaliacoes" />" class="btn btn-primary">Avaliações Realizadas</a>
 								</c:if> 
 							</div>

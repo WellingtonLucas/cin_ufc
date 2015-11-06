@@ -40,6 +40,9 @@
 			<c:if test="${ (permissao == 'professor') }">
 				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/vincular"></c:url>">Vincular Membros</a></li>
 			</c:if>
+			<c:if test="${ (permissao == 'professor' || permissao== 'alunoLogado') }">
+				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/historico"></c:url>">Histórico de Notas</a></li>
+			</c:if>
 		</c:if>
 		<c:if test="${(action == 'vincularEquipe')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
@@ -54,6 +57,7 @@
 		<c:if test="${(action == 'detalhesUsuario')}">
 			<c:if test="${ (permissao == 'professor' || permissao== 'alunoLogado') }">
 				<li><a href="<c:url value ="/usuario/${usuarioParticipante.id}/jogo/${jogo.id}/avaliacoes"></c:url>">Avaliações Realizadas</a></li>
+				<li><a href="<c:url value ="/usuario/${usuarioParticipante.id }/jogo/${jogo.id}/historico"></c:url>">Histórico de Notas</a></li>
 			</c:if>
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome }</a></li>
 		</c:if>
@@ -107,6 +111,9 @@
 		</c:if>
 		<c:if test="${(action =='avaliacoesDoAluno') && (permissao == 'professor' || permissao== 'alunoLogado')}">
 			<li class="active"><a href="<c:url value ="/usuario/${usuarioRequisitado.id }/detalhes/${jogo.id}"></c:url>">${usuarioRequisitado.nome }</a></li>
+		</c:if>
+		<c:if test="${(action =='historico') && (permissao == 'professor' || permissao== 'alunoLogado')}">
+			<li class="active"><a href="<c:url value ="/usuario/${requisitado.id }/detalhes/${jogo.id}"></c:url>">${requisitado.nome }</a></li>
 		</c:if>
 	</ul>
 </div>

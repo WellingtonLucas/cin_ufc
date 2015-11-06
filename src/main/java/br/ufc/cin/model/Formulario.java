@@ -92,7 +92,7 @@ public class Formulario {
 	}
 
 	public String toString() {
-		return "Formulario id: " + getId() + ", titulo: " + getTitulo();
+		return "Formulario id: " + getId() + ", titulo: " + getTitulo()+";";
 	}
 	
 	@Override

@@ -71,7 +71,7 @@ public class ReaberturaSubmissao {
 
 	@Override
 	public String toString() {
-		return "Id: "+getId()+" rodada: "+ getRodada().getNome()+" qtdDias "+ getQuantidadeDia();
+		return "Id: "+getId()+" rodada: "+ getRodada().getNome()+" qtdDias "+ getQuantidadeDia()+";";
 	}
 	
 	@Override

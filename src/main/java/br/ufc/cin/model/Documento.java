@@ -95,7 +95,7 @@ public class Documento {
 	@Override
 	public String toString() {
 		return "Documento id: " + getId() + "; Nome: " + getNomeOriginal()
-				+ "; Extensão: " + getExtensao();
+				+ "; Extensão: " + getExtensao()+";";
 	}
 
 	@Override

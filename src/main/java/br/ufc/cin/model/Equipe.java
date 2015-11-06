@@ -56,7 +56,7 @@ public class Equipe {
 	@OneToMany(mappedBy = "equipe", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE})
 	private List<StatusRodadaEquipe> statusRodadaEquipes;
 	
-	@OneToMany(mappedBy = "equipe", cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE})
+	@OneToMany(mappedBy = "equipe", cascade={CascadeType.REMOVE})
 	private List<ReaberturaSubmissao> reaberturaSubmissao;
 	
 	@Transient
@@ -174,7 +174,7 @@ public class Equipe {
 	}
 
 	public String toString(){
-		return "Equipe id: "+getId()+ " nome: " +getNome() ;
+		return "Equipe id: "+getId()+ " nome: " +getNome()+";" ;
 	}
 	@Override
 	public boolean equals(Object obj) {

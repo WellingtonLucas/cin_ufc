@@ -61,11 +61,16 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 	public StatusRodadaEquipe atualizaStatusRodadaEquipe(ReaberturaSubmissao reabertura) {
 		StatusRodadaEquipe status = find(reabertura.getEquipe(), reabertura.getRodada());
 		if(status != null){
+			if(!status.isAtiva())
+				return status;
 			status.setAtiva(verificaPrazo(reabertura));
 		}else{
 			status = new StatusRodadaEquipe();
+			status.setEquipe(reabertura.getEquipe());
+			status.setRodada(reabertura.getRodada());
 			status.setAtiva(false);
 		}
+		update(status);
 		return status;
 	}
 	
@@ -86,7 +91,7 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 		Long prazoSubmissao =reabertura.getRodada().getPrazoSubmissao().getTime(); 
 		Long prazoFinal = prazoSubmissao + (umDiaTimeInMillis() * qtdDias);
 		
-		if(prazoFinal > hojeMillis){
+		if((prazoFinal < hojeMillis || reabertura.getRodada().isStatusPrazo())){
 			return false;
 		}
 		return true;
@@ -100,6 +105,19 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 				delete(statusRodadaEquipe);
 			}
 		}
+	}
+
+	@Override
+	public boolean verificaSeTemSolicitacao(List<Equipe> equipes, Rodada rodada) {
+		for (Equipe equipe : equipes) {
+			StatusRodadaEquipe rodadaEquipe = find(equipe, rodada);
+			if(rodadaEquipe != null){
+				if(rodadaEquipe.isAtiva()){
+					return  true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

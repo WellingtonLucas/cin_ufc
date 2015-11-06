@@ -221,7 +221,7 @@ public class Jogo implements Serializable {
 	}
 
 	public String toString() {
-		return "Jogo id: " + getId() + ", nome: " + getNomeDoCurso();
+		return "Jogo id: " + getId() + ", nome: " + getNomeDoCurso()+";";
 	}
 	
 	@Override

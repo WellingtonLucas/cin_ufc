@@ -46,4 +46,26 @@ public class RespostaServiceImpl extends GenericServiceImpl<Resposta> implements
 	public List<Resposta> find(Usuario usuarioRequisitado) {
 		return respostaRepository.find(usuarioRequisitado);
 	}
+
+	@Override
+	public List<Resposta> find(Usuario usuario, Entrega entrega) {
+		return respostaRepository.find(usuario, entrega);
+	}
+
+	@Override
+	public Resposta findUltimaRespostaPorEntrega(Usuario usuario, Entrega entrega) {
+		List<Resposta> respostas = find(usuario, entrega);
+		if(respostas != null){
+			Long maior = respostas.get(0).getDia().getTime();
+			int temp = 0;
+			for (int i = 1; i < respostas.size(); i++) {
+				if(respostas.get(i).getDia().getTime() > maior){
+					maior = respostas.get(i).getDia().getTime();
+					temp = i;
+				}
+			}
+			return respostas.get(temp);
+		}
+		return null;
+	}
 }

@@ -60,27 +60,34 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label field">Início:</label>
-							<div class="col-sm-3 field-value">
+							<div class="col-sm-4 field-value">
 								<c:if test="${empty rodada.inicio }">
 									<label>-</label>
 								</c:if>
 								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.inicio }" /></label>
 							</div>
-							<label class="col-sm-3 control-label field">Prazo de submissão:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.prazoSubmissao }">
-									<label>-</label>
-								</c:if>
-								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.prazoSubmissao }" /></label>
-							</div>
-						</div>
-						<div class="form-group">
 							<label class="col-sm-2 control-label field">Término:</label>
 							<div class="col-sm-4 field-value">
 								<c:if test="${empty rodada.termino }">
 									<label>-</label>
 								</c:if>
 								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.termino }" /></label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label field">Prazo de submissão:</label>
+							<div class="col-sm-4 field-value">
+								<c:if test="${empty rodada.prazoSubmissao }">
+									<label>-</label>
+								</c:if>
+								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.prazoSubmissao }" /></label>
+							</div>
+							<label class="col-sm-2 control-label field">Prazo de avaliacões:</label>
+							<div class="col-sm-4 field-value">
+								<c:if test="${empty rodada.terminoAvaliacao }">
+									<label>-</label>
+								</c:if>
+								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.terminoAvaliacao }" /></label>
 							</div>
 						</div>
 						
@@ -90,9 +97,40 @@
 								<label>-</label>
 							</c:if>
 							<div class="col-sm-10 field-value">
-								<label>${rodada.descricao }</label>
+								<article><label>${rodada.descricao }</label></article>
 							</div>						
 						</div>
+					
+						<div class="form-group">
+							<label class="col-sm-2 control-label field">Formulário:</label>
+							<div class="col-sm-4 field-value">
+								<c:if test="${empty rodada.formulario.titulo }">
+									<label>
+										-
+									</label>
+								</c:if>
+								<c:if test="${not empty rodada.formulario.titulo }">
+									<label>							
+										<a href="<c:url value="/formulario/${rodada.formulario.id }/detalhes" />">
+											${rodada.formulario.titulo }
+										</a>
+									</label>
+								</c:if>
+							</div>		
+							<label class="col-sm-2 control-label field">Modelo:</label>
+							<div class="col-sm-4 field-value">
+								<c:if test="${empty rodada.modelo }">
+									<label>
+										-
+									</label>
+								</c:if>
+								<c:if test="${not empty rodada.modelo }">
+									<label>
+										<a href="<c:url value="/documento/downloadDocumento/${rodada.modelo.id }" ></c:url>">${rodada.modelo.nomeOriginal }</a>
+									</label> 
+								</c:if>
+							</div>
+						</div>	
 						<c:if test="${(permissao == 'professor') || (rodada.statusPrazo) || (rodada.status && rodadaEquipe.ativa)}">
 							<form:form id="adicionarEntregaForm" role="form" class="form-horizontal" commandName="rodada"
 							 	enctype="multipart/form-data" servletRelativeAction="/jogo/${jogo.id }/rodada/entrega" method="POST">
@@ -113,36 +151,6 @@
 								</div>
 							</div>
 						</c:if>
-						<div class="form-group">
-							<label class="col-sm-2 control-label field">Formulário:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.formulario.titulo }">
-									<label>
-										-
-									</label>
-								</c:if>
-								<c:if test="${not empty rodada.formulario.titulo }">
-									<label>							
-										<a href="<c:url value="/jogo/${jogo.id }/formulario/${rodada.formulario.id }/detalhes" />">
-											${rodada.formulario.titulo }
-										</a>
-									</label>
-								</c:if>
-							</div>		
-							<label class="col-sm-2 control-label field">Modelo:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.modelo }">
-									<label>
-										-
-									</label>
-								</c:if>
-								<c:if test="${not empty rodada.modelo }">
-									<label>
-										<a href="<c:url value="/documento/downloadDocumento/${rodada.modelo.id }" ></c:url>">${rodada.modelo.nomeOriginal }</a>
-									</label> 
-								</c:if>
-							</div>
-						</div>	
 					</div>	
 					<div class="col-sm-12">
 						<hr>
@@ -265,6 +273,12 @@
 												</button>
 											</a>
 										</c:if>
+									</div>
+									<div class="col-sm-2">
+										<a id="ranking" data-toggle="modal" data-target="#confirm-gerar-ranking" href="#" 
+										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/ranking"></c:url>" data-name="${rodada.nome }">
+											<button class="btn btn-success btn-lg">Ranking&nbsp;<i class="glyphicon glyphicon-ok-circle"></i></button>
+										</a>					
 									</div>
 									<div class="col-sm-2">
 										<a id="excluir" data-toggle="modal" data-target="#confirm-delete-rodada" href="#" 

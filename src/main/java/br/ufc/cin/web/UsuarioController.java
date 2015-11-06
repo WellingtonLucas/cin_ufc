@@ -8,6 +8,7 @@ import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -30,20 +31,34 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.cin.model.Documento;
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Historico;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.Nota;
 import br.ufc.cin.model.Resposta;
+import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.CalculoNotaService;
 import br.ufc.cin.service.DocumentoService;
+import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
+import br.ufc.cin.service.HistoricoService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.RespostaService;
+import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
 @RequestMapping("usuario")
 public class UsuarioController {
 
+	@Inject
+	private CalculoNotaService calculoNotaService;
+	
+	@Inject 
+	private EntregaService entregaService;
+	
 	@Inject
 	private UsuarioService usuarioService;
 
@@ -58,6 +73,12 @@ public class UsuarioController {
 
 	@Inject
 	private DocumentoService documentoService;
+	
+	@Inject
+	private RodadaService rodadaService;
+	
+	@Inject
+	private HistoricoService historicoService;
 	
 	@RequestMapping(value = "/cadastre-se", method = RequestMethod.POST)
 	public String cadastrarPessoa(HttpSession session, Model model,
@@ -158,6 +179,7 @@ public class UsuarioController {
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public String profile(Model model, HttpSession session) {
 		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "profile");
 		return "jogador/profile";
@@ -285,7 +307,6 @@ public class UsuarioController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
 		Resposta resposta = respostaService.find(Resposta.class, idRes);
 		if (resposta == null) {
 			redirectAttributes.addFlashAttribute("erro", "Avaliação inexistente.");
@@ -328,7 +349,135 @@ public class UsuarioController {
 		model.addAttribute("liberaGaba", verificaPrazo(resposta));
 		return "jogador/avaliacao";
 	}
+
+	@RequestMapping(value = "/{id}/jogo/{idJogo}/historico", method = RequestMethod.GET)
+	public String historico(@PathVariable("idJogo") Integer idJogo, @PathVariable("id") Integer id, 
+			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if(jogo == null){
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Usuario requisitado = usuarioService.find(Usuario.class, id);
+		if(!jogo.getAlunos().contains(requisitado)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Aluno não existe ou não pertence ao jogo.");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		if(jogo.getRodadas() == null || jogo.getRodadas().isEmpty()){
+			redirectAttributes.addFlashAttribute("erro",
+					"O jogo ainda não possui rodadas.");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+			
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		
+		if (usuario.equals(jogo.getProfessor())) {			
+			model.addAttribute("permissao", "professor");
+		}else if(usuario.equals(requisitado) && jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "alunoLogado");
+		}else{			
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
+		rodadas = rodadaService.atualizaStatusRodadas(rodadas);
+		
+		Historico historico = historicoService.buscarPorJogoUsuario(jogo, requisitado);
+		if(historico == null){
+			historico = criarHistorico(historico, rodadas, requisitado);
+		}else{
+			historico = atualizarHistorico(historico, rodadas, requisitado);
+		}
+		Float media = historicoService.calculaMedia(historico);
+		model.addAttribute("requisitado", requisitado);
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("historico", historico);
+		model.addAttribute("media", media);
+		model.addAttribute("action", "historico");
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("rodadas", rodadas);
+		return "jogador/historico";
+	}
+
+	private Historico atualizarHistorico(Historico historico, List<Rodada> rodadas,
+			Usuario usuario) {
+		if(historico.getNotas().size() < rodadas.size()){
+			historico = criarNovasNotas(historico, rodadas);
+		}
+		for (Rodada rodada : rodadas) {
+			if(!rodada.isStatusRaking()){//Alterar na história de liberar raking
+				if(!historico.getNotas().isEmpty()){
+					for(Nota nota: historico.getNotas()){
+						if(nota.getRodada().equals(rodada)){
+							List<Resposta> respostas = new ArrayList<Resposta>();
+							for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
+								Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
+								if(resposta != null){		
+									respostas.add(resposta);
+								}
+							}
+							if(!rodada.isStatusRaking() && !respostas.isEmpty()){
+								nota.setValor(calculoNotaService.calculoMedia(respostas));
+								historico.addNota(nota);
+							}
+						}
+					}
+				}
+			}
+		}
+		historicoService.update(historico);
+		return historico;
+	}
+
+	private Historico criarNovasNotas(Historico historico, List<Rodada> rodadas){
+		for(int i=historico.getNotas().size(); i<rodadas.size();i++){
+			Nota noaNota = new Nota();
+			noaNota.setRodada(rodadas.get(i));
+			noaNota.setValor(-1f);
+			historico.addNota(noaNota);	
+		}
+		historicoService.update(historico);
+		return historico;
+	}
 	
+	private Historico criarHistorico(Historico historico, List<Rodada> rodadas, Usuario usuario){
+		historico = new Historico();
+		historico.setJogo(rodadas.get(0).getJogo());
+		historico.setUsuario(usuario);
+		List<Nota> notas = new ArrayList<Nota>();
+		for (Rodada rodada : rodadas) {
+			List<Resposta> respostas = new ArrayList<Resposta>();
+			for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
+				Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
+				if(resposta != null){		
+					respostas.add(resposta);
+				}
+			}	
+			Nota nota = new Nota();
+			nota.setRodada(rodada);
+			if(!rodada.isStatus() && !respostas.isEmpty()){
+				nota.setValor(calculoNotaService.calculoMedia(respostas));
+			}
+			notas.add(nota);
+		}
+		historico.setNotas(notas);
+		historicoService.save(historico);
+		return historico;
+	} 
+
 	private boolean verificaPrazo(Resposta resposta){
 		Calendar calendario = Calendar.getInstance();
 		long termino = resposta.getEntrega().getRodada().getTermino().getTime();

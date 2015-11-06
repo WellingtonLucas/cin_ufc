@@ -42,6 +42,16 @@ public class Opcao {
 	}
 	
 	public String toString() {
-		return "Opcao id: " + getId() + ", descricao: " + getDescricao();
+		return "Opcao id: " + getId() + ", descricao: " + getDescricao()+";";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Opcao)){
+			return false;
+		}
+		Opcao opcao = (Opcao) obj;
+		
+		return toString().equals(opcao.toString());
 	}
 }

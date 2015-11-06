@@ -31,12 +31,12 @@
 								<c:if test="${usuario.foto == null }">
 									<img alt="Foto do usuário"
 										src="<c:url value="/resources/imagens/empty_profile.gif" />"
-										class="img-circle img-responsive" >
+										class="img-circle img-responsive" />
 								</c:if>
 								<c:if test="${usuario.foto != null }">
 									<img alt="Foto do usuário"
 										src="data:${usuario.foto.extensao };base64,${usuario.foto.encode }"
-										class="img-thumbnail img-responsive" >
+										class="img-thumbnail img-responsive" />
 								</c:if>
 							</div>
 

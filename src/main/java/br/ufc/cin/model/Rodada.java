@@ -42,6 +42,9 @@ public class Rodada {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date prazoSubmissao;
 	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date terminoAvaliacao;
+	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column
@@ -55,6 +58,12 @@ public class Rodada {
 
 	@Column
 	private boolean statusPrazo;
+	
+	@Column
+	private boolean statusAvaliacao;
+	
+	@Column
+	private boolean statusRaking;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private Documento modelo;
@@ -122,6 +131,14 @@ public class Rodada {
 		this.termino = termino;
 	}
 
+	public Date getTerminoAvaliacao() {
+		return terminoAvaliacao;
+	}
+
+	public void setTerminoAvaliacao(Date terminoAvaliacao) {
+		this.terminoAvaliacao = terminoAvaliacao;
+	}
+
 	public String getDescricao() {
 		return descricao;
 	}
@@ -153,14 +170,29 @@ public class Rodada {
 	public void setPrazoSubmissao(Date prazoSubmissao) {
 		this.prazoSubmissao = prazoSubmissao;
 	}
-
 	
+	public boolean isStatusRaking() {
+		return statusRaking;
+	}
+
+	public void setStatusRaking(boolean statusRaking) {
+		this.statusRaking = statusRaking;
+	}
+
 	public boolean isStatusPrazo() {
 		return statusPrazo;
 	}
 
 	public void setStatusPrazo(boolean statusPrazo) {
 		this.statusPrazo = statusPrazo;
+	}
+
+	public boolean isStatusAvaliacao() {
+		return statusAvaliacao;
+	}
+
+	public void setStatusAvaliacao(boolean statusAvaliacao) {
+		this.statusAvaliacao = statusAvaliacao;
 	}
 
 	@Override
@@ -175,6 +207,6 @@ public class Rodada {
 
 	@Override
 	public String toString() {
-		return "Nome: "+getNome()+" Id: "+getId();
+		return "Nome: "+getNome()+" Id: "+getId()+";";
 	}	
 }

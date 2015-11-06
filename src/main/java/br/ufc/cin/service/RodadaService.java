@@ -7,6 +7,14 @@ import br.ufc.quixada.npi.service.GenericService;
 
 public interface RodadaService extends GenericService<Rodada>{
 
-	List<Rodada> ordenaPorInicio(List<Rodada> rodadas);
+	public abstract List<Rodada> ordenaPorInicio(List<Rodada> rodadas);
+	
+	public abstract List<Rodada> atualizaStatusRodadas(List<Rodada> rodadas);
+
+	public abstract Rodada atualizaStatusRodada(Rodada rodada);
+
+	public abstract Rodada atualizaStatusPrazoRodada(Rodada rodada);
+
+	public abstract Rodada atualizaStatusAvaliacao(Rodada rodada);
 
 }

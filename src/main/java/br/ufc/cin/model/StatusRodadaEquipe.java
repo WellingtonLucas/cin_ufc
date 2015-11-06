@@ -60,7 +60,7 @@ public class StatusRodadaEquipe {
 	
 	@Override
 	public String toString() {
-		return "Id: "+getId()+" id_equipe: "+ getEquipe().getId()+ " id_rodada: "+getRodada().getId();
+		return "[Id: "+getId()+"; id_equipe: "+ getEquipe().getId()+ "; id_rodada: "+getRodada().getId()+";]";
 	}
 	
 	@Override

@@ -16,4 +16,11 @@ public interface RespostaService extends GenericService<Resposta>{
 	
 	public abstract List<Resposta> find(
 			Usuario usuarioRequisitado, Jogo jogo);
+	
+	public abstract List<Resposta> find(
+			Usuario usuario, Entrega entrega);
+	
+	public abstract Resposta findUltimaRespostaPorEntrega(
+			Usuario usuario, Entrega entrega);
+	
 }

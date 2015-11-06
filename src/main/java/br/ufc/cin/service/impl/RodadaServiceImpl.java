@@ -1,5 +1,6 @@
 package br.ufc.cin.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Named;
@@ -25,5 +26,58 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 			}
 		}
 		return rodadas;
+	}
+
+	@Override
+	public List<Rodada> atualizaStatusRodadas(List<Rodada> rodadas) {
+		Calendar calendario = Calendar.getInstance();
+		long tempoAtual = calendario.getTimeInMillis();
+		for (Rodada rodada : rodadas) {
+			if(rodada.getTermino().getTime() < tempoAtual){
+				rodada.setStatus(false);
+				update(rodada);
+			}
+		}
+		return rodadas;
+	}
+
+	@Override
+	public Rodada atualizaStatusRodada(Rodada rodada) {
+		Calendar calendario = Calendar.getInstance();
+		long tempoAtual = calendario.getTimeInMillis();
+		if(rodada.getTermino().getTime() < tempoAtual){
+			rodada.setStatus(false);
+		}else{
+			rodada.setStatus(true);
+		}
+		update(rodada);
+		return rodada;
+	}
+
+	@Override
+	public Rodada atualizaStatusPrazoRodada(Rodada rodada) {
+		Calendar calendario = Calendar.getInstance();
+		long tempoAtual = calendario.getTimeInMillis();
+		if(rodada.getPrazoSubmissao().getTime() < tempoAtual){
+			rodada.setStatusPrazo(false);
+		}else{
+			rodada.setStatusPrazo(true);
+		}
+		update(rodada);
+		return rodada;
+	}
+
+	@Override
+	public Rodada atualizaStatusAvaliacao(Rodada rodada) {
+		Calendar calendario = Calendar.getInstance();
+		long tempoAtual = calendario.getTimeInMillis();
+		if(rodada.getTerminoAvaliacao().getTime() < tempoAtual){
+			rodada.setStatusAvaliacao(false);
+		}else{
+			rodada.setStatusAvaliacao(true);
+		}
+		update(rodada);
+		return rodada;
+
 	}
 }

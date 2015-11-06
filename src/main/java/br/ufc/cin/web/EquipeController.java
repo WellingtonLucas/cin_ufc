@@ -606,6 +606,10 @@ public class EquipeController {
 			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
 			return "redirect:/jogo/"+ idJogo +"/rodadas";
 		}
+		if(!entrega.getRodada().isStatusRaking()){
+			redirectAttributes.addFlashAttribute("erro", "Ainda não está disponível o gabarito.");
+			return "redirect:/jogo/"+ idJogo +"/equipe/"+idEquipe+"/avaliacoes";
+		}
 		
 		Usuario usuario = getUsuarioLogado(session);
 		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){

@@ -102,7 +102,7 @@ public class Resposta {
 	}
 	
 	public String toString() {
-		return "Resposta id: " + getId();
+		return "Resposta id: " + getId()+" dia: "+getDia()+";";
 	}
 	
 	@Override

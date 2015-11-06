@@ -50,6 +50,8 @@
 				<form:hidden path="id"/>
 				<form:hidden path="status"/>
 				<form:hidden path="statusPrazo"/>
+				<form:hidden path="statusAvaliacao"/>
+				<form:hidden path="statusRaking"/>
 				<c:if test="${not empty rodada.modelo.id }">
 					<form:hidden path="modelo.id"/>
 				</c:if>
@@ -107,6 +109,20 @@
 							<c:if test="${not empty error_prazoSubmissao}">
 								<div class="error-validation">
 									<span>${error_prazoSubmissao}</span>
+								</div>
+							</c:if>
+						</div>
+					</div>
+					<div class="form-item">
+						<label for="terminoAvaliacao" class="col-sm-2 control-label">Prazo de avaliação:<span class="required">*</span></label>
+						<div class="col-sm-2">
+							<form:input type="text" path="terminoAvaliacao" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
+							<div class="error-validation">
+								<form:errors path="terminoAvaliacao"></form:errors>
+							</div>
+							<c:if test="${not empty error_terminoAvaliacao}">
+								<div class="error-validation">
+									<span>${error_terminoAvaliacao}</span>
 								</div>
 							</c:if>
 						</div>

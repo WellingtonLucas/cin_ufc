@@ -38,4 +38,16 @@ public class JpaRespostaRepository extends JpaGenericRepositoryImpl<Resposta>  i
 		return null;
 	}
 
+	@Override
+	public List<Resposta> find(Usuario usuario, Entrega entrega) {
+		Map<String, Object> params = new HashMap<String, Object>();	
+		params.put("idU", usuario.getId());
+		params.put("idE", entrega.getId());
+		List<Resposta> respostas = find(QueryType.JPQL, "from Resposta where usuario_id = :idU and entrega_id = :idE", params);
+		if(!respostas.isEmpty() && respostas != null){
+			return respostas;
+		}		
+		return null;
+	}
+
 }

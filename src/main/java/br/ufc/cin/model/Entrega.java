@@ -133,7 +133,7 @@ public class Entrega {
 	
 	@Override
 	public String toString() {
-		return "ID: "+getId()+" dia: "+getDia().getTime();
+		return "Entrega id: "+getId()+" dia: "+getDia().getTime()+";";
 	}
 	
 	@Override

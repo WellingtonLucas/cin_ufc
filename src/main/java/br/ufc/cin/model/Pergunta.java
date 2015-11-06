@@ -81,6 +81,16 @@ public class Pergunta {
 	}
 	
 	public String toString() {
-		return "Pergunta id: " + getId() + ", descricao: " + getDescricao();
+		return "Pergunta id: " + getId() + ", descricao: " + getDescricao()+";";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Pergunta)){
+			return false;
+		}
+		Pergunta pergunta = (Pergunta) obj;
+		
+		return toString().equals(pergunta.toString());
 	}
 }

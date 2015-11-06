@@ -158,6 +158,8 @@ public class RodadaController {
 			rodada.setJogo(jogo);
 			rodada.setStatus(false);
 			rodada.setStatusPrazo(true);
+			rodada.setStatusAvaliacao(false);
+			rodada.setStatusRaking(false);
 			if( rodada.getFormulario() == null){
 				redirectAttributes.addFlashAttribute("erro", "Primeiramente crie formulários para associar a uma rodada.");
 				return "redirect:/jogo/"+id+"/formularios";
@@ -206,22 +208,15 @@ public class RodadaController {
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		
-		Calendar calendario = Calendar.getInstance();
-		long termino = rodada.getTermino().getTime();
-		long tempoAtual = calendario.getTimeInMillis();
+		rodada = rodadaService.atualizaStatusRodada(rodada);
 		
-		if((termino < tempoAtual) && rodada.isStatus()){
-			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/inativar";
-		}
-		if(tempoAtual > rodada.getPrazoSubmissao().getTime()){
-			rodada.setStatusPrazo(false);
-		}else{
-			rodada.setStatusPrazo(true);
-		}
+		rodada = rodadaService.atualizaStatusPrazoRodada(rodada);
+		
+		rodada = rodadaService.atualizaStatusAvaliacao(rodada);
 		
 		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
 			model.addAttribute("permissao", "professor");
-		}else if(rodada.getJogo().getEquipes().contains(equipe)){
+		}else if(equipe != null && rodada.getJogo().getEquipes().contains(equipe)){
 			ReaberturaSubmissao reaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
 			if(reaberturaSubmissao != null){
 				StatusRodadaEquipe rodadaEquipe = rodadaEquipeService.atualizaStatusRodadaEquipe(reaberturaSubmissao);
@@ -393,7 +388,7 @@ public class RodadaController {
 		
 		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.equals(jogo.getProfessor())
-				&& jogo.getRodadas().contains(rodada) || jogo.getAlunos().contains(usuario)) {
+				&& jogo.getRodadas().contains(rodada)) {
 			rodada.setStatus(false);
 			rodadaService.update(rodada);
 			redirectAttributes.addFlashAttribute("info",
@@ -645,15 +640,20 @@ public class RodadaController {
 					"Rodada solicitada não existe.");
 			return "redirect:/jogo/" + idJogo + "/rodadas";
 		}
+		
 		Calendar calendario = Calendar.getInstance();
-		Date data =  calendario.getTime();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		simpleDateFormat.format(data);
-		long tempoAtual = data.getTime();
+		long tempoAtual = calendario.getTimeInMillis();
 		if(tempoAtual < rodada.getPrazoSubmissao().getTime()){
 			redirectAttributes.addFlashAttribute("erro", "Período de submissão ainda não se encerrou!");
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/detalhes";
 		}
+		
+		boolean status = rodadaEquipeService.verificaSeTemSolicitacao(jogo.getEquipes(), rodada);
+		if(status){
+			redirectAttributes.addFlashAttribute("erro", "Aguarte até o prazo final de prorrogação dos prazos.");
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/detalhes";
+		}
+		
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 		List<Entrega> entregas = entregaService.getUltimasEntregasDaRodada(rodada);
@@ -665,7 +665,7 @@ public class RodadaController {
 		
 		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
 			model.addAttribute("permissao", "professor");
-		}else if(rodada.getJogo().getEquipes().contains(equipe)){
+		}else if(equipe != null && rodada.getJogo().getEquipes().contains(equipe)){
 			model.addAttribute("permissao", "aluno");
 		}else {
 			redirectAttributes.addFlashAttribute("erro",
@@ -777,13 +777,8 @@ public class RodadaController {
 			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 		}		
 
-		Calendar calendario = Calendar.getInstance();
-		Date data =  calendario.getTime();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		simpleDateFormat.format(data);
-		long tempoAtual = data.getTime();
-		
-		if( tempoAtual > rodada.getPrazoSubmissao().getTime()){
+		rodada = rodadaService.atualizaStatusPrazoRodada(rodada);
+		if( !rodada.isStatusPrazo()){
 			redirect.addFlashAttribute("erro","Uma solicitação de reabertura do prazo de submissão deve ser feita antes do encerramento deste.");
 		}else{
 			ReaberturaSubmissao oldReaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
@@ -807,7 +802,26 @@ public class RodadaController {
 		return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 	}
 	
-private Usuario getUsuarioLogado(HttpSession session) {
+	@RequestMapping(value="/jogo/{idJogo}/rodada/{id}/gerarRanking", method = RequestMethod.GET)
+	public String gerarRanking(@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("id") Integer id, Model model,
+			HttpSession session, RedirectAttributes redirectAttributes){
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Rodada rodada = rodadaService.find(Rodada.class, id);
+		if (rodada == null) {
+			redirectAttributes.addFlashAttribute("erro","Rodada inexistente.");
+			return "redirect:/jogo/" + jogo.getId() + "/equipes";
+		}
+		
+		return "rodada/ranking";
+	}
+
+	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService
 					.getUsuarioByEmail(SecurityContextHolder.getContext()

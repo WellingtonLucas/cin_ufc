@@ -172,7 +172,7 @@
 											</div>
 										</c:if>
 										<c:if test="${(entregaId.index != 0) && (entregaId.index % 2 == 1) }">	
-											<article class="timeline-entry left-aligned">
+											<div class="timeline-entry left-aligned">
 												<div class="timeline-entry-inner">
 													<time class="timeline-time" datetime="${entrega.dia }">
 														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
@@ -188,10 +188,10 @@
 														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
 													</div>
 												</div>
-											</article>
+											</div>
 										</c:if>
 										<c:if test="${(entregaId.index != 0) && (entregaId.index % 2 == 0) }">	
-											<article class="timeline-entry">
+											<div class="timeline-entry">
 												<div class="timeline-entry-inner">
 													<time class="timeline-time" datetime="${entrega.dia }">
 														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
@@ -207,7 +207,7 @@
 														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
 													</div>
 												</div>
-											</article>
+											</div>
 										</c:if>
 							
 									</c:forEach>

@@ -54,6 +54,34 @@ $(document).ready(function() {
                         	return true;
                         }
                     },
+                    callback: {
+                        message: 'A data de início deve ser anterior à data do prazo de submissão.',
+                        callback: function(value, validator) {
+                        	var prazoSubmissao = validator.getFieldElements('prazoSubmissao').val();
+                        	if(value != "" && prazoSubmissao != "") {
+                        		prazoSubmissao = moment(prazoSubmissao, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var inicio = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(prazoSubmissao, "DD/MM/YYYY").isBefore(moment(inicio, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
+                    callback: {
+                        message: 'A data de início deve ser anterior à data do prazo de avaliação.',
+                        callback: function(value, validator) {
+                        	var terminoAvaliacao = validator.getFieldElements('terminoAvaliacao').val();
+                        	if(value != "" && terminoAvaliacao != "") {
+                        		terminoAvaliacao = moment(terminoAvaliacao, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var inicio = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(terminoAvaliacao, "DD/MM/YYYY").isBefore(moment(inicio, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
                     notEmpty:{
             			message: 'Data de início é obrigatória.'
             		}
@@ -61,15 +89,92 @@ $(document).ready(function() {
             }, 
             termino: {
             	validators:{
+            		callback: {
+                        message: 'A data de término deve ser posterior à data de início',
+                        callback: function(value, validator) {
+                        	var inicio = validator.getFieldElements('inicio').val();
+                        	if(value != "" && inicio != "") {
+                        		inicio = moment(inicio, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var termino = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(inicio, "DD/MM/YYYY").isAfter(moment(termino, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
+                    callback: {
+                        message: 'A data de término deve ser posterior à data do prazo de submissão.',
+                        callback: function(value, validator) {
+                        	var prazoSubmissao = validator.getFieldElements('prazoSubmissao').val();
+                        	if(value != "" && prazoSubmissao != "") {
+                        		prazoSubmissao = moment(prazoSubmissao, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var termino = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(prazoSubmissao, "DD/MM/YYYY").isAfter(moment(termino, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
+                    callback: {
+                        message: 'A data de término deve ser posterior à data de avaliação.',
+                        callback: function(value, validator) {
+                        	var terminoAvaliacao = validator.getFieldElements('terminoAvaliacao').val();
+                        	if(value != "" && terminoAvaliacao != "") {
+                        		terminoAvaliacao = moment(terminoAvaliacao, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var termino = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(terminoAvaliacao, "DD/MM/YYYY").isAfter(moment(termino, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
             		notEmpty:{
             			message: 'Data de termino é obrigatória.'
+            		}
+            	}
+            },
+            terminoAvaliacao: {
+            	validators:{
+            		callback: {
+                        message: 'O prazo para avaliação deve ser anterior ao término da rodada.',
+                        callback: function(value, validator) {
+                        	var termino = validator.getFieldElements('termino').val();
+                        	if(value != "" && termino != "") {
+                        		termino = moment(termino, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var terminoAvaliacao = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(termino, "DD/MM/YYYY").isBefore(moment(terminoAvaliacao, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
+                    callback: {
+                        message: 'O prazo para avaliação deve ser posterior ao prazo de submissão.',
+                        callback: function(value, validator) {
+                        	var prazoSubmissao = validator.getFieldElements('prazoSubmissao').val();
+                        	if(value != "" && prazoSubmissao != "") {
+                        		prazoSubmissao = moment(prazoSubmissao, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var terminoAvaliacao = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(prazoSubmissao, "DD/MM/YYYY"). isAfter(moment(terminoAvaliacao, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
+            		notEmpty:{
+            			message: 'Data de prazo das avaliações é obrigatório.'
             		}
             	}
             },
             prazoSubmissao :{
             	validators: {
             		callback: {
-                        message: 'O prazo deve ser anterior ao término da rodada.',
+                        message: 'O prazo de submissões deve ser anterior ao término da rodada.',
                         callback: function(value, validator) {
                         	var termino = validator.getFieldElements('termino').val();
                         	if(value != "" && termino != "") {
@@ -82,8 +187,22 @@ $(document).ready(function() {
                         	return true;
                         }
                     },
+                    callback: {
+                        message: 'O prazo de submissões deve ser posterior ao início da rodada.',
+                        callback: function(value, validator) {
+                        	var inicio = validator.getFieldElements('inicio').val();
+                        	if(value != "" && inicio != "") {
+                        		inicio = moment(inicio, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	var prazoSubmissao = moment(value, "DD/MM/YYYY").format("DD/MM/YYYY");
+	                        	if(moment(inicio, "DD/MM/YYYY").isAfter(moment(prazoSubmissao, "DD/MM/YYYY"))) {
+	                        		return false;
+	                        	}
+                        	}
+                        	return true;
+                        }
+                    },
                     notEmpty:{
-            			message: 'Prazo é obrigatório?.'
+            			message: 'Prazo é obrigatório.'
             		}
             	}
             },
@@ -120,7 +239,10 @@ $(document).ready(function() {
 		todayHighlight : true,
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
-        $('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'termino');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'prazoSubmissao');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'terminoAvaliacao');
     });
     
     $("#termino").datepicker({
@@ -133,6 +255,8 @@ $(document).ready(function() {
 		$(this).datepicker('hide');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'termino');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'prazoSubmissao');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'terminoAvaliacao');
     });
     
     $("#prazoSubmissao").datepicker({
@@ -146,6 +270,21 @@ $(document).ready(function() {
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'termino');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'prazoSubmissao');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'terminoAvaliacao');
+    });
+    
+    $("#terminoAvaliacao").datepicker({
+		format : "dd/mm/yyyy",
+		todayBtn : "linked",
+		language : "pt-BR",
+		todayHighlight : true,
+		startDate: new Date()
+	}).on('changeDate', function(e) {
+		$(this).datepicker('hide');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'termino');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'prazoSubmissao');
+		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'terminoAvaliacao');
     });
     
     $('div.error-validation:has(span)').find('span').css('color', '#a94442');

@@ -71,9 +71,24 @@ public class Usuario {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
 	private List<Entrega> entregas;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
+	private List<Historico> historicos;
+	
 	@OneToOne
 	@JoinColumn(name = "FOTO_ID")
 	private Documento foto;
+
+	@OneToOne
+	@JoinColumn(name = "HISTORICO_ID")
+	private Historico historico;
+	
+	public Historico getHistorico() {
+		return historico;
+	}
+
+	public void setHistorico(Historico historico) {
+		this.historico = historico;
+	}
 
 	public List<Entrega> getEntregas() {
 		return entregas;
@@ -121,6 +136,16 @@ public class Usuario {
 		}
 	}
 
+	public void addHistorico(Historico historico) {
+		if (!getHistoricos().contains(historico)) {
+			getHistoricos().add(historico);
+			if (historico.getUsuario() != null) {
+                historico.getUsuario().getHistoricos().remove(historico);
+            }
+            historico.setUsuario(this);
+        }
+	}
+	
 	public void setJogoParticipa(List<Jogo> jogoParticipa) {
 		this.jogoParticipa = jogoParticipa;
 	}
@@ -217,8 +242,16 @@ public class Usuario {
 		return (this.id == null);
 	}
 
+	public List<Historico> getHistoricos() {
+		return historicos;
+	}
+
+	public void setHistoricos(List<Historico> historicos) {
+		this.historicos = historicos;
+	}
+
 	public String toString() {
-		return "Usuario id: " + getId() + ", nome: " + getNome();
+		return "Usuario id: " + getId() + ", nome: " + getNome()+" email:"+ getEmail()+";";
 	}
 
 	@Override

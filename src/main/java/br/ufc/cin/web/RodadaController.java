@@ -162,7 +162,7 @@ public class RodadaController {
 			rodada.setStatusRaking(false);
 			if( rodada.getFormulario() == null){
 				redirectAttributes.addFlashAttribute("erro", "Primeiramente crie formulários para associar a uma rodada.");
-				return "redirect:/jogo/"+id+"/formularios";
+				return "redirect:/formularios";
 			}
 			Formulario formulario = formularioService.find(Formulario.class, rodada.getFormulario().getId());
 			rodada.setFormulario(formulario);

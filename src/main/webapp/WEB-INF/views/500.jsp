@@ -21,7 +21,7 @@
 				<p class="lead text-muted">${message}</p>
 				<br>
 				<div class="col-lg-6 col-lg-offset-3">
-					<a class="btn btn-warning btn-group-justified" href="<c:url value='index'/>">Voltar</a>
+					<a class="btn btn-warning btn-group-justified" href="<c:url value='/jogo/listar'/>">Voltar</a>
 				</div>
 			</div>
 		</div>

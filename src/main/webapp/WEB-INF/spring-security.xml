@@ -19,8 +19,6 @@
  		<intercept-url pattern="/usuario/cadastre-se" access="IS_AUTHENTICATED_ANONYMOUSLY" />	
 
 		<intercept-url pattern="/**" access="ROLE_USUARIO" />
- 		<!-- <intercept-url pattern="/*/professor/**" access="ROLE_PROFESSOR" /> -->
- 		<!-- <intercept-url pattern="/**" access="ROLE_ALUNO,ROLE_PROFESSOR" /> -->
  		
  		<form-login login-page="/login" default-target-url="/" 
  			authentication-failure-url="/loginfailed" />
@@ -35,11 +33,6 @@
 				authorities-by-username-query="SELECT u.email, u.papel FROM usuario AS u WHERE u.email = ?" 
 			/>          
 
-			<!-- <jdbc-user-service data-source-ref="cinufc"
-				users-by-username-query="SELECT login, senha, habilitado FROM usuario WHERE login = ?"
-				authorities-by-username-query="SELECT u.login, u.papel FROM usuario AS u WHERE u.login = ?" 
-            /> -->
-                    
 		</authentication-provider>		
  	</authentication-manager>
  	

@@ -9,4 +9,6 @@ public interface CalculoNotaService {
 	public abstract Float calculoNota(Resposta resposta);
 	
 	public abstract Float calculoMedia(List<Resposta> respostas);
+
+	public abstract Float calculoNotaEquipe(Resposta resposta);
 }

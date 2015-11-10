@@ -39,12 +39,19 @@ import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.NotaEquipeRodada;
+import br.ufc.cin.model.Resposta;
+import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.CalculoNotaService;
 import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.NotaEquipeRodadaService;
+import br.ufc.cin.service.RespostaService;
+import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
@@ -65,7 +72,19 @@ public class EquipeController {
 	private DocumentoService documentoService;
 	
 	@Inject
+	private RodadaService rodadaService;
+	
+	@Inject
 	private FormularioService formularioService;
+	
+	@Inject
+	private NotaEquipeRodadaService notaEquipeRodadaService;
+	
+	@Inject 
+	private CalculoNotaService calculoNotaService;
+	
+	@Inject
+	private RespostaService respostaService;
 	
 	@RequestMapping(value = "/jogo/{id}/equipe/nova", method = RequestMethod.GET)
 	public String cadastrarFrom(@PathVariable("id") Integer id, Model model,
@@ -641,6 +660,113 @@ public class EquipeController {
 		model.addAttribute("entrega", entrega);
 
 		return "equipe/avaliacao";
+	}
+	
+	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/historico", method = RequestMethod.GET)
+	public String historicoEquipe(@PathVariable("idJogo") Integer idJogo, @PathVariable("idEquipe") Integer idEquipe, 
+			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if(jogo == null){
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
+		if(!jogo.getEquipes().contains(equipe)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Equipe não existe ou não pertence ao jogo.");
+			return "redirect:/jogo/"+idJogo+"/equipes";
+		}
+		if(jogo.getRodadas() == null || jogo.getRodadas().isEmpty()){
+			redirectAttributes.addFlashAttribute("erro",
+					"O jogo ainda não possui rodadas.");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+			
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		
+		if (usuario.equals(jogo.getProfessor())) {			
+			model.addAttribute("permissao", "professor");
+		}else if(equipe.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "alunoLogado");
+		}else{			
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
+		rodadas = rodadaService.atualizaStatusRodadas(rodadas);
+		
+		List<NotaEquipeRodada> notasEquipeRodadas = notaEquipeRodadaService.buscarPorEquipe(equipe);
+		if(notasEquipeRodadas == null){
+			notasEquipeRodadas = criarNotasEquipeRodadas(notasEquipeRodadas, equipe);
+		}
+		if(notasEquipeRodadas != null){
+			notasEquipeRodadas = atualizarNotasEquipeRodadas(notasEquipeRodadas, equipe);
+		}
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("notasEquipeRodadas", notasEquipeRodadas);
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("equipe", equipe);
+		return "equipe/historicoEquipeRodada";
+	}
+
+	private List<NotaEquipeRodada> atualizarNotasEquipeRodadas(
+			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe) {
+		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
+		List<Resposta> respostas = new ArrayList<Resposta>();
+		for (int i= notasEquipeRodadas.size(); i<entregas.size();i++) {
+			Resposta resposta = respostaService.findUltimaRespostaPorEntrega(entregas.get(i).getUsuario(), entregas.get(i));
+			if(resposta!= null){
+				respostas.add(resposta);
+			}
+			if(!entregas.get(i).getRodada().isStatusRaking() && !respostas.isEmpty()){
+				NotaEquipeRodada notaEquipeRodada = new NotaEquipeRodada();
+				notaEquipeRodada.setEquipe(equipe);
+				notaEquipeRodada.setRodada(entregas.get(i).getRodada());
+				Float nota = calculoNotaService.calculoNotaEquipe(resposta);
+				notaEquipeRodada.setValor(nota);
+				notaEquipeRodada.setFatorDeAposta(nota);
+				notaEquipeRodadaService.save(notaEquipeRodada);
+				notasEquipeRodadas.add(notaEquipeRodada);
+			}
+		}
+		return notasEquipeRodadas;
+	}
+
+	private List<NotaEquipeRodada> criarNotasEquipeRodadas(
+			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe) {
+		notasEquipeRodadas = new ArrayList<NotaEquipeRodada>();
+		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
+		List<Resposta> respostas = new ArrayList<Resposta>();
+		for (Entrega entrega : entregas) {
+			Resposta resposta = respostaService.findUltimaRespostaPorEntrega(entrega.getUsuario(), entrega);
+			if(resposta!= null){
+				respostas.add(resposta);
+			}
+			if(!entrega.getRodada().isStatusRaking() && !respostas.isEmpty()){
+				NotaEquipeRodada notaEquipeRodada = new NotaEquipeRodada();
+				notaEquipeRodada.setEquipe(equipe);
+				notaEquipeRodada.setRodada(entrega.getRodada());
+				Float nota = calculoNotaService.calculoNotaEquipe(resposta);
+				notaEquipeRodada.setValor(nota);
+				notaEquipeRodada.setFatorDeAposta(nota);
+				notaEquipeRodadaService.save(notaEquipeRodada);
+				notasEquipeRodadas.add(notaEquipeRodada);
+			}
+		}	
+		
+		return notasEquipeRodadas;
 	}
 
 	private Usuario getUsuarioLogado(HttpSession session) {

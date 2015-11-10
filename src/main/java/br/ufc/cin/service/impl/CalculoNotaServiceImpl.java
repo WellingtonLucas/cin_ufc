@@ -47,4 +47,40 @@ public class CalculoNotaServiceImpl implements CalculoNotaService{
 		return null;
 	}
 
+	@Override
+	public Float calculoNotaEquipe(Resposta resposta) {
+		List<Opcao> gabarito = resposta.getEntrega().getGabarito().getOpcoes();
+		
+		float somatorio = 0f;
+		for (int i = 0; i < gabarito.size(); i++) {
+			List<Opcao> opcoes = gabarito.get(i).getPergunta().getOpcoes();
+			opcoes = ordenaOpcoesPorId(opcoes);
+			float inicial = 10f;	
+			for (Opcao opcao : opcoes) {
+				if(opcao.equals(gabarito.get(i))){
+					break;
+				}
+				inicial -= 2;
+			}
+			somatorio += inicial;
+		}
+		return somatorio/gabarito.size();
+		
+	}
+	
+	private List<Opcao> ordenaOpcoesPorId(List<Opcao>opcoes){
+		for (int j=0;j<opcoes.size();j++) {
+			for (int k = j+1; k < opcoes.size(); k++) {
+				if(opcoes.get(j).getId() > opcoes.get(k).getId()){
+					Opcao aux = opcoes.get(j);
+					opcoes.add(j, opcoes.get(k));
+					opcoes.remove(j+1);
+					opcoes.add(k, aux);
+					opcoes.remove(k+1);
+				}
+			}
+		}
+		return opcoes;
+	}
+
 }

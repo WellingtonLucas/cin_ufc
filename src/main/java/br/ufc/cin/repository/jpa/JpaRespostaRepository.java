@@ -20,7 +20,7 @@ public class JpaRespostaRepository extends JpaGenericRepositoryImpl<Resposta>  i
 	public Resposta getRespostaByEntrega(Entrega entrega) {
 		Map<String, Object> params = new HashMap<String, Object>();	
 		params.put("idEntrega", entrega.getId());
-		List<Resposta> respostas = find(QueryType.JPQL, "from Resposta where entregagabarito_id = :idEntrega", params);
+		List<Resposta> respostas = find(QueryType.JPQL, "from Resposta where entrega_gabarito_id = :idEntrega", params);
 		if(!respostas.isEmpty() && respostas != null){
 			return respostas.get(respostas.size()-1);
 		}		

@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -31,6 +32,7 @@ public class Resposta {
 	private Usuario usuario;
 	
 	@OneToOne
+	@JoinColumn(name="entrega_gabarito_id")
 	private Entrega entregaGabarito;
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy'T'HH:mm:ss")

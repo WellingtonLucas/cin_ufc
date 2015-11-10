@@ -9,7 +9,7 @@
 <html>
 	<head>
 		<jsp:include page="../fragments/header-estrutura.jsp" />
-		<title>Histórico ${requisitado.nome }</title>
+		<title>Histórico ${equipe.nome }</title>
 	</head>
 <body>
 	<jsp:include page="../fragments/header.jsp" />
@@ -20,7 +20,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<div class="col-sm-12">
 					<h2>
-						<strong>Visualizar histórico </strong><small>${requisitado.nome } ${requisitado.sobreNome }</small>
+						<strong>Visualizar histórico </strong><small>${equipe.nome } </small>
 					</h2>
 					<hr>
 					<c:if test="${not empty erro}">
@@ -39,29 +39,29 @@
 								<h4 class="panel-title">
 									<a role="button" data-toggle="collapse" data-parent="#accordion"
 										href="#collapseOne" aria-expanded="true"
-										aria-controls="collapseOne"> <strong>Suas Notas</strong> </a>
+										aria-controls="collapseOne"> <strong>Notas da Equipe</strong> </a>
 								</h4>
 							</div>
 							<div id="collapseOne" class="panel-collapse collapse in"
 								role="tabpanel" aria-labelledby="headingOne">
 								<div class="panel-body">
-									<c:if test="${historico.notas != null }">
+									<c:if test="${notasEquipeRodadas != null }">
 										<table id="table" class="table table-striped table-hover">
 											<tbody>
-												<c:forEach var="nota" items="${historico.notas }">
+												<c:forEach var="nota" items="${notasEquipeRodadas }">
 													<tr>
 														<td>${nota.rodada.nome }</td>
-														<c:if test="${nota.valor != null && nota.valor >= 0}">
+														<c:if test="${nota.valor != null }">
 															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
 																value= "${nota.valor }" />
 															</td>
 														</c:if>
-														<c:if test="${nota.valor == null || nota.valor < 0 }">
+														<c:if test="${nota.valor == null }">
 															<td>-</td>
 														</c:if>
 													</tr>
 												</c:forEach>
-												<tr>
+												<%-- <tr>
 													<td><strong>Média</strong></td>
 													<c:if test="${media >= 0 }">
 														<td>
@@ -72,7 +72,7 @@
 													<c:if test="${media < 0 }">
 														<td>-</td>
 													</c:if>
-												</tr>
+												</tr> --%>
 											</tbody>
 										</table>
 									</c:if>

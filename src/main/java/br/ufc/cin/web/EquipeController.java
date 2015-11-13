@@ -600,8 +600,10 @@ public class EquipeController {
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/entrega/{id}/formulario/{idForm}/avaliacao", method = RequestMethod.GET)
-	public String avaliacao(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,
-			@PathVariable("id") Integer id, Model model, HttpSession session, @PathVariable("idEquipe") Integer idEquipe,
+	public String avaliacao(@PathVariable("idJogo") Integer idJogo, 
+			@PathVariable("idForm") Integer idForm,
+			@PathVariable("id") Integer id, Model model, HttpSession session, 
+			@PathVariable("idEquipe") Integer idEquipe,
 			RedirectAttributes redirectAttributes) {
 
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
@@ -721,6 +723,49 @@ public class EquipeController {
 		return "equipe/historicoEquipeRodada";
 	}
 
+	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/fator/{idFator}", method = RequestMethod.POST)
+	public String atualizarFator(@RequestParam("fatorDeAposta") String fatorString,
+			@PathVariable("idEquipe") Integer idEquipe,
+			@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("idFator") Integer idFator,
+			HttpSession session, RedirectAttributes redirectAttributes) {
+		
+		Float fator = converteFator(fatorString);
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if(jogo == null){
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
+		if(!jogo.getEquipes().contains(equipe)){
+			redirectAttributes.addFlashAttribute("erro",
+					"Equipe não existe ou não pertence ao jogo.");
+			return "redirect:/jogo/"+idJogo+"/equipes";
+		}
+		
+		NotaEquipeRodada notaEquipeRodada = notaEquipeRodadaService.find(NotaEquipeRodada.class, idFator);
+		if(notaEquipeRodada == null){
+			redirectAttributes.addFlashAttribute("erro",
+					"Não existe nota para esta equipe, nesta rodada.");
+			return "redirect:/jogo/"+idJogo+"/equipe/"+idEquipe+"/historico";
+		}
+		try {
+			notaEquipeRodada.setFatorDeAposta(fator);
+			notaEquipeRodadaService.update(notaEquipeRodada);	
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro",
+					"Erro ao atualizar fator de aposta da equipe.");
+			return "redirect:/jogo/"+idJogo+"/equipe/"+idEquipe+"/historico";
+		}
+		redirectAttributes.addFlashAttribute("info","Fator atualizado com sucesso.");
+		return "redirect:/jogo/"+jogo.getId()+"/equipe/"+equipe.getId()+"/historico";
+	}
+	
+	private Float converteFator(String fatorString){
+		fatorString = fatorString.replace(',', '.');
+		return Float.parseFloat(fatorString);
+	}
+	
 	private List<NotaEquipeRodada> atualizarNotasEquipeRodadas(
 			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe) {
 		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);

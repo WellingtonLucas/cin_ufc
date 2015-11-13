@@ -2,7 +2,6 @@ $(document).ready(function() {
 	$('#adicionarJogoForm').bootstrapValidator({
         feedbackIcons: {
         	valid: 'glyphicon glyphicon-ok',
-        	/*invalid: 'glyphicon glyphicon-remove',*/
             validating: 'glyphicon glyphicon-refresh'
         },
         
@@ -81,18 +80,26 @@ $(document).ready(function() {
         }
        
 	});
-	 
-	/*// Usado para não apagar a máscara e enviar somente o valor para o servidor
-	$("#adicionarProjetoForm, #submeterProjetoForm").submit(function() {
-		$('#valorDaBolsa').val($('#bolsa').maskMoney('unmasked')[0]);
+	//Histórico equipe 
+	$('#fatorForm').bootstrapValidator({
+        feedbackIcons: {
+        	valid: 'glyphicon glyphicon-ok',
+        	invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+        	err: 'tooltip',
+            fatorDeAposta: {
+                validators: {
+                    notEmpty:{
+            			message: 'Defina um fator de aposta.'
+            		}
+                }
+            },
+        }
+       
 	});
-	*/
-	/*// Máscaras
-    $('[name="bolsa"]').maskMoney({prefix:'R$ ', showSymbol:true, thousands:'.', decimal:','});
-    if($('[name="bolsa"]').val() != '') {
-    	$('[name="bolsa"]').maskMoney('mask');
-    }
-	*/
+	
     $("#inicio").datepicker({
 		format : "dd/mm/yyyy",
 		todayBtn : "linked",
@@ -125,11 +132,6 @@ $(document).ready(function() {
 		$(this).datepicker('hide');
 		$('#atribuirPareceristaForm').bootstrapValidator('revalidateField', 'prazo');
     });
-    
-    /*$("#participantes, #parecerista, #posicionamento, #avaliacao").select2({
-   	 	placeholder: "Buscar...",
-   	 	dropdownCssClass: "bigdrop"
-    });*/
     
     $('div.error-validation:has(span)').find('span').css('color', '#a94442');
     
@@ -194,16 +196,6 @@ $(document).ready(function() {
 		$(this).find('.modal-body').text('Tem certeza de que deseja ativar o jogo \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
-	
-	/*$('#confirm-parecer').on('show.bs.modal', function(e) {
-		var indexSelect = document.getElementById("posicionamento").selectedIndex;
-		var valueSelected = emitirParecerForm.posicionamento.options[indexSelect].value;
-
-		
-		$(this).find('.modal-body').text('Tem certeza de que deseja submeter o parecer do projeto \"' + $(e.relatedTarget).data('name') + '\" com o posicionamento '+valueSelected+'?');
-		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
-	});
-	*/
 	
 	$(".file").fileinput({
 		showUpload: false,

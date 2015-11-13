@@ -8,7 +8,6 @@ import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,17 +30,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.cin.model.Documento;
-import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Historico;
 import br.ufc.cin.model.Jogo;
-import br.ufc.cin.model.Nota;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
-import br.ufc.cin.service.CalculoNotaService;
 import br.ufc.cin.service.DocumentoService;
-import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.HistoricoService;
 import br.ufc.cin.service.JogoService;
@@ -53,12 +48,6 @@ import br.ufc.cin.service.UsuarioService;
 @RequestMapping("usuario")
 public class UsuarioController {
 
-	@Inject
-	private CalculoNotaService calculoNotaService;
-	
-	@Inject 
-	private EntregaService entregaService;
-	
 	@Inject
 	private UsuarioService usuarioService;
 
@@ -397,9 +386,9 @@ public class UsuarioController {
 		
 		Historico historico = historicoService.buscarPorJogoUsuario(jogo, requisitado);
 		if(historico == null){
-			historico = criarHistorico(historico, rodadas, requisitado);
+			historico = historicoService.criarHistorico(historico, rodadas, requisitado);
 		}else{
-			historico = atualizarHistorico(historico, rodadas, requisitado);
+			historico = historicoService.atualizarHistorico(historico, rodadas, requisitado);
 		}
 		Float media = historicoService.calculaMedia(historico);
 		model.addAttribute("requisitado", requisitado);
@@ -411,72 +400,6 @@ public class UsuarioController {
 		model.addAttribute("rodadas", rodadas);
 		return "jogador/historico";
 	}
-
-	private Historico atualizarHistorico(Historico historico, List<Rodada> rodadas,
-			Usuario usuario) {
-		if(historico.getNotas().size() < rodadas.size()){
-			historico = criarNovasNotas(historico, rodadas);
-		}
-		for (Rodada rodada : rodadas) {
-			if(!rodada.isStatusRaking()){//Alterar na história de liberar raking
-				if(!historico.getNotas().isEmpty()){
-					for(Nota nota: historico.getNotas()){
-						if(nota.getRodada().equals(rodada)){
-							List<Resposta> respostas = new ArrayList<Resposta>();
-							for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
-								Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
-								if(resposta != null){		
-									respostas.add(resposta);
-								}
-							}
-							if(!rodada.isStatusRaking() && !respostas.isEmpty()){
-								nota.setValor(calculoNotaService.calculoMedia(respostas));
-								historico.addNota(nota);
-							}
-						}
-					}
-				}
-			}
-		}
-		historicoService.update(historico);
-		return historico;
-	}
-
-	private Historico criarNovasNotas(Historico historico, List<Rodada> rodadas){
-		for(int i=historico.getNotas().size(); i<rodadas.size();i++){
-			Nota noaNota = new Nota();
-			noaNota.setRodada(rodadas.get(i));
-			noaNota.setValor(-1f);
-			historico.addNota(noaNota);	
-		}
-		historicoService.update(historico);
-		return historico;
-	}
-	
-	private Historico criarHistorico(Historico historico, List<Rodada> rodadas, Usuario usuario){
-		historico = new Historico();
-		historico.setJogo(rodadas.get(0).getJogo());
-		historico.setUsuario(usuario);
-		List<Nota> notas = new ArrayList<Nota>();
-		for (Rodada rodada : rodadas) {
-			List<Resposta> respostas = new ArrayList<Resposta>();
-			for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
-				Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
-				if(resposta != null){		
-					respostas.add(resposta);
-				}
-			}	
-			Nota nota = new Nota();
-			nota.setRodada(rodada);
-			if(!rodada.isStatus() && !respostas.isEmpty()){
-				nota.setValor(calculoNotaService.calculoMedia(respostas));
-			}
-			notas.add(nota);
-		}
-		historico.setNotas(notas);
-		historicoService.save(historico);
-		return historico;
-	} 
 
 	private boolean verificaPrazo(Resposta resposta){
 		Calendar calendario = Calendar.getInstance();

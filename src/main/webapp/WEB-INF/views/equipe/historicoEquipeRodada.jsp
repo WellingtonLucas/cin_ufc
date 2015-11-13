@@ -20,7 +20,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<div class="col-sm-12">
 					<h2>
-						<strong>Visualizar histórico </strong><small>${equipe.nome } </small>
+						<strong>Histórico da equipe </strong><small>${equipe.nome } </small>
 					</h2>
 					<hr>
 					<c:if test="${not empty erro}">
@@ -31,7 +31,14 @@
 							<c:out value="${erro}"></c:out>
 						</div>
 					</c:if>		
-						
+					<c:if test="${not empty info}">
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${info}"></c:out>
+						</div>
+					</c:if>	
 					<div class="panel-group" id="accordion" role="tablist"
 						aria-multiselectable="true">
 						<div class="panel panel-info">
@@ -47,10 +54,47 @@
 								<div class="panel-body">
 									<c:if test="${notasEquipeRodadas != null }">
 										<table id="table" class="table table-striped table-hover">
+											<thead>
+												<tr>
+													<td><strong>Rodada </strong></td>
+													<td><strong>Fator de aposta </strong></td>
+													<td><strong>Nota </strong></td>
+												</tr>
+											</thead>
 											<tbody>
 												<c:forEach var="nota" items="${notasEquipeRodadas }">
 													<tr>
 														<td>${nota.rodada.nome }</td>
+														<c:if test="${nota.fatorDeAposta == null }">
+															<td>-</td>
+														</c:if>
+														<c:if test="${nota.fatorDeAposta != null }">
+															<td>
+																<c:if test="${permissao == 'professor' }">
+																	<form id="fatorForm" role="form"
+																		class="form-horizontal" 
+																		action="<c:url value="/jogo/${jogo.id}/equipe/${nota.equipe.id }/fator/${nota.id }"></c:url>"
+																		method="POST">
+																		<div class="form-group col-sm-3">
+																			<input class="form-control" type="text" name="fatorDeAposta"  
+																			 value='<fmt:formatNumber type="number"
+																			 maxFractionDigits="2">${nota.fatorDeAposta }
+																			 </fmt:formatNumber>' />
+																		</div>
+																		<div class="col-sm-1">
+																			<button type="submit" class="btn btn-primary">
+																				<i class="glyphicon glyphicon-floppy-disk"></i>
+																			</button>
+																		</div>	 
+																	</form>
+																</c:if>
+																<c:if test="${permissao == 'aluno' }">
+																	<fmt:formatNumber type="number" maxFractionDigits="2">
+																		 ${nota.fatorDeAposta }
+																	 </fmt:formatNumber>
+																</c:if>
+															</td>
+														</c:if>
 														<c:if test="${nota.valor != null }">
 															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
 																value= "${nota.valor }" />

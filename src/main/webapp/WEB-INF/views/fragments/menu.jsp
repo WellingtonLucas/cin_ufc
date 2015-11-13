@@ -11,6 +11,7 @@
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>">Equipes&nbsp;</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>">Rodadas</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/rankings"></c:url>">Rankings Gerais</a></li>
 			<hr>
 		</c:if>
 		<c:if test="${permissao == 'professor'}">
@@ -67,10 +68,10 @@
 			</c:if>	
 		</c:if>
 		<c:if test="${(action == 'detalhesRodada')}">
-			<c:if test="${ (permissao == 'professor') }">
+			<%-- <c:if test="${ (permissao == 'professor') }">
 				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincularFormulario"></c:url>">Vincular Formulario (x)</a></li>
 				<hr>
-			</c:if>	
+			</c:if>	 --%>
 			<c:if test="${ (permissao == 'aluno') && rodada.statusPrazo}">
 				<li>
 					<a data-toggle="modal" data-target="#squarespaceModal" data-toggle="tooltip" data-placement="right"
@@ -80,6 +81,7 @@
 			</c:if>	
 			<c:if test="${(permissao == 'professor')||(permissao == 'aluno') }">
 				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/submissoes"></c:url>">Submissões da rodada</a></li>
+				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/rankings"></c:url>">Rankings</a></li>
 			</c:if>
 		</c:if>
 		

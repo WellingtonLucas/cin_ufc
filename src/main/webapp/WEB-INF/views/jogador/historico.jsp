@@ -47,6 +47,12 @@
 								<div class="panel-body">
 									<c:if test="${historico.notas != null }">
 										<table id="table" class="table table-striped table-hover">
+											<thead>
+												<tr>
+													<td><strong>Rodada </strong></td>
+													<td><strong>Nota </strong></td>
+												</tr>
+											</thead>
 											<tbody>
 												<c:forEach var="nota" items="${historico.notas }">
 													<tr>

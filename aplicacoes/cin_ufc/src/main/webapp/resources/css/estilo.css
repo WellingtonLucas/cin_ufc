@@ -1,0 +1,301 @@
+body {
+	font-family: 'Lato', Calibri, Arial, sans-serif !important;
+	background:
+		url('../imagens/bg-body.png')
+		repeat scroll 0% 0% transparent;
+	/* background: none repeat scroll 0% 0% #F2F2F2;*/
+}
+
+button, a, h2>a {
+	text-decoration: none;
+	outline: 0 !important;
+}
+
+h3 {
+	text-align: left;
+	margin-bottom: 0px;
+}
+
+hr {
+	margin-top: 2px;
+	border-color: #47A3DA;
+	border-width: 2px;
+}
+
+label {
+	line-height: 1;
+	font-size: 18px;
+	font-weight: 500;
+}
+
+label.field {
+	text-align: right;
+	font-weight: 700;
+}
+
+div.detalhes>div.form-group {
+	padding-bottom: 13px;
+	padding-top: 13px;
+}
+
+div.field-value {
+	text-align: left;
+	padding-left: 0px;
+}
+
+div.field-value.parecer>label {
+	margin-left: 17px;
+	margin-top: 7px;
+}
+
+div.field-value>a {
+	text-decoration: none;
+	font-size: 18px;
+	line-height: 1;
+}
+
+div.formulario {
+	text-align: center;
+}
+
+.form-control {
+	font-size: 17px !important;
+}
+
+.container-fluid {
+	font-size: 17px !important;
+}
+
+div.container {
+	margin-bottom: 0px;
+}
+
+button.close {
+	margin: 5px !important;
+	padding: 2px;
+}
+
+h4.modal-title {
+	display: inline;
+}
+
+table.projetos {
+	background-color: #F5F5F5;
+}
+
+table.z>thead {
+	color: #473F3F;
+	background-color: #A4CDE6;
+}
+
+table.projetos>tbody>tr>td.acoes {
+	text-align: right;
+}
+
+table.projetos>tbody>tr>td>a {
+	text-decoration: none;
+	outline: 0;
+}
+
+div.main {
+	margin-bottom: 10px;
+}
+
+table#details {
+	border: none;
+	width: 100%;
+	font-size: 15px;
+}
+
+table#details tr td.head {
+	text-align: right;
+	width: 30%;
+	padding: 8px;
+	font-weight: bold;
+}
+
+table#details tr td.content {
+	width: 70%;
+	padding: 8px;
+	font-style: normal;
+	color: #0064A1;
+}
+
+div.alert {
+	text-align: center;
+}
+
+div.error {
+	color: #a94442;
+}
+
+div.files {
+	text-align: left;
+}
+
+table#file-upload {
+	margin-top: 20px;
+}
+
+.input-group {
+	margin: auto;
+}
+
+.has-success .control-label {
+	color: inherit;
+}
+
+.has-success .form-control {
+	border-color: #CCC;
+}
+
+.has-success .form-control:focus {
+	border-color: #66AFE9;
+	outline: 0px none;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px
+		rgba(102, 175, 233, 0.6);
+}
+
+span.required {
+	color: #A94442;
+}
+
+span.campo-obrigatorio {
+	font-size: 16px;
+	color: #555;
+}
+
+table#table-anexos {
+	margin-top: 20px;
+}
+
+textarea#comentario {
+	margin-bottom: 10px;
+	float: right;
+	width: 89%;
+}
+
+div.file-caption {
+	text-align: left;
+}
+
+.datas {
+	padding-top: 18px;
+}
+
+.navbar-brand {
+	float: left;
+	height: 50px;
+	padding: 15px 15px;
+	font-size: 24px;
+	line-height: 20px
+}
+
+.navbar {
+	font-size: 18px;
+}
+
+.navbar-default {
+	background-color: #428BCA;
+	border-color: #e7e7e7
+}
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+.navbar-default .navbar-text {
+    color: #fff;
+}
+.navbar-default .navbar-nav>li>a {
+    color: #fff;
+}
+.MultiFile-label {
+	font-size: 16px;
+}
+
+.MultiFile-remove {
+	font-size: 20px;
+	color: #F00;
+}
+.inner {
+  padding: 30px;
+}
+.mastfoot {
+  color: #999; /* IE8 proofing */
+  color: #000;
+  text-align: center;
+  margin: 30px 0;
+  padding: 30px 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+}
+
+@media (min-width: 768px) {
+  .mastfoot {
+    bottom: 0;
+    vertical-align: middle;
+  }
+  .mastfoot {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .mastfoot {
+    width: 700px;
+  }
+}
+
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  -ms-filter: 'alpha(opacity=0)';
+  font-size: 200px;
+  direction: ltr;
+  cursor: pointer;
+}
+
+/* Fixes for IE < 8 */
+@media screen\9 {
+  .fileinput-button input {
+    filter: alpha(opacity=0);
+    font-size: 100%;
+    height: 100%;
+  }
+}
+/* li { list-style-type:none;} */
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+
+.btn span.glyphicon {    			
+	opacity: 0;				
+}
+.btn.active span.glyphicon {				
+	opacity: 1;				
+}
+.glyphicon-star{
+	color: rgb(217, 83, 79);
+}
+.glyphicon-star-empty{
+	color: rgb(66, 139, 202);
+}

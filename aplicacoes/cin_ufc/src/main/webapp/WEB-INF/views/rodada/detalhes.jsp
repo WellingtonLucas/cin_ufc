@@ -276,8 +276,8 @@
 									</div>
 									<div class="col-sm-2">
 										<a id="ranking" data-toggle="modal" data-target="#confirm-gerar-ranking" href="#" 
-										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/ranking"></c:url>" data-name="${rodada.nome }">
-											<button class="btn btn-success btn-lg">Ranking&nbsp;<i class="glyphicon glyphicon-ok-circle"></i></button>
+										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/publicarRankings"></c:url>" data-name="${rodada.nome }">
+											<button class="btn btn-success btn-lg">Gerar Ranking&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
 										</a>					
 									</div>
 									<div class="col-sm-2">
@@ -362,6 +362,7 @@
 				</div>
 			</div>
 		</div>
+	
 		<!-- Modal desativar equipe -->
 		<div class="modal fade" id="inativar-equipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
@@ -373,6 +374,23 @@
 					<div class="modal-body"></div>
 					<div class="modal-footer">
 						<a href="#" class="btn btn-warning">Inativar</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal liberar rankings -->
+		<div class="modal fade" id="confirm-gerar-ranking" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+	        			<h4 class="modal-title" id="rankingModalLabel">Gere os Rankings e Notas para esta rodada </h4>
+	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-success">Gerar&nbsp;<i class="glyphicon glyphicon-refresh"></i></a>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>

@@ -35,6 +35,41 @@ public class RankingController {
 	@Inject
 	private RodadaService rodadaService;
 	
+	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/publicarRankings", method = RequestMethod.GET)
+	public String publicarRanking(@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("idRodada") Integer idRodada, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		if (jogo == null) {
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_JOGO_INEXISTENTE);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		Usuario usuario = getUsuarioLogado(session);
+		if(!jogo.getProfessor().equals(usuario)){
+			redirectAttributes.addFlashAttribute("erro",
+					MENSAGEM_PERMISSAO_NEGADA);
+			return "redirect:/jogo/listar";
+		}
+		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
+		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
+			redirectAttributes.addFlashAttribute("erro",
+					"Rodada solicitada não existe.");
+			return "redirect:/jogo/" + idJogo + "/rodadas";
+		}
+		try{
+			rodada.setStatusRaking(true);
+			rodadaService.update(rodada);
+		}catch(Exception e){
+			redirectAttributes.addFlashAttribute("erro",
+					"Erro ao tentar publicar o ranking.");
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
+		}
+		redirectAttributes.addFlashAttribute("info",
+				"Os rankings dessa rodada podem ser consultados.");
+		return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
+	}
+	
 	@RequestMapping(value = "/jogo/{idJogo}/ranking/alunos", method = RequestMethod.GET)
 	public String rankings(@PathVariable("idJogo") Integer idJogo, HttpSession session,
 			RedirectAttributes redirectAttributes, Model model) {
@@ -62,7 +97,7 @@ public class RankingController {
 
 	}
 	
-	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/ranking/alunos", method = RequestMethod.GET)
+	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/rankings", method = RequestMethod.GET)
 	public String rankingsRodada(@PathVariable("idJogo") Integer idJogo, 
 			@PathVariable("idRodada") Integer idRodada,HttpSession session,
 			RedirectAttributes redirectAttributes, Model model) {
@@ -75,7 +110,6 @@ public class RankingController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
-		model.addAttribute("action", "detalhesRodada");
 		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
 			redirectAttributes.addFlashAttribute("erro",
 					"Rodada solicitada não existe.");
@@ -99,7 +133,6 @@ public class RankingController {
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("jogo", jogo);
 		return "ranking/rankings";
-
 	}
 	
 	private Usuario getUsuarioLogado(HttpSession session) {

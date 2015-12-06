@@ -76,7 +76,7 @@
 														</td>
 													</c:if>
 													<c:if test="${media < 0 }">
-														<td>-</td>
+														<td>0.0</td>
 													</c:if>
 												</tr>
 											</tbody>

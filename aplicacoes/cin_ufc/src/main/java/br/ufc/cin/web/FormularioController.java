@@ -260,10 +260,7 @@ public class FormularioController {
 			return "redirect:/jogo/"+ idJogo +"/rodadas";
 		}
 		Calendar calendario = Calendar.getInstance();
-		Date data =  calendario.getTime();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		simpleDateFormat.format(data);
-		long tempoAtual = data.getTime();
+		long tempoAtual = calendario.getTimeInMillis();
 		if(tempoAtual < entrega.getRodada().getPrazoSubmissao().getTime()){
 			redirectAttributes.addFlashAttribute("erro", "Período de submissão ainda não se encerrou!");
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
@@ -281,6 +278,10 @@ public class FormularioController {
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		if(!entrega.getRodada().isStatusAvaliacao()){
+			redirectAttributes.addFlashAttribute("erro", "Prazo de avaliação encerrado!");
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
 		}
 		model.addAttribute("action", "responder");
 		model.addAttribute("formulario", formulario);

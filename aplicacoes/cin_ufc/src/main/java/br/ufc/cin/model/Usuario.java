@@ -3,6 +3,7 @@ package br.ufc.cin.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -78,18 +79,9 @@ public class Usuario {
 	@JoinColumn(name = "FOTO_ID")
 	private Documento foto;
 
-	@OneToOne
-	@JoinColumn(name = "HISTORICO_ID")
-	private Historico historico;
+	@OneToMany(mappedBy = "apostador", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE})
+	private List<Aposta> apostas;
 	
-	public Historico getHistorico() {
-		return historico;
-	}
-
-	public void setHistorico(Historico historico) {
-		this.historico = historico;
-	}
-
 	public List<Entrega> getEntregas() {
 		return entregas;
 	}

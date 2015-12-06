@@ -58,6 +58,11 @@ public class Equipe {
 	
 	@OneToMany(mappedBy = "equipe", cascade={CascadeType.REMOVE})
 	private List<ReaberturaSubmissao> reaberturaSubmissao;
+
+	@OneToMany(mappedBy = "equipe", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE})
+	private List<SaldoNaRodada> saldosNasRodadas;
+	
+	private Float saldo;
 	
 	@Transient
 	private boolean statusNaRodada;
@@ -97,7 +102,21 @@ public class Equipe {
 			usuario.getEquipes().add(this);
 		}
 	}
+	
+	public List<SaldoNaRodada> getSaldosNasRodadas() {
+		return saldosNasRodadas;
+	}
 
+	public void setSaldosNasRodadas(List<SaldoNaRodada> saldosNasRodadas) {
+		this.saldosNasRodadas = saldosNasRodadas;
+	}
+
+	public void addSaldo(SaldoNaRodada saldo) {
+		if (!getSaldosNasRodadas().contains(saldo)) {
+			getSaldosNasRodadas().add(saldo);
+		}
+	}
+	
 	public void addStatusRodadaEquipe(StatusRodadaEquipe statusRodadaEquipe){
 		if(!getStatusRodadaEquipes().contains(statusRodadaEquipe)){
 			getStatusRodadaEquipes().add(statusRodadaEquipe);
@@ -171,6 +190,14 @@ public class Equipe {
 
 	public void setStatusRodadaEquipes(List<StatusRodadaEquipe> statusRodadaEquipes) {
 		this.statusRodadaEquipes = statusRodadaEquipes;
+	}
+
+	public Float getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(Float saldo) {
+		this.saldo = saldo;
 	}
 
 	public String toString(){

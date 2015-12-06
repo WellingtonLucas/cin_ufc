@@ -75,6 +75,12 @@ public class Rodada {
 	@OneToMany(mappedBy = "rodada", cascade={CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.REFRESH,CascadeType.MERGE})
 	private List<Entrega> entregas;
 	
+	@Column(name = "valor_liberado")
+	private Float valorLiberado;
+	
+	@Column(name="all_in")
+	private boolean allIn;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -193,6 +199,22 @@ public class Rodada {
 
 	public void setStatusAvaliacao(boolean statusAvaliacao) {
 		this.statusAvaliacao = statusAvaliacao;
+	}
+
+	public Float getValorLiberado() {
+		return valorLiberado;
+	}
+
+	public void setValorLiberado(Float valorLiberado) {
+		this.valorLiberado = valorLiberado;
+	}
+
+	public boolean isAllIn() {
+		return allIn;
+	}
+
+	public void setAllIn(boolean allIn) {
+		this.allIn = allIn;
 	}
 
 	@Override

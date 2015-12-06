@@ -46,8 +46,12 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
 		if(rodada.getTermino().getTime() < tempoAtual){
+			if(rodada.isStatus() == false)
+				return rodada;
 			rodada.setStatus(false);
 		}else{
+			if(rodada.isStatus() == true)
+				return rodada;
 			rodada.setStatus(true);
 		}
 		update(rodada);
@@ -59,8 +63,12 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
 		if(rodada.getPrazoSubmissao().getTime() < tempoAtual){
+			if(rodada.isStatusPrazo() == false)
+				return rodada;
 			rodada.setStatusPrazo(false);
 		}else{
+			if(rodada.isStatusPrazo() == true)
+				return rodada;
 			rodada.setStatusPrazo(true);
 		}
 		update(rodada);
@@ -72,8 +80,12 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
 		if(rodada.getTerminoAvaliacao().getTime() < tempoAtual){
+			if(rodada.isStatusAvaliacao() == false)
+				return rodada;
 			rodada.setStatusAvaliacao(false);
 		}else{
+			if(rodada.isStatusAvaliacao() == true)
+				return rodada;
 			rodada.setStatusAvaliacao(true);
 		}
 		update(rodada);

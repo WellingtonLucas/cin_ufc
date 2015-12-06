@@ -54,7 +54,6 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 		return -1f;
 	}
 
-	
 	@Override
 	public Historico atualizarHistorico(Historico historico,
 			List<Rodada> rodadas, Usuario usuario) {
@@ -62,7 +61,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 			historico = criarNovasNotas(historico, rodadas);
 		}
 		for (Rodada rodada : rodadas) {
-			if(!rodada.isStatusRaking()){//Alterar na história de liberar raking
+			if(rodada.isStatusRaking()){
 				if(!historico.getNotas().isEmpty()){
 					for(Nota nota: historico.getNotas()){
 						if(nota.getRodada().equals(rodada)){
@@ -73,7 +72,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 									respostas.add(resposta);
 								}
 							}
-							if(!rodada.isStatusRaking() && !respostas.isEmpty()){
+							if(rodada.isStatusRaking() && !respostas.isEmpty()){
 								nota.setValor(calculoNotaService.calculoMedia(respostas));
 								historico.addNota(nota);
 							}
@@ -103,7 +102,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 			}	
 			Nota nota = new Nota();
 			nota.setRodada(rodada);
-			if(!rodada.isStatus() && !respostas.isEmpty()){
+			if(!rodada.isStatusRaking() && !respostas.isEmpty()){
 				nota.setValor(calculoNotaService.calculoMedia(respostas));
 			}
 			notas.add(nota);

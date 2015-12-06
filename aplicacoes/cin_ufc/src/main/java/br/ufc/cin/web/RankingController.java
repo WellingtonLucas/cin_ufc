@@ -5,6 +5,8 @@ import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.Nota;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.RankingService;
 import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
 
@@ -34,6 +38,9 @@ public class RankingController {
 	
 	@Inject
 	private RodadaService rodadaService;
+	
+	@Inject
+	private RankingService rankingService;
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/publicarRankings", method = RequestMethod.GET)
 	public String publicarRanking(@PathVariable("idJogo") Integer idJogo,
@@ -81,7 +88,6 @@ public class RankingController {
 					MENSAGEM_JOGO_INEXISTENTE);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-
 		Usuario usuario = getUsuarioLogado(session);
 		if (usuario.equals(jogo.getProfessor())) {
 			model.addAttribute("permissao", "professor");
@@ -91,9 +97,11 @@ public class RankingController {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_PERMISSAO_NEGADA);
 		}
+		
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("jogo", jogo);
-		return "ranking/rankings";
+		model.addAttribute("rankingJogo", true);
+		return "ranking/rankingsRodada";
 
 	}
 	
@@ -103,7 +111,6 @@ public class RankingController {
 			RedirectAttributes redirectAttributes, Model model) {
 
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_JOGO_INEXISTENTE);
@@ -130,9 +137,13 @@ public class RankingController {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_PERMISSAO_NEGADA);
 		}
+		List<Nota> notas = rankingService.ordenaNotas(rodada);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("jogo", jogo);
-		return "ranking/rankings";
+		model.addAttribute("notas", notas);
+		model.addAttribute("rankingJogo", true);
+		model.addAttribute("rodada", rodada);
+		return "ranking/rankingsRodada";
 	}
 	
 	private Usuario getUsuarioLogado(HttpSession session) {

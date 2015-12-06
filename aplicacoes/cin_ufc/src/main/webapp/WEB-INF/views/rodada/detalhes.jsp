@@ -90,7 +90,36 @@
 								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.terminoAvaliacao }" /></label>
 							</div>
 						</div>
-						
+						<div class="form-group">
+							<label class="col-sm-2 control-label field">Valor de aposta:</label>
+							<div class="col-sm-4 field-value">
+								<c:if test="${empty rodada.valorLiberado }">
+									<label>-</label>
+								</c:if>
+								<c:if test="${not empty rodada.valorLiberado }">
+									<label><fmt:formatNumber currencyCode="BRL" value="${rodada.valorLiberado }" /></label>
+								</c:if>
+							</div>
+							<label class="col-sm-2 control-label field">All in:</label>
+							<div class="col-sm-4 field-value">
+								<c:if test="${rodada.allIn}">
+									<label class="radio-inline">
+										<input type="radio" name="tudo" value="sim" checked="checked" disabled="disabled"> Sim
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="tudo" value="nao" disabled="disabled"> Não
+									</label>
+								</c:if>
+								<c:if test="${!rodada.allIn}">
+									<label class="radio-inline">
+										<input type="radio" name="tudo" value="sim" disabled="disabled"> Sim
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="tudo" value="nao"  checked="checked" disabled="disabled"> Não
+									</label>
+								</c:if>
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label field">Descrição:</label>
 							<c:if test="${empty rodada.descricao }">

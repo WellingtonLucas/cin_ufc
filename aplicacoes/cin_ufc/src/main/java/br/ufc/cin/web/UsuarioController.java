@@ -8,7 +8,6 @@ import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -335,7 +334,7 @@ public class UsuarioController {
 		model.addAttribute("formulario", resposta.getFormulario());
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("resposta", resposta);
-		model.addAttribute("liberaGaba", verificaPrazo(resposta));
+		model.addAttribute("liberaGaba", resposta.getEntrega().getRodada().isStatusRaking());
 		return "jogador/avaliacao";
 	}
 
@@ -401,15 +400,6 @@ public class UsuarioController {
 		return "jogador/historico";
 	}
 
-	private boolean verificaPrazo(Resposta resposta){
-		Calendar calendario = Calendar.getInstance();
-		long termino = resposta.getEntrega().getRodada().getTermino().getTime();
-		long tempoAtual = calendario.getTimeInMillis();
-		if(termino<tempoAtual)
-			return true;
-		return false;
-	}
-	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

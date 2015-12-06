@@ -27,7 +27,9 @@
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<div class="col-sm-12">
 						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Ultimas submissões da rodada</small></h2>
+						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Ultimas submissões da rodada</small>
+							- Seu saldo é <strong>${aposta.saldo } R$</strong>
+						</h2>
 						<hr>
 						<c:if test="${not empty erro}">
 							<div class="alert alert-warning alert-dismissible" role="alert">
@@ -62,6 +64,7 @@
 										<th>Nome da Equipe</th>
 										<th>Nome do Documento</th>
 										<th>Avalie</th>
+										<th>Aposte</th>
 										<th>Data de Submissão</th>
 									</tr>
 								</thead>
@@ -85,6 +88,11 @@
 														<button class="btn btn-success">Avaliar</button>
 													</a>
 												</c:if>
+											</td>
+											<td>
+												<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
+													<button class="btn btn-primary">Apostar</button>
+												</a>
 											</td>
 											<td>
 												<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />

@@ -69,7 +69,6 @@ public class Jogo implements Serializable {
 	private boolean status;
 
 	@ManyToOne
-	/* (fetch = FetchType.LAZY) */
 	@JoinColumn(name = "id_professor")
 	private Usuario professor;
 

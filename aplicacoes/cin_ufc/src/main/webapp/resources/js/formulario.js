@@ -54,8 +54,6 @@ $(function () {
 
         $('#btnDel').attr('disabled', false);
 
-        if (newNum == 5)
-        $('#btnAdd').attr('disabled', true).prop('value', "Você excedeu o limite de "+newNum+" perguntas."); // value here updates the text in the 'add' button when the limit is reached 
     });
 
     $('#btnDel').click(function () {

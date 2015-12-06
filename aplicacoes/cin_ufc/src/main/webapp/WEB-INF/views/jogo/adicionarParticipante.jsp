@@ -66,7 +66,7 @@
 											<th>Nome</th>
 											<th>Sorenome</th>
 											<th>Curso</th>
-											<th>Matricula</th>
+											<th>Email</th>
 											<th>Marque aqui</th>
 										</tr>
 									</thead>

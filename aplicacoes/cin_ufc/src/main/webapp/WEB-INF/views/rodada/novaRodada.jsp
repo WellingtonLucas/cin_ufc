@@ -58,7 +58,7 @@
 				<div class="form-group">
 					<div class="form-item">
 						<label for="nome" class="col-sm-2 control-label" >Nome da Rodada:<span class="required">*</span></label>
-						<div class="col-sm-6">
+						<div class="col-sm-8">
 							<form:input type="text" class="form-control" id="nome" path="nome" placeholder="Rodada 1" />
 							<div class="error-validation">
 								<form:errors path="nome"></form:errors>
@@ -71,7 +71,7 @@
 					<div class="form-item">
 						<label for="inicio" class="col-sm-2 control-label">Data de Início:<span class="required">*</span></label>
 						<div class="col-sm-2">
-							<form:input id="inicio" type="text" path="inicio" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
+							<form:input id="inicio" type="text" path="inicio" cssClass="form-control data" placeholder="DD/MM/AAAA"/>
 							<div class="error-validation">
 								<form:errors path="inicio"></form:errors>
 							</div>
@@ -82,11 +82,11 @@
 							</c:if>
 						</div>
 					</div>
-
+					<div class="col-sm-2"></div>
 					<div class="form-item">
 						<label for="termino" class="col-sm-2 control-label">Data de Término:<span class="required">*</span></label>
 						<div class="col-sm-2">
-							<form:input id="termino" type="text" path="termino" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
+							<form:input id="termino" type="text" path="termino" cssClass="form-control data" placeholder="DD/MM/AAAA"/>
 							<div class="error-validation">
 								<form:errors path="termino"></form:errors>
 							</div>
@@ -102,7 +102,7 @@
 					<div class="form-item">
 						<label for="prazoSubmissao" class="col-sm-2 control-label">Prazo de submissão:<span class="required">*</span></label>
 						<div class="col-sm-2">
-							<form:input type="text" path="prazoSubmissao" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
+							<form:input type="text" path="prazoSubmissao" cssClass="form-control data" placeholder="DD/MM/AAAA"/>
 							<div class="error-validation">
 								<form:errors path="prazoSubmissao"></form:errors>
 							</div>
@@ -113,10 +113,11 @@
 							</c:if>
 						</div>
 					</div>
+					<div class="col-sm-2"></div>
 					<div class="form-item">
 						<label for="terminoAvaliacao" class="col-sm-2 control-label">Prazo de avaliação:<span class="required">*</span></label>
 						<div class="col-sm-2">
-							<form:input type="text" path="terminoAvaliacao" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
+							<form:input type="text" path="terminoAvaliacao" cssClass="form-control data" placeholder="DD/MM/AAAA"/>
 							<div class="error-validation">
 								<form:errors path="terminoAvaliacao"></form:errors>
 							</div>
@@ -126,6 +127,52 @@
 								</div>
 							</c:if>
 						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-item">
+						<label for="valorLiberado" class="col-sm-2 control-label">Valor de aposta (R$):</label>
+						<div class="col-sm-2">
+							<form:input type="number" step="0.5" path="valorLiberado" min="0.0" class="form-control"/>
+							<div class="error-validation">
+									<form:errors path="valorLiberado"></form:errors>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-2"></div>
+					<div class="form-item">
+						<label for="tudo" class="col-sm-2 control-label">All in:<span class="required">*</span></label>
+						<c:if test="${rodada.allIn == null }">
+							<div class="col-sm-2">
+								<label class="radio-inline">
+									<input type="radio" name="tudo" value="sim"> Sim
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="tudo" value="nao" checked="checked"> Não
+								</label>
+							</div>
+						</c:if>
+						<c:if test="${rodada.allIn != null }">
+							<div class="col-sm-2">
+								<c:if test="${rodada.allIn}">
+									<label class="radio-inline">
+										<input type="radio" name="tudo" value="sim" checked="checked"> Sim
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="tudo" value="nao"> Não
+									</label>
+								</c:if>
+								<c:if test="${!rodada.allIn}">
+									<label class="radio-inline">
+										<input type="radio" name="tudo" value="sim"> Sim
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="tudo" value="nao"  checked="checked"> Não
+									</label>
+								</c:if>
+							</div>
+						</c:if>
+						
 					</div>
 				</div>
 				<div class="form-group">
@@ -166,7 +213,7 @@
 						</button>						
 					</div>
 					<div class="col-sm-2">
-						<a href="<c:url value="/jogo/${jogo.id }/rodadas"></c:url>" class="btn btn-warning btn-lg">Cancelar</a>
+						<a href="javascript:history.back();" class="btn btn-warning btn-lg">Cancelar</a>
 					</div>
 				</div>
 			</form:form>

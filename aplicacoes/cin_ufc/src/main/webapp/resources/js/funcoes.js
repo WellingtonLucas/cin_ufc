@@ -205,6 +205,8 @@ $(document).ready(function() {
 		browseClass: "btn btn-default",
 		removeLabel: "Excluir",
 		msgSelected: "{n} arquivos selecionados",
+		maxFileSize: 10000,
+		msgSizeTooLarge: 'O arquivo "{name}" (<b>{size} KB</b>) excede o tamanho de <b>{maxSize} KB</b>. Por favor tente novamente!',
 		msgLoading: "Carregando arquivo {index} de {files} &hellip;"
 	});
 	

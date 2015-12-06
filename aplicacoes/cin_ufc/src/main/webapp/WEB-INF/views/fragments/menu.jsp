@@ -68,10 +68,6 @@
 			</c:if>	
 		</c:if>
 		<c:if test="${(action == 'detalhesRodada')}">
-			<%-- <c:if test="${ (permissao == 'professor') }">
-				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/vincularFormulario"></c:url>">Vincular Formulario (x)</a></li>
-				<hr>
-			</c:if>	 --%>
 			<c:if test="${ (permissao == 'aluno') && rodada.statusPrazo}">
 				<li>
 					<a data-toggle="modal" data-target="#squarespaceModal" data-toggle="tooltip" data-placement="right"
@@ -82,6 +78,9 @@
 			<c:if test="${(permissao == 'professor')||(permissao == 'aluno') }">
 				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/submissoes"></c:url>">Submissões da rodada</a></li>
 				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/rankings"></c:url>">Rankings</a></li>
+				<c:if test="${permissao == 'professor'}">
+					<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/apostas"></c:url>">Histórico de apostas</a></li>
+				</c:if>
 			</c:if>
 		</c:if>
 		
@@ -116,6 +115,9 @@
 		</c:if>
 		<c:if test="${(action =='historico') && (permissao == 'professor' || permissao== 'alunoLogado')}">
 			<li class="active"><a href="<c:url value ="/usuario/${requisitado.id }/detalhes/${jogo.id}"></c:url>">${requisitado.nome }</a></li>
+		</c:if>
+		<c:if test="${rankingJogo == true && (permissao == 'professor' || permissao == 'aluno')}">
+			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/detalhes"></c:url>">${rodada.nome }</a></li>
 		</c:if>
 	</ul>
 </div>

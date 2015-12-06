@@ -7,14 +7,19 @@ import javax.inject.Named;
 
 import br.ufc.cin.model.Nota;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.SaldoNaRodada;
 import br.ufc.cin.service.NotaService;
 import br.ufc.cin.service.RankingService;
+import br.ufc.cin.service.SaldoNaRodadaService;
 
 @Named
 public class RankingServiceImpl implements RankingService{
 
 	@Inject
 	private NotaService notaService;
+	
+	@Inject
+	private SaldoNaRodadaService saldoNaRodadaService;
 	
 	@Override
 	public List<Nota> ordenaNotas(Rodada rodada) {
@@ -32,6 +37,26 @@ public class RankingServiceImpl implements RankingService{
 				}
 			}
 			return notas;
+		}
+		return null;
+	}
+
+	@Override
+	public List<SaldoNaRodada> ordenaSaldos(Rodada rodada) {
+		List<SaldoNaRodada> saldos = saldoNaRodadaService.findByRodada(rodada);
+		if(saldos != null){
+			for (int i=0;i<saldos.size();i++) {
+				for (int j = i+1; j < saldos.size(); j++) {
+					if(saldos.get(i).getSaldoComFator() < saldos.get(j).getSaldoComFator()){
+						SaldoNaRodada aux = saldos.get(i);
+						saldos.add(i, saldos.get(j));
+						saldos.remove(i+1);
+						saldos.add(j, aux);
+						saldos.remove(j+1);
+					}
+				}
+			}
+			return saldos;
 		}
 		return null;
 	}

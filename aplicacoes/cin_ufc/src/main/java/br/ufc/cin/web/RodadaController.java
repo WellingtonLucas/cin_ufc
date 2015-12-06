@@ -756,24 +756,6 @@ public class RodadaController {
 		return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 	}
 	
-	@RequestMapping(value="/jogo/{idJogo}/rodada/{id}/gerarRanking", method = RequestMethod.GET)
-	public String gerarRanking(@PathVariable("idJogo") Integer idJogo,
-			@PathVariable("id") Integer id, Model model,
-			HttpSession session, RedirectAttributes redirectAttributes){
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		Rodada rodada = rodadaService.find(Rodada.class, id);
-		if (rodada == null) {
-			redirectAttributes.addFlashAttribute("erro","Rodada inexistente.");
-			return "redirect:/jogo/" + jogo.getId() + "/equipes";
-		}
-		
-		return "rodada/ranking";
-	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/equipe/{idEquipe}/apostar", method = RequestMethod.GET)
 	public String apostar(@PathVariable("idJogo") Integer idJogo, @PathVariable("idEquipe") Integer idJEquipe,

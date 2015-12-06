@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.NotaEquipeRodada;
+import br.ufc.cin.model.Rodada;
 import br.ufc.cin.repository.NotaEquipeRodadaRepository;
 import br.ufc.cin.service.NotaEquipeRodadaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
@@ -20,6 +21,11 @@ public class NotaEquipeRodadaServiceImpl extends GenericServiceImpl<NotaEquipeRo
 	@Override
 	public List<NotaEquipeRodada> buscarPorEquipe(Equipe equipe) {
 		return notaEquipeRodadaRepository.buscarPorEquipe(equipe);
+	}
+
+	@Override
+	public NotaEquipeRodada findByEquipeRodada(Equipe equipe, Rodada rodada) {
+		return notaEquipeRodadaRepository.findByEquipeRodada(equipe,rodada);
 	}
 
 }

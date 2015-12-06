@@ -18,6 +18,7 @@ public class SaldoNaRodada {
 	private Integer id;
 	
 	@ManyToOne
+	@JoinColumn(name="EQUIPE_ID")
 	private Equipe equipe;
 	
 	@OneToOne
@@ -26,6 +27,9 @@ public class SaldoNaRodada {
 	
 	@Column
 	private Float saldo;
+
+	@Column(name="saldo_com_fator")
+	private Float saldoComFator;
 
 	public Integer getId() {
 		return id;
@@ -41,6 +45,14 @@ public class SaldoNaRodada {
 
 	public void setEquipe(Equipe equipe) {
 		this.equipe = equipe;
+	}
+
+	public Float getSaldoComFator() {
+		return saldoComFator;
+	}
+
+	public void setSaldoComFator(Float saldoComFator) {
+		this.saldoComFator = saldoComFator;
 	}
 
 	public Rodada getRodada() {

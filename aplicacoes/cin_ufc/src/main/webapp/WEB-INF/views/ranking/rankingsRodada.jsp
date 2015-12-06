@@ -28,15 +28,18 @@
 					        <h1>Rankings</h1>
 					        <p class="lead">Escolha uma das opções abaixo para visualizar os respectivos Rankings.</p>
 					        <div>
-					        	<a class="btn btn-lg btn-success col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/rankings"></c:url>" role="button">Alunos <i class="glyphicon glyphicon-list"></i></a>
+					        	<a class="btn btn-lg btn-success col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/alunos"></c:url>" role="button">Alunos <i class="glyphicon glyphicon-list"></i></a>
 					        </div>
 					        <div class="col-sm-1"></div>
 					        <div>
-					        	<a class="btn btn-lg btn-primary col-sm-3" href="<c:url value="/jogo/${jogo.id }/ranking/equipes"></c:url>" role="button">Equipes <i class="glyphicon glyphicon-list"></i></a>
+					        	<a class="btn btn-lg btn-primary col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/equipes"></c:url>" role="button">Equipes <i class="glyphicon glyphicon-list"></i></a>
 					        </div>
 					    </div> 
-					    <c:if test="${notas != null}">
+					    <c:if test="${notas != null && rankingAlunos}">
 					    	<jsp:include page="rankingAlunosRodada.jsp" />
+					    </c:if>
+					    <c:if test="${saldos != null && rankingEquipes}">
+					    	<jsp:include page="rankingEquipesRodada.jsp" />
 					    </c:if>
 				    </div>
 				</div>

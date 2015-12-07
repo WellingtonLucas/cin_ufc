@@ -65,6 +65,9 @@ public class Rodada {
 	@Column
 	private boolean statusRaking;
 	
+	@Column
+	private boolean statusNota;
+	
 	@OneToOne(fetch = FetchType.LAZY)
 	private Documento modelo;
 	
@@ -207,6 +210,14 @@ public class Rodada {
 
 	public void setValorLiberado(Float valorLiberado) {
 		this.valorLiberado = valorLiberado;
+	}
+
+	public boolean isStatusNota() {
+		return statusNota;
+	}
+
+	public void setStatusNota(boolean statusNota) {
+		this.statusNota = statusNota;
 	}
 
 	public boolean isAllIn() {

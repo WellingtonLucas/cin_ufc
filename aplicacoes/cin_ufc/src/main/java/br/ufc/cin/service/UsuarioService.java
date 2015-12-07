@@ -21,5 +21,7 @@ public interface UsuarioService  extends GenericService<Usuario>{
 	void salvar(List<Usuario> alunos);
 
 	void atualizar(List<Usuario> alunos);
+
+	String definePermissao(Jogo jogo, Usuario usuario);
 	
 }

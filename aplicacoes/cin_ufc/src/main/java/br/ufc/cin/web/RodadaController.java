@@ -171,6 +171,7 @@ public class RodadaController {
 			rodada.setStatusPrazo(true);
 			rodada.setStatusAvaliacao(false);
 			rodada.setStatusRaking(false);
+			rodada.setStatusNota(true);
 			if(allIN.equals("sim")){
 				rodada.setAllIn(true);
 			}else{
@@ -756,7 +757,6 @@ public class RodadaController {
 		return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 	}
 	
-
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/equipe/{idEquipe}/apostar", method = RequestMethod.GET)
 	public String apostar(@PathVariable("idJogo") Integer idJogo, @PathVariable("idEquipe") Integer idJEquipe,
 			@PathVariable("id") Integer id, Model model,
@@ -893,7 +893,35 @@ public class RodadaController {
 		return "rodada/apostas";
 	}
 	
-	
+	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/gerarNotas", method = RequestMethod.GET)
+	public String gerarNotasRodada(@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("idRodada") Integer idRodada, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		Usuario usuario = getUsuarioLogado(session);
+		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
+		try {
+			regrasService.verificaJogo(jogo);	
+			regrasService.verificaSeProfessor(usuario, jogo);
+			regrasService.verificaRodadaJogo(rodada,jogo);
+			rodada.setStatusNota(true);
+			rodadaService.update(rodada);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",
+					e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e){
+			redirectAttributes.addFlashAttribute("erro",
+					"Erro ao tentar gerar as notas.");
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
+		}
+		
+		redirectAttributes.addFlashAttribute("info",
+				usuario.getNome()+" você pode conferir as notas das equipes e alterar os fatores de aposta. "
+						+ "Basta ir na página de cada equipe.");
+		return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
+	}
+
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

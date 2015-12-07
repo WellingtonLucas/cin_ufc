@@ -520,31 +520,6 @@ public class JogoController {
 
 	}
 	
-	@RequestMapping(value = "/{idJogo}/rankings", method = RequestMethod.GET)
-	public String rankings(@PathVariable("idJogo") Integer idJogo, HttpSession session,
-			RedirectAttributes redirectAttributes, Model model) {
-
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-
-		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.equals(jogo.getProfessor())) {
-			model.addAttribute("permissao", "professor");
-		} else {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_PERMISSAO_NEGADA);
-		}
-		model.addAttribute("usuario", usuario);
-		model.addAttribute("jogo", jogo);
-		return "ranking/rankings";
-
-	}
-	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

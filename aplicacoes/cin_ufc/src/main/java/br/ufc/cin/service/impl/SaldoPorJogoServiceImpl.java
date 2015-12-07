@@ -1,5 +1,7 @@
 package br.ufc.cin.service.impl;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,6 +21,11 @@ public class SaldoPorJogoServiceImpl extends GenericServiceImpl<SaldoPorJogo> im
 	@Override
 	public SaldoPorJogo findByUsuarioJogo(Usuario apostador, Jogo jogo) {
 		return saldoPorJogoRepository.findByUsuarioJogo(apostador, jogo);
+	}
+
+	@Override
+	public List<SaldoPorJogo> findByJogo(Jogo jogo) {
+		return saldoPorJogoRepository.findByJogo(jogo);
 	}
 
 }

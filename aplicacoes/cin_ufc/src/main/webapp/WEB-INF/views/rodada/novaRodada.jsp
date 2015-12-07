@@ -52,6 +52,7 @@
 				<form:hidden path="statusPrazo"/>
 				<form:hidden path="statusAvaliacao"/>
 				<form:hidden path="statusRaking"/>
+				<form:hidden path="statusNota"/>
 				<c:if test="${not empty rodada.modelo.id }">
 					<form:hidden path="modelo.id"/>
 				</c:if>

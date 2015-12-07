@@ -14,9 +14,9 @@
 					<div class="col-md-3 col-lg-3 " align="center">
 						<a class="pull-left" href="#"> 
 							<c:if test="${nota.historico.usuario.foto == null }">
-								<img class="media-object img-circle"
+								<img class="img-thumbnail img-responsive"
 								src="<c:url value="/resources/imagens/empty_profile.gif" />"
-								alt="Foto de ${nota.historico.usuario.nome }">
+								alt="Foto de ${nota.historico.usuario.nome }" />
 							</c:if>
 							<c:if test="${nota.historico.usuario.foto != null }">
 								<img alt="Foto de ${nota.historico.usuario.nome} "

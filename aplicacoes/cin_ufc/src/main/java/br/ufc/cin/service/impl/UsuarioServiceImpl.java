@@ -65,4 +65,15 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 			update(aluno);
 		}
 	}
+
+	@Override
+	public String definePermissao(Jogo jogo, Usuario usuario) {
+		if (usuario.equals(jogo.getProfessor())) {
+			return "professor";
+		} else if(jogo.getAlunos().contains(usuario)){
+			return "aluno";
+		}else {
+			throw new IllegalArgumentException("Permissão negada.");
+		}
+	}
 }

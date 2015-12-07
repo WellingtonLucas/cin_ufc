@@ -127,5 +127,41 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 		}
 	}
 
+
+	@Override
+	public void atualizaSaldoAlunos(Jogo jogo, Rodada rodada) {
+		List<Usuario> alunos = jogo.getAlunos();
+		for (Usuario usuario : alunos) {
+			Aposta aposta = findByUsuarioRodada(usuario, rodada);
+			if(aposta!=null){
+				List<Deposito> depositos = aposta.getDepositos();
+				SaldoPorJogo saldoPorJogo = saldoPorJogoService.findByUsuarioJogo(usuario, jogo);
+				Float saldo = 0f;
+				if(saldoPorJogo != null){
+					saldo = saldoPorJogo.getSaldo();
+				}
+				for (Deposito deposito : depositos) {
+					NotaEquipeRodada notaEquipeRodada =
+							notaEquipeRodadaService.findByEquipeRodada(deposito.getEquipe(), rodada);
+					if(notaEquipeRodada != null){
+						if(saldoPorJogo == null){
+							saldoPorJogo = new SaldoPorJogo();
+							saldoPorJogo.setApostador(usuario);
+							saldoPorJogo.setJogo(jogo);
+							saldoPorJogo.setSaldo(deposito.getQuantia() * notaEquipeRodada.getFatorDeAposta());
+							saldo = saldoPorJogo.getSaldo();
+						}else{
+							saldo += (deposito.getQuantia() * notaEquipeRodada.getFatorDeAposta());
+						}
+					}
+				}
+				saldoPorJogo.setSaldo(saldo);
+				saldoPorJogoService.update(saldoPorJogo);
+			}
+			
+		}
+		
+	}
+
 	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.quixada.npi.service.GenericService;
@@ -20,5 +21,11 @@ public interface EquipeService extends GenericService<Equipe>{
 	public abstract Equipe equipePorAlunoNoJogo(Usuario aluno, Jogo jogo);
 
 	public abstract List<Entrega> getEntregasOrdenadasPorEquipe(Equipe equipe, Jogo jogo);
+
+	public abstract List<NotaEquipeRodada> criarNotasEquipeRodadas(
+			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe, String permissao);
+
+	public abstract List<NotaEquipeRodada> atualizarNotasEquipeRodadas(
+			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe, String permissao);
 
 }

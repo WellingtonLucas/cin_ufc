@@ -5,12 +5,16 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Nota;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.SaldoNaRodada;
+import br.ufc.cin.model.SaldoPorJogo;
 import br.ufc.cin.service.NotaService;
 import br.ufc.cin.service.RankingService;
 import br.ufc.cin.service.SaldoNaRodadaService;
+import br.ufc.cin.service.SaldoPorJogoService;
 
 @Named
 public class RankingServiceImpl implements RankingService{
@@ -20,6 +24,9 @@ public class RankingServiceImpl implements RankingService{
 	
 	@Inject
 	private SaldoNaRodadaService saldoNaRodadaService;
+	
+	@Inject
+	private SaldoPorJogoService saldoPorJogoService; 
 	
 	@Override
 	public List<Nota> ordenaNotas(Rodada rodada) {
@@ -59,6 +66,48 @@ public class RankingServiceImpl implements RankingService{
 			return saldos;
 		}
 		return null;
+	}
+
+	@Override
+	public List<Equipe> ordenaEquipes(Jogo jogo) {
+		List<Equipe> equipes = jogo.getEquipes();
+		if(equipes != null){
+			for (int i=0;i<equipes.size();i++) {
+				for (int j = i+1; j < equipes.size(); j++) {
+					if(equipes.get(i).getSaldo() < equipes.get(j).getSaldo()){
+						Equipe aux = equipes.get(i);
+						equipes.add(i, equipes.get(j));
+						equipes.remove(i+1);
+						equipes.add(j, aux);
+						equipes.remove(j+1);
+					}
+				}
+			}
+			return equipes;
+		}
+		throw new IllegalArgumentException(
+				"O jogo ainda não possui equipes.");
+	}
+
+	@Override
+	public List<SaldoPorJogo> ordenaSaldosPorJogo(Jogo jogo) {
+		List<SaldoPorJogo> saldosPorJogo = saldoPorJogoService.findByJogo(jogo);
+		if(saldosPorJogo != null){
+			for (int i=0;i<saldosPorJogo.size();i++) {
+				for (int j = i+1; j < saldosPorJogo.size(); j++) {
+					if(saldosPorJogo.get(i).getSaldo() < saldosPorJogo.get(j).getSaldo()){
+						SaldoPorJogo aux = saldosPorJogo.get(i);
+						saldosPorJogo.add(i, saldosPorJogo.get(j));
+						saldosPorJogo.remove(i+1);
+						saldosPorJogo.add(j, aux);
+						saldosPorJogo.remove(j+1);
+					}
+				}
+			}
+			return saldosPorJogo;
+		}
+		throw new IllegalArgumentException(
+				"Nenhum períogo de apostas finalizado até o momento.");
 	}
 
 	

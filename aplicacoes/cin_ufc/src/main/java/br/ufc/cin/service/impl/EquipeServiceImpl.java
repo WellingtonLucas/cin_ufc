@@ -9,10 +9,16 @@ import javax.inject.Named;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.NotaEquipeRodada;
+import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.EquipeRepository;
+import br.ufc.cin.service.CalculoNotaService;
+import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
+import br.ufc.cin.service.NotaEquipeRodadaService;
+import br.ufc.cin.service.RespostaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
@@ -21,6 +27,18 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 
 	@Inject
 	private EquipeRepository equipeRepository;
+	
+	@Inject
+	private EntregaService entregaService;
+	
+	@Inject
+	private RespostaService respostaService;
+	
+	@Inject
+	private CalculoNotaService calculoNotaService;
+
+	@Inject
+	private NotaEquipeRodadaService notaEquipeRodadaService;
 	
 	@Override
 	public List<Usuario> alunosSemEquipe(Jogo jogo) {
@@ -93,6 +111,56 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 			}
 		}
 		return entregas;
+	}
+
+	@Override
+	public List<NotaEquipeRodada> criarNotasEquipeRodadas(
+			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe, String permissao) {
+		notasEquipeRodadas = new ArrayList<NotaEquipeRodada>();
+		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
+		List<Resposta> respostas = new ArrayList<Resposta>();
+		for (Entrega entrega : entregas) {
+			Resposta resposta = respostaService.findUltimaRespostaPorEntrega(entrega.getUsuario(), entrega);
+			if(resposta!= null){
+				respostas.add(resposta);
+			}
+			if(((entrega.getRodada().isStatusNota() && permissao.equals("professor")) || entrega.getRodada().isStatusRaking()) && !respostas.isEmpty()){
+				NotaEquipeRodada notaEquipeRodada = new NotaEquipeRodada();
+				notaEquipeRodada.setEquipe(equipe);
+				notaEquipeRodada.setRodada(entrega.getRodada());
+				Float nota = calculoNotaService.calculoNotaEquipe(resposta);
+				notaEquipeRodada.setValor(nota);
+				notaEquipeRodada.setFatorDeAposta(nota);
+				notaEquipeRodadaService.save(notaEquipeRodada);
+				notasEquipeRodadas.add(notaEquipeRodada);
+			}
+		}	
+		
+		return notasEquipeRodadas;
+	}
+
+	@Override
+	public List<NotaEquipeRodada> atualizarNotasEquipeRodadas(
+			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe, String permissao) {
+		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
+		List<Resposta> respostas = new ArrayList<Resposta>();
+		for (int i= notasEquipeRodadas.size(); i<entregas.size();i++) {
+			Resposta resposta = respostaService.findUltimaRespostaPorEntrega(entregas.get(i).getUsuario(), entregas.get(i));
+			if(resposta!= null){
+				respostas.add(resposta);
+			}
+			if(((entregas.get(i).getRodada().isStatusNota() && permissao.equals("professor")) || entregas.get(i).getRodada().isStatusRaking()) && !respostas.isEmpty()){
+				NotaEquipeRodada notaEquipeRodada = new NotaEquipeRodada();
+				notaEquipeRodada.setEquipe(equipe);
+				notaEquipeRodada.setRodada(entregas.get(i).getRodada());
+				Float nota = calculoNotaService.calculoNotaEquipe(resposta);
+				notaEquipeRodada.setValor(nota);
+				notaEquipeRodada.setFatorDeAposta(nota);
+				notaEquipeRodadaService.save(notaEquipeRodada);
+				notasEquipeRodadas.add(notaEquipeRodada);
+			}
+		}
+		return notasEquipeRodadas;
 	}
 
 }

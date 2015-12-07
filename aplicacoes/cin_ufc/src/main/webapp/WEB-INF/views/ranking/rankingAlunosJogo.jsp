@@ -5,33 +5,33 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">Melhores equipes da rodada</h3>
+		<h3 class="panel-title">Melhores avaliadores do jogo</h3>
 	</div>
 	<div class="panel-body">
-		<c:forEach var="saldo" items="${saldos }" varStatus="idEqui">
+		<c:forEach var="saldo" items="${saldos }" varStatus="idAlu">
 			<ul class="media-list">
 				<li class="media">
 					<div class="col-md-3 col-lg-3 " align="center">
 						<a class="pull-left" href="#"> 
-							<c:if test="${saldo.equipe.logo == null }">
+							<c:if test="${saldo.apostador.foto == null }">
 								<img class="img-thumbnail img-responsive"
-								src="<c:url value="/resources/imagens/boxvazia.gif" />"
-								alt="Foto de ${saldo.equipe.nome }" />
+								src="<c:url value="/resources/imagens/empty_profile.gif" />"
+								alt="Foto de ${saldo.apostador.nome }" />
 							</c:if>
-							<c:if test="${saldo.equipe.logo != null }">
-								<img alt="Foto de ${saldo.equipe.nome} "
-									src="data:${saldo.equipe.logo.extensao };base64,${saldo.equipe.logo.encode }"
+							<c:if test="${saldo.apostador.foto != null }">
+								<img alt="Foto de ${saldo.apostador.nome} "
+									src="data:${saldo.apostador.foto.extensao };base64,${saldo.apostador.foto.encode }"
 									class="img-thumbnail img-responsive" />
 							</c:if>
 						</a>
 					</div>
 					<div class="container media-body">
 						<div class="well well-lg">
-							<h1 class="media-heading text-uppercase reviews"><span class="label label-success">${idEqui.count }º</span>
-								${saldo.equipe.nome} 
+							<h1 class="media-heading text-uppercase reviews"><span class="label label-success">${idAlu.count }º</span>
+								${saldo.apostador.nome} ${saldo.apostador.sobreNome}
 							</h1>
 							<h2>
-								Saldo na Rodada = R$ ${saldo.saldoComFator}
+								Saldo = R$ ${saldo.saldo}
 							</h2>
 							<p class="media-comment"><i class="glyphicon glyphicon-asterisk"></i>Parabéns pelo ótimo desempenho!</p>
 						</div>

@@ -102,7 +102,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 			}	
 			Nota nota = new Nota();
 			nota.setRodada(rodada);
-			if(!rodada.isStatusRaking() && !respostas.isEmpty()){
+			if(rodada.isStatusRaking() && !respostas.isEmpty()){
 				nota.setValor(calculoNotaService.calculoMedia(respostas));
 			}
 			notas.add(nota);

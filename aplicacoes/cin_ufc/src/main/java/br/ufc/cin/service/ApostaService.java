@@ -24,6 +24,8 @@ public interface ApostaService extends GenericService<Aposta>{
 	public abstract List<Aposta> findByRodada(Rodada rodada);
 
 	public abstract void atualizaSaldoEquipes(Jogo jogo, Rodada rodada);
+
+	public abstract void atualizaSaldoAlunos(Jogo jogo, Rodada rodada);
 	
 	
 }

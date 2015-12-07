@@ -322,7 +322,12 @@ $(document).ready(function() {
 	});
 
 	$('#confirm-gerar-ranking').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza que deseja gerar os Rankings e Notas para \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.modal-body').text('Tem certeza que deseja gerar os Rankings para \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.btn-success').attr('href', $(e.relatedTarget).data('href'));
+	});
+	
+	$('#confirm-gerar-notas').on('show.bs.modal', function(e) {
+		$(this).find('.modal-body').text('Tem certeza que deseja gerar as Notas para \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-success').attr('href', $(e.relatedTarget).data('href'));
 	});
 	

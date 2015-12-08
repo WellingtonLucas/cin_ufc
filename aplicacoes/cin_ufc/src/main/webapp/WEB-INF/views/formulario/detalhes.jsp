@@ -9,7 +9,7 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<title>Formulario</title>
+	<title>Formulário</title>
 </head>
 
 <body>
@@ -82,52 +82,55 @@
 							<label>${formulario.nota }</label>
 						</div>
 					</div>
-					<div class="col-sm-12">
-						<div class="row placeholders">
-							<ul class="list-group">							
-								<li class="media"><hr></li>							
-							</ul>
-							<div class="form-group">
-								<div class="col-sm-2">				
-									<a id="editar" href="<c:url value="/formulario/${formulario.id }/editar" ></c:url>">
-										<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
-									</a>
-								</div>
-								<div class="col-sm-2">				
-									<a id="copiar" href="<c:url value="/formulario/${formulario.id }/copiar" ></c:url>">
-										<button class="btn btn-success btn-lg">Copiar&nbsp;<i class="glyphicon glyphicon-duplicate"></i></button>
-									</a>
-								</div>
-								<div class="col-sm-2">
-									<a id="excluir" data-toggle="modal" data-target="#confirm-delete3" href="#" 
-									data-href="<c:url value="/formulario/${formulario.id }/excluir"></c:url>" data-name="${formulario.titulo }">
-										<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="glyphicon glyphicon-trash"></i></button>
-									</a>					
+					<c:if test="${permissao == 'professorForm' }">
+						<div class="col-sm-12">
+							<div class="row placeholders">
+								<ul class="list-group">							
+									<li class="media"><hr></li>							
+								</ul>
+								<div class="form-group">
+									<div class="col-sm-2">				
+										<a id="editar" href="<c:url value="/formulario/${formulario.id }/editar" ></c:url>">
+											<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
+										</a>
+									</div>
+									<div class="col-sm-2">				
+										<a id="copiar" href="<c:url value="/formulario/${formulario.id }/copiar" ></c:url>">
+											<button class="btn btn-success btn-lg">Copiar&nbsp;<i class="glyphicon glyphicon-duplicate"></i></button>
+										</a>
+									</div>
+									<div class="col-sm-2">
+										<a id="excluir" data-toggle="modal" data-target="#confirm-delete3" href="#" 
+										data-href="<c:url value="/formulario/${formulario.id }/excluir"></c:url>" data-name="${formulario.titulo }">
+											<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="glyphicon glyphicon-trash"></i></button>
+										</a>					
+									</div>
 								</div>
 							</div>
 						</div>
+					</c:if>
+				</div>
+			</div>
+		</div>
+	</div>
+	<c:if test="${permissao == 'professorForm' }">	
+		<!-- Modal Excluir FORMULARIO -->
+		<div class="modal fade" id="confirm-delete3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+	        			<h4 class="modal-title" id="excluirModalLabel">Excluir</h4>
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-danger">Excluir</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-				
-	<!-- Modal Excluir FORMULARIO -->
-	<div class="modal fade" id="confirm-delete3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-        			<h4 class="modal-title" id="excluirModalLabel">Excluir</h4>
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<a href="#" class="btn btn-danger">Excluir</a>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	</c:if>		
 	<jsp:include page="../fragments/footer.jsp" />	
 </body>
 </html>

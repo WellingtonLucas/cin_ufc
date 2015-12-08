@@ -140,7 +140,7 @@
 	</div>
 	<script src="<c:url value="/webjars/jquery/2.1.0/jquery.js" />"></script>
 	<script	src="<c:url value="/webjars/bootstrap/3.3.5/js/bootstrap.min.js" />"></script>
-	<script src="<c:url value="/resources/js/funcoes2.js" />"></script>
+	<script src="<c:url value="/resources/js/cadastro.js" />"></script>
 	<script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
 	
 

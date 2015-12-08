@@ -140,7 +140,7 @@
 								</c:if>
 								<c:if test="${not empty rodada.formulario.titulo }">
 									<label>							
-										<a href="<c:url value="/formulario/${rodada.formulario.id }/detalhes" />">
+										<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id}/formulario" />">
 											${rodada.formulario.titulo }
 										</a>
 									</label>

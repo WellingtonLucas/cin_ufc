@@ -152,7 +152,7 @@ public class RodadaController {
 	}
 	
 	@RequestMapping(value = "/jogo/{id}/nova-rodada", method = RequestMethod.POST)
-	public  String cadastrar(@PathVariable("id") Integer id, @RequestParam("allIn") String allIN, 
+	public  String cadastrar(@PathVariable("id") Integer id, @RequestParam("tudo") String allIN, 
 			@ModelAttribute("rodada") Rodada rodada, BindingResult result, 
 			HttpSession session, RedirectAttributes redirectAttributes){
 		Jogo jogo = jogoService.find(Jogo.class, id);

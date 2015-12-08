@@ -922,6 +922,33 @@ public class RodadaController {
 		return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
 	}
 
+	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/formulario", method = RequestMethod.GET)
+	public String formulario(@PathVariable("idJogo") Integer idJogo, 
+			@PathVariable("id") Integer id, Model model,
+			HttpSession session, RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		Usuario usuario = getUsuarioLogado(session);
+		Rodada rodada = rodadaService.find(Rodada.class, id);
+		String permissao = "";
+		try {
+			regrasService.verificaParticipacao(usuario, jogo);
+			regrasService.verificaRodada(rodada);
+			regrasService.verificaRodadaJogo(rodada, jogo);
+			permissao = usuarioService.definePermissao(jogo, usuario);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		
+		model.addAttribute("permissao", permissao);
+		model.addAttribute("jogo", jogo);
+		model.addAttribute("rodada", rodada);
+		model.addAttribute("formulario", rodada.getFormulario());
+		model.addAttribute("action", "detalhesRodada");
+		return "formulario/detalhes";
+	}
+	
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {
 			Usuario usuario = usuarioService

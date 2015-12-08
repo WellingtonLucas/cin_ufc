@@ -15,7 +15,7 @@
  		<intercept-url pattern="/resources/css/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
  		<intercept-url pattern="/resources/imagens/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
  		<intercept-url pattern="/resources/js/bootstrapValidator.min.js" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<intercept-url pattern="/resources/js/funcoes2.js" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 		 		
+		<intercept-url pattern="/resources/js/cadastro.js" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 		 		
  		<intercept-url pattern="/usuario/cadastre-se" access="IS_AUTHENTICATED_ANONYMOUSLY" />	
 
 		<intercept-url pattern="/**" access="ROLE_USUARIO" />

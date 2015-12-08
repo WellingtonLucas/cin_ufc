@@ -23,164 +23,167 @@
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<div class="col-sm-12">
-						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-						<h3><strong>${rodada.nome }</strong> </h3>							
-						<hr>				
-						<c:if test="${not empty erro}">
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
-							</div>
-						</c:if>
-						<c:if test="${not empty info}">
-							<div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${info}"></c:out>
-							</div>
-						</c:if>
-					</div>
-					<div class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-2 control-label field">Nome:</label>
-							<div class="col-sm-10 field-value">
-								<c:if test="${empty rodada.nome }">
-									<label>-</label>
-								</c:if>
-								<c:if test="${not empty rodada.nome }">
-									<label>							
-										${rodada.nome }
-									</label>
-								</c:if>
-							</div>		
+					<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
+					<c:if test="${not empty erro}">
+						<div class="alert alert-warning alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${erro}"></c:out>
 						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label field">Início:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.inicio }">
-									<label>-</label>
-								</c:if>
-								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.inicio }" /></label>
-							</div>
-							<label class="col-sm-2 control-label field">Término:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.termino }">
-									<label>-</label>
-								</c:if>
-								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.termino }" /></label>
-							</div>
+					</c:if>
+					<c:if test="${not empty info}">
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${info}"></c:out>
 						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label field">Prazo de submissão:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.prazoSubmissao }">
-									<label>-</label>
-								</c:if>
-								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.prazoSubmissao }" /></label>
-							</div>
-							<label class="col-sm-2 control-label field">Prazo de avaliacões:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.terminoAvaliacao }">
-									<label>-</label>
-								</c:if>
-								<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.terminoAvaliacao }" /></label>
-							</div>
+					</c:if>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4>Rodada: <strong>${rodada.nome }</strong> </h4>
 						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label field">Valor de aposta:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.valorLiberado }">
-									<label>-</label>
-								</c:if>
-								<c:if test="${not empty rodada.valorLiberado }">
-									<label><fmt:formatNumber currencyCode="BRL" value="${rodada.valorLiberado }" /></label>
-								</c:if>
-							</div>
-							<label class="col-sm-2 control-label field">All in:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${rodada.allIn}">
-									<label class="radio-inline">
-										<input type="radio" name="tudo" value="sim" checked="checked" disabled="disabled"> Sim
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="tudo" value="nao" disabled="disabled"> Não
-									</label>
-								</c:if>
-								<c:if test="${!rodada.allIn}">
-									<label class="radio-inline">
-										<input type="radio" name="tudo" value="sim" disabled="disabled"> Sim
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="tudo" value="nao"  checked="checked" disabled="disabled"> Não
-									</label>
-								</c:if>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label field">Descrição:</label>
-							<c:if test="${empty rodada.descricao }">
-								<label>-</label>
-							</c:if>
-							<div class="col-sm-10 field-value">
-								<article><label>${rodada.descricao }</label></article>
-							</div>						
-						</div>
-					
-						<div class="form-group">
-							<label class="col-sm-2 control-label field">Formulário:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.formulario.titulo }">
-									<label>
-										-
-									</label>
-								</c:if>
-								<c:if test="${not empty rodada.formulario.titulo }">
-									<label>							
-										<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id}/formulario" />">
-											${rodada.formulario.titulo }
-										</a>
-									</label>
-								</c:if>
-							</div>		
-							<label class="col-sm-2 control-label field">Modelo:</label>
-							<div class="col-sm-4 field-value">
-								<c:if test="${empty rodada.modelo }">
-									<label>
-										-
-									</label>
-								</c:if>
-								<c:if test="${not empty rodada.modelo }">
-									<label>
-										<a href="<c:url value="/documento/downloadDocumento/${rodada.modelo.id }" ></c:url>">${rodada.modelo.nomeOriginal }</a>
-									</label> 
-								</c:if>
-							</div>
-						</div>	
-						<c:if test="${(permissao == 'professor') || (rodada.statusPrazo) || (rodada.status && rodadaEquipe.ativa)}">
-							<form:form id="adicionarEntregaForm" role="form" class="form-horizontal" commandName="rodada"
-							 	enctype="multipart/form-data" servletRelativeAction="/jogo/${jogo.id }/rodada/entrega" method="POST">
-								<form:hidden path="id" value="${rodada.id }"/>
-								<div class="form-group form-item">
-									<label for="fileupload" class="col-sm-2 control-label field">Entrega:</label>
-									<div class="col-sm-7">
-										<input type="file" id="fileupload" class="file" name="anexos" multiple></input>	
+						<div class="panel-body">
+							<div class="form-horizontal">
+								<div class="form-group">
+									<label class="col-sm-2 field">Nome:</label>
+									<div class="col-sm-10 field-value">
+										<c:if test="${empty rodada.nome }">
+											<label>-</label>
+										</c:if>
+										<c:if test="${not empty rodada.nome }">
+											<label>							
+												${rodada.nome }
+											</label>
+										</c:if>
+									</div>		
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 field">Início:</label>
+									<div class="col-sm-4 field-value">
+										<c:if test="${empty rodada.inicio }">
+											<label>-</label>
+										</c:if>
+										<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.inicio }" /></label>
+									</div>
+									<label class="col-sm-2 field">Término:</label>
+									<div class="col-sm-4 field-value">
+										<c:if test="${empty rodada.termino }">
+											<label>-</label>
+										</c:if>
+										<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.termino }" /></label>
 									</div>
 								</div>
-							</form:form>
-						</c:if>
-						<c:if test="${(permissao != 'professor') && (!rodada.statusPrazo) && (!rodada.status || !rodadaEquipe.ativa)}">
-							<div class="form-group form-item">
-								<label for="fileupload" class="col-sm-2 control-label field">Entrega:</label>
-								<div class="col-sm-7">
-									<input type="file" id="fileupload" class="file" name="anexos" multiple disabled="disabled"></input>	
+								<div class="form-group">
+									<label class="col-sm-2 field">Prazo de submissão:</label>
+									<div class="col-sm-3 field-value">
+										<c:if test="${empty rodada.prazoSubmissao }">
+											<label>-</label>
+										</c:if>
+										<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.prazoSubmissao }" /></label>
+									</div>
+									<label class="col-sm-3 field">Prazo de avaliacões:</label>
+									<div class="col-sm-4 field-value">
+										<c:if test="${empty rodada.terminoAvaliacao }">
+											<label>-</label>
+										</c:if>
+										<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.terminoAvaliacao }" /></label>
+									</div>
 								</div>
-							</div>
-						</c:if>
-					</div>	
+								<div class="form-group">
+									<label class="col-sm-2 field">Valor de aposta:</label>
+									<div class="col-sm-4 field-value">
+										<c:if test="${empty rodada.valorLiberado }">
+											<label>-</label>
+										</c:if>
+										<c:if test="${not empty rodada.valorLiberado }">
+											<label><fmt:formatNumber currencyCode="BRL" value="${rodada.valorLiberado }" /></label>
+										</c:if>
+									</div>
+									<label class="col-sm-2 control-label field">All in:</label>
+									<div class="col-sm-4 field-value">
+										<c:if test="${rodada.allIn}">
+											<label class="radio-inline">
+												<input type="radio" name="tudo" value="sim" checked="checked" disabled="disabled"> Sim
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="tudo" value="nao" disabled="disabled"> Não
+											</label>
+										</c:if>
+										<c:if test="${!rodada.allIn}">
+											<label class="radio-inline">
+												<input type="radio" name="tudo" value="sim" disabled="disabled"> Sim
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="tudo" value="nao"  checked="checked" disabled="disabled"> Não
+											</label>
+										</c:if>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 field">Descrição:</label>
+									<c:if test="${empty rodada.descricao }">
+										<label>-</label>
+									</c:if>
+									<div class="col-sm-10 field-value">
+										<article><label>${rodada.descricao }</label></article>
+									</div>						
+								</div>
+							
+								<div class="form-group">
+									<label class="col-sm-2 field">Formulário:</label>
+									<div class="col-sm-4 field-value">
+										<c:if test="${empty rodada.formulario.titulo }">
+											<label>
+												-
+											</label>
+										</c:if>
+										<c:if test="${not empty rodada.formulario.titulo }">
+											<label>							
+												<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id}/formulario" />">
+													${rodada.formulario.titulo }
+												</a>
+											</label>
+										</c:if>
+									</div>		
+									<label class="col-sm-2 field">Modelo:</label>
+									<div class="col-sm-4 field-value">
+										<c:if test="${empty rodada.modelo }">
+											<label>
+												-
+											</label>
+										</c:if>
+										<c:if test="${not empty rodada.modelo }">
+											<label>
+												<a href="<c:url value="/documento/downloadDocumento/${rodada.modelo.id }" ></c:url>">${rodada.modelo.nomeOriginal }</a>
+											</label> 
+										</c:if>
+									</div>
+								</div>	
+								<c:if test="${(permissao == 'professor') || (rodada.statusPrazo) || (rodada.status && rodadaEquipe.ativa)}">
+									<form:form id="adicionarEntregaForm" role="form" class="form-horizontal" commandName="rodada"
+									 	enctype="multipart/form-data" servletRelativeAction="/jogo/${jogo.id }/rodada/entrega" method="POST">
+										<form:hidden path="id" value="${rodada.id }"/>
+										<div class="form-group form-item">
+											<label for="fileupload" class="col-sm-2 field">Entrega:</label>
+											<div class="col-sm-7 field-value">
+												<input type="file" id="fileupload" class="file" name="anexos" multiple></input>	
+											</div>
+										</div>
+									</form:form>
+								</c:if>
+								<c:if test="${(permissao != 'professor') && (!rodada.statusPrazo) && (!rodada.status || !rodadaEquipe.ativa)}">
+									<div class="form-group form-item">
+										<label for="fileupload" class="col-sm-2 field">Entrega:</label>
+										<div class="col-sm-7 field-value">
+											<input type="file" id="fileupload" class="file" name="anexos" multiple disabled="disabled"></input>	
+										</div>
+									</div>
+								</c:if>
+							</div>	
+						</div>
+					</div>
 					<div class="col-sm-12">
 						<hr>
 						<c:if test="${not empty rodada.jogo.equipes }">
@@ -335,7 +338,7 @@
 		<div class="modal fade" id="confirm-delete-rodada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header btn-danger">
 	        			<h4 class="modal-title" id="excluirModalLabel">Excluir</h4>
 						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					</div>
@@ -358,7 +361,7 @@
 					</div>
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<a href="#" class="btn btn-primary">Encerrar</a>
+						<a href="#" class="btn btn-warning">Encerrar</a>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>

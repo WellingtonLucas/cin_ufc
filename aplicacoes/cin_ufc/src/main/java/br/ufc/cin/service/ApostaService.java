@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.ufc.cin.model.Aposta;
 import br.ufc.cin.model.Deposito;
+import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
@@ -26,6 +27,8 @@ public interface ApostaService extends GenericService<Aposta>{
 	public abstract void atualizaSaldoEquipes(Jogo jogo, Rodada rodada);
 
 	public abstract void atualizaSaldoAlunos(Jogo jogo, Rodada rodada);
+
+	public abstract void realizarDeposito(Equipe equipe, String quantidadeDia);
 	
 	
 }

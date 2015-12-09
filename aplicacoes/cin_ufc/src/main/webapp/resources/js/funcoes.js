@@ -221,10 +221,10 @@ $(document).ready(function() {
 		msgSelected: "{n} arquivos selecionados",
 		maxFileSize: 100,
 		maxFileCount: 1,
-		msgSizeTooLarge: 'A imagem "{name}" (<b>{size} KB</b>) excede o tamanho de <b>{maxSize} KB</b>. Por favor escolha outra imagem e tente novamente!',
-		msgFilesTooMany: "Selecione apenas uma imagem por vez. Tente novamente.",
 		allowedFileExtensions: ['png','jpeg','jpg'],
 		msgInvalidFileExtension: 'Extensão do arquivo "{name}" inválida. Somente "{extensions}" são suportados.',
+		msgSizeTooLarge: '"{name}" (<b>{size} KB</b>) excede o tamanho de <b>{maxSize} KB</b>. Por favor escolha outra imagem e tente novamente!',
+		msgFilesTooMany: "Selecione apenas uma imagem por vez. Tente novamente.",
 		msgLoading: "Carregando arquivo {index} de {files} &hellip;"
 	});
 	

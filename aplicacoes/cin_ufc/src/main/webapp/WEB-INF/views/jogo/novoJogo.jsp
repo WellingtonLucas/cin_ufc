@@ -54,7 +54,7 @@
 						</div>
 					</div>
 					<div class="form-item">	
-						<label for="semestre" class="col-sm-1 control-label" >Semestre:<span class="required">*</span></label>
+						<label for="semestre" class="col-sm-2 control-label" >Semestre:<span class="required">*</span></label>
 						<div class="col-sm-2">
 							<form:input type="text" class="form-control" id="semestre" path="semestre" placeholder="2015.2" />
 							<div class="error-validation">
@@ -81,7 +81,7 @@
 					</div>
 
 					<div class="form-item">
-						<label for="termino" class="col-sm-2 control-label">Data de Término:<span class="required">*</span></label>
+						<label for="termino" class="col-sm-4 control-label">Data de Término:<span class="required">*</span></label>
 						<div class="col-sm-2">
 							<form:input id="termino" type="text" path="termino" cssClass="form-control data" placeholder="DD/MM/YYYY"/>
 							<div class="error-validation">
@@ -117,7 +117,20 @@
 						<form:textarea name="regras" id="regras" path="regras" />
 					</div>
 				</div>		
-									
+				<div class="form-group">
+					<label for="fileupload" class="col-sm-2 control-label">Foto:</label>
+					<div class="col-sm-8">
+						<input type="file" id="idfoto" name="logo"></input>
+					</div>
+				</div>
+				<c:if test="${action eq 'editar' }">
+					<div class="form-group">
+						<div class="col-sm-2"></div>
+						<div class="col-sm-8">
+							<p class="bg-info">Para alterar a imagem do jogo escolha outra.</p>
+						</div>
+					</div>
+				</c:if>		
 				<div class="form-group form-item">
 					<label for="fileupload" class="col-sm-2 control-label">Anexos:</label>
 					<div class="col-sm-8">

@@ -118,6 +118,31 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 	}
 
 	@Override
+	public Documento verificaAnexoImagem(MultipartFile anexo, Jogo jogo) throws IOException {
+		Documento documento = new Documento();
+		if (anexo != null) {
+			if (anexo.getBytes() != null && anexo.getBytes().length != 0) {
+				if(anexo.getSize() <= 100000){
+					documento.setArquivo(anexo.getBytes());
+					String data = new Date().getTime() + "";
+					documento.setNomeOriginal(data + "-"
+							+ anexo.getOriginalFilename());
+					documento.setNome(jogo.getNomeDoCurso() + "-" + "imagem");
+					documento.setExtensao(anexo.getContentType());
+					if (!verificaSeImagem(documento.getExtensao())) {
+						throw new IllegalArgumentException(
+								"O arquivo deve ter um destes formatos: PNG ou JPEG ");
+					}
+				}else{
+					throw new IllegalArgumentException(
+							"A imagem precisa ter no máximo 100KB.");
+				}
+			}
+		}
+		return documento;
+	}
+
+	@Override
 	public void verificaArquivos(List<MultipartFile> anexos) {
 		if(anexos != null && !anexos.isEmpty()) {
 			for(MultipartFile anexo : anexos) {

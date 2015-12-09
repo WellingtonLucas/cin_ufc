@@ -113,7 +113,7 @@ public class JogoController {
 	
 	@RequestMapping(value = "/novo-jogo", method = RequestMethod.POST)
 	public String cadastrar(@ModelAttribute("jogo") Jogo jogo, @RequestParam("anexos") List<MultipartFile> anexos, 
-			BindingResult result, HttpSession session, RedirectAttributes redirect, Model model){
+			@RequestParam("logo") MultipartFile anexo, BindingResult result, HttpSession session, RedirectAttributes redirect, Model model){
 		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
@@ -129,10 +129,13 @@ public class JogoController {
 			model.addAttribute("usuario", usuario);
 			return PAGINA_CADASTRAR_JOGO;
 		}
+		Documento imagem;
 		try {
+			imagem = documentoService.verificaAnexoImagem(anexo, jogo);
 			documentoService.verificaArquivos(anexos);
 			jogoService.verificaDatas(jogo);
 			jogoService.verificaNomeSemestre(jogo);
+			jogo.setImagem(imagem);
 			jogo.setProfessor(usuarioService.find(Usuario.class, usuario.getId()));
 			jogoService.save(jogo);
 		} catch (IllegalArgumentException e) {
@@ -186,8 +189,8 @@ public class JogoController {
 	}
 	
 	@RequestMapping(value = "/editar", method = RequestMethod.POST)
-	public String editar(@RequestParam("anexos") List<MultipartFile> anexos, @Valid Jogo jogo, 
-			BindingResult result, HttpSession session,	RedirectAttributes redirect) {
+	public String editar(@RequestParam("anexos") List<MultipartFile> anexos, @RequestParam("logo") MultipartFile imagem, 
+			@Valid Jogo jogo, BindingResult result, HttpSession session, RedirectAttributes redirect) {
 		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro ao na edição do jogo");
@@ -200,6 +203,22 @@ public class JogoController {
 		}
 		
 		Jogo oldJogo = jogoService.find(Jogo.class, jogo.getId());
+		try {
+			Documento logo = documentoService.verificaAnexoImagem(imagem, oldJogo);
+			if(oldJogo.getImagem() != null){
+				logo.setId(oldJogo.getImagem().getId());
+			}
+			oldJogo.setImagem(logo);
+		} catch (IOException e1) {
+			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
+			return "redirect:/jogo/"+jogo.getId()+"/editar";
+		} catch (IllegalArgumentException e) {
+			redirect.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/jogo/"+jogo.getId()+"/editar";
+		} catch (Exception e) {
+			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
+			return "redirect:/jogo/"+jogo.getId()+"/editar";
+		}
 		List<Documento> documentos = new ArrayList<Documento>();	
 		if(anexos != null && !anexos.isEmpty()) {
 			for(MultipartFile anexo : anexos) {

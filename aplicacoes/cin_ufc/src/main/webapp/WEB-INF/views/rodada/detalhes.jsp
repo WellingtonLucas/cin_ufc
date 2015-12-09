@@ -166,7 +166,7 @@
 									 	enctype="multipart/form-data" servletRelativeAction="/jogo/${jogo.id }/rodada/entrega" method="POST">
 										<form:hidden path="id" value="${rodada.id }"/>
 										<div class="form-group form-item">
-											<label for="fileupload" class="col-sm-2 field">Entrega:</label>
+											<label for="entrega" class="col-sm-2 field">Entrega:</label>
 											<div class="col-sm-7 field-value">
 												<input type="file" id="entrega" class="file" name="anexo" required="required"></input>	
 											</div>

@@ -39,13 +39,6 @@ public class LoginController {
 
 	}
 
-	@RequestMapping(value = "/cover", method = RequestMethod.GET)
-	public ModelAndView cover() {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("cover");
-		return model;
-	}
-
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	public String loginerror(ModelMap model) {
 		model.addAttribute("usuario", new Usuario());
@@ -57,9 +50,7 @@ public class LoginController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(ModelMap model, HttpSession session) {
 		session.invalidate();
-		
 		return "login";
-
 	}
 	
 	@RequestMapping(value = "/403", method = RequestMethod.GET)

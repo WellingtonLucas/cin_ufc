@@ -41,4 +41,6 @@ public interface DocumentoService extends GenericService<Documento> {
 
 	public abstract List<Documento> criaDocumentos(List<MultipartFile> anexos,
 			Jogo jogo) throws IOException;
+	
+	public Documento verificaAnexoImagem(MultipartFile anexo, Jogo jogo) throws IOException;
 }

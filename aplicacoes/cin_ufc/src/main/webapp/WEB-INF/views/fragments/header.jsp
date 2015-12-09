@@ -32,7 +32,7 @@
 	            </li>
 			</ul>
 			<p class="navbar-right navbar-text">
-				Bem Vindo ${sessionScope.usuario.nome}!<br>
+				Olá ${sessionScope.usuario.nome}!<br>
 			</p>
 
 		</div>

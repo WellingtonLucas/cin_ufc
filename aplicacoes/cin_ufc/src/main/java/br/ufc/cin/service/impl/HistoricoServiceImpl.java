@@ -43,7 +43,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 	@Override
 	public Float calculaMedia(Historico historico) {
 		Float media = -0f;
-		if(!historico.getNotas().isEmpty()){
+		if(historico.getNotas()!= null && !historico.getNotas().isEmpty()){
 			for (Nota nota : historico.getNotas()) {
 				if(nota != null){
 					media += nota.getValor();

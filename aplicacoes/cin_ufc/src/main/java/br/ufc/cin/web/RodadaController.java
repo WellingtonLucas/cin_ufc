@@ -152,7 +152,7 @@ public class RodadaController {
 	}
 	
 	@RequestMapping(value = "/jogo/{id}/nova-rodada", method = RequestMethod.POST)
-	public  String cadastrar(@PathVariable("id") Integer id, @RequestParam("allIn") String allIN, 
+	public  String cadastrar(@PathVariable("id") Integer id, @RequestParam("tudo") String allIN, 
 			@ModelAttribute("rodada") Rodada rodada, BindingResult result, 
 			HttpSession session, RedirectAttributes redirectAttributes){
 		Jogo jogo = jogoService.find(Jogo.class, id);
@@ -558,7 +558,7 @@ public class RodadaController {
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/entrega", method = RequestMethod.POST)
-	public String entregaDeUmaRodada(@ModelAttribute("rodada") Rodada rodada, @RequestParam("anexos") List<MultipartFile> anexos, 
+	public String entregaDeUmaRodada(@ModelAttribute("rodada") Rodada rodada, @RequestParam("anexo") MultipartFile anexo, 
 			BindingResult result, @PathVariable("idJogo") Integer idJogo,
 			 HttpSession session, RedirectAttributes redirect, Model model){
 
@@ -572,67 +572,43 @@ public class RodadaController {
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
 		Entrega entrega = new Entrega();
-		List<Documento> documentos = new ArrayList<Documento>();
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
-		if(anexos != null && !anexos.isEmpty()) {
-			if(anexos.size() > 1){
-				redirect.addFlashAttribute("erro", "Selecione apenas um anexo!");
-				return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
-			}
-			for(MultipartFile anexo : anexos) {
-				try {
-					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
-						Documento documento = new Documento();
-						documento.setArquivo(anexo.getBytes());
-						documento.setNomeOriginal(anexo.getOriginalFilename());
-						if(!usuario.equals(jogo.getProfessor())){
-							documento.setNome(equipe.getNome()+"-"+rodada.getNome());
-						}else{
-							documento.setNome("MODELO-"+rodada.getNome());
-						}
-						documento.setExtensao(anexo.getContentType());
-						if(!documentoService.verificaExtensao(documento.getExtensao())){
-							redirect.addFlashAttribute("erro", "O arquivo deve está com algum desses formatos: "
-									+ "doc, docx, pdf, odt ou fodt!");
-							return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
-						}
-						documentos.add(documento);
-					}
-				} catch (IOException e) {
-					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
-					return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
-				}
-			}
-		}
-		if(!documentos.isEmpty()) {
-			documentoService.save(documentos.get(0));
-			if(usuario.equals(jogo.getProfessor())){
-				rodada.setModelo(documentos.get(0));
-				rodadaService.update(rodada);
-			}
-			entrega.setDocumento(documentos.get(0));
-			entrega.setRodada(rodada);
-			entrega.setUsuario(usuario);
-			if(!usuario.equals(jogo.getProfessor())){
-				entrega.setEquipe(equipe);
-			}
-			Calendar calendario = Calendar.getInstance();
-			Date data =  calendario.getTime();
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss");
-			simpleDateFormat.format(data);
-			entrega.setDia(data);
-			
-			entregaService.save(entrega);
-			if(!usuario.equals(jogo.getProfessor())){
-				redirect.addFlashAttribute("info", "Entrega efetuada com sucesso.");
-			}else{
-				redirect.addFlashAttribute("info", "Modelo salvo com sucesso.");
-			}
+		Documento documento;
+		try {
+			documento = documentoService.verificaAnexoEntrega(anexo,usuario,rodada,jogo,equipe);
+		} catch (IOException e) {
+			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
 			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+		} catch (IllegalArgumentException e) {
+			redirect.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+		}
+		
+		documentoService.save(documento);
+		if(usuario.equals(jogo.getProfessor())){
+			rodada.setModelo(documento);
+			rodadaService.update(rodada);
+		}
+		entrega.setDocumento(documento);
+		entrega.setRodada(rodada);
+		entrega.setUsuario(usuario);
+		if(!usuario.equals(jogo.getProfessor())){
+			entrega.setEquipe(equipe);
+		}
+		Calendar calendario = Calendar.getInstance();
+		Date data =  calendario.getTime();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss");
+		simpleDateFormat.format(data);
+		entrega.setDia(data);
+		
+		entregaService.save(entrega);
+		if(!usuario.equals(jogo.getProfessor())){
+			redirect.addFlashAttribute("info", "Entrega efetuada com sucesso.");
 		}else{
-			redirect.addFlashAttribute("erro", "Selecione um documento!");
-			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+			redirect.addFlashAttribute("info", "Modelo salvo com sucesso.");
 		}
+		return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
+	
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/submissoes", method = RequestMethod.GET)

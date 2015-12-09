@@ -114,4 +114,21 @@ public class RegrasServiceImpl implements RegrasService {
 		
 	}
 
+	@Override
+	public void verificaJogoComRodada(Jogo jogo) {
+		if (jogo.getRodadas() == null || jogo.getRodadas().isEmpty()) {
+			throw new IllegalArgumentException(
+					"O jogo ainda não possui rodadas.");
+		}	
+	}
+
+	@Override
+	public void verificaStatusJogo(Jogo jogo) {
+		if (!jogo.isStatus()) {
+			throw new IllegalArgumentException(
+					"Jogo inativo.");
+		}	
+		
+	}
+
 }

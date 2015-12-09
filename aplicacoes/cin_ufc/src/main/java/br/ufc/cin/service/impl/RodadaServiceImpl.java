@@ -63,11 +63,11 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
 		if(rodada.getPrazoSubmissao().getTime() < tempoAtual){
-			if(rodada.isStatusPrazo() == false)
+			if(rodada.isStatusPrazo())
 				return rodada;
 			rodada.setStatusPrazo(false);
 		}else{
-			if(rodada.isStatusPrazo() == true)
+			if(rodada.isStatusPrazo())
 				return rodada;
 			rodada.setStatusPrazo(true);
 		}

@@ -10,13 +10,13 @@
   
 	<http auto-config="true">
 		<access-denied-handler error-page="/403" />
+		<intercept-url pattern="/cover*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
  		<intercept-url pattern="/login*" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
  		<intercept-url pattern="/webjars/**" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 		
  		<intercept-url pattern="/resources/css/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
  		<intercept-url pattern="/resources/imagens/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
  		<intercept-url pattern="/resources/js/bootstrapValidator.min.js" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/resources/js/cadastro.js" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 		 		
- 		<intercept-url pattern="/usuario/cadastre-se" access="IS_AUTHENTICATED_ANONYMOUSLY" />	
 
 		<intercept-url pattern="/**" access="ROLE_USUARIO" />
  		

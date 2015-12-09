@@ -50,13 +50,21 @@
 									</c:if>
 									<div class="row placeholders">
 										<c:forEach var="jogo" items="${jogosParticipa}" varStatus="id">
-											<div class="col-sm-3">		
-												<a
-													href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
-													<img class="img-circle"
-													src="<c:url value="/resources/imagens/boxvazia.gif" />"
-													alt="" width="200" height="200" >
-												</a>
+											<div class="col-sm-3">
+												<c:if test="${jogo.imagem == null }">		
+													<a href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
+														<img class="img-circle"
+														src="<c:url value="/resources/imagens/boxvazia.gif" />"
+														alt="" width="200" height="200" >
+													</a>
+												</c:if>
+												<c:if test="${jogo.imagem != null }">
+													<a href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
+														<img alt="Imagem do jogo" width="200" height="200"
+														src="data:${jogo.imagem.extensao };base64,${jogo.imagem.encode }"
+														class="img-circle" />
+													</a>
+												</c:if>
 												<div class="caption">
 													<h4>${jogo.nomeDoCurso}</h4>
 													<p>${jogo.semestre}</p>
@@ -80,12 +88,20 @@
 									<div class="row placeholders">
 										<c:forEach var="jogo" items="${jogos}" varStatus="id">
 											<div class="col-sm-3">		
-												<a
-													href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
-													<img class="img-circle"
-													src="<c:url value="/resources/imagens/boxvazia.gif" />"
-													alt="" width="200" height="200" >
-												</a>
+												<c:if test="${jogo.imagem == null }">
+													<a href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
+														<img class="img-circle"
+														src="<c:url value="/resources/imagens/boxvazia.gif" />"
+														alt="" width="200" height="200" >
+													</a>
+												</c:if>
+												<c:if test="${jogo.imagem != null }">
+													<a href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
+														<img alt="Imagem do jogo" width="200" height="200"
+														src="data:${jogo.imagem.extensao };base64,${jogo.imagem.encode }"
+														class="img-circle" />
+													</a>
+												</c:if>
 												<div class="caption">
 													<h4>${jogo.nomeDoCurso}</h4>
 													<p>${jogo.semestre}</p>

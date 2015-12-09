@@ -99,7 +99,7 @@
 						<div class="form-group">
 							<label for="fileupload" class="col-sm-1 control-label">Foto:</label>
 							<div class="col-sm-8">
-								<input type="file" id="fileupload" class="file" name="anexos" multiple></input>
+								<input type="file" id="idfoto" name="anexo"></input>
 							</div>
 						</div>
 						<c:if test="${action eq 'perfil' }">

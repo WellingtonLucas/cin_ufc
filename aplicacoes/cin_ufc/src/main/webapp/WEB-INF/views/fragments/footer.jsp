@@ -17,8 +17,6 @@
 </c:if>
 <c:if test="${editor eq 'rodada' }">
 	<script src="<c:url value="/resources/js/rodada.js" />"></script>
-</c:if>
-<c:if test="${editor eq 'rodada' && (action == 'cadastrar' || action == 'editar') }">
 	<script src="<c:url value="/resources/js/rodada.file.js" />"></script>
 </c:if>
 <c:if test="${editor eq 'equipe' && (action == 'cadastrar' || action == 'editar') }">

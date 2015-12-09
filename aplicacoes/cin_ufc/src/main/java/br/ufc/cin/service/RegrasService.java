@@ -56,4 +56,16 @@ public interface RegrasService {
 	 * Verifica se a rodada faz parte do jogo.
 	 * */
 	public abstract void verificaRodadaJogo(Rodada rodada, Jogo jogo);
+
+	/**
+	 * Verifica se o jogo contem rodadas.
+	 * @author Wellington
+	 * */
+	public abstract void verificaJogoComRodada(Jogo jogo);
+
+	/**
+	 * Verifica se o status do jogo é válido.
+	 * @author Wellington
+	 * */
+	public abstract void verificaStatusJogo(Jogo jogo);
 }

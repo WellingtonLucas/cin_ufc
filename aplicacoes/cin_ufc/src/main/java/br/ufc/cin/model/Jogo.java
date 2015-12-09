@@ -19,6 +19,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -85,6 +86,18 @@ public class Jogo implements Serializable {
 
 	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
 	private List<Rodada> rodadas;
+
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	@JoinColumn(name = "IMAGEM_ID")
+	private Documento imagem;
+	
+	public Documento getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(Documento imagem) {
+		this.imagem = imagem;
+	}
 
 	public List<Rodada> getRodadas() {
 		return rodadas;

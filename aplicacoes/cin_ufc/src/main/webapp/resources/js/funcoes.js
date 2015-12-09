@@ -80,6 +80,7 @@ $(document).ready(function() {
         }
        
 	});
+	
 	//Histórico equipe 
 	$('#fatorForm').bootstrapValidator({
         feedbackIcons: {
@@ -207,6 +208,23 @@ $(document).ready(function() {
 		msgSelected: "{n} arquivos selecionados",
 		maxFileSize: 10000,
 		msgSizeTooLarge: 'O arquivo "{name}" (<b>{size} KB</b>) excede o tamanho de <b>{maxSize} KB</b>. Por favor tente novamente!',
+		msgLoading: "Carregando arquivo {index} de {files} &hellip;"
+	});
+	
+	$("#idfoto").fileinput({
+		showUpload: false,
+		overwriteInitial: false,
+		initialCaption: "Selecione...",
+		browseLabel: "Buscar",
+		browseClass: "btn btn-default",
+		removeLabel: "Excluir",
+		msgSelected: "{n} arquivos selecionados",
+		maxFileSize: 100,
+		maxFileCount: 1,
+		allowedFileExtensions: ['png','jpeg','jpg'],
+		msgInvalidFileExtension: 'Extensão do arquivo "{name}" inválida. Somente "{extensions}" são suportados.',
+		msgSizeTooLarge: '"{name}" (<b>{size} KB</b>) excede o tamanho de <b>{maxSize} KB</b>. Por favor escolha outra imagem e tente novamente!',
+		msgFilesTooMany: "Selecione apenas uma imagem por vez. Tente novamente.",
 		msgLoading: "Carregando arquivo {index} de {files} &hellip;"
 	});
 	

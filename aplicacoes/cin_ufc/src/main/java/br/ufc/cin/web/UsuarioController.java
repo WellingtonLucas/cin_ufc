@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.ufc.cin.model.Aposta;
 import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Historico;
@@ -33,10 +34,12 @@ import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.ApostaService;
 import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.HistoricoService;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.RegrasService;
 import br.ufc.cin.service.RespostaService;
 import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
@@ -66,6 +69,11 @@ public class UsuarioController {
 	@Inject
 	private HistoricoService historicoService;
 	
+	@Inject
+	private RegrasService regrasService;
+	
+	@Inject
+	private ApostaService apostaService;
 	@RequestMapping(value = "/cadastre-se", method = RequestMethod.POST)
 	public String cadastrarPessoa(HttpSession session, Model model,
 			@Valid @ModelAttribute("usuario") Usuario usuario,
@@ -386,6 +394,48 @@ public class UsuarioController {
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("rodadas", rodadas);
 		return "jogador/historico";
+	}
+	@RequestMapping(value = "/{id}/jogo/{idJogo}/investimentos", method = RequestMethod.GET)
+	public String investimentos(@PathVariable("idJogo") Integer idJogo, @PathVariable("id") Integer id, 
+			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
+		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		Usuario requisitado = usuarioService.find(Usuario.class, id);
+		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
+		try {
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaParticipacao(requisitado, jogo);
+			regrasService.verificaParticipacao(usuario, jogo);
+			regrasService.verificaJogoComRodada(jogo);
+			regrasService.verificaStatusJogo(jogo);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", "Algo saiu errado, tente novamente.");
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		if (usuario.equals(jogo.getProfessor())) {			
+			model.addAttribute("permissao", "professor");
+		}else if(usuario.equals(requisitado) && jogo.getAlunos().contains(usuario)){
+			model.addAttribute("permissao", "alunoLogado");
+		}else{			
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		}
+		List<Aposta> apostas;
+		try {
+			apostas = apostaService.findByUsuarioRodada(requisitado, jogo);	
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/usuario/"+requisitado.getId()+"/detalhes/"+jogo.getId();
+		}
+		model.addAttribute("apostas", apostas); 
+		model.addAttribute("requisitado", requisitado);
+		model.addAttribute("action", "historico");
+		model.addAttribute("jogo", jogo);
+		return "jogador/apostas";
 	}
 
 	private Usuario getUsuarioLogado(HttpSession session) {

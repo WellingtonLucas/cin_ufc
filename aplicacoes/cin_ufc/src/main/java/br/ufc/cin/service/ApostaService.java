@@ -29,6 +29,12 @@ public interface ApostaService extends GenericService<Aposta>{
 	public abstract void atualizaSaldoAlunos(Jogo jogo, Rodada rodada);
 
 	public abstract void realizarDeposito(Equipe equipe, String quantidadeDia);
+
+	/**
+	 * Buscar as apostas de um aluno no jogo
+	 * @author Wellington
+	 * */
+	public abstract List<Aposta> findByUsuarioRodada(Usuario requisitado, Jogo jogo);
 	
 	
 }

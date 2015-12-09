@@ -1,5 +1,6 @@
 package br.ufc.cin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -179,6 +180,24 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 		}else{
 			throw new IllegalArgumentException("Quantidade de dias inválida para uma reabertura.");
 		}
+	}
+
+
+	@Override
+	public List<Aposta> findByUsuarioRodada(Usuario requisitado, Jogo jogo) {
+		List<Aposta> apostas = new ArrayList<Aposta>();
+		for (Rodada rodada : jogo.getRodadas()) {
+			if(!rodada.isStatus()){
+				Aposta aposta = findByUsuarioRodada(requisitado, rodada);
+				if(aposta!=null){
+					apostas.add(aposta);
+				}
+			}
+		}
+		if(apostas.isEmpty()){
+			throw new IllegalArgumentException("Não existem investimentos desse aluno no jogo.");
+		}
+		return apostas;
 	}
 
 	

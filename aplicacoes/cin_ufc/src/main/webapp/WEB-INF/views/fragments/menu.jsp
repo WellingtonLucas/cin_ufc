@@ -57,8 +57,9 @@
 		</c:if>
 		<c:if test="${(action == 'detalhesUsuario')}">
 			<c:if test="${ (permissao == 'professor' || permissao== 'alunoLogado') }">
-				<li><a href="<c:url value ="/usuario/${usuarioParticipante.id}/jogo/${jogo.id}/avaliacoes"></c:url>">Avaliações Realizadas</a></li>
+				<li><a href="<c:url value ="/usuario/${usuarioParticipante.id }/jogo/${jogo.id}/avaliacoes"></c:url>">Avaliações Realizadas</a></li>
 				<li><a href="<c:url value ="/usuario/${usuarioParticipante.id }/jogo/${jogo.id}/historico"></c:url>">Histórico de Notas</a></li>
+				<li><a href="<c:url value ="/usuario/${usuarioParticipante.id }/jogo/${jogo.id}/investimentos"></c:url>">Histórico de Investimentos</a></li>
 			</c:if>
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome }</a></li>
 		</c:if>

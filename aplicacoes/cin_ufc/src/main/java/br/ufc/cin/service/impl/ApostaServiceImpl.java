@@ -163,5 +163,23 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 		
 	}
 
+
+	@Override
+	public void realizarDeposito(Equipe equipe, String quantidadeDia) {
+		Deposito deposito = new Deposito();
+		deposito.setEquipe(equipe);
+		Float fator = converte(quantidadeDia);
+		deposito.setQuantia((-fator)*1000);
+		depositoRepository.save(deposito);
+	}
+	
+	private Float converte(String quantidade){
+		if(quantidade.equals("1") || quantidade.equals("2") || quantidade.equals("3")){
+			return Float.parseFloat(quantidade);
+		}else{
+			throw new IllegalArgumentException("Quantidade de dias inválida para uma reabertura.");
+		}
+	}
+
 	
 }

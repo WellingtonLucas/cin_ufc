@@ -20,88 +20,104 @@
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<div class="col-sm-12">
-						<h2><strong>${equipe.nome }</strong></h2>						
-						<hr>				
-						<c:if test="${not empty erro}">
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
-							</div>
-						</c:if>
-						<c:if test="${not empty info}">
-							<div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${info}"></c:out>
-							</div>
-						</c:if>
-					</div>
-					<c:if test="${ equipe.logo != null}">
-						<div  class="col-sm-12">
-							<img class="img-thumbnail" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }" alt="Logo da equipe" width="200" height="200" />
+					<h2><strong>${equipe.nome }</strong></h2>						
+					<c:if test="${not empty erro}">
+						<div class="alert alert-warning alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${erro}"></c:out>
 						</div>
 					</c:if>
-					<c:if test="${ equipe.logo == null}">
-						<div  class="col-sm-12">
-							<img class="img-thumbnail"  src="<c:url value="/resources/imagens/boxvazia.gif" />" alt="Logo da equipe" width="200" height="200" />
+					<c:if test="${not empty info}">
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${info}"></c:out>
 						</div>
 					</c:if>
-					<div  class="col-sm-12">
-					</div>
-					<h3><strong class="col-sm-3">Ideia de Negócio:</strong></h3>
-					<div class="col-sm-9 field-value">
-						<c:if test="${empty equipe.ideiaDeNegocio }">
-							<label>-</label>
-						</c:if>
-						<c:if test="${not empty equipe.ideiaDeNegocio }">
-							<article>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							Detalhes da equipe
+						</div>
+						<div class="panel-body">
+						<h4><strong class="col-sm-1 field">Nome:</strong></h4>
+							<div class="col-sm-5 field-value">
 								<label>							
-									${equipe.ideiaDeNegocio }
+									${equipe.nome }
 								</label>
-							</article>
-						</c:if>
-					</div>		
-					
-					<div class="col-sm-12">
-						<c:if test="${not empty equipe.alunos }">
-							<table id="table_id" class="table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>Nome</th>
-										<th>Sorenome</th>
-										<th>Curso</th>
-										<th>Email</th>
-										<c:if test="${permissao eq 'professor' }">
-											<th></th>
-										</c:if>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="usuario" items="${equipe.alunos}">
-										<tr>
-											<td>
-												<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
-											</td>
-											<td>${usuario.sobreNome}</td>
-											<td>${usuario.curso } </td>
-											<td>${usuario.email } </td>
-											<c:if test="${permissao eq 'professor' }">
-												<td>
-													<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
-														data-href="<c:url value="${equipe.id }/usuario/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
-														<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
-													</a>
-												</td>
-											</c:if>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</c:if>	
+							</div>			
+							<h4><strong class="col-sm-2 field">Logo:</strong></h4>
+							<c:if test="${ equipe.logo != null}">
+								<div  class="col-sm-3">
+									<img class="img-thumbnail" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }" alt="Logo da equipe" width="200" height="200" />
+								</div>
+							</c:if>
+							<c:if test="${ equipe.logo == null}">
+								<div  class="col-sm-3">
+									<img class="img-thumbnail"  src="<c:url value="/resources/imagens/boxvazia.gif" />" alt="Logo da equipe" width="200" height="200" />
+								</div>
+							</c:if>
+							<br><br><br><br><br><br><br>	
+							<h4><strong class="col-sm-2 field">Ideia de Negócio:</strong></h4>
+							<div class="col-sm-10 field-value">
+								<c:if test="${empty equipe.ideiaDeNegocio }">
+									<label>-</label>
+								</c:if>
+								<c:if test="${not empty equipe.ideiaDeNegocio }">
+									<article>
+										<label>							
+											${equipe.ideiaDeNegocio }
+										</label>
+									</article>
+								</c:if>
+							</div>		
+						</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							Membros
+						</div>
+						<div class="panel-body">
+							<div class="col-sm-12">
+								<c:if test="${not empty equipe.alunos }">
+									<table id="table_id" class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th>Nome</th>
+												<th>Sorenome</th>
+												<th>Curso</th>
+												<th>Email</th>
+												<c:if test="${permissao eq 'professor' }">
+													<th></th>
+												</c:if>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="usuario" items="${equipe.alunos}">
+												<tr>
+													<td>
+														<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
+													</td>
+													<td>${usuario.sobreNome}</td>
+													<td>${usuario.curso } </td>
+													<td>${usuario.email } </td>
+													<c:if test="${permissao eq 'professor' }">
+														<td>
+															<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
+																data-href="<c:url value="${equipe.id }/usuario/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
+																<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
+															</a>
+														</td>
+													</c:if>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</c:if>	
+							</div>
+						</div>
 					</div>
 					<div class="col-sm-12">
 						<hr>

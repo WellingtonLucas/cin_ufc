@@ -31,4 +31,20 @@ public class JogoServiceImpl extends GenericServiceImpl<Jogo> implements JogoSer
 		return turmaRepository.getJogosByProfessor(idProfessor);
 	}
 
+	@Override
+	public void verificaDatas(Jogo jogo) {
+		if(jogo.getInicio().getTime() > jogo.getTermino().getTime()){
+			throw new IllegalArgumentException("A data de início deve ser posterior a de término.");
+		}
+		
+	}
+
+	@Override
+	public void verificaNomeSemestre(Jogo jogo) {
+		if(jogo.getNomeDoCurso()==null || jogo.getSemestre() == null){
+			throw new IllegalArgumentException("Verifique os campos com asterísco e preencha-os para criar um novo jogo.");
+		}
+		
+	}
+
 }

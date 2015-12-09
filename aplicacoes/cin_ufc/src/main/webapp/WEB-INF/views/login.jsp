@@ -34,7 +34,7 @@
 				</div>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
-				<form name="f" class="navbar-form navbar-right"
+				<form id="form-login" name="f" class="navbar-form navbar-right"
 					action="<c:url value='j_spring_security_check' />" method='POST'>
 					<div class="form-group">
 						<c:if test="${not empty error}">
@@ -62,7 +62,6 @@
 	</div>
 	<div class="col-lg-6"></div>
 	<div class="col-lg-6">
-		
 		<form:form id="cadastro" class="form-horizontal" role="form" commandName="usuario" 
 		modelAttribute="usuario" method="POST" servletRelativeAction="/usuario/cadastre-se" >			
 			<div></div>
@@ -140,7 +139,7 @@
 	</div>
 	<script src="<c:url value="/webjars/jquery/2.1.0/jquery.js" />"></script>
 	<script	src="<c:url value="/webjars/bootstrap/3.3.5/js/bootstrap.min.js" />"></script>
-	<script src="<c:url value="/resources/js/funcoes2.js" />"></script>
+	<script src="<c:url value="/resources/js/cadastro.js" />"></script>
 	<script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
 	
 

@@ -78,7 +78,7 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 	public Equipe equipePorAlunoNoJogo(Usuario aluno, Jogo jogo) {
 		for (Equipe equipe : aluno.getEquipes()) {
 			if(equipe.getJogo().equals(jogo))
-				return equipe;
+				return find(Equipe.class, equipe.getId());
 		}
 		return null;
 	}

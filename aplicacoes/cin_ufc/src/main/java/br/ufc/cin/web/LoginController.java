@@ -39,6 +39,13 @@ public class LoginController {
 
 	}
 
+	@RequestMapping(value = "/cover", method = RequestMethod.GET)
+	public ModelAndView cover() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("cover");
+		return model;
+	}
+
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	public String loginerror(ModelMap model) {
 		model.addAttribute("usuario", new Usuario());

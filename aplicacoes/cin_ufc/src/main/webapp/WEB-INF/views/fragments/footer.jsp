@@ -10,7 +10,6 @@
 <script src="<c:url value="/webjars/jquery/2.1.0/jquery.min.js" />"></script>
 <script src="<c:url value="/webjars/jquery-ui/1.11.1/jquery-ui.min.js" />"></script>
 <script src="<c:url value="/webjars/bootstrap/3.3.5/js/bootstrap.min.js" />"></script>
-<script src="<c:url value="/webjars/datatables/1.9.4/media/js/jquery.dataTables.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.pt-BR.js" />"></script>
 <c:if test="${editor != 'rodada' }">
@@ -18,14 +17,11 @@
 </c:if>
 <c:if test="${editor eq 'rodada' }">
 	<script src="<c:url value="/resources/js/rodada.js" />"></script>
-</c:if>
-<c:if test="${editor eq 'rodada' && (action == 'cadastrar' || action == 'editar') }">
 	<script src="<c:url value="/resources/js/rodada.file.js" />"></script>
 </c:if>
 <c:if test="${editor eq 'equipe' && (action == 'cadastrar' || action == 'editar') }">
 	<script src="<c:url value="/resources/js/validatorEquipe.js" />"></script>
 </c:if>
-<script src="<c:url value="/resources/js/funcoes2.js" />"></script>
 <script src="<c:url value="/resources/js/formulario.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
 <script src="<c:url value="/resources/js/language/pt_BR.js" />"></script>
@@ -37,10 +33,6 @@
 <script src="<c:url value="/resources/js/fileinput.min.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.MultiFile.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.fileupload.js" />"></script>
-<%-- <script src="<c:url value="/resources/js/jquery.fileupload-image.js" />"></script>
-<script src="<c:url value="/resources/js/jquery.fileupload-validate.js" />"></script> --%>
-<%-- <script src="<c:url value="/resources/js/jquery.iframe-transport.js" />"></script> --%>
-<%-- <script src="<c:url value="/resources/js/jquery.ui.widget.js" />"></script> --%>
 <script src="<c:url value="/resources/js/jquery.searchable.js" />"></script>
 <script src="<c:url value="/resources/js/searchable.js" />"></script>
 <script src="<c:url value="/resources/js/dynamic-avatar-blur.js" />"></script>

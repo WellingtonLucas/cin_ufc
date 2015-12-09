@@ -17,7 +17,7 @@
 			<div class="modal-body">
 				<form:form id="reaberturaForm" role="form"
 					class="form-horizontal" commandName="reaberturaSubmissao"
-					servletRelativeAction="/jogo/${jogo.id}/rodada/${rodada.id}/equipe/${equipe.id }/solicitarReabertura"
+					servletRelativeAction="/jogo/${jogo.id}/rodada/${rodada.id}/solicitarReabertura"
 					method="POST">
 					<form:hidden path="equipe.id" value="${equipe.id }"/>
 					<form:hidden path="rodada.id"  value="${rodada.id }"/>
@@ -43,7 +43,7 @@
 						</div>
 					</div>
 				</form:form>
-			<h4><small>Lembrete: cada dia tem um custo adicional para sua equipe.</small></h4>
+			<h4><small>Lembrete: cada dia tem um custo adicional de R$ 1000 para sua equipe.</small></h4>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal"

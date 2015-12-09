@@ -1,6 +1,5 @@
 package br.ufc.cin.web;
 
-import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
@@ -8,7 +7,6 @@ import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -174,56 +172,41 @@ public class UsuarioController {
 	}
 	
 	@RequestMapping(value = "/atualizar", method = RequestMethod.POST)
-	public String atualizar(@RequestParam("anexos") List<MultipartFile> anexos, Model model, 
+	public String atualizar(@RequestParam("anexo") MultipartFile anexo, Model model, 
 			HttpSession session, RedirectAttributes redirect, 
 			@Valid Usuario usuario, BindingResult result) {
-		Usuario perfilAnterior = usuarioService.find(Usuario.class,usuario.getId());
+		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro ao atualizar seus dados.");
 			return "redirect:/usuario/perfil";
 		}
-		Documento documento = new Documento();
-		if(anexos != null && !anexos.isEmpty()) {
-			if(anexos.size() > 1){
-				redirect.addFlashAttribute("erro", "Selecione apenas uma foto!");
-				return "redirect:/usuario/perfil";
-			}
-			for(MultipartFile anexo : anexos) {
-				try {
-					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
-						documento.setArquivo(anexo.getBytes());
-						String data = new Date().getTime()+"";
-						documento.setNomeOriginal(data+"-"+anexo.getOriginalFilename());
-						documento.setNome(usuario.getNome()+"-"+"foto");
-						documento.setExtensao(anexo.getContentType());
-						if(!documentoService.verificaSeImagem(documento.getExtensao())){
-							redirect.addFlashAttribute("erro", "O arquivo deve está com algum desses formatos: PNG ou JPEG "
-									);
-							return "redirect:/usuario/perfil";
-						}
-					}
-				} catch (IOException e) {
-					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
-					return "redirect:/usuario/perfil";
-				}
-			}
-		}
-		try {
-			documentoService.save(documento);	
-		} catch (Exception e) {
-			redirect.addFlashAttribute("erro", "Erro ao persistir a foto.");
+		Usuario logado = getUsuarioLogado(session);
+		Usuario perfilAnterior = usuarioService.find(Usuario.class,usuario.getId());
+		if(!logado.equals(perfilAnterior)){
+			redirect.addFlashAttribute("erro", "Erro ao atualizar os dados, tente novamente.");
 			return "redirect:/usuario/perfil";
+		}
+		Documento imagem;
+		try {
+			imagem = documentoService.verificaAnexoImagem(anexo, usuario);
+		} catch (IOException e) {
+			redirect.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/usuario/perfil";
+		} catch (IllegalArgumentException e) {
+			redirect.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/usuario/perfil";	
 		}
 		if(perfilAnterior.getFoto() != null){
 			try {
-				documentoService.delete(perfilAnterior.getFoto());	
+				imagem.setId(perfilAnterior.getFoto().getId());
+				documentoService.update(imagem);
 			} catch (Exception e) {
 				redirect.addFlashAttribute("erro", "Erro na troca de fotos.");
 				return "redirect:/usuario/perfil";
 			}
 		}
 		
-		perfilAnterior.setFoto(documento);
+		perfilAnterior.setFoto(imagem);
 		if(!(usuario.getSenha().isEmpty())){
 			ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 			perfilAnterior.setSenha(encoder.encodePassword(usuario.getSenha(), ""));
@@ -233,8 +216,13 @@ public class UsuarioController {
 		perfilAnterior.setMatricula(usuario.getMatricula());
 		perfilAnterior.setCurso(usuario.getCurso());
 		perfilAnterior.setEmail(usuario.getEmail());
-		usuarioService.update(perfilAnterior);
-		return "redirect:/usuario/perfil";
+		try {
+			usuarioService.update(perfilAnterior);	
+		} catch (Exception e) {
+			redirect.addFlashAttribute("erro", "Erro tentar atualizar os dados.");
+			return "redirect:/usuario/perfil";
+		}
+		return "redirect:/usuario/profile";
 	}
 	
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/avaliacoes", method = RequestMethod.GET)

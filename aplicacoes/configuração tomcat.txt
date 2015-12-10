@@ -1,0 +1,10 @@
+--------- Arquivo server.xml -----------
+
+<Resource auth="Container" defaultAutoCommit="false" driverClassName="org.postgresql.Driver" 
+	maxActive="10" maxIdle="3" maxWait="10000" name="cinufc" password="postgres" 
+	type="javax.sql.DataSource" url="jdbc:postgresql://localhost/cin_ufc" username="postgres"/>
+
+
+--------- Arquivo context.xml -----------
+
+<ResourceLink global="cinufc" name="cinufc" type="javax.sql.DataSource"/>

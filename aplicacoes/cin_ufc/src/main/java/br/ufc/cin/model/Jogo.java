@@ -81,13 +81,13 @@ public class Jogo implements Serializable {
 			CascadeType.PERSIST })
 	private List<Documento> documentos;
 
-	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE, CascadeType.REMOVE})
 	private List<Equipe> equipes;
 
-	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	@OneToMany(mappedBy = "jogo", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE, CascadeType.REMOVE})
 	private List<Rodada> rodadas;
 
-	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE, CascadeType.REMOVE})
 	@JoinColumn(name = "IMAGEM_ID")
 	private Documento imagem;
 	

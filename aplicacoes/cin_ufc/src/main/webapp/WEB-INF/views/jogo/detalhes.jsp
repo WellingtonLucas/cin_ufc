@@ -84,7 +84,7 @@
 										</c:if>				
 										<c:if test="${not empty jogo.documentos }">
 											<c:forEach items="${jogo.documentos }" var="documento">
-												<label><a href="<c:url value="/documento/downloadDocumento/${documento.id }" ></c:url>">${documento.nomeOriginal }</a></label> - 							
+												<label><a href="<c:url value="/documento/downloadDocumento/${documento.id }" ></c:url>">${documento.nomeOriginal }</a></label>; 							
 											</c:forEach>
 										</c:if>
 									</div>

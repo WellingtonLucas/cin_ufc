@@ -88,6 +88,13 @@ public class UsuarioController {
 					"Erro, já existe um usuário cadastrado com esse email, por favor escolha outro.");
 			return REDIRECT_PAGINA_LOGIN;
 		}
+		try {
+			usuarioService.verificaDados(usuario);	
+		} catch (IllegalArgumentException e) {
+			redirect.addFlashAttribute("erro",e.getMessage());
+			return REDIRECT_PAGINA_LOGIN;
+		}
+		
 			
 		usuario.setHabilitado(true);
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);

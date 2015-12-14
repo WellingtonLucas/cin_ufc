@@ -44,7 +44,6 @@ public class LoginController {
 		model.addAttribute("usuario", new Usuario());
 		model.addAttribute("error", "Usuário e/ou senha inválidos!");
 		return "login";
-
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)

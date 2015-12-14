@@ -76,4 +76,18 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 			throw new IllegalArgumentException("Permissão negada.");
 		}
 	}
+
+	@Override
+	public void verificaDados(Usuario usuario) {
+		if(usuario.getNome() == null){
+			throw new IllegalArgumentException("O campo Nome é obrigatório.");
+		}else if(usuario.getCurso() == null){
+			throw new IllegalArgumentException("O campo Curso é obrigatório.");
+		}else if(usuario.getEmail() == null){
+			throw new IllegalArgumentException("O campo Email é obrigatório.");
+		}else if(usuario.getSenha() == null){
+			throw new IllegalArgumentException("O campo senha é obrigatório.");
+		}
+		
+	}
 }

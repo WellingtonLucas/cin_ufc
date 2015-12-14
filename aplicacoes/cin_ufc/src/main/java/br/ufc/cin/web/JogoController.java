@@ -1,7 +1,6 @@
 package br.ufc.cin.web;
 
 
-import static br.ufc.cin.util.Constants.MENSAGEM_ADD_ANEXO;
 import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPES_NAO_CRIADAS;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_AO_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
@@ -77,7 +76,7 @@ public class JogoController {
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		List<Jogo> jogos = jogoService.getJogoByProfessor(usuario.getId());
 		if(jogos == null){
-			model.addAttribute("info", "Você ainda não crirou jogos.");
+			model.addAttribute("info", "Você ainda não criou jogos.");
 		}
 		List<Jogo> jogosParticipa = new ArrayList<Jogo>();
 		boolean flag = false;
@@ -113,7 +112,7 @@ public class JogoController {
 	
 	@RequestMapping(value = "/novo-jogo", method = RequestMethod.POST)
 	public String cadastrar(@ModelAttribute("jogo") Jogo jogo, @RequestParam("anexos") List<MultipartFile> anexos, 
-			@RequestParam("logo") MultipartFile anexo, BindingResult result, HttpSession session, RedirectAttributes redirect, Model model){
+			@RequestParam("logo") MultipartFile logo, BindingResult result, HttpSession session, RedirectAttributes redirect, Model model){
 		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
@@ -131,7 +130,7 @@ public class JogoController {
 		}
 		Documento imagem;
 		try {
-			imagem = documentoService.verificaAnexoImagem(anexo, jogo);
+			imagem = documentoService.verificaAnexoImagem(logo, jogo);
 			documentoService.verificaArquivos(anexos);
 			jogoService.verificaDatas(jogo);
 			jogoService.verificaNomeSemestre(jogo);
@@ -162,7 +161,7 @@ public class JogoController {
 		}
 		
 		redirect.addFlashAttribute("info", MENSAGEM_JOGO_CADASTRADO);
-		return REDIRECT_PAGINA_LISTAR_JOGO;
+		return "redirect:/jogo/"+jogo.getId()+"/detalhes";
 	}
 	
 	@RequestMapping(value = "/{id}/editar", method = RequestMethod.GET)
@@ -196,19 +195,29 @@ public class JogoController {
 			redirect.addFlashAttribute("erro", "Erro ao na edição do jogo");
 			return "redirect:/jogo/"+jogo.getId()+"/editar";
 		}
-		if(jogo.getDescricao() == null || jogo.getRegras().isEmpty()){
+		if(jogo.getDescricao() == null || jogo.getDescricao().isEmpty()){
 			redirect.addFlashAttribute("erro", "A descrição do jogo é obrigatória!");
 			redirect.addFlashAttribute("error_descricao", "A descrição do jogo é obrigatória!");
 			return "redirect:/jogo/"+jogo.getId()+"/editar";
 		}
 		
 		Jogo oldJogo = jogoService.find(Jogo.class, jogo.getId());
+		List<Documento> documentos = new ArrayList<Documento>();
 		try {
+			jogoService.verificaDatas(jogo);
+			jogoService.verificaNomeSemestre(jogo);
+			documentoService.verificaArquivos(anexos);
+			documentos = documentoService.criaDocumentos(anexos, oldJogo);
 			Documento logo = documentoService.verificaAnexoImagem(imagem, oldJogo);
-			if(oldJogo.getImagem() != null){
-				logo.setId(oldJogo.getImagem().getId());
+			if(logo != null){
+				if(oldJogo.getImagem() != null){
+					logo.setId(oldJogo.getImagem().getId());
+				}
+				oldJogo.setImagem(logo);
 			}
-			oldJogo.setImagem(logo);
+			if(!documentos.isEmpty()) {
+				documentoService.salvar(documentos);
+			}
 		} catch (IOException e1) {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
 			return "redirect:/jogo/"+jogo.getId()+"/editar";
@@ -219,36 +228,7 @@ public class JogoController {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
 			return "redirect:/jogo/"+jogo.getId()+"/editar";
 		}
-		List<Documento> documentos = new ArrayList<Documento>();	
-		if(anexos != null && !anexos.isEmpty()) {
-			for(MultipartFile anexo : anexos) {
-				try {
-					if(anexo.getBytes() != null && anexo.getBytes().length != 0) {
-						Documento documento = new Documento();
-						documento.setArquivo(anexo.getBytes());
-						documento.setNomeOriginal(anexo.getOriginalFilename());
-						documento.setExtensao(anexo.getContentType());
-						documento.setNome(anexo.getName());
-						documento.setJogo(oldJogo);						
-						documentos.add(documento);
-					}
-				} catch (IOException e) {
-					redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
-					return "redirect:/jogo/"+jogo.getId()+"/editar";
-				}
-			}
-			if(!documentos.isEmpty()) {
-				try {
-					documentoService.salvar(documentos);	
-				} catch (Exception e) {
-					redirect.addFlashAttribute("erro", "Erro ao tentar salvar os arquivos.");
-					return "redirect:/jogo/"+jogo.getId()+"/editar";
-				}
-			}
-		}else{
-			redirect.addFlashAttribute("erro", MENSAGEM_ADD_ANEXO);
-			return "redirect:/jogo/"+jogo.getId()+"/editar";
-		}
+	
 		oldJogo.setDescricao(jogo.getDescricao());
 		oldJogo.setRegras(jogo.getRegras());
 		oldJogo.setNomeDoCurso(jogo.getNomeDoCurso());
@@ -309,6 +289,7 @@ public class JogoController {
 		} else {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 		}
+		redirectAttributes.addFlashAttribute("remo", "Jogo removido com sucesso.");
 		return REDIRECT_PAGINA_LISTAR_JOGO;
 
 	}

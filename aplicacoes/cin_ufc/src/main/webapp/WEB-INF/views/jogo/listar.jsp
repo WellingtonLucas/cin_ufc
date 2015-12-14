@@ -85,6 +85,14 @@
 											<c:out value="${info}"></c:out>
 										</div>
 									</c:if>
+									<c:if test="${not empty remo}">
+										<div class="alert alert-warning alert-dismissible" role="alert">
+											<button type="button" class="close" data-dismiss="alert">
+												<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+											</button>
+											<c:out value="${remo}"></c:out>
+										</div>
+									</c:if>
 									<div class="row placeholders">
 										<c:forEach var="jogo" items="${jogos}" varStatus="id">
 											<div class="col-sm-3">		

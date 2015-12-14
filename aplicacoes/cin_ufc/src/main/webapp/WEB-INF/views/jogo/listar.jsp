@@ -116,10 +116,10 @@
 													<a class="btn btn-primary" role="button"
 														href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
 														<c:if test="${!jogo.status}">
-															<i class="glyphicon glyphicon-eye-close"></i>
+															<i class="glyphicon glyphicon-lock"></i>
 														</c:if>
 														<c:if test="${jogo.status}">
-															<i class="glyphicon glyphicon-eye-open"></i>
+															<i class="fa fa-unlock"></i>
 														</c:if>
 														Detalhes »</a>
 												</div>

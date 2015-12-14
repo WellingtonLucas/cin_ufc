@@ -44,16 +44,8 @@
 						</c:if>
 					</div>
 					<c:if test="${not empty respostas }">
-						<div class="col-lg-4">
-							<div class="input-group">
-					            <input type="search" id="search" value="" class="form-control" placeholder="Pesquisar">
-					            <span class="input-group-addon">
-					            	<span class="glyphicon glyphicon-search"></span>
-					            </span>
-					        </div>
-				        </div>
 				       	<div class="col-sm-12">
-							<table id="table" class="table table-striped table-hover">
+							<table id="tabela-avaliacoes-user" class="table table-striped table-hover">
 								<thead>
 									<tr>
 										<th>Rodada</th>

@@ -261,6 +261,25 @@ $(document).ready(function() {
             "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
         }
 	});
-	
+	$('#tabela-avaliacoes').DataTable({
+		"order" : [[ 0, 'desc' ]],
+		"columnDefs" : [ 
+		    {className: "dt-center", "targets": [0]},
+		    {"targets" : 2, "orderable" : false}
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	$('#tabela-avaliacoes-user').DataTable({
+		"order" : [[ 0, 'desc' ]],
+		"columnDefs" : [ 
+		    {"targets" : 2, "orderable" : false},
+		    {"targets" : 3, "orderable" : false}
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
 });
 

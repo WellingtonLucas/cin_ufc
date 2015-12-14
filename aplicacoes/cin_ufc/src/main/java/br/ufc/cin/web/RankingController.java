@@ -128,6 +128,7 @@ public class RankingController {
 		}
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("rodada", rodada);
+		model.addAttribute("action", "detalhesRodada");
 		return "ranking/rankingsRodada";
 	}
 
@@ -168,6 +169,7 @@ public class RankingController {
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("notas", notas);
 		model.addAttribute("rankingAlunos", true);
+		model.addAttribute("action", "detalhesRodada");
 		model.addAttribute("rodada", rodada);
 		return "ranking/rankingsRodada";
 	}
@@ -210,6 +212,7 @@ public class RankingController {
 		model.addAttribute("saldos", saldos);
 		model.addAttribute("rankingEquipes", true);
 		model.addAttribute("rodada", rodada);
+		model.addAttribute("action", "detalhesRodada");
 		return "ranking/rankingsRodada";
 	}
 	

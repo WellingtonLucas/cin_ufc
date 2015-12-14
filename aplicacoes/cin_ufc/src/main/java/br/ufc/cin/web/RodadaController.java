@@ -887,15 +887,22 @@ public class RodadaController {
 		Usuario usuario = getUsuarioLogado(session);
 		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
 		try {
-			regrasService.verificaJogo(jogo);	
-			regrasService.verificaSeProfessor(usuario, jogo);
-			regrasService.verificaRodadaJogo(rodada,jogo);
+			try {
+				regrasService.verificaJogo(jogo);	
+				regrasService.verificaSeProfessor(usuario, jogo);
+				regrasService.verificaRodadaJogo(rodada,jogo);
+			} catch (IllegalArgumentException e) {
+				redirectAttributes.addFlashAttribute("erro",
+						e.getMessage());
+				return REDIRECT_PAGINA_LISTAR_JOGO;
+			}
+			rodadaService.verificaPeriodoAvaliacao(rodada);
 			rodada.setStatusNota(true);
 			rodadaService.update(rodada);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro",
 					e.getMessage());
-			return REDIRECT_PAGINA_LISTAR_JOGO;
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
 		} catch (Exception e){
 			redirectAttributes.addFlashAttribute("erro",
 					"Erro ao tentar gerar as notas.");

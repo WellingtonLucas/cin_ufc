@@ -45,7 +45,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 		Float media = -0f;
 		if(historico.getNotas()!= null && !historico.getNotas().isEmpty()){
 			for (Nota nota : historico.getNotas()) {
-				if(nota != null){
+				if(nota != null && nota.getValor()!= null){
 					media += nota.getValor();
 				}
 			}

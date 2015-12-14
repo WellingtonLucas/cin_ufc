@@ -6,11 +6,11 @@
 	 </div>
  </div>
 
-
 <script src="<c:url value="/webjars/jquery/2.1.0/jquery.min.js" />"></script>
 <script src="<c:url value="/webjars/jquery-ui/1.11.1/jquery-ui.min.js" />"></script>
 <script src="<c:url value="/webjars/bootstrap/3.3.5/js/bootstrap.min.js" />"></script>
-<script src="<c:url value="/resources/js/bootstrap-datepicker.js" />"></script>
+<script src="<c:url value="/webjars/datatables/1.10.9/js/jquery.dataTables.min.js" />"></script>
+<script src="<c:url value="/webjars/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.pt-BR.js" />"></script>
 <c:if test="${editor != 'rodada' }">
 	<script src="<c:url value="/resources/js/funcoes.js" />"></script>
@@ -23,22 +23,15 @@
 	<script src="<c:url value="/resources/js/validatorEquipe.js" />"></script>
 </c:if>
 <script src="<c:url value="/resources/js/formulario.js" />"></script>
-<script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
+<script src="<c:url value="/webjars/bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js" />"></script>
 <script src="<c:url value="/resources/js/language/pt_BR.js" />"></script>
-<script src="<c:url value="/resources/js/jquery.mask.min.js" />"></script>
-<script src="<c:url value="/resources/js/moment.js" />"></script>
-<script src="<c:url value="/resources/js/moment-with-locales.js" />"></script>
-<script src="<c:url value="/resources/js/select2.min.js" />"></script>
-<script src="<c:url value="/resources/js/select2_locale_pt-BR.js" />"></script>
+<script src="<c:url value="/webjars/momentjs/2.10.6/moment.js" />"></script>
 <script src="<c:url value="/resources/js/fileinput.min.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.MultiFile.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.fileupload.js" />"></script>
-<script src="<c:url value="/resources/js/jquery.searchable.js" />"></script>
-<script src="<c:url value="/resources/js/searchable.js" />"></script>
 <script src="<c:url value="/resources/js/dynamic-avatar-blur.js" />"></script>
 <script src="<c:url value="/resources/js/readmore.min.js" />"></script>
-<script src="<c:url value="/resources/ckeditor/ckeditor.js"/>"></script>
-<script src="<c:url value="/resources/ckeditor/adapters/jquery.js"/>"></script>
+<script src="<c:url value="/webjars/ckeditor/4.5.4/full/ckeditor.js"/>"></script>
 <c:if test="${editor eq 'equipe' }">
 	<script>
 		CKEDITOR.replace('ideiaDeNegocio');

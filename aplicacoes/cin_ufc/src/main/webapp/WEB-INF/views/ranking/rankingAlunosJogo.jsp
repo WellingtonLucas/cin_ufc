@@ -14,14 +14,14 @@
 					<div class="col-md-3 col-lg-3 " align="center">
 						<a class="pull-left" href="#"> 
 							<c:if test="${saldo.apostador.foto == null }">
-								<img class="img-thumbnail img-responsive"
+								<img class="img-circle"  width="200" height="200"
 								src="<c:url value="/resources/imagens/empty_profile.gif" />"
 								alt="Foto de ${saldo.apostador.nome }" />
 							</c:if>
 							<c:if test="${saldo.apostador.foto != null }">
 								<img alt="Foto de ${saldo.apostador.nome} "
 									src="data:${saldo.apostador.foto.extensao };base64,${saldo.apostador.foto.encode }"
-									class="img-thumbnail img-responsive" />
+									class="img-circle"  width="200" height="200" />
 							</c:if>
 						</a>
 					</div>

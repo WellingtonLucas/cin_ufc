@@ -287,37 +287,20 @@
 										</a>
 									</div>
 									<div class="col-sm-2">
-										<c:if test="${rodada.status == true}">									
-											<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-rodada" href="#" 
-												data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/inativar">
-												</c:url>" data-name="${rodada.nome }">
-												<button class="btn btn-warning btn-lg">
-													Encerrar&nbsp;<i class="glyphicon glyphicon-ban-circle"></i>
-												</button>
-											</a>
-										</c:if>
-										<c:if test="${rodada.status == false }">
-											<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-rodada" href="#" 
-												data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/ativar">
-												</c:url>" data-name="${rodada.nome }">
-												<button class="btn btn-success btn-lg">
-													Iniciar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>
-												</button>
-											</a>
-										</c:if>
-									</div>
-									<div class="col-sm-2">
 										<a id="notas" data-toggle="modal" data-target="#confirm-gerar-notas" href="#" 
 										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/gerarNotas"></c:url>" data-name="${rodada.nome }">
 											<button class="btn btn-success btn-lg">Gerar Notas&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
 										</a>					
 									</div>
-									<div class="col-sm-2">
-										<a id="ranking" data-toggle="modal" data-target="#confirm-gerar-ranking" href="#" 
-										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/publicarRankings"></c:url>" data-name="${rodada.nome }">
-											<button class="btn btn-success btn-lg">Gerar Ranking&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
-										</a>					
-									</div>
+									<c:if test="${rodada.statusAvaliacao }">
+										<div class="col-sm-1"></div>
+										<div class="col-sm-2">
+											<a id="ranking" data-toggle="modal" data-target="#confirm-gerar-ranking" href="#" 
+											data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/publicarRankings"></c:url>" data-name="${rodada.nome }">
+												<button class="btn btn-success btn-lg">Gerar Ranking&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
+											</a>					
+										</div>
+									</c:if>
 									<div class="col-sm-1"></div>
 									<div class="col-sm-2">
 										<a id="excluir" data-toggle="modal" data-target="#confirm-delete-rodada" href="#" 

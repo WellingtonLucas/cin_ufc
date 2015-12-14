@@ -36,12 +36,12 @@
 								<c:if test="${usuarioParticipante.foto == null }">
 									<img alt="Foto do usuário"
 										src="<c:url value="/resources/imagens/empty_profile.gif" />"
-										class="img-circle img-responsive" />
+										class="img-circle"  width="200" height="200" />
 								</c:if>
 								<c:if test="${usuarioParticipante.foto != null }">
 									<img alt="Foto do usuário"
 										src="data:${usuarioParticipante.foto.extensao };base64,${usuarioParticipante.foto.encode }"
-										class="img-thumbnail img-responsive" />
+										class="img-circle"  width="200" height="200" />
 								</c:if>
 							</div>
 

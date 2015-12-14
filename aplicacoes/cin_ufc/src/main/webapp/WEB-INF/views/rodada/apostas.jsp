@@ -61,7 +61,7 @@
 											<td>
 												<a href="<c:url value="/jogo/${jogo.id}/equipe/${deposito.equipe.id }"></c:url>">${deposito.equipe.nome }</a> 
 											</td>
-											<td><fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.quantia }" /> R$</td>
+											<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.quantia }" /></td>
 										</tr>
 									</c:forEach>
 								</c:forEach>

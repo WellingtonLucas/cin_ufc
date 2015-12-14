@@ -133,13 +133,14 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 						throw new IllegalArgumentException(
 								"O arquivo deve ter um destes formatos: PNG ou JPEG ");
 					}
+					return documento;
 				}else{
 					throw new IllegalArgumentException(
 							"A imagem precisa ter no máximo 100KB.");
 				}
 			}
 		}
-		return documento;
+		return null;
 	}
 
 	@Override

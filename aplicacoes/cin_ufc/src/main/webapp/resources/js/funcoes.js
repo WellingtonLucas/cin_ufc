@@ -228,5 +228,58 @@ $(document).ready(function() {
 		msgLoading: "Carregando arquivo {index} de {files} &hellip;"
 	});
 	
+	$('#add-participante-jogo').DataTable({
+		"order" : [[ 0, 'desc' ]],
+		"columnDefs" : [ 
+		    {className: "dt-center", "targets": [ 0, 1, 4]},
+		    {"targets" : 3, "orderable" : false},
+            {"targets" : 4, "orderable" : false}
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	$('#participantes').DataTable({
+		"order" : [[ 0, 'desc' ]],
+		"columnDefs" : [ 
+		    {className: "dt-center", "targets": [ 0, 1, 4]},
+		    {"targets" : 3, "orderable" : false},
+            {"targets" : 4, "orderable" : false}
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	$('#add-participantes-equipe').DataTable({
+		"order" : [[ 0, 'desc' ]],
+		"columnDefs" : [ 
+		    {className: "dt-center", "targets": [ 0, 1, 4]},
+		    {"targets" : 3, "orderable" : false},
+            {"targets" : 4, "orderable" : false}
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	$('#tabela-avaliacoes').DataTable({
+		"order" : [[ 0, 'desc' ]],
+		"columnDefs" : [ 
+		    {className: "dt-center", "targets": [0]},
+		    {"targets" : 2, "orderable" : false}
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	$('#tabela-avaliacoes-user').DataTable({
+		"order" : [[ 0, 'desc' ]],
+		"columnDefs" : [ 
+		    {"targets" : 2, "orderable" : false},
+		    {"targets" : 3, "orderable" : false}
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
 });
 

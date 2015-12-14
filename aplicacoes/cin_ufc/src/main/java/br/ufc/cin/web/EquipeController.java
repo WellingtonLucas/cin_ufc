@@ -494,7 +494,7 @@ public class EquipeController {
 			if(usuarios == null || usuarios.isEmpty()){
 				model.addAttribute("erro", "Todos os usuários já estão cadastrados.");
 			}
-	
+			model.addAttribute("permissao", "professor");
 			model.addAttribute("usuarios", usuarios);
 			return "equipe/adicionarParticipante";
 		}

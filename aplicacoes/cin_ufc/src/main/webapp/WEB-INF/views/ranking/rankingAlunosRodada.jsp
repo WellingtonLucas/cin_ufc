@@ -14,14 +14,14 @@
 					<div class="col-md-3 col-lg-3 " align="center">
 						<a class="pull-left" href="#"> 
 							<c:if test="${nota.historico.usuario.foto == null }">
-								<img class="img-thumbnail img-responsive"
+								<img class="img-circle"  width="200" height="200"
 								src="<c:url value="/resources/imagens/empty_profile.gif" />"
 								alt="Foto de ${nota.historico.usuario.nome }" />
 							</c:if>
 							<c:if test="${nota.historico.usuario.foto != null }">
 								<img alt="Foto de ${nota.historico.usuario.nome} "
 									src="data:${nota.historico.usuario.foto.extensao };base64,${nota.historico.usuario.foto.encode }"
-									class="img-thumbnail img-responsive" />
+									class="img-circle"  width="200" height="200" />
 							</c:if>
 						</a>
 					</div>

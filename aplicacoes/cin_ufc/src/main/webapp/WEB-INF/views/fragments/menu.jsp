@@ -9,7 +9,7 @@
 		</c:if>
 		<!-- OPCOES DO JOGO -->
 		<c:if test="${(permissao == 'professor')||(permissao == 'aluno') ||(permissao == 'alunoLogado') || (permissao == 'jogador')}">
-			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;${jogo.nomeDoCurso }</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;Home Jogo</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>"><i class="fa fa-users"></i>&nbsp;&nbsp;Equipes</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>"><i class="fa fa-youtube-play"></i>&nbsp;&nbsp;Rodadas</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rankings"></c:url>"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Rankings Gerais</a></li>
@@ -30,6 +30,9 @@
 		</c:if>
 		<c:if test="${(action == 'formularios') && (permissao == 'professorForm')}">
 			<li class="active"><a href="<c:url value ="/formulario"></c:url>"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Criar Formulário</a></li>
+			<li>
+				<a href="javascript:history.back();"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;Voltar</a>
+			</li>
 				
 		</c:if>
 		<c:if test="${permissao== 'professorForm' && ((action == 'detalhesFormulario') || (action == 'responder'))}">

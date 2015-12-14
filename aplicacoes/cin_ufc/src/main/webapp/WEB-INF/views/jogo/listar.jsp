@@ -55,7 +55,7 @@
 													<a href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
 														<img class="img-circle"
 														src="<c:url value="/resources/imagens/boxvazia.gif" />"
-														alt="" width="200" height="200" >
+														alt="Imágem vazia" width="200" height="200" >
 													</a>
 												</c:if>
 												<c:if test="${jogo.imagem != null }">
@@ -85,12 +85,12 @@
 											<c:out value="${info}"></c:out>
 										</div>
 									</c:if>
-									<c:if test="${not empty remo}">
-										<div class="alert alert-warning alert-dismissible" role="alert">
+									<c:if test="${not empty erro}">
+										<div class="alert alert-danger alert-dismissible" role="alert">
 											<button type="button" class="close" data-dismiss="alert">
 												<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 											</button>
-											<c:out value="${remo}"></c:out>
+											<c:out value="${erro}"></c:out>
 										</div>
 									</c:if>
 									<div class="row placeholders">

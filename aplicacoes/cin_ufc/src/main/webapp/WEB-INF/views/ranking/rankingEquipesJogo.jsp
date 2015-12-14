@@ -14,14 +14,14 @@
 					<div class="col-md-3 col-lg-3 " align="center">
 						<a class="pull-left" href="#"> 
 							<c:if test="${equipe.logo == null }">
-								<img class="img-thumbnail img-responsive"
+								<img class="img-circle"  width="200" height="200"
 								src="<c:url value="/resources/imagens/boxvazia.gif" />"
 								alt="Foto de ${equipe.nome }" />
 							</c:if>
 							<c:if test="${equipe.logo != null }">
 								<img alt="Foto de ${equipe.nome} "
 									src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }"
-									class="img-thumbnail img-responsive" />
+									class="img-circle"  width="200" height="200"/>
 							</c:if>
 						</a>
 					</div>

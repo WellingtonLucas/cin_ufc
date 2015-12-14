@@ -281,7 +281,6 @@ public class JogoController {
 		if (usuario.equals(jogo.getProfessor())) {
 			if(jogo.getEquipes().isEmpty()){
 				jogoService.delete(jogo);
-				redirectAttributes.addFlashAttribute("info", MENSAGEM_JOGO_REMOVIDO);
 			}else{
 				redirectAttributes.addFlashAttribute("erro", "Primeiramente remova as equipes associadas ao jogo.");
 				return  "redirect:/jogo/"+jogo.getId()+"/detalhes";
@@ -289,7 +288,7 @@ public class JogoController {
 		} else {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 		}
-		redirectAttributes.addFlashAttribute("remo", "Jogo removido com sucesso.");
+		redirectAttributes.addFlashAttribute("info", MENSAGEM_JOGO_REMOVIDO);
 		return REDIRECT_PAGINA_LISTAR_JOGO;
 
 	}

@@ -68,12 +68,6 @@
 	
 	<dependencies>
 		
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>font-awesome</artifactId>
-			<version>4.5.0</version>
-		</dependency>
-
 		<!-- Jackson JSON Mapper -->
 
 		<dependency>
@@ -213,6 +207,35 @@
 			<artifactId>jquery-ui</artifactId>
 			<version>${jquery-ui.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>4.5.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>momentjs</artifactId>
+			<version>2.10.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap-datepicker</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrapvalidator</artifactId>
+			<version>0.5.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>ckeditor</artifactId>
+			<version>4.5.4</version>
+		</dependency>
+				
 
 		<!-- Dandelion -->
 		<dependency>

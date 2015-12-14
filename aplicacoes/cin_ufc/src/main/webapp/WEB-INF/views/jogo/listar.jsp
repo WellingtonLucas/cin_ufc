@@ -115,6 +115,12 @@
 													<p>${jogo.semestre}</p>
 													<a class="btn btn-primary" role="button"
 														href="<c:url value="/jogo/${jogo.id}/detalhes"></c:url>">
+														<c:if test="${!jogo.status}">
+															<i class="glyphicon glyphicon-eye-close"></i>
+														</c:if>
+														<c:if test="${jogo.status}">
+															<i class="glyphicon glyphicon-eye-open"></i>
+														</c:if>
 														Detalhes »</a>
 												</div>
 											</div>

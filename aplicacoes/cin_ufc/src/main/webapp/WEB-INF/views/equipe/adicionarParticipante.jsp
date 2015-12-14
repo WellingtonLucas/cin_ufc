@@ -46,60 +46,52 @@
 							</div>
 						</c:if>
 					</div>
-					<c:if test="${not empty usuarios }">
-						<div class="col-lg-4">
-							<div class="input-group">
-					            <input type="search" id="search" value="" class="form-control" placeholder="Pesquisar">
-					            <span class="input-group-addon">
-					            	<span class="glyphicon glyphicon-search"></span>
-					            </span>
-					        </div>
-				        </div>
-				        <form:form id="addParticipante" role="form" commandName="equipe" class="form-horizontal" method="POST"
-							servletRelativeAction="${url }">
-							<form:hidden path="id" value="${equipe.id }"/>
-							<div class="col-sm-12">
-								<table id="table" class="table table-striped table-hover">
-									<thead>
+			        <form:form id="addParticipante" role="form" commandName="equipe" class="form-horizontal" method="POST"
+						servletRelativeAction="${url }">
+						<form:hidden path="id" value="${equipe.id }"/>
+						<div class="col-sm-12">
+							<table id="add-participantes-equipe" class="table table-striped table-hover">
+								<thead>
+									<tr>
+										<th>Nome</th>
+										<th>Sorenome</th>
+										<th>Curso</th>
+										<th>Matricula</th>
+										<th>Marque aqui</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="usuario" items="${usuarios}" varStatus="userId">
 										<tr>
-											<th>Nome</th>
-											<th>Sorenome</th>
-											<th>Curso</th>
-											<th>Matricula</th>
-											<th>Marque aqui</th>
+											<td>
+												<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
+											</td>
+											<td>	
+												${usuario.sobreNome}										
+											</td>
+											<td>${usuario.curso } </td>
+											<td>${usuario.email } </td>
+											<td>
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary">
+														<input name="alunos[${userId.index }].id" type="checkbox" autocomplete="off" value="${usuario.id }">
+														<span class="glyphicon glyphicon-ok"></span>
+													</label>
+												</div>
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="usuario" items="${usuarios}" varStatus="userId">
-											<tr>
-												<td>
-													<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
-												</td>
-												<td>	
-													${usuario.sobreNome}										
-												</td>
-												<td>${usuario.curso } </td>
-												<td>${usuario.email } </td>
-												<td>
-													<div class="btn-group" data-toggle="buttons">
-														<label class="btn btn-primary">
-															<input name="alunos[${userId.index }].id" type="checkbox" autocomplete="off" value="${usuario.id }">
-															<span class="glyphicon glyphicon-ok"></span>
-														</label>
-													</div>
-												</td>
-											</tr>
-										</c:forEach>
-									</tbody>
-								</table>
-							</div>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+						<c:if test="${not empty usuarios }">
 							<div class="form-group">
 								<div class="col-sm-2">				
 									<button type="submit" class="btn btn-primary btn-lg">Vincular&nbsp;<i class="glyphicon glyphicon-floppy-disk"></i></button>
 								</div>
 							</div>
-						</form:form>
-					</c:if>	
+						</c:if>	
+					</form:form>
 				</div>
 			</div>
 		</div>

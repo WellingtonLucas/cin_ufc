@@ -17,4 +17,6 @@ public interface RodadaService extends GenericService<Rodada>{
 
 	public abstract Rodada atualizaStatusAvaliacao(Rodada rodada);
 
+	public abstract void verificaPeriodoAvaliacao(Rodada rodada);
+
 }

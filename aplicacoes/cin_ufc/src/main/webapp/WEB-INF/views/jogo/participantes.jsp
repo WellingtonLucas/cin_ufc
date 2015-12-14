@@ -44,7 +44,7 @@
 					</div>
 					<div class="col-sm-12">
 						<c:if test="${not empty usuarios }">
-							<table id="table_id" class="table table-striped table-hover">
+							<table id="participantes" class="table table-striped table-hover">
 								<thead>
 									<tr>
 										<th>Nome</th>

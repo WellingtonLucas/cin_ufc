@@ -79,7 +79,7 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	public Rodada atualizaStatusAvaliacao(Rodada rodada) {
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
-		if(rodada.getTerminoAvaliacao().getTime() < tempoAtual){
+		if(rodada.getTerminoAvaliacao().getTime() >= tempoAtual){
 			if(rodada.isStatusAvaliacao() == false)
 				return rodada;
 			rodada.setStatusAvaliacao(false);
@@ -91,5 +91,14 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		update(rodada);
 		return rodada;
 
+	}
+
+	@Override
+	public void verificaPeriodoAvaliacao(Rodada rodada) {
+		Calendar calendario = Calendar.getInstance();
+		long tempoAtual = calendario.getTimeInMillis();
+		if(rodada.getPrazoSubmissao().getTime() > tempoAtual){
+			throw new IllegalArgumentException("Aguarde o término do período de Submissão.");
+		}
 	}
 }

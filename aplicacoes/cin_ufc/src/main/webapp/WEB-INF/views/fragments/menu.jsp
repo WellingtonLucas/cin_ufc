@@ -25,7 +25,11 @@
 		
 		<c:if test="${(action == 'participantesJogo')}">
 			<c:if test="${ (permissao == 'professor') }">
-				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/vincular"></c:url>"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Vincular Participantes</a></li>
+				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/vincular"></c:url>" data-toggle="tooltip" data-placement="right"
+					title="Vincule participantes ao jogo." >
+					<i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Vincular
+					</a>
+				</li>
 			</c:if>
 		</c:if>
 		<c:if test="${(action == 'equipes') && (permissao == 'professor')}">
@@ -39,14 +43,13 @@
 				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/avaliacoes"></c:url>">Avaliações</a></li>
 			</c:if>
 			<c:if test="${ (permissao == 'professor') }">
-				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/vincular"></c:url>">Vincular Membros <i class="glyphicon glyphicon-plus"></i></a></li>
+				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/vincular"></c:url>"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Vincular Membros</a></li>
 			</c:if>
 			<c:if test="${ (permissao == 'professor' || permissao== 'alunoLogado') }">
 				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/historico"></c:url>">Histórico de Notas</a></li>
 			</c:if>
 		</c:if>
 		<c:if test="${(action == 'vincularEquipe')}">
-			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>">${jogo.nomeDoCurso }</a></li>
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome }</a></li>
 		</c:if>
 		<c:if test="${(action == 'formularios') && (permissao == 'professorForm')}">

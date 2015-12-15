@@ -1,7 +1,5 @@
 package br.ufc.cin.service.impl;
 
-import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -169,9 +167,12 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 					documentos.add(documento);
 				}
 			}
-			return documentos;
+			if(documentos.size() == 0)
+				return null;
+			else
+				return documentos;
 		}else{
-			throw new IllegalArgumentException(MENSAGEM_ERRO_UPLOAD);
+			return null;
 		}
 	}
 

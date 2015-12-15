@@ -151,12 +151,14 @@ public class JogoController {
 		List<Documento> documentos = new ArrayList<Documento>();
 		try {
 			documentos = documentoService.criaDocumentos(anexos,jogo);
-			documentoService.salvar(documentos);
+			if( documentos != null && !documentos.isEmpty()){
+				documentoService.salvar(documentos);
+			}
 		} catch (IOException e1) {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
 			return "redirect:/jogo/novo-jogo";
-		} catch (IllegalArgumentException e) {
-			redirect.addFlashAttribute("erro", e.getMessage());
+		} catch (Exception e) {
+			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
 			return "redirect:/jogo/novo-jogo";
 		}
 		
@@ -215,7 +217,7 @@ public class JogoController {
 				}
 				oldJogo.setImagem(logo);
 			}
-			if(!documentos.isEmpty()) {
+			if(documentos != null && !documentos.isEmpty()) {
 				documentoService.salvar(documentos);
 			}
 		} catch (IOException e1) {
@@ -404,7 +406,7 @@ public class JogoController {
 			jogo.getAlunos().addAll(alunos);
 			jogoService.update(jogoCompleto);
 			redirectAttributes.addFlashAttribute("info",
-					"Usuários associados ao jogo com sucesso!.");
+					"Usuários associados ao jogo com sucesso!");
 			return "redirect:/jogo/"+jogo.getId()+"/participantes";
 		}else{
 			redirectAttributes.addFlashAttribute("erro",

@@ -92,17 +92,14 @@ public class FormularioController {
 	@RequestMapping(value = "/formulario", method = RequestMethod.GET)
 	public String novoFormulario(Model model, HttpSession session,
 			 RedirectAttributes redirectAttributes) {
-		
-		Usuario usuario = getUsuarioLogado(session);
-		
-		model.addAttribute("usuario", usuario);
+		getUsuarioLogado(session);
 		model.addAttribute("formulario", new Formulario());
 		model.addAttribute("action","cadastrar");
 		
 		return "formulario/formulario";
 	}
 	
-	@RequestMapping(value = "/formulario/salvar", method = RequestMethod.POST)
+	@RequestMapping(value = "/formulario", method = RequestMethod.POST)
 	public String cadastroFormulario(@ModelAttribute("formulario") Formulario formulario, Model model,
 			HttpSession session, RedirectAttributes redirect, BindingResult result) {
 		
@@ -113,10 +110,15 @@ public class FormularioController {
 
 		Usuario usuario = getUsuarioLogado(session);
 		try {
-
+			formularioService.verificaCamposObrigatorios(formulario);	
 			formulario.setProfessor(usuario);
 			formularioService.save(formulario);	
-		} catch (Exception e) {
+		}catch(IllegalArgumentException e){
+			model.addAttribute("erro", e.getMessage());
+			model.addAttribute("action","erroCadastro");
+			model.addAttribute("formulario", formulario);
+			return "formulario/formulario";
+		}catch (Exception e) {
 			redirect.addFlashAttribute("erro", "Erro ao tentar salvar o formulário.");
 			return "redirect:/formulario";
 		}
@@ -166,15 +168,23 @@ public class FormularioController {
 		return REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 	}
 	
-	@RequestMapping(value = "/formulario/editar", method = RequestMethod.POST)
-	public String editar(@Valid Formulario formulario, Model model, 
+	@RequestMapping(value = "/formulario/{idForm}/editar", method = RequestMethod.POST)
+	public String editar(@PathVariable("idForm") Integer idForm, @Valid Formulario formulario, Model model, 
 			HttpSession session, RedirectAttributes redirect, BindingResult result) {
 		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro ao editar formulário.");
 			return "redirect:/formulario/"+formulario.getId()+"/editar";
 		}
-		
+		try {
+			formularioService.verificaCamposObrigatorios(formulario);
+		} catch (IllegalArgumentException e) {
+			model.addAttribute("erro", e.getMessage());
+			model.addAttribute("action","editar");
+			model.addAttribute("formulario", formulario);
+			return "formulario/formulario";	
+		}
+			
 		formulario.setProfessor(getUsuarioLogado(session));
 		
 		for (Pergunta pergunta : formulario.getPerguntas()) {

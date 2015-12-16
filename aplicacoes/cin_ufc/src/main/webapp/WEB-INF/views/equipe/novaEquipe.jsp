@@ -66,9 +66,9 @@
 				</div>
 				
 				<div class="form-group form-item">
-					<label for="fileupload" class="col-sm-2 control-label">Logo:</label>
+					<label for="idFoto" class="col-sm-2 control-label">Logo:</label>
 					<div class="col-sm-8">
-						<input type="file" id="fileupload" class="file" name="anexos" multiple></input>
+						<input type="file" id="idfoto" name="anexo"></input>
 					</div>
 				</div>
 				<c:if test="${action eq 'editar' }">

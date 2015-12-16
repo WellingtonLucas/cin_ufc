@@ -12,7 +12,7 @@ $(function () {
         newElem.find('.questao1')
         	.attr('id', 'ID' + newNum + '_questao')
         	.attr('name', 'perguntas['+ (newNum -1) +'].descricao').val('');
-
+        
         // Opção 1 - text
         newElem.find('.opt1').attr('for', 'ID' + newNum + '_opcao');
 		newElem.find('.optR').attr('id', 'ID' + newNum + '_opcaoR').attr('name', 'ID' + newNum + '_opcaoR').val('');
@@ -79,4 +79,23 @@ $(function () {
 	}else{
 		$('#btnDel').attr('disabled', true);
 	}
+});
+
+$(document).ready(function() {
+	$('#id-formulario').bootstrapValidator({
+		feedbackIcons: {
+        	valid: 'glyphicon glyphicon-ok',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            titulo: {
+                validators: {
+                    notEmpty:{
+            			message: 'O título do formulário é obrigatório.'
+            		}
+                }
+            },
+         }
+	})
+	
 });

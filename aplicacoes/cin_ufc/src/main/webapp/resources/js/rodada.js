@@ -264,7 +264,6 @@ $(document).ready(function() {
 		todayBtn : "linked",
 		language : "pt-BR",
 		todayHighlight : true,
-		startDate: new Date()
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
@@ -278,7 +277,6 @@ $(document).ready(function() {
 		todayBtn : "linked",
 		language : "pt-BR",
 		todayHighlight : true,
-		startDate: new Date()
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');

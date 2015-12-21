@@ -80,4 +80,6 @@ public class Constants {
 	public static final String MENSAGEM_FORM_NAO_CRIADOS = "Não existem formulários no jogo. Crie formulários.";
 	
 	public static final String MENSAGEM_FORM_NAO_EXISTENTE = "Formulário não existe. Ou não está ativo.";
+	
+	public static final String MENSAGEM_EXCEPTION = "O sistema se comportou de forma inesperada, tente novamente. Contacte o administrador.";
 }

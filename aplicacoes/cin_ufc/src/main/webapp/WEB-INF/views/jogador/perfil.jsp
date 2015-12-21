@@ -56,8 +56,8 @@
 								<form:input id="nome" path="nome" type="text"
 									class="form-control" name="nome" placeholder="Nome" />
 							</div>
-							<label for="snome" class="col-sm-1 control-label">Sobrenome:</label>
-							<div class="col-sm-4">
+							<label for="snome" class="col-sm-2 control-label">Sobrenome:</label>
+							<div class="col-sm-3">
 								<div class="error-validation">
 									<form:errors path="sobreNome"></form:errors>
 								</div>

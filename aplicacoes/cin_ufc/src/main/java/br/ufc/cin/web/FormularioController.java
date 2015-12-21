@@ -45,6 +45,7 @@ import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.OpcaoService;
 import br.ufc.cin.service.PerguntaService;
 import br.ufc.cin.service.RespostaService;
+import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
@@ -71,7 +72,9 @@ public class FormularioController {
 	@Inject
 	private EntregaService entregaService;
 	
-
+	@Inject
+	private RodadaService rodadaService;
+	
 	@RequestMapping(value = "/formularios", method = RequestMethod.GET)
 	public String listarFormularios(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 		model.addAttribute("action","formularios");
@@ -269,30 +272,27 @@ public class FormularioController {
 			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
 			return "redirect:/jogo/"+ idJogo +"/rodadas";
 		}
-		Calendar calendario = Calendar.getInstance();
-		long tempoAtual = calendario.getTimeInMillis();
-		if(tempoAtual < entrega.getRodada().getPrazoSubmissao().getTime()){
-			redirectAttributes.addFlashAttribute("erro", "Período de submissão ainda não se encerrou!");
+		
+		try {
+			rodadaService.verificaStatusRodada(entrega.getRodada());
+			rodadaService.verificaStatusPrazoSubmissao(entrega.getRodada());
+			rodadaService.verificaStatusAvaliacao(entrega.getRodada());
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
 		}
+		
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)
-				&& entrega.getRodada().isStatus()) {			
+		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
 			model.addAttribute("permissao", "professor");
-		}else if(jogo.getAlunos().contains(usuario) && jogo.getProfessor().getFormulario().contains(formulario)
-				&& entrega.getRodada().isStatus()) {
+		}else if(jogo.getAlunos().contains(usuario) && jogo.getProfessor().getFormulario().contains(formulario)) {
 			model.addAttribute("permissao", "aluno");
-		}else if(!entrega.getRodada().isStatus()){
-			redirectAttributes.addFlashAttribute("erro", "A rodada se encerrou!");
-			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		if(!entrega.getRodada().isStatusAvaliacao()){
-			redirectAttributes.addFlashAttribute("erro", "Prazo de avaliação encerrado!");
-			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
-		}
+		
+		
 		model.addAttribute("action", "responder");
 		model.addAttribute("formulario", formulario);
 		model.addAttribute("jogo", jogo);

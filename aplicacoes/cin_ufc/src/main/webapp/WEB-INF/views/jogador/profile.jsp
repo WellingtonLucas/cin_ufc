@@ -34,9 +34,9 @@
 										class="img-circle img-responsive" />
 								</c:if>
 								<c:if test="${usuario.foto != null }">
-									<img alt="Foto do usuário"
+									<img alt="Foto do usuário" width="200" height="200"
 										src="data:${usuario.foto.extensao };base64,${usuario.foto.encode }"
-										class="img-thumbnail img-responsive" />
+										class="img-circle" />
 								</c:if>
 							</div>
 

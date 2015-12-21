@@ -10,7 +10,7 @@
 		<!-- OPCOES DO JOGO -->
 		<c:if test="${(permissao == 'professor')||(permissao == 'aluno') ||(permissao == 'alunoLogado') || (permissao == 'jogador')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;Home Jogo</a></li>
-			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>"><i class="fa fa-users"></i>&nbsp;&nbsp;Equipes</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>"><i class="fa fa-industry"></i>&nbsp;&nbsp;Empresas</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>"><i class="fa fa-youtube-play"></i>&nbsp;&nbsp;Rodadas</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rankings"></c:url>"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Rankings Gerais</a></li>
 			<hr>
@@ -48,7 +48,7 @@
 		</c:if>
 		<!-- EQUIPES -->
 		<c:if test="${(action == 'equipes') && (permissao == 'professor')}">
-			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/nova"></c:url>"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Nova Equipe</a></li>		
+			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/nova"></c:url>"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Nova Empresa</a></li>		
 		</c:if>
 		
 		<c:if test="${(action == 'detalhesEquipe')}">

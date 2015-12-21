@@ -22,8 +22,20 @@ public interface UsuarioService  extends GenericService<Usuario>{
 
 	void atualizar(List<Usuario> alunos);
 
+	/**
+	 * Define uma permissão para o usuário logado e verifica o status do jogo.
+	 * @author Wellington
+	 * @exception IllegalArgumentException
+	 * */
 	String definePermissao(Jogo jogo, Usuario usuario);
 
 	void verificaDados(Usuario usuario);
+
+	/**
+	 * Verifica se o usuário não é nulo
+	 * @author Wellington
+	 * @exception IllegalArgumentException
+	 * */
+	void verificaUsuario(Usuario usuario);
 	
 }

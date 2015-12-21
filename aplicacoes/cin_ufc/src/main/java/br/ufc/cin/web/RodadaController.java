@@ -1,6 +1,7 @@
 package br.ufc.cin.web;
 
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
+import static br.ufc.cin.util.Constants.MENSAGEM_EXCEPTION;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
@@ -688,8 +689,10 @@ public class RodadaController {
 		try {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaRodada(rodada);
-			regrasService.verificaRodadaInJogo(jogo);
+			regrasService.verificaParticipacao(usuario, jogo);
 			regrasService.verificaEquipe(equipe);
+			regrasService.verificaAlunoEquipe(usuario, equipe);
+			regrasService.verificaRodadaInJogo(jogo);
 		} catch (IllegalArgumentException e) {
 			redirect.addFlashAttribute("erro",
 					e.getMessage());
@@ -700,11 +703,6 @@ public class RodadaController {
 			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
 		}
 		
-		if(!jogo.getAlunos().contains(usuario) || !equipe.getAlunos().contains(usuario)){
-			redirect.addFlashAttribute("erro", "Você não possui permissão para isso.");
-			return "redirect:/jogo/"+idJogo+"/rodada/"+rodada.getId()+"/detalhes";
-		}		
-
 		rodada = rodadaService.atualizaStatusPrazoRodada(rodada);
 		if( !rodada.isStatusPrazo()){
 			redirect.addFlashAttribute("erro","Uma solicitação de reabertura do prazo de submissão deve ser feita antes do encerramento deste.");
@@ -750,36 +748,33 @@ public class RodadaController {
 
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
 		Usuario usuario = getUsuarioLogado(session);
-		try {
-			regrasService.verificaParticipacao(usuario, jogo);
-		} catch (IllegalArgumentException e) {
-			redirectAttributes.addFlashAttribute("erro",e.getMessage());
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		
 		Rodada rodada = rodadaService.find(Rodada.class, id);
 		Equipe equipe = equipeService.find(Equipe.class, idJEquipe);
 		try {
+			regrasService.verificaParticipacao(usuario, jogo);
 			regrasService.verificaExistencia(rodada, equipe, jogo);
+			usuario = usuarioService.find(Usuario.class, usuario.getId());
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
-		Calendar calendario = Calendar.getInstance();
-		long tempoAtual = calendario.getTimeInMillis();
-		if(tempoAtual < rodada.getPrazoSubmissao().getTime()){
-			redirectAttributes.addFlashAttribute("erro", "Período de submissão ainda não se encerrou!");
+		try {
+			rodadaService.verificaStatusRodada(rodada);
+			rodadaService.atualizaStatusAvaliacao(rodada);
+			rodadaService.verificaStatusAvaliacao(rodada);
+			rodadaService.atualizaStatusPrazoRodada(rodada);
+			rodadaService.verificaStatusPrazoSubmissao(rodada);
+			rodadaEquipeService.verificaSeTemSolicitacao(jogo.getEquipes(), rodada);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/detalhes";
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
-		boolean status = rodadaEquipeService.verificaSeTemSolicitacao(jogo.getEquipes(), rodada);
-		if(status){
-			redirectAttributes.addFlashAttribute("erro", "Aguarte até o prazo final de prorrogação dos prazos.");
-			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/detalhes";
-		}
-		
-		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		
 		if (usuario.equals(jogo.getProfessor()) && jogo.getRodadas().contains(rodada)) {
 			model.addAttribute("permissao", "professor");
@@ -850,16 +845,13 @@ public class RodadaController {
 
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
 		Usuario usuario = getUsuarioLogado(session);
+		Rodada rodada = rodadaService.find(Rodada.class, id);
 		try {
 			regrasService.verificaParticipacao(usuario, jogo);
+			regrasService.verificaRodada(rodada);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		Rodada rodada = rodadaService.find(Rodada.class, id);
-		if (rodada == null) {
-			redirectAttributes.addFlashAttribute("erro","Rodada inexistente.");
-			return "redirect:/jogo/" + jogo.getId() + "/rodadas";
 		}
 		List<Aposta> apostas = apostaService.findByRodada(rodada);
 		if (apostas == null) {

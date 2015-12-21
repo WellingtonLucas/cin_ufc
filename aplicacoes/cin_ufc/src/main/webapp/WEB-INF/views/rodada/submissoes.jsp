@@ -61,8 +61,8 @@
 							<table id="table" class="table table-striped table-hover">
 								<thead>
 									<tr>
-										<th>Nome da Equipe</th>
-										<th>Nome do Documento</th>
+										<th>Empresa</th>
+										<th>Documento</th>
 										<th>Avalie</th>
 										<th>Aposte</th>
 										<th>Data de Submissão</th>

@@ -28,7 +28,7 @@
 					        <h1>Rankings</h1>
 					        <p class="lead">Escolha uma das opções abaixo para visualizar os respectivos Rankings.</p>
 					        <div>
-					        	<a class="btn btn-lg btn-success col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/alunos"></c:url>" role="button">Alunos <i class="glyphicon glyphicon-list"></i></a>
+					        	<a class="btn btn-lg btn-success col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/alunos"></c:url>" role="button">Avaliadores <i class="glyphicon glyphicon-list"></i></a>
 					        </div>
 					        <div class="col-sm-1"></div>
 					        <div>

@@ -5,7 +5,7 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">Melhores equipes da rodada</h3>
+		<h3 class="panel-title">Melhores empresas da rodada</h3>
 	</div>
 	<div class="panel-body">
 		<c:forEach var="saldo" items="${saldos }" varStatus="idEqui">

@@ -38,6 +38,7 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 				update(rodada);
 			}
 		}
+		
 		return rodadas;
 	}
 
@@ -46,11 +47,11 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
 		if(rodada.getTermino().getTime() < tempoAtual){
-			if(rodada.isStatus() == false)
+			if(!rodada.isStatus())
 				return rodada;
 			rodada.setStatus(false);
 		}else{
-			if(rodada.isStatus() == true)
+			if(rodada.isStatus())
 				return rodada;
 			rodada.setStatus(true);
 		}
@@ -62,8 +63,9 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	public Rodada atualizaStatusPrazoRodada(Rodada rodada) {
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
-		if(rodada.getPrazoSubmissao().getTime() < tempoAtual){
-			if(rodada.isStatusPrazo())
+		long temp = rodada.getPrazoSubmissao().getTime(); 
+		if( temp < tempoAtual){
+			if(!rodada.isStatusPrazo())
 				return rodada;
 			rodada.setStatusPrazo(false);
 		}else{
@@ -79,26 +81,49 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	public Rodada atualizaStatusAvaliacao(Rodada rodada) {
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
-		if(rodada.getTerminoAvaliacao().getTime() >= tempoAtual){
-			if(rodada.isStatusAvaliacao() == false)
+		if(rodada.getTerminoAvaliacao().getTime() < tempoAtual){
+			if(!rodada.isStatusAvaliacao())
 				return rodada;
 			rodada.setStatusAvaliacao(false);
 		}else{
-			if(rodada.isStatusAvaliacao() == true)
+			if(rodada.isStatusAvaliacao())
 				return rodada;
 			rodada.setStatusAvaliacao(true);
 		}
 		update(rodada);
 		return rodada;
-
 	}
 
 	@Override
 	public void verificaPeriodoAvaliacao(Rodada rodada) {
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
-		if(rodada.getPrazoSubmissao().getTime() > tempoAtual){
+		if((rodada.getPrazoSubmissao().getTime() > tempoAtual) || (rodada.getTerminoAvaliacao().getTime() < tempoAtual)){
 			throw new IllegalArgumentException("Aguarde o término do período de Submissão.");
 		}
+	}
+
+	@Override
+	public void verificaStatusPrazoSubmissao(Rodada rodada) {
+		if(rodada.isStatusPrazo()){
+			throw new IllegalArgumentException("Aguarde o término do período de Submissão.");
+		}
+		
+	}
+
+	@Override
+	public void verificaStatusRodada(Rodada rodada) {
+		if(!rodada.isStatus()){
+			throw new IllegalArgumentException("A rodada se encerrou!");
+		}
+		
+	}
+
+	@Override
+	public void verificaStatusAvaliacao(Rodada rodada) {
+		if(!rodada.isStatusAvaliacao()){
+			throw new IllegalArgumentException("Você não está no período de avaliação desta rodada!");
+		}
+		
 	}
 }

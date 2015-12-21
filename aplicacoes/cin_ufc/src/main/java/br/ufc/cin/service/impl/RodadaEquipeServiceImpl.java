@@ -113,7 +113,7 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 			StatusRodadaEquipe rodadaEquipe = find(equipe, rodada);
 			if(rodadaEquipe != null){
 				if(rodadaEquipe.isAtiva()){
-					return  true;
+					throw new IllegalArgumentException("Aguarte até o prazo final de prorrogação dos prazos.");
 				}
 			}
 		}

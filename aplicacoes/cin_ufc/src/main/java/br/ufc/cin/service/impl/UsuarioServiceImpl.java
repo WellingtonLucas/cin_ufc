@@ -71,6 +71,9 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 		if (usuario.equals(jogo.getProfessor())) {
 			return "professor";
 		} else if(jogo.getAlunos().contains(usuario)){
+			if(!jogo.isStatus()){
+				throw new IllegalArgumentException("Jogo inativo no momento. Para maiores informações: "+jogo.getProfessor().getEmail()+".");
+			}
 			return "aluno";
 		}else {
 			throw new IllegalArgumentException("Permissão negada.");
@@ -89,5 +92,12 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 			throw new IllegalArgumentException("O campo senha é obrigatório.");
 		}
 		
+	}
+
+	@Override
+	public void verificaUsuario(Usuario usuario) {
+		if(usuario==null){
+			throw new IllegalArgumentException("Usuário solicitado não existe.");
+		}
 	}
 }

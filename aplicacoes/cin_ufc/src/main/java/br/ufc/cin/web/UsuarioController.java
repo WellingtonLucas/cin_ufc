@@ -1,6 +1,6 @@
 package br.ufc.cin.web;
 
-import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
+import static br.ufc.cin.util.Constants.*;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
@@ -117,37 +117,24 @@ public class UsuarioController {
 			@PathVariable("idJogo") Integer idJogo, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
 		Usuario logado = getUsuarioLogado(session);
 		logado = usuarioService.find(Usuario.class, logado.getId());
-		
-		if(!jogo.isStatus() && jogo.getAlunos().contains(logado)){
-			redirectAttributes.addFlashAttribute("erro",
-					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+		Usuario usuario;
+		Equipe equipe;
+		try {
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaParticipacao(logado, jogo);
+			usuario = usuarioService.find(Usuario.class, id);
+			usuarioService.verificaUsuario(usuario);
+			equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+			regrasService.verificaEquipe(equipe);
+			regrasService.verificaEquipeJogo(equipe, jogo);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}else if(!jogo.getAlunos().contains(logado) && !jogo.getProfessor().equals(logado)){
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_PERMISSAO_NEGADA);
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		
-		Usuario usuario = usuarioService.find(Usuario.class, id);
-		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
-		if (usuario == null) {
-			redirectAttributes.addFlashAttribute("erro", "Usuário inexistente");
-			return "redirect:/jogo/" + idJogo + "/participantes";
-		}
-		if(!jogo.getAlunos().contains(usuario)) {
-			redirectAttributes.addFlashAttribute("erro", "Usuário não faz parte do jogo.");
-			return "redirect:/jogo/" + idJogo + "/participantes";
-		}
-		if(!jogo.getEquipes().contains(equipe)) {
-			redirectAttributes.addFlashAttribute("erro", "Usuário não faz parte de equipe no jogo.");
-			return "redirect:/jogo/" + idJogo + "/participantes";
 		}
 		
 		if(logado.equals(jogo.getProfessor())){
@@ -157,7 +144,7 @@ public class UsuarioController {
 		}else if(logado.equals(usuario) && logado.getEquipes().contains(equipe)){
 			model.addAttribute("permissao", "alunoLogado");
 		}else{
-			redirectAttributes.addFlashAttribute("erro", "Você não possui permissão de acesso.");
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return "redirect:/jogo/" + idJogo + "/equipe/"+equipe.getId();
 		}
 		model.addAttribute("usuario", logado);
@@ -205,7 +192,7 @@ public class UsuarioController {
 		try {
 			imagem = documentoService.verificaAnexoImagem(anexo, usuario);
 		} catch (IOException e) {
-			redirect.addFlashAttribute("erro", e.getMessage());
+			redirect.addFlashAttribute("erro", "Erro ao atualizar os dados, tente novamente.");
 			return "redirect:/usuario/perfil";
 		} catch (IllegalArgumentException e) {
 			redirect.addFlashAttribute("erro", e.getMessage());
@@ -213,14 +200,12 @@ public class UsuarioController {
 		}
 		if(perfilAnterior.getFoto() != null){
 			try {
-				imagem.setId(perfilAnterior.getFoto().getId());
-				documentoService.update(imagem);
+				documentoService.delete(perfilAnterior.getFoto());
 			} catch (Exception e) {
 				redirect.addFlashAttribute("erro", "Erro na troca de fotos.");
 				return "redirect:/usuario/perfil";
 			}
 		}
-		
 		perfilAnterior.setFoto(imagem);
 		if(!(usuario.getSenha().isEmpty())){
 			ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
@@ -234,7 +219,7 @@ public class UsuarioController {
 		try {
 			usuarioService.update(perfilAnterior);	
 		} catch (Exception e) {
-			redirect.addFlashAttribute("erro", "Erro tentar atualizar os dados.");
+			redirect.addFlashAttribute("erro", "Erro tentar atualizar os dados."+e.getMessage());
 			return "redirect:/usuario/perfil";
 		}
 		return "redirect:/usuario/profile";

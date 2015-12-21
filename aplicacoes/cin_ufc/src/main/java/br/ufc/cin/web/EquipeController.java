@@ -115,13 +115,12 @@ public class EquipeController {
 		Documento imagem;
 		try {
 			imagem = documentoService.verificaAnexoImagem(anexo, equipe);
-			documentoService.save(imagem);
 			equipe.setLogo(imagem);
 			equipe.setJogo(jogo);
 			equipe.setStatus(true);
 			equipeService.save(equipe);
 		} catch (IOException e) {
-			redirect.addFlashAttribute("erro", e.getMessage());
+			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
 			return "redirect:/jogo/" + id + "/equipe/nova";
 		} catch (IllegalArgumentException e) {
 			redirect.addFlashAttribute("erro", e.getMessage());

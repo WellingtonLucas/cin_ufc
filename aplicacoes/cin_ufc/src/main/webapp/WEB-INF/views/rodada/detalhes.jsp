@@ -187,7 +187,7 @@
 					<div class="col-sm-12">
 						<hr>
 						<c:if test="${not empty rodada.jogo.equipes }">
-							<h3><strong>Equipes na Rodada</strong></h3>
+							<h3><strong>Empresas na Rodada</strong></h3>
 							<table id="table_id" class="table table-striped table-hover">
 								<thead>
 									<tr>

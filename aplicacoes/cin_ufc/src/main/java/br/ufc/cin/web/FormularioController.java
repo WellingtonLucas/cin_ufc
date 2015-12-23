@@ -8,6 +8,8 @@ import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_FORMULARIO;
 import static br.ufc.cin.util.Constants.PAGINA_DETALHES_FORM;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_FORMULARIOS;
+import static br.ufc.cin.util.Constants.PAGINA_RESPONDER_FORMULARIO;
+import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_FORMULARIO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
@@ -99,31 +101,29 @@ public class FormularioController {
 		model.addAttribute("formulario", new Formulario());
 		model.addAttribute("action","cadastrar");
 		
-		return "formulario/formulario";
+		return PAGINA_CADASTRAR_FORMULARIO;
 	}
 	
 	@RequestMapping(value = "/formulario", method = RequestMethod.POST)
 	public String cadastroFormulario(@ModelAttribute("formulario") Formulario formulario, Model model,
 			HttpSession session, RedirectAttributes redirect, BindingResult result) {
-		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro na formação do formulário.");
-			return "redirect:/formulario";
+			return REDIRECT_PAGINA_FORMULARIO;
 		}
-
 		Usuario usuario = getUsuarioLogado(session);
 		try {
-			formularioService.verificaCamposObrigatorios(formulario);	
+			formularioService.verificaCamposObrigatorios(formulario);
 			formulario.setProfessor(usuario);
-			formularioService.save(formulario);	
+			formularioService.save(formulario);
 		}catch(IllegalArgumentException e){
 			model.addAttribute("erro", e.getMessage());
 			model.addAttribute("action","erroCadastro");
 			model.addAttribute("formulario", formulario);
-			return "formulario/formulario";
+			return PAGINA_CADASTRAR_FORMULARIO;
 		}catch (Exception e) {
 			redirect.addFlashAttribute("erro", "Erro ao tentar salvar o formulário.");
-			return "redirect:/formulario";
+			return REDIRECT_PAGINA_FORMULARIO;
 		}
 		try {
 			for (Pergunta pergunta : formulario.getPerguntas()) {
@@ -132,7 +132,7 @@ public class FormularioController {
 			perguntaService.salvar(formulario.getPerguntas());
 		} catch (Exception e) {
 			redirect.addFlashAttribute("erro", "Erro ao tentar salvar as perguntas do formulário.");
-			return "redirect:/formulario";
+			return REDIRECT_PAGINA_FORMULARIO;
 		}
 		try {
 			for (Pergunta pergunta : formulario.getPerguntas()) {
@@ -143,9 +143,8 @@ public class FormularioController {
 			}
 		} catch (Exception e) {
 			redirect.addFlashAttribute("erro", "Erro ao tentar salvar as opções das perguntas do formulário.");
-			return "redirect:/formulario";
+			return REDIRECT_PAGINA_FORMULARIO;
 		}
-
 		redirect.addFlashAttribute("info", "Formulário cadastrado com sucesso!");
 		return  "redirect:/formulario/"+formulario.getId()+"/detalhes";
 	}
@@ -185,7 +184,7 @@ public class FormularioController {
 			model.addAttribute("erro", e.getMessage());
 			model.addAttribute("action","editar");
 			model.addAttribute("formulario", formulario);
-			return "formulario/formulario";	
+			return PAGINA_CADASTRAR_FORMULARIO;	
 		}
 			
 		formulario.setProfessor(getUsuarioLogado(session));
@@ -218,7 +217,7 @@ public class FormularioController {
 		Formulario formulario = formularioService.find(Formulario.class, idForm);
 			if(formulario == null){
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_FORM_NAO_EXISTENTE);
-			return "redirect:/formulario/listar";
+			return REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 		}
 		Usuario usuario = getUsuarioLogado(session);
 		
@@ -298,7 +297,7 @@ public class FormularioController {
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("entrega", entrega);
 		model.addAttribute("resposta", new Resposta());
-		return "formulario/responder";
+		return PAGINA_RESPONDER_FORMULARIO;
 	}
 	
 	@RequestMapping(value = "/{idJogo}/entrega/{id}/formulario/{idForm}/responder", method = RequestMethod.POST)

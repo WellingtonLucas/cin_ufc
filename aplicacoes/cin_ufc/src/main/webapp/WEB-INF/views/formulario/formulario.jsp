@@ -182,7 +182,7 @@
 									<label class="col-sm-2 qt1 control-label" for="perguntas[0].descricao">Questão 1:</label>
 									<div class="col-sm-9">
 										<input id="questao1" name="perguntas[0].descricao" type="text" placeholder=""
-										class="form-control" required />
+										class="questao1 form-control" required />
 									</div>
 								</div>
 							</div>

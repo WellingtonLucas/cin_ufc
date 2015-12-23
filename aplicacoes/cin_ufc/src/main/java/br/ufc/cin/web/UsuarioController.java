@@ -1,7 +1,15 @@
 package br.ufc.cin.web;
 
-import static br.ufc.cin.util.Constants.*;
+import static br.ufc.cin.util.Constants.MENSAGEM_EXCEPTION;
+import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
+import static br.ufc.cin.util.Constants.PAGINA_APOSTAS_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_AVALIACAO_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_AVALIACOES_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_HISTORICO_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_PERFIL_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_PROFILE_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_USUARIO_JOGADOR;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
@@ -152,8 +160,7 @@ public class UsuarioController {
 		model.addAttribute("action", "detalhesUsuario");
 		model.addAttribute("usuarioParticipante", usuario);
 		model.addAttribute("equipe", equipe);
-		return "jogador/usuario";
-		
+		return PAGINA_USUARIO_JOGADOR;
 	}
 
 	@RequestMapping(value = "/perfil", method = RequestMethod.GET)
@@ -161,7 +168,7 @@ public class UsuarioController {
 		Usuario usuario = getUsuarioLogado(session);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "perfil");
-		return "jogador/perfil";
+		return PAGINA_PERFIL_JOGADOR;
 	}
 	
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
@@ -170,7 +177,7 @@ public class UsuarioController {
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "profile");
-		return "jogador/profile";
+		return PAGINA_PROFILE_JOGADOR;
 	}
 	
 	@RequestMapping(value = "/atualizar", method = RequestMethod.POST)
@@ -271,7 +278,7 @@ public class UsuarioController {
 		model.addAttribute("respostas", respostas);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("usuarioRequisitado", usuarioRequisitado);
-		return "jogador/avaliacoes";
+		return PAGINA_AVALIACOES_JOGADOR;
 	}
 
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/resposta/{idRes}/avaliacao", method = RequestMethod.GET)
@@ -323,7 +330,7 @@ public class UsuarioController {
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("resposta", resposta);
 		model.addAttribute("liberaGaba", resposta.getEntrega().getRodada().isStatusRaking());
-		return "jogador/avaliacao";
+		return PAGINA_AVALIACAO_JOGADOR;
 	}
 
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/historico", method = RequestMethod.GET)
@@ -385,7 +392,7 @@ public class UsuarioController {
 		model.addAttribute("action", "historico");
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("rodadas", rodadas);
-		return "jogador/historico";
+		return PAGINA_HISTORICO_JOGADOR;
 	}
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/investimentos", method = RequestMethod.GET)
 	public String investimentos(@PathVariable("idJogo") Integer idJogo, @PathVariable("id") Integer id, 
@@ -427,7 +434,7 @@ public class UsuarioController {
 		model.addAttribute("requisitado", requisitado);
 		model.addAttribute("action", "historico");
 		model.addAttribute("jogo", jogo);
-		return "jogador/apostas";
+		return PAGINA_APOSTAS_JOGADOR;
 	}
 
 	private Usuario getUsuarioLogado(HttpSession session) {

@@ -2,6 +2,7 @@ package br.ufc.cin.service;
 
 import java.util.List;
 
+import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.quixada.npi.service.GenericService;
@@ -37,5 +38,12 @@ public interface UsuarioService  extends GenericService<Usuario>{
 	 * @exception IllegalArgumentException
 	 * */
 	void verificaUsuario(Usuario usuario);
+	/**
+	 * Define uma permissão para o usuário logado em relação a uma equipe. 
+	 * Aborta a operação caso não seja uma das permissões esperada.
+	 * @author Wellington
+	 * 
+	 * */
+	String definePermissao(Equipe equipe, Usuario usuario);
 	
 }

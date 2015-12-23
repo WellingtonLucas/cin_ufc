@@ -7,6 +7,7 @@ import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.StatusRodadaEquipe;
 import br.ufc.cin.model.Usuario;
 import br.ufc.quixada.npi.service.GenericService;
 
@@ -28,4 +29,15 @@ public interface EquipeService extends GenericService<Equipe>{
 	public abstract List<NotaEquipeRodada> atualizarNotasEquipeRodadas(
 			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe, String permissao);
 
+	/**
+	 * Remove a equipe do jogo e dos usuários vinculados a ela.
+	 * @author Wellington
+	 * */
+	public abstract void removeEquipe(Jogo jogo, Equipe equipe);
+
+	public abstract void vincularParticipantes(Equipe equipeCompleta, List<Usuario> alunos);
+
+	public abstract void ativarSubmissaoEquipeRodada(Equipe equipe, Rodada rodada, StatusRodadaEquipe rodadaEquipe);
+	
+	public abstract void desativarSubmissaoEquipeRodada(Equipe equipe, Rodada rodada, StatusRodadaEquipe rodadaEquipe);
 }

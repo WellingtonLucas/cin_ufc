@@ -1,14 +1,26 @@
 package br.ufc.cin.service;
 
+import java.util.List;
+
+import br.ufc.cin.model.Aposta;
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 
+/**
+*Seriço destinado a verificar consistências de regras de negócios gerais, 
+*eventualmente algumas regras são verificadas em outros serviços.
+*@author Wellington
+**/
 public interface RegrasService {
 	
 	/**
-	 * Verifica se o usuário participa do jogo, como aluno, e o status do jogo.
+	 * Verifica se o usuário participa do jogo, e o status do jogo. 
+	 * Lançando uma exception caso não participe do jogo ou o status do jogo esteja falso e não seja professor.
 	 * @author Wellington
 	 * */
 	public abstract void verificaParticipacao(Usuario usuario, Jogo jogo);
@@ -50,7 +62,7 @@ public interface RegrasService {
 	public abstract void verificaEquipeJogo(Equipe equipe, Jogo jogo);
 
 	/**
-	 * Verifica se a rodada pertence ao jogo
+	 * Verifica se existem rodadas no jogo
 	 * @author Wellington
 	 * */
 	public abstract void verificaRodadaInJogo(Jogo jogo);
@@ -84,4 +96,13 @@ public interface RegrasService {
 	 * @author Wellington
 	 * */
 	public abstract void verificaAlunoEquipe(Usuario usuario, Equipe equipe);
+
+	public abstract void verificaFormulario(Formulario formulario);
+
+	public abstract void verificaEntrega(Entrega entrega);
+
+	public abstract void verificaNoraEquipeRodada(
+			NotaEquipeRodada notaEquipeRodada);
+
+	public abstract void verificaApostas(List<Aposta> apostas);
 }

@@ -190,12 +190,12 @@ $(document).ready(function() {
 	
 	$('#confirm-inativar-jogo').on('show.bs.modal', function(e) {
 		$(this).find('.modal-body').text('Tem certeza de que deseja inativar o jogo \"' + $(e.relatedTarget).data('name') + '\"?');
-		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
+		$(this).find('#id-inativar-jogo').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$('#confirm-ativar-jogo').on('show.bs.modal', function(e) {
 		$(this).find('.modal-body').text('Tem certeza de que deseja ativar o jogo \"' + $(e.relatedTarget).data('name') + '\"?');
-		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
+		$(this).find('#id-ativar-jogo').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$(".file").fileinput({

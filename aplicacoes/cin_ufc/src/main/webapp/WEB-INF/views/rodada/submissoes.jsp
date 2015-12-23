@@ -28,7 +28,7 @@
 					<div class="col-sm-12">
 						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
 						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Ultimas submissões da rodada</small>
-							- Seu saldo é <strong>${aposta.saldo } R$</strong>
+							- Seu saldo é <strong>R$ ${aposta.saldo }</strong>
 						</h2>
 						<hr>
 						<c:if test="${not empty erro}">

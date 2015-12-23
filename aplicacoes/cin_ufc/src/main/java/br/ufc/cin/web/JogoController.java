@@ -11,12 +11,14 @@ import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_REMOVIDO;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.MENSAGEM_USUARIOS_NAO_ASSOCIADOS;
+import static br.ufc.cin.util.Constants.PAGINA_ADD_PARTICIPANES_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_DETALHES_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_EQUIPES;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_USUARIOS;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
+import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_NOVO_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import java.io.IOException;
@@ -120,7 +122,7 @@ public class JogoController {
 		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
-			return "redirect:/jogo/novo-jogo";
+			return REDIRECT_PAGINA_NOVO_JOGO;
 		}
 		Usuario usuario = getUsuarioLogado(session);
 		if(jogo.getDescricao() == null || jogo.getDescricao().isEmpty()){
@@ -150,7 +152,7 @@ public class JogoController {
 			return PAGINA_CADASTRAR_JOGO;
 		} catch (Exception e) {
 			redirect.addFlashAttribute("erro", "Erro ao tentar salvar o jogo.");
-			return "redirect:/jogo/novo-jogo";
+			return REDIRECT_PAGINA_NOVO_JOGO;
 		}
 		List<Documento> documentos = new ArrayList<Documento>();
 		try {
@@ -160,10 +162,10 @@ public class JogoController {
 			}
 		} catch (IOException e1) {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
-			return "redirect:/jogo/novo-jogo";
+			return REDIRECT_PAGINA_NOVO_JOGO;
 		} catch (Exception e) {
 			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_UPLOAD);
-			return "redirect:/jogo/novo-jogo";
+			return REDIRECT_PAGINA_NOVO_JOGO;
 		}
 		
 		redirect.addFlashAttribute("info", MENSAGEM_JOGO_CADASTRADO);
@@ -374,7 +376,7 @@ public class JogoController {
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("action","vincularAoJogo");
 		model.addAttribute("usuarios", usuarios);
-		return "jogo/adicionarParticipante";
+		return PAGINA_ADD_PARTICIPANES_JOGO;
 
 	}
 	

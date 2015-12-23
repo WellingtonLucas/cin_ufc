@@ -32,7 +32,7 @@
 					        </div>
 					        <div class="col-sm-1"></div>
 					        <div>
-					        	<a class="btn btn-lg btn-primary col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/equipes"></c:url>" role="button">Equipes <i class="glyphicon glyphicon-list"></i></a>
+					        	<a class="btn btn-lg btn-primary col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/equipes"></c:url>" role="button">Empresas <i class="glyphicon glyphicon-list"></i></a>
 					        </div>
 					    </div> 
 					    <c:if test="${notas != null && rankingAlunos}">

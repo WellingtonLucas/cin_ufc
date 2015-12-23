@@ -21,9 +21,9 @@ public interface RodadaService extends GenericService<Rodada>{
 	public abstract Rodada atualizaStatusAvaliacao(Rodada rodada);
 
 	/**
-	 * Verifica se o período de avaliação é menor que o tempo atual
+	 * Verifica se a rodada não está no prazo de submissões.
 	 * */
-	public abstract void verificaPeriodoAvaliacao(Rodada rodada);
+	public abstract void verificaSeNaoPrazoSubmissao(Rodada rodada);
 	
 	/**
 	 * Verifica o status de submissão da rodada, se ainda for verdadeiro retorna uma IllegalArgumentException
@@ -33,5 +33,13 @@ public interface RodadaService extends GenericService<Rodada>{
 	public abstract void verificaStatusRodada(Rodada rodada);
 
 	public abstract void verificaStatusAvaliacao(Rodada rodada);
+
+	public abstract void salvar(Rodada rodada, String allIn);
+
+	public abstract void verificarDatas(Rodada rodada);
+
+	public abstract void atualizar(Rodada rodada, String allIn);
+
+	public abstract void verificaStatusRaking(Rodada rodada);
 
 }

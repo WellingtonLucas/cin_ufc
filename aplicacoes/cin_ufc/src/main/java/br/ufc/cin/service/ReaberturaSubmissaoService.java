@@ -12,4 +12,7 @@ public interface ReaberturaSubmissaoService extends GenericService<ReaberturaSub
 	public abstract List<Equipe> atualizarSolitacoesDeReabertura(List<Equipe> equipes,
 			Rodada rodada);
 	public abstract ReaberturaSubmissao find(Equipe equipe, Rodada rodada);
+	
+	public abstract void solicitarReabertura(Rodada rodada, Equipe equipe,
+			ReaberturaSubmissao reaberturaSubmissao);
 }

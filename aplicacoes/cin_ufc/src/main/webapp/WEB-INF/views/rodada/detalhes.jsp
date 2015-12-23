@@ -98,7 +98,7 @@
 											<label>-</label>
 										</c:if>
 										<c:if test="${not empty rodada.valorLiberado }">
-											<label><fmt:formatNumber currencyCode="BRL" value="${rodada.valorLiberado }" /></label>
+											<label>R$ <fmt:formatNumber currencyCode="BRL" value="${rodada.valorLiberado }" /></label>
 										</c:if>
 									</div>
 									<label class="col-sm-2 control-label field">All in:</label>
@@ -286,13 +286,13 @@
 											<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
 										</a>
 									</div>
-									<div class="col-sm-2">
-										<a id="notas" data-toggle="modal" data-target="#confirm-gerar-notas" href="#" 
-										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/gerarNotas"></c:url>" data-name="${rodada.nome }">
-											<button class="btn btn-success btn-lg">Gerar Notas&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
-										</a>					
-									</div>
 									<c:if test="${rodada.statusAvaliacao }">
+										<div class="col-sm-2">
+											<a id="notas" data-toggle="modal" data-target="#confirm-gerar-notas" href="#" 
+											data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/gerarNotas"></c:url>" data-name="${rodada.nome }">
+												<button class="btn btn-success btn-lg">Gerar Notas&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
+											</a>					
+										</div>
 										<div class="col-sm-1"></div>
 										<div class="col-sm-2">
 											<a id="ranking" data-toggle="modal" data-target="#confirm-gerar-ranking" href="#" 
@@ -328,40 +328,6 @@
 					<div class="modal-body"></div>
 					<div class="modal-footer">
 						<a href="#" class="btn btn-danger">Excluir</a>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<!-- Modal Inativar Rodada -->
-		<div class="modal fade" id="confirm-inativar-rodada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-	        			<h4 class="modal-title" id="inativarModalLabel">Encerrar</h4>
-	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					</div>
-					<div class="modal-body"></div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-warning">Encerrar</a>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<!-- Modal ativar Rodada -->
-		<div class="modal fade" id="confirm-ativar-rodada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-	        			<h4 class="modal-title" id="ativarModalLabel">Iniciar</h4>
-	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					</div>
-					<div class="modal-body"></div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-primary">Iniciar</a>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>

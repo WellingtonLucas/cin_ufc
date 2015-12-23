@@ -2,10 +2,16 @@ package br.ufc.cin.service.impl;
 
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 
+import java.util.List;
+
 import javax.inject.Named;
 
+import br.ufc.cin.model.Aposta;
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.RegrasService;
@@ -137,6 +143,36 @@ public class RegrasServiceImpl implements RegrasService {
 			throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);
 		}
 		
+	}
+
+	@Override
+	public void verificaFormulario(Formulario formulario) {
+		if(formulario==null){
+			throw new IllegalArgumentException("Formulário inexistente.");
+		}
+		
+	}
+
+	@Override
+	public void verificaEntrega(Entrega entrega) {
+		if(entrega == null){
+			throw new IllegalArgumentException("Entrega inexistente.");
+		}
+	}
+
+	@Override
+	public void verificaNoraEquipeRodada(NotaEquipeRodada notaEquipeRodada) {
+		if(notaEquipeRodada==null){
+			throw new IllegalArgumentException("Não existe nota para esta equipe, nesta rodada.");
+		}
+		
+	}
+
+	@Override
+	public void verificaApostas(List<Aposta> apostas) {
+		if (apostas == null || apostas.isEmpty()) {
+			throw new IllegalArgumentException("Não existem apostas até o momento.");
+		}		
 	}
 
 }

@@ -4,33 +4,87 @@ public class Constants {
 	public static final String USUARIO_LOGADO = "usuario";
 
 	/** Páginas */
-
+	/** JOGO */
 	public static final String PAGINA_LISTAR_JOGO = "jogo/listar";
 	
 	public static final String PAGINA_LISTAR_USUARIOS = "jogo/participantes";
-	
-	public static final String PAGINA_LISTAR_EQUIPES = "equipe/equipes";
+
+	public static final String PAGINA_ADD_PARTICIPANES_JOGO = "jogo/adicionarParticipante";
 	
 	public static final String PAGINA_CADASTRAR_JOGO = "jogo/novoJogo";
 	
 	public static final String PAGINA_DETALHES_JOGO = "jogo/detalhes";
+
+	/** EQUIPE */
+	public static final String PAGINA_LISTAR_EQUIPES = "equipe/equipes";
 	
 	public static final String PAGINA_DETALHES_EQUIPE = "equipe/detalhes";
-	
-	public static final String PAGINA_DETALHES_FORM = "formulario/detalhes";
 
 	public static final String PAGINA_CADASTRAR_EQUIPE = "equipe/novaEquipe";
 	
+	public static final String PAGINA_AVALIACOES_EQUIPE = "equipe/avaliacoes";
+	
+	public static final String PAGINA_AVALIACAO_EQUIPE = "equipe/avaliacao";
+	
+	public static final String PAGINA_HISTORICO_EQUIPE = "equipe/historicoEquipeRodada";
+	
+	public static final String PAGINA_ADD_PARTICIPANTES_EQUIPE = "equipe/adicionarParticipante";
+	
+	/** RODADA */
+	public static final String PAGINA_LISTAR_RODADAS = "rodada/listar";
+	
+	public static final String PAGINA_NOVA_RODADA = "rodada/novaRodada";
+	
+	public static final String PAGINA_DETALHES_RODADA = "rodada/detalhes";
+	
+	public static final String PAGINA_APOSTAS_RODADA = "rodada/apostas";
+	
+	public static final String PAGINA_APOSTA_RODADA = "rodada/aposta";
+	
+	public static final String PAGINA_SOLICITAR_REABERTURA_RODADA = "rodada/solicitarReabertura";
+	
+	public static final String PAGINA_SUBMISSOES_RODADA = "rodada/submissoes";
+	
+	/** FORMULARIO */
+	public static final String PAGINA_DETALHES_FORM = "formulario/detalhes";
+
 	public static final String PAGINA_LISTAR_FORMULARIOS = "formulario/listar";
 	
 	public static final String PAGINA_CADASTRAR_FORMULARIO = "formulario/formulario";
+	
+	public static final String PAGINA_RESPONDER_FORMULARIO = "formulario/responder";
+	
+	/** JOGADOR */
+	public static final String PAGINA_PERFIL_JOGADOR = "jogador/perfil";
+	
+	public static final String PAGINA_PROFILE_JOGADOR = "jogador/profile";
+	
+	public static final String PAGINA_USUARIO_JOGADOR = "jogador/usuario";
+	
+	public static final String PAGINA_HISTORICO_JOGADOR = "jogador/historico";
+	
+	public static final String PAGINA_AVALIACAO_JOGADOR = "jogador/avaliacao";
+	
+	public static final String PAGINA_AVALIACOES_JOGADOR = "jogador/avaliacoes";
+	
+	public static final String PAGINA_APOSTAS_JOGADOR = "jogador/apostas";
+	
+	/** RANKING */
+	public static final String PAGINA_RANKINGS_JOGO = "ranking/rankingsJogo";
+	
+	public static final String PAGINA_RANKINGS_RODADA = "ranking/rankingsRodada";
+	
 	/** Redirecionamentos */
 
 	public static final String REDIRECT_PAGINA_LISTAR_JOGO = "redirect:/jogo/listar";
 	
 	public static final String REDIRECT_PAGINA_LISTAR_FORMULARIOS = "redirect:/formularios";
 	
+	public static final String REDIRECT_PAGINA_FORMULARIO = "redirect:/formulario";
+	
 	public static final String REDIRECT_PAGINA_LOGIN = "redirect:/login";
+	
+	public static final String REDIRECT_PAGINA_NOVO_JOGO = "redirect:/jogo/novo-jogo";
 	
 	/** Mensagens */
 	public static final String MENSAGEM_ERRO_AO_CADASTRAR_JOGO = "Aconteceu algum erro ao cadastrar um novo jogo";
@@ -45,7 +99,7 @@ public class Constants {
 	
 	public static final String MENSAGEM_EQUIPE_INEXISTENTE = "Equipe inexistente";
 
-	public static final String MENSAGEM_JOGO_ATUALIZADO = "Jogo atualizado com sucesso";
+	public static final String MENSAGEM_JOGO_ATUALIZADO = "Jogo atualizado com sucesso!";
 
 	public static final String MENSAGEM_EQUIPE_ATUALIZADA = "Equipe atualizada com sucesso";
 	
@@ -81,5 +135,5 @@ public class Constants {
 	
 	public static final String MENSAGEM_FORM_NAO_EXISTENTE = "Formulário não existe. Ou não está ativo.";
 	
-	public static final String MENSAGEM_EXCEPTION = "O sistema se comportou de forma inesperada, tente novamente. Contacte o administrador.";
+	public static final String MENSAGEM_EXCEPTION = "O sistema se comportou de forma inesperada, tente novamente ou contacte o administrador.";
 }

@@ -83,7 +83,7 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 		} else if(anexo.getSize() == 0){
 			throw new IllegalArgumentException(
 					"Selecione um arquivo para a entrega!");
-		} else if(anexo.getSize() > 10000000){
+		} else if(anexo.getSize() > 10240000){
 			throw new IllegalArgumentException(
 					"O arquivo deve ser menor que 1Mb!");
 		}

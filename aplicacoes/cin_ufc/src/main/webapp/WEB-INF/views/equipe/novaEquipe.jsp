@@ -15,7 +15,7 @@
 			<c:set var="txtBtn" value="Salvar"></c:set>
 		</c:if>
 		<c:if test="${action eq 'editar' }">
-			<c:set var="url" value="/${idJogo }/equipe/editar"></c:set>
+			<c:set var="url" value="/jogo/${idJogo }/equipe/${equipe.id }/editar"></c:set>
 			<c:set var="titulo" value="Editar - ${equipe.nome } "></c:set>
 			<c:set var="txtBtn" value="Atualizar"></c:set>
 		</c:if>

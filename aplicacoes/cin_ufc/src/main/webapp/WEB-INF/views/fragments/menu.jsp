@@ -38,6 +38,9 @@
 		<c:if test="${permissao== 'professorForm' && ((action == 'detalhesFormulario') || (action == 'responder'))}">
 			<li class="active"><a href="<c:url value ="/formulario"></c:url>"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Criar Formulário</a></li>
 		</c:if>
+		<c:if test="${action == 'responder' }">
+			<li class="active"><a href="javascript:history.back();"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;Voltar</a></li>
+		</c:if>
 		<!-- VINCULAR PARTICIPANTES JOGO -->
 		<c:if test="${(action == 'participantesJogo') &&  (permissao == 'professor')}">
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/vincular"></c:url>" data-toggle="tooltip" data-placement="right"
@@ -104,7 +107,7 @@
 				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/submissoes"></c:url>"><i class="glyphicon glyphicon-open"></i>&nbsp;&nbsp;Submissões da rodada</a></li>
 				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/rankings"></c:url>"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Rankings</a></li>
 				<c:if test="${permissao == 'professor'}">
-					<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/apostas"></c:url>"><i class="fa fa-money"></i>&nbsp;&nbsp;Histórico de apostas</a></li>
+					<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/apostas"></c:url>"><i class="fa fa-money"></i>&nbsp;&nbsp;Investimentos</a></li>
 				</c:if>
 			</c:if>
 		</c:if>

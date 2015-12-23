@@ -25,9 +25,7 @@
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<div class="col-sm-12">
-						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Ultimas submissões da rodada</small>
+						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Últimas submissões da rodada</small>
 							- Seu saldo é <strong>R$ ${aposta.saldo }</strong>
 						</h2>
 						<hr>
@@ -47,62 +45,60 @@
 								<c:out value="${info}"></c:out>
 							</div>
 						</c:if>
-					</div>
-					<c:if test="${not empty entregas }">
-						<div class="col-lg-4">
-							<div class="input-group">
-					            <input type="search" id="search" value="" class="form-control" placeholder="Pesquisar">
-					            <span class="input-group-addon">
-					            	<span class="glyphicon glyphicon-search"></span>
-					            </span>
-					        </div>
-				        </div>
-				       	<div class="col-sm-12">
-							<table id="table" class="table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>Empresa</th>
-										<th>Documento</th>
-										<th>Avalie</th>
-										<th>Aposte</th>
-										<th>Data de Submissão</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
-										<tr>
-											<td>
-												<a href="<c:url value="/jogo/${jogo.id}/equipe/${entrega.equipe.id }"></c:url>">${entrega.equipe.nome}</a>
-											</td>
-											<td>
-												<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
-											</td>
-											<td>
-												<c:if test="${!entrega.respondida }">
-													<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
-														<button class="btn btn-primary">Avaliar</button>
-													</a>
-												</c:if>
-												<c:if test="${entrega.respondida }">
-													<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
-														<button class="btn btn-success">Avaliar</button>
-													</a>
-												</c:if>
-											</td>
-											<td>
-												<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
-													<button class="btn btn-primary">Apostar</button>
-												</a>
-											</td>
-											<td>
-												<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />
-											</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4><strong>Últimas Submissões</strong> </h4>
 						</div>
-					</c:if>	
+						<div class="panel-body">
+							<c:if test="${not empty entregas }">
+						       	<div class="col-sm-12">
+									<table id="tabela-submissoes" class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th>Empresa</th>
+												<th>Documento</th>
+												<th>Avalie</th>
+												<th>Aposte</th>
+												<th>Data de Submissão</th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
+												<tr>
+													<td>
+														<a href="<c:url value="/jogo/${jogo.id}/equipe/${entrega.equipe.id }"></c:url>">${entrega.equipe.nome}</a>
+													</td>
+													<td>
+														<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
+													</td>
+													<td>
+														<c:if test="${!entrega.respondida }">
+															<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
+																<button class="btn btn-primary">Avaliar</button>
+															</a>
+														</c:if>
+														<c:if test="${entrega.respondida }">
+															<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
+																<button class="btn btn-success">Avaliar</button>
+															</a>
+														</c:if>
+													</td>
+													<td>
+														<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
+															<button class="btn btn-primary">Apostar</button>
+														</a>
+													</td>
+													<td>
+														<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />
+													</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
+							</c:if>
+						</div>
+					</div>		
 				</div>
 			</div>
 		</div>

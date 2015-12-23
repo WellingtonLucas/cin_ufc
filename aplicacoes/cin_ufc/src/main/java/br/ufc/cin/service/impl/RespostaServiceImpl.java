@@ -1,16 +1,23 @@
 package br.ufc.cin.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Entrega;
+import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.Opcao;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.RespostaRepository;
+import br.ufc.cin.service.EntregaService;
+import br.ufc.cin.service.OpcaoService;
 import br.ufc.cin.service.RespostaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
@@ -19,6 +26,12 @@ public class RespostaServiceImpl extends GenericServiceImpl<Resposta> implements
 
 	@Inject
 	private RespostaRepository respostaRepository;
+	
+	@Inject
+	private OpcaoService opcaoService;
+	
+	@Inject
+	private  EntregaService entregaService;
 	
 	@Override
 	public Resposta getRespostaByEntrega(Entrega entrega) {
@@ -67,5 +80,38 @@ public class RespostaServiceImpl extends GenericServiceImpl<Resposta> implements
 			return respostas.get(temp);
 		}
 		return null;
+	}
+
+	@Override
+	public void salvar(Resposta resposta, Jogo jogo, Formulario formulario, Usuario usuario, Entrega entrega) {
+		List<Opcao> opcoes = new ArrayList<Opcao>();
+		for (Opcao opcao : resposta.getOpcoes()) {
+			if(!(opcao.getId()==null))
+				opcoes.add(opcaoService.find(Opcao.class, opcao.getId()));
+		}
+		if(opcoes.size()==0 || (formulario.getPerguntas().size() != opcoes.size())){
+			throw new IllegalAccessError("É necessário responder todas as perguntas para efetuar uma avaliação.");
+			
+		}
+		Calendar calendario = Calendar.getInstance();
+		Date data =  calendario.getTime();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss");
+		simpleDateFormat.format(data);
+		resposta.setOpcoes(opcoes);
+		resposta.setFormulario(formulario);
+		resposta.setUsuario(usuario);
+		if(usuario.equals(jogo.getProfessor())){
+			resposta.setEntregaGabarito(entrega);
+		}else{
+			resposta.setEntrega(entrega);
+		}
+		resposta.setDia(data);
+		save(resposta);
+		
+		if(usuario.equals(jogo.getProfessor())){
+			entrega.setGabarito(getRespostaByEntrega(entrega));
+			entregaService.update(entrega);
+		}
+		
 	}
 }

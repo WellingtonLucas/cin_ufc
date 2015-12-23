@@ -24,8 +24,8 @@ public class RegrasServiceImpl implements RegrasService {
 	public void verificaParticipacao(Usuario usuario, Jogo jogo) {
 		if (!jogo.isStatus() && jogo.getAlunos().contains(usuario)) {
 			throw new IllegalArgumentException(
-					"Jogo inativado no momento. Para mais informações "
-							+ jogo.getProfessor().getEmail());
+					"Jogo inativo no momento. Para mais informações: "
+							+ jogo.getProfessor().getEmail()+".");
 		} else if (!jogo.getAlunos().contains(usuario)
 				&& !jogo.getProfessor().equals(usuario)) {
 			throw new IllegalArgumentException(

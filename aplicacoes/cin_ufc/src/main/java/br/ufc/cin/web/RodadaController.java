@@ -644,6 +644,7 @@ public class RodadaController {
 		}
 		model.addAttribute("permissao", "professor");
 		model.addAttribute("apostas", apostas);
+		model.addAttribute("editor", "rodada");
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("rodada", rodada);
 		model.addAttribute("action", "detalhesRodada");

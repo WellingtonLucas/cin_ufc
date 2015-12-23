@@ -11,11 +11,11 @@
 	<head>
 		<c:if test="${action eq 'cadastrar' }">
 			<c:set var="url" value="/${idJogo }/equipe/nova"></c:set>
-			<c:set var="titulo" value="Nova Equipe"></c:set>
+			<c:set var="titulo" value="Nova Empresa"></c:set>
 			<c:set var="txtBtn" value="Salvar"></c:set>
 		</c:if>
 		<c:if test="${action eq 'editar' }">
-			<c:set var="url" value="/${idJogo }/equipe/editar"></c:set>
+			<c:set var="url" value="/jogo/${idJogo }/equipe/${equipe.id }/editar"></c:set>
 			<c:set var="titulo" value="Editar - ${equipe.nome } "></c:set>
 			<c:set var="txtBtn" value="Atualizar"></c:set>
 		</c:if>
@@ -47,7 +47,7 @@
 				<form:hidden path="status"/>
 				<div class="form-group">
 					<div class="form-item">
-						<label for="nomeDoCurso" class="col-sm-2 control-label" >Nome da Equipe:<span class="required">*</span></label>
+						<label for="nomeDoCurso" class="col-sm-2 control-label" >Nome da Empresa:<span class="required">*</span></label>
 						<div class="col-sm-8">
 							<form:input type="text" class="form-control" id="nome" path="nome" placeholder="Nome da Equipe" />
 							<div class="error-validation">
@@ -66,9 +66,9 @@
 				</div>
 				
 				<div class="form-group form-item">
-					<label for="fileupload" class="col-sm-2 control-label">Logo:</label>
+					<label for="idFoto" class="col-sm-2 control-label">Logo:</label>
 					<div class="col-sm-8">
-						<input type="file" id="fileupload" class="file" name="anexos" multiple></input>
+						<input type="file" id="idfoto" name="anexo"></input>
 					</div>
 				</div>
 				<c:if test="${action eq 'editar' }">

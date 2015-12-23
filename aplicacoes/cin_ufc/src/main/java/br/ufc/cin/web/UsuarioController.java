@@ -1,7 +1,15 @@
 package br.ufc.cin.web;
 
+import static br.ufc.cin.util.Constants.MENSAGEM_EXCEPTION;
 import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
+import static br.ufc.cin.util.Constants.PAGINA_APOSTAS_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_AVALIACAO_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_AVALIACOES_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_HISTORICO_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_PERFIL_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_PROFILE_JOGADOR;
+import static br.ufc.cin.util.Constants.PAGINA_USUARIO_JOGADOR;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LOGIN;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
@@ -117,37 +125,24 @@ public class UsuarioController {
 			@PathVariable("idJogo") Integer idJogo, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
 		Usuario logado = getUsuarioLogado(session);
 		logado = usuarioService.find(Usuario.class, logado.getId());
-		
-		if(!jogo.isStatus() && jogo.getAlunos().contains(logado)){
-			redirectAttributes.addFlashAttribute("erro",
-					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+		Usuario usuario;
+		Equipe equipe;
+		try {
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaParticipacao(logado, jogo);
+			usuario = usuarioService.find(Usuario.class, id);
+			usuarioService.verificaUsuario(usuario);
+			equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+			regrasService.verificaEquipe(equipe);
+			regrasService.verificaEquipeJogo(equipe, jogo);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}else if(!jogo.getAlunos().contains(logado) && !jogo.getProfessor().equals(logado)){
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_PERMISSAO_NEGADA);
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		
-		Usuario usuario = usuarioService.find(Usuario.class, id);
-		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
-		if (usuario == null) {
-			redirectAttributes.addFlashAttribute("erro", "Usuário inexistente");
-			return "redirect:/jogo/" + idJogo + "/participantes";
-		}
-		if(!jogo.getAlunos().contains(usuario)) {
-			redirectAttributes.addFlashAttribute("erro", "Usuário não faz parte do jogo.");
-			return "redirect:/jogo/" + idJogo + "/participantes";
-		}
-		if(!jogo.getEquipes().contains(equipe)) {
-			redirectAttributes.addFlashAttribute("erro", "Usuário não faz parte de equipe no jogo.");
-			return "redirect:/jogo/" + idJogo + "/participantes";
 		}
 		
 		if(logado.equals(jogo.getProfessor())){
@@ -157,7 +152,7 @@ public class UsuarioController {
 		}else if(logado.equals(usuario) && logado.getEquipes().contains(equipe)){
 			model.addAttribute("permissao", "alunoLogado");
 		}else{
-			redirectAttributes.addFlashAttribute("erro", "Você não possui permissão de acesso.");
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return "redirect:/jogo/" + idJogo + "/equipe/"+equipe.getId();
 		}
 		model.addAttribute("usuario", logado);
@@ -165,8 +160,7 @@ public class UsuarioController {
 		model.addAttribute("action", "detalhesUsuario");
 		model.addAttribute("usuarioParticipante", usuario);
 		model.addAttribute("equipe", equipe);
-		return "jogador/usuario";
-		
+		return PAGINA_USUARIO_JOGADOR;
 	}
 
 	@RequestMapping(value = "/perfil", method = RequestMethod.GET)
@@ -174,7 +168,7 @@ public class UsuarioController {
 		Usuario usuario = getUsuarioLogado(session);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "perfil");
-		return "jogador/perfil";
+		return PAGINA_PERFIL_JOGADOR;
 	}
 	
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
@@ -183,7 +177,7 @@ public class UsuarioController {
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "profile");
-		return "jogador/profile";
+		return PAGINA_PROFILE_JOGADOR;
 	}
 	
 	@RequestMapping(value = "/atualizar", method = RequestMethod.POST)
@@ -205,7 +199,7 @@ public class UsuarioController {
 		try {
 			imagem = documentoService.verificaAnexoImagem(anexo, usuario);
 		} catch (IOException e) {
-			redirect.addFlashAttribute("erro", e.getMessage());
+			redirect.addFlashAttribute("erro", "Erro ao atualizar os dados, tente novamente.");
 			return "redirect:/usuario/perfil";
 		} catch (IllegalArgumentException e) {
 			redirect.addFlashAttribute("erro", e.getMessage());
@@ -213,14 +207,12 @@ public class UsuarioController {
 		}
 		if(perfilAnterior.getFoto() != null){
 			try {
-				imagem.setId(perfilAnterior.getFoto().getId());
-				documentoService.update(imagem);
+				documentoService.delete(perfilAnterior.getFoto());
 			} catch (Exception e) {
 				redirect.addFlashAttribute("erro", "Erro na troca de fotos.");
 				return "redirect:/usuario/perfil";
 			}
 		}
-		
 		perfilAnterior.setFoto(imagem);
 		if(!(usuario.getSenha().isEmpty())){
 			ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
@@ -234,7 +226,7 @@ public class UsuarioController {
 		try {
 			usuarioService.update(perfilAnterior);	
 		} catch (Exception e) {
-			redirect.addFlashAttribute("erro", "Erro tentar atualizar os dados.");
+			redirect.addFlashAttribute("erro", "Erro tentar atualizar os dados."+e.getMessage());
 			return "redirect:/usuario/perfil";
 		}
 		return "redirect:/usuario/profile";
@@ -286,7 +278,7 @@ public class UsuarioController {
 		model.addAttribute("respostas", respostas);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("usuarioRequisitado", usuarioRequisitado);
-		return "jogador/avaliacoes";
+		return PAGINA_AVALIACOES_JOGADOR;
 	}
 
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/resposta/{idRes}/avaliacao", method = RequestMethod.GET)
@@ -338,7 +330,7 @@ public class UsuarioController {
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("resposta", resposta);
 		model.addAttribute("liberaGaba", resposta.getEntrega().getRodada().isStatusRaking());
-		return "jogador/avaliacao";
+		return PAGINA_AVALIACAO_JOGADOR;
 	}
 
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/historico", method = RequestMethod.GET)
@@ -400,7 +392,7 @@ public class UsuarioController {
 		model.addAttribute("action", "historico");
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("rodadas", rodadas);
-		return "jogador/historico";
+		return PAGINA_HISTORICO_JOGADOR;
 	}
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/investimentos", method = RequestMethod.GET)
 	public String investimentos(@PathVariable("idJogo") Integer idJogo, @PathVariable("id") Integer id, 
@@ -442,7 +434,7 @@ public class UsuarioController {
 		model.addAttribute("requisitado", requisitado);
 		model.addAttribute("action", "historico");
 		model.addAttribute("jogo", jogo);
-		return "jogador/apostas";
+		return PAGINA_APOSTAS_JOGADOR;
 	}
 
 	private Usuario getUsuarioLogado(HttpSession session) {

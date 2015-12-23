@@ -8,6 +8,8 @@ import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_FORMULARIO;
 import static br.ufc.cin.util.Constants.PAGINA_DETALHES_FORM;
 import static br.ufc.cin.util.Constants.PAGINA_LISTAR_FORMULARIOS;
+import static br.ufc.cin.util.Constants.PAGINA_RESPONDER_FORMULARIO;
+import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_FORMULARIO;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
@@ -45,6 +47,7 @@ import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.OpcaoService;
 import br.ufc.cin.service.PerguntaService;
 import br.ufc.cin.service.RespostaService;
+import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
@@ -71,7 +74,9 @@ public class FormularioController {
 	@Inject
 	private EntregaService entregaService;
 	
-
+	@Inject
+	private RodadaService rodadaService;
+	
 	@RequestMapping(value = "/formularios", method = RequestMethod.GET)
 	public String listarFormularios(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 		model.addAttribute("action","formularios");
@@ -92,33 +97,33 @@ public class FormularioController {
 	@RequestMapping(value = "/formulario", method = RequestMethod.GET)
 	public String novoFormulario(Model model, HttpSession session,
 			 RedirectAttributes redirectAttributes) {
-		
-		Usuario usuario = getUsuarioLogado(session);
-		
-		model.addAttribute("usuario", usuario);
+		getUsuarioLogado(session);
 		model.addAttribute("formulario", new Formulario());
 		model.addAttribute("action","cadastrar");
 		
-		return "formulario/formulario";
+		return PAGINA_CADASTRAR_FORMULARIO;
 	}
 	
-	@RequestMapping(value = "/formulario/salvar", method = RequestMethod.POST)
+	@RequestMapping(value = "/formulario", method = RequestMethod.POST)
 	public String cadastroFormulario(@ModelAttribute("formulario") Formulario formulario, Model model,
 			HttpSession session, RedirectAttributes redirect, BindingResult result) {
-		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro na formação do formulário.");
-			return "redirect:/formulario";
+			return REDIRECT_PAGINA_FORMULARIO;
 		}
-
 		Usuario usuario = getUsuarioLogado(session);
 		try {
-
+			formularioService.verificaCamposObrigatorios(formulario);
 			formulario.setProfessor(usuario);
-			formularioService.save(formulario);	
-		} catch (Exception e) {
+			formularioService.save(formulario);
+		}catch(IllegalArgumentException e){
+			model.addAttribute("erro", e.getMessage());
+			model.addAttribute("action","erroCadastro");
+			model.addAttribute("formulario", formulario);
+			return PAGINA_CADASTRAR_FORMULARIO;
+		}catch (Exception e) {
 			redirect.addFlashAttribute("erro", "Erro ao tentar salvar o formulário.");
-			return "redirect:/formulario";
+			return REDIRECT_PAGINA_FORMULARIO;
 		}
 		try {
 			for (Pergunta pergunta : formulario.getPerguntas()) {
@@ -127,7 +132,7 @@ public class FormularioController {
 			perguntaService.salvar(formulario.getPerguntas());
 		} catch (Exception e) {
 			redirect.addFlashAttribute("erro", "Erro ao tentar salvar as perguntas do formulário.");
-			return "redirect:/formulario";
+			return REDIRECT_PAGINA_FORMULARIO;
 		}
 		try {
 			for (Pergunta pergunta : formulario.getPerguntas()) {
@@ -138,9 +143,8 @@ public class FormularioController {
 			}
 		} catch (Exception e) {
 			redirect.addFlashAttribute("erro", "Erro ao tentar salvar as opções das perguntas do formulário.");
-			return "redirect:/formulario";
+			return REDIRECT_PAGINA_FORMULARIO;
 		}
-
 		redirect.addFlashAttribute("info", "Formulário cadastrado com sucesso!");
 		return  "redirect:/formulario/"+formulario.getId()+"/detalhes";
 	}
@@ -166,15 +170,23 @@ public class FormularioController {
 		return REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 	}
 	
-	@RequestMapping(value = "/formulario/editar", method = RequestMethod.POST)
-	public String editar(@Valid Formulario formulario, Model model, 
+	@RequestMapping(value = "/formulario/{idForm}/editar", method = RequestMethod.POST)
+	public String editar(@PathVariable("idForm") Integer idForm, @Valid Formulario formulario, Model model, 
 			HttpSession session, RedirectAttributes redirect, BindingResult result) {
 		
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro ao editar formulário.");
 			return "redirect:/formulario/"+formulario.getId()+"/editar";
 		}
-		
+		try {
+			formularioService.verificaCamposObrigatorios(formulario);
+		} catch (IllegalArgumentException e) {
+			model.addAttribute("erro", e.getMessage());
+			model.addAttribute("action","editar");
+			model.addAttribute("formulario", formulario);
+			return PAGINA_CADASTRAR_FORMULARIO;	
+		}
+			
 		formulario.setProfessor(getUsuarioLogado(session));
 		
 		for (Pergunta pergunta : formulario.getPerguntas()) {
@@ -205,7 +217,7 @@ public class FormularioController {
 		Formulario formulario = formularioService.find(Formulario.class, idForm);
 			if(formulario == null){
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_FORM_NAO_EXISTENTE);
-			return "redirect:/formulario/listar";
+			return REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 		}
 		Usuario usuario = getUsuarioLogado(session);
 		
@@ -259,36 +271,33 @@ public class FormularioController {
 			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
 			return "redirect:/jogo/"+ idJogo +"/rodadas";
 		}
-		Calendar calendario = Calendar.getInstance();
-		long tempoAtual = calendario.getTimeInMillis();
-		if(tempoAtual < entrega.getRodada().getPrazoSubmissao().getTime()){
-			redirectAttributes.addFlashAttribute("erro", "Período de submissão ainda não se encerrou!");
+		
+		try {
+			rodadaService.verificaStatusRodada(entrega.getRodada());
+			rodadaService.verificaStatusPrazoSubmissao(entrega.getRodada());
+			rodadaService.verificaStatusAvaliacao(entrega.getRodada());
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
 		}
+		
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)
-				&& entrega.getRodada().isStatus()) {			
+		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
 			model.addAttribute("permissao", "professor");
-		}else if(jogo.getAlunos().contains(usuario) && jogo.getProfessor().getFormulario().contains(formulario)
-				&& entrega.getRodada().isStatus()) {
+		}else if(jogo.getAlunos().contains(usuario) && jogo.getProfessor().getFormulario().contains(formulario)) {
 			model.addAttribute("permissao", "aluno");
-		}else if(!entrega.getRodada().isStatus()){
-			redirectAttributes.addFlashAttribute("erro", "A rodada se encerrou!");
-			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
 		}else{			
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		if(!entrega.getRodada().isStatusAvaliacao()){
-			redirectAttributes.addFlashAttribute("erro", "Prazo de avaliação encerrado!");
-			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
-		}
+		
+		
 		model.addAttribute("action", "responder");
 		model.addAttribute("formulario", formulario);
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("entrega", entrega);
 		model.addAttribute("resposta", new Resposta());
-		return "formulario/responder";
+		return PAGINA_RESPONDER_FORMULARIO;
 	}
 	
 	@RequestMapping(value = "/{idJogo}/entrega/{id}/formulario/{idForm}/responder", method = RequestMethod.POST)

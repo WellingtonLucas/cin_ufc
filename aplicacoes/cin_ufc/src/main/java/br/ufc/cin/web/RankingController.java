@@ -1,7 +1,8 @@
 package br.ufc.cin.web;
 
-import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
-import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
+import static br.ufc.cin.util.Constants.MENSAGEM_EXCEPTION;
+import static br.ufc.cin.util.Constants.PAGINA_RANKINGS_JOGO;
+import static br.ufc.cin.util.Constants.PAGINA_RANKINGS_RODADA;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
@@ -58,24 +59,22 @@ public class RankingController {
 	public String publicarRanking(@PathVariable("idJogo") Integer idJogo,
 			@PathVariable("idRodada") Integer idRodada, HttpSession session,
 			RedirectAttributes redirectAttributes) {
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		
+		Jogo jogo;
 		Usuario usuario = getUsuarioLogado(session);
-		if(!jogo.getProfessor().equals(usuario)){
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_PERMISSAO_NEGADA);
-			return "redirect:/jogo/listar";
-		}
-		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
-		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
-			redirectAttributes.addFlashAttribute("erro",
-					"Rodada solicitada não existe.");
-			return "redirect:/jogo/" + idJogo + "/rodadas";
+		Rodada rodada;
+		try {
+			jogo = jogoService.find(Jogo.class, idJogo);
+			rodada = rodadaService.find(Rodada.class, idRodada);
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaRodada(rodada);
+			regrasService.verificaRodadaJogo(rodada, jogo);
+			regrasService.verificaSeProfessor(usuario, jogo);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		if(!rodada.isStatusRaking()){
 			try{
@@ -98,71 +97,60 @@ public class RankingController {
 	public String rankingsRodada(@PathVariable("idJogo") Integer idJogo, 
 			@PathVariable("idRodada") Integer idRodada,HttpSession session,
 			RedirectAttributes redirectAttributes, Model model) {
-
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
-		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
-			redirectAttributes.addFlashAttribute("erro",
-					"Rodada solicitada não existe.");
-			return "redirect:/jogo/" + idJogo + "/rodadas";
-		}
-		if(!rodada.isStatusRaking()){
-			redirectAttributes.addFlashAttribute("erro",
-					"O ranking da rodada ainda não está disponível, aguarde.");
-			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
-		}
-		
+		Jogo jogo;
+		Rodada rodada;
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.equals(jogo.getProfessor())) {
-			model.addAttribute("permissao", "professor");
-		} else if(jogo.getAlunos().contains(usuario)){
-			model.addAttribute("permissao", "aluno");
-		}else {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_PERMISSAO_NEGADA);
+		String permissao;
+		try {
+			jogo = jogoService.find(Jogo.class, idJogo);
+			rodada = rodadaService.find(Rodada.class, idRodada);
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaRodada(rodada);
+			regrasService.verificaRodadaJogo(rodada, jogo);
+			rodadaService.verificaStatusRaking(rodada);	
+			permissao = usuarioService.definePermissao(jogo, usuario);
+			model.addAttribute("permissao", permissao);
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("rodada", rodada);
 		model.addAttribute("action", "detalhesRodada");
-		return "ranking/rankingsRodada";
+		return PAGINA_RANKINGS_RODADA;
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/alunos", method = RequestMethod.GET)
 	public String alunos(@PathVariable("idJogo") Integer idJogo,@PathVariable("idRodada") Integer idRodada,
-			HttpSession session,
-			RedirectAttributes redirectAttributes, Model model) {
-
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
-		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
-			redirectAttributes.addFlashAttribute("erro",
-					"Rodada solicitada não existe.");
-			return "redirect:/jogo/" + idJogo + "/rodadas";
-		}
-		if(!rodada.isStatusRaking()){
-			redirectAttributes.addFlashAttribute("erro",
-					"O ranking da rodada ainda não está disponível, aguarde.");
-			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
-		}
-		
+			HttpSession session, RedirectAttributes redirectAttributes, Model model) {
+		Jogo jogo;
+		Rodada rodada;
 		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.equals(jogo.getProfessor())) {
-			model.addAttribute("permissao", "professor");
-		} else if(jogo.getAlunos().contains(usuario)){
-			model.addAttribute("permissao", "aluno");
-		}else {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_PERMISSAO_NEGADA);
+		String permissao;
+		try {
+			jogo = jogoService.find(Jogo.class, idJogo);
+			rodada = rodadaService.find(Rodada.class, idRodada);
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaRodada(rodada);
+			regrasService.verificaRodadaJogo(rodada, jogo);
+			permissao = usuarioService.definePermissao(jogo, usuario);
+			rodadaService.verificaStatusRaking(rodada);	
+			model.addAttribute("permissao", permissao);
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		List<Nota> notas = rankingService.ordenaNotas(rodada);
 		model.addAttribute("usuario", usuario);
@@ -171,7 +159,7 @@ public class RankingController {
 		model.addAttribute("rankingAlunos", true);
 		model.addAttribute("action", "detalhesRodada");
 		model.addAttribute("rodada", rodada);
-		return "ranking/rankingsRodada";
+		return PAGINA_RANKINGS_RODADA;
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/equipes", method = RequestMethod.GET)
@@ -179,41 +167,36 @@ public class RankingController {
 			HttpSession session,
 			RedirectAttributes redirectAttributes, Model model) {
 
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if (jogo == null) {
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
-		if (rodada == null || !jogo.getRodadas().contains(rodada)) {
-			redirectAttributes.addFlashAttribute("erro",
-					"Rodada solicitada não existe.");
-			return "redirect:/jogo/" + idJogo + "/rodadas";
-		}
-		if(!rodada.isStatusRaking()){
-			redirectAttributes.addFlashAttribute("erro",
-					"O ranking da rodada ainda não está disponível, aguarde.");
-			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
-		}
-		
+		Jogo jogo;
+		Rodada rodada;
 		Usuario usuario = getUsuarioLogado(session);
 		String permissao  = "";
 		try {
-			permissao = usuarioService.definePermissao(jogo,usuario);	
+			jogo = jogoService.find(Jogo.class, idJogo);
+			rodada = rodadaService.find(Rodada.class, idRodada);
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaRodada(rodada);
+			regrasService.verificaRodadaJogo(rodada, jogo);
+			permissao = usuarioService.definePermissao(jogo, usuario);
+			rodadaService.verificaStatusRaking(rodada);	
+			model.addAttribute("permissao", permissao);
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
 		List<SaldoNaRodada> saldos = rankingService.ordenaSaldos(rodada);
 		model.addAttribute("jogo", jogo);
-		model.addAttribute("permissao", permissao);
 		model.addAttribute("saldos", saldos);
 		model.addAttribute("rankingEquipes", true);
 		model.addAttribute("rodada", rodada);
 		model.addAttribute("action", "detalhesRodada");
-		return "ranking/rankingsRodada";
+		return PAGINA_RANKINGS_RODADA;
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rankings", method = RequestMethod.GET)
@@ -237,7 +220,7 @@ public class RankingController {
 		}
 		model.addAttribute("permissao", permissao);
 		model.addAttribute("jogo", jogo);
-		return "ranking/rankingsJogo";
+		return PAGINA_RANKINGS_JOGO;
 	}
 	@RequestMapping(value = "/jogo/{idJogo}/rankings-equipes", method = RequestMethod.GET)
 	public String rankingGeralEquipes(@PathVariable("idJogo") Integer idJogo,
@@ -249,7 +232,12 @@ public class RankingController {
 		try{
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
-			regrasService.verificaStatusRanking(jogo);
+			try {
+				regrasService.verificaStatusRanking(jogo);			
+			} catch(IllegalArgumentException e){
+				redirectAttributes.addFlashAttribute("erro",e.getMessage());
+				return "redirect:/jogo/"+jogo.getId()+"/rankings";
+			}
 			permissao = usuarioService.definePermissao(jogo,usuario);
 			equipes = rankingService.ordenaEquipes(jogo);
 		}catch(IllegalArgumentException e){
@@ -261,7 +249,7 @@ public class RankingController {
 		model.addAttribute("permissao", permissao);
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("equipes", equipes);
-		return "ranking/rankingsJogo";
+		return PAGINA_RANKINGS_JOGO;
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rankings-alunos", method = RequestMethod.GET)
@@ -274,7 +262,12 @@ public class RankingController {
 		try{
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
-			regrasService.verificaStatusRanking(jogo);
+			try {
+				regrasService.verificaStatusRanking(jogo);			
+			} catch(IllegalArgumentException e){
+				redirectAttributes.addFlashAttribute("erro",e.getMessage());
+				return "redirect:/jogo/"+jogo.getId()+"/rankings";
+			}
 			permissao = usuarioService.definePermissao(jogo,usuario);
 			saldosPorJogo = rankingService.ordenaSaldosPorJogo(jogo);
 		}catch(IllegalArgumentException e){
@@ -286,7 +279,7 @@ public class RankingController {
 		model.addAttribute("permissao", permissao);
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("saldos", saldosPorJogo);
-		return "ranking/rankingsJogo";
+		return PAGINA_RANKINGS_JOGO;
 	}
 	private Usuario getUsuarioLogado(HttpSession session) {
 		if (session.getAttribute(USUARIO_LOGADO) == null) {

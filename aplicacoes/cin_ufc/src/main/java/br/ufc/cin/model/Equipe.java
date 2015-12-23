@@ -49,7 +49,7 @@ public class Equipe {
 	@JoinTable(name = "equipe_aluno", joinColumns = { @JoinColumn(name = "equipe_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "aluno_id", referencedColumnName = "id") })
 	private List<Usuario> alunos;
 	
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "LOGO_ID")
 	private Documento logo;
 	

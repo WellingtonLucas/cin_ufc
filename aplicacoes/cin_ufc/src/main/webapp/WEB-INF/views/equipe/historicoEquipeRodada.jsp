@@ -20,7 +20,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<div class="col-sm-12">
 					<h2>
-						<strong>Histórico da equipe </strong><small>${equipe.nome } </small>
+						<strong>Histórico da empresa </strong><small>${equipe.nome } </small>
 					</h2>
 					<hr>
 					<c:if test="${not empty erro}">
@@ -46,7 +46,7 @@
 								<h4 class="panel-title">
 									<a role="button" data-toggle="collapse" data-parent="#accordion"
 										href="#collapseOne" aria-expanded="true"
-										aria-controls="collapseOne"> <strong>Notas da Equipe</strong> </a>
+										aria-controls="collapseOne"> <strong>Notas da Empresa</strong> </a>
 								</h4>
 							</div>
 							<div id="collapseOne" class="panel-collapse collapse in"

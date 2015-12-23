@@ -3,7 +3,6 @@ $(function () {
         var num     = $('.clonedInput').length, // Checks to see how many "duplicatable" input fields we currently have
             newNum  = new Number(num + 1),      // The numeric ID of the new input field being added, increasing by 1 each time
             newElem = $('#entry' + num).clone().attr('id', 'entry' + newNum).fadeIn('slow'); // create the new element via clone(), and manipulate it's ID using newNum value
-    
         // H2 - section
         newElem.find('.heading-reference').attr('id', 'ID' + newNum + '_reference').attr('name', 'ID' + newNum + '_reference').html('Questão ' + newNum);
 
@@ -12,7 +11,7 @@ $(function () {
         newElem.find('.questao1')
         	.attr('id', 'ID' + newNum + '_questao')
         	.attr('name', 'perguntas['+ (newNum -1) +'].descricao').val('');
-
+        
         // Opção 1 - text
         newElem.find('.opt1').attr('for', 'ID' + newNum + '_opcao');
 		newElem.find('.optR').attr('id', 'ID' + newNum + '_opcaoR').attr('name', 'ID' + newNum + '_opcaoR').val('');
@@ -79,4 +78,23 @@ $(function () {
 	}else{
 		$('#btnDel').attr('disabled', true);
 	}
+});
+
+$(document).ready(function() {
+	$('#id-formulario').bootstrapValidator({
+		feedbackIcons: {
+        	valid: 'glyphicon glyphicon-ok',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            titulo: {
+                validators: {
+                    notEmpty:{
+            			message: 'O título do formulário é obrigatório.'
+            		}
+                }
+            },
+         }
+	})
+	
 });

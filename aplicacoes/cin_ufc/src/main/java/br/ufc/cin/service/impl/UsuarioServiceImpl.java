@@ -1,11 +1,14 @@
 package br.ufc.cin.service.impl;
 
+import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.UsuarioRepository;
@@ -71,6 +74,9 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 		if (usuario.equals(jogo.getProfessor())) {
 			return "professor";
 		} else if(jogo.getAlunos().contains(usuario)){
+			if(!jogo.isStatus()){
+				throw new IllegalArgumentException("Jogo inativo no momento. Para maiores informações: "+jogo.getProfessor().getEmail()+".");
+			}
 			return "aluno";
 		}else {
 			throw new IllegalArgumentException("Permissão negada.");
@@ -89,5 +95,22 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 			throw new IllegalArgumentException("O campo senha é obrigatório.");
 		}
 		
+	}
+
+	@Override
+	public void verificaUsuario(Usuario usuario) {
+		if(usuario==null){
+			throw new IllegalArgumentException("Usuário solicitado não existe.");
+		}
+	}
+
+	@Override
+	public String definePermissao(Equipe equipe, Usuario usuario) {
+		if (equipe.getJogo().getProfessor().equals(usuario)) {
+			return "professor";
+		}else if(equipe.getAlunos().contains(usuario)){
+			return "aluno";
+		}
+		throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);
 	}
 }

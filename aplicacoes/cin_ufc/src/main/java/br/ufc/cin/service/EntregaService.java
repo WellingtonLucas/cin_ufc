@@ -2,6 +2,7 @@ package br.ufc.cin.service;
 
 import java.util.List;
 
+import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Rodada;
@@ -17,5 +18,10 @@ public interface EntregaService extends GenericService<Entrega>{
 	List<Entrega> getUltimasEntregasDaEquipe(Equipe equipe);
 
 	List<Entrega> getUltimasEntregasDaEquipeComGabarito(Equipe equipe);
+
+	void salvar(Entrega entrega, Rodada rodada, Equipe equipe, Usuario usuario,
+			Documento documento);
+
+	void verificaExistenciaEntregas(List<Entrega> entregas);
 
 }

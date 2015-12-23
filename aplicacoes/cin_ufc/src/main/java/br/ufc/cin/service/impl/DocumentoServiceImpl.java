@@ -1,7 +1,5 @@
 package br.ufc.cin.service.impl;
 
-import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,7 +83,7 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 		} else if(anexo.getSize() == 0){
 			throw new IllegalArgumentException(
 					"Selecione um arquivo para a entrega!");
-		} else if(anexo.getSize() > 10000000){
+		} else if(anexo.getSize() > 10240000){
 			throw new IllegalArgumentException(
 					"O arquivo deve ser menor que 1Mb!");
 		}
@@ -169,10 +167,39 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 					documentos.add(documento);
 				}
 			}
-			return documentos;
+			if(documentos.size() == 0)
+				return null;
+			else
+				return documentos;
 		}else{
-			throw new IllegalArgumentException(MENSAGEM_ERRO_UPLOAD);
+			return null;
 		}
+	}
+
+	@Override
+	public Documento verificaAnexoImagem(MultipartFile anexo, Equipe equipe) throws IOException {
+		Documento documento = new Documento();
+		if (anexo != null) {
+			if (anexo.getBytes() != null && anexo.getBytes().length != 0) {
+				if(anexo.getSize() <= 100000){
+					documento.setArquivo(anexo.getBytes());
+					String data = new Date().getTime() + "";
+					documento.setNomeOriginal(data + "-"
+							+ anexo.getOriginalFilename());
+					documento.setNome(equipe.getNome() + "-" + "imagem");
+					documento.setExtensao(anexo.getContentType());
+					if (!verificaSeImagem(documento.getExtensao())) {
+						throw new IllegalArgumentException(
+								"O arquivo deve ter um destes formatos: PNG ou JPEG ");
+					}
+					return documento;
+				}else{
+					throw new IllegalArgumentException(
+							"A imagem precisa ter no máximo 100KB.");
+				}
+			}
+		}
+		return null;
 	}
 
 }

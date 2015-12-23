@@ -29,6 +29,7 @@ import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.RegrasService;
 import br.ufc.cin.service.UsuarioService;
 
 @Controller
@@ -44,12 +45,19 @@ public class DocumentoController {
 	@Inject
 	private UsuarioService usuarioService;
 	
+	@Inject
+	private RegrasService regrasService;
+	
 	@RequestMapping(value = "/{idJogo}/{idArquivo}", method = RequestMethod.GET)
-	public void getArquivo(@PathVariable("idJogo") Integer idJogo, @PathVariable("idArquivo") Integer idArquivo, HttpServletResponse response, HttpSession session) {
+	public void getArquivo(@PathVariable("idJogo") Integer idJogo, @PathVariable("idArquivo") Integer idArquivo, HttpServletResponse response, 
+			 HttpSession session) {
 		try {
 			Jogo jogo = jogoService.find(Jogo.class, idJogo);
+			Usuario usuario = getUsuarioLogado(session);
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaSeProfessor(usuario, jogo);
 			Documento documento = documentoService.find(Documento.class,idArquivo);
-			if(documento != null && jogo != null && (getUsuarioLogado(session).equals(jogo.getProfessor()))) {
+			if(documento != null) {
 				InputStream is = new ByteArrayInputStream(documento.getArquivo());
 				response.setContentType(documento.getExtensao());
 				response.setHeader("Content-Disposition", "attachment; filename=" + documento.getNomeOriginal());
@@ -58,6 +66,10 @@ public class DocumentoController {
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -72,7 +84,7 @@ public class DocumentoController {
 		headers.set("Content-Disposition", "attachment; filename=" + documento.getNomeOriginal().replace(" ", "_"));
 		headers.setContentLength(arquivo.length);
 
-		redirectAttributes.addFlashAttribute("success", "Download do Documento realizado com sucesso");
+		redirectAttributes.addFlashAttribute("infos", "Download do Documento realizado com sucesso");
 		return new HttpEntity<byte[]>(arquivo, headers);
 	}
 	
@@ -91,7 +103,8 @@ public class DocumentoController {
 			model.addAttribute("result", "erro");
 			model.addAttribute("mensagem", MENSAGEM_DOCUMENTO_INEXISTENTE);
 			return model;
-		}		
+		}
+		
 		documentoService.delete(documento);
 		model.addAttribute("result", "ok");
 		return model;

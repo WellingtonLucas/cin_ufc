@@ -150,7 +150,7 @@
 		<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header btn-danger">
 	        			<h4 class="modal-title" id="excluirModalLabel">Excluir</h4>
 						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					</div>
@@ -166,13 +166,13 @@
 		<div class="modal fade" id="confirm-inativar-jogo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header btn-warning">
 	        			<h4 class="modal-title" id="inativarModalLabel">Inativar</h4>
 	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					</div>
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<a href="#" class="btn btn-primary">Inativar</a>
+						<a href="#" id="id-inativar-jogo" class="btn btn-warning">Inativar</a>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>
@@ -183,13 +183,13 @@
 		<div class="modal fade" id="confirm-ativar-jogo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header btn-success">
 	        			<h4 class="modal-title" id="ativarModalLabel">Ativar</h4>
 	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					</div>
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<a href="#" class="btn btn-primary">Ativar</a>
+						<a href="#" id="id-ativar-jogo" class="btn btn-success">Ativar</a>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>

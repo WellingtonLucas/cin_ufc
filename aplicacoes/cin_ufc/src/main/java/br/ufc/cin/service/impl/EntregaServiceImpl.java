@@ -1,22 +1,31 @@
 package br.ufc.cin.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.EntregaService;
+import br.ufc.cin.service.RodadaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
 public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 		EntregaService {
 
+	@Inject
+	private RodadaService rodadaService;
+	
 	@Override
 	public List<Entrega> getUltimasEntregasDaRodada(Rodada rodada) {
 		List<Entrega> ultimasEntregas = new ArrayList<Entrega>();
@@ -100,5 +109,35 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 		if(entrega!= null && entrega.getGabarito()!= null)
 			return entrega;
 		return null;
+	}
+
+	@Override
+	public void salvar(Entrega entrega, Rodada rodada, Equipe equipe,  Usuario usuario,
+			Documento documento) {
+		if(usuario.equals(rodada.getJogo().getProfessor())){
+			rodada.setModelo(documento);
+			rodadaService.update(rodada);
+		}
+		entrega.setDocumento(documento);
+		entrega.setRodada(rodada);
+		entrega.setUsuario(usuario);
+		if(!usuario.equals(rodada.getJogo().getProfessor())){
+			entrega.setEquipe(equipe);
+		}
+		Calendar calendario = Calendar.getInstance();
+		Date data =  calendario.getTime();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss");
+		simpleDateFormat.format(data);
+		entrega.setDia(data);
+		
+		save(entrega);
+		
+	}
+
+	@Override
+	public void verificaExistenciaEntregas(List<Entrega> entregas) {
+		if(entregas.isEmpty() || entregas == null){
+			throw new IllegalArgumentException("Não existem entregas para está rodada até o momento.");
+		}
 	}
 }

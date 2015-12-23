@@ -205,13 +205,6 @@ $(document).ready(function() {
             			message: 'Prazo é obrigatório.'
             		}
             	}
-            },
-            selec: {
-                validators: {
-                    notEmpty: {
-                        message: 'Selecione um formulário para esta rodada.'
-                    }
-                }
             }
         }
        
@@ -264,7 +257,6 @@ $(document).ready(function() {
 		todayBtn : "linked",
 		language : "pt-BR",
 		todayHighlight : true,
-		startDate: new Date()
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
@@ -278,7 +270,6 @@ $(document).ready(function() {
 		todayBtn : "linked",
 		language : "pt-BR",
 		todayHighlight : true,
-		startDate: new Date()
 	}).on('changeDate', function(e) {
 		$(this).datepicker('hide');
 		$('#adicionarRodadaForm').bootstrapValidator('revalidateField', 'inicio');
@@ -294,16 +285,6 @@ $(document).ready(function() {
 	$('#confirm-delete-rodada').on('show.bs.modal', function(e) {
 		$(this).find('.modal-body').text('Tem certeza de que deseja excluir a rodada \"' + $(e.relatedTarget).data('name') + '\"?');
 		$(this).find('.btn-danger').attr('href', $(e.relatedTarget).data('href'));
-	});
-	
-	$('#confirm-inativar-rodada').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja encerrar a rodada \"' + $(e.relatedTarget).data('name') + '\"?');
-		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
-	});
-	
-	$('#confirm-ativar-rodada').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja iniciar a rodada \"' + $(e.relatedTarget).data('name') + '\"?');
-		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$('#ativar-equipe').on('show.bs.modal', function(e) {

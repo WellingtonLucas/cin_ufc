@@ -49,7 +49,7 @@
 								<thead>
 									<tr>
 										<th>Rodada</th>
-										<th>Equipe</th>
+										<th>Empresa</th>
 										<th>Entrega</th>
 										<th>Avaliação</th>
 									</tr>

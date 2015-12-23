@@ -27,7 +27,7 @@
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<div class="col-sm-12">
 						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-						<h2><strong>Equipe: ${equipe.nome }</strong> - <small>Vincule participantes à equipe</small></h2>
+						<h2><strong>Empresa: ${equipe.nome }</strong> - <small>Vincule participantes à empresa</small></h2>
 						<hr>
 						<c:if test="${not empty erro}">
 							<div class="alert alert-warning alert-dismissible" role="alert">

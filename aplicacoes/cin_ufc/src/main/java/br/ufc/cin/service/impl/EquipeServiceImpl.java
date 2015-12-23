@@ -12,13 +12,16 @@ import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.StatusRodadaEquipe;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.EquipeRepository;
 import br.ufc.cin.service.CalculoNotaService;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
+import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.NotaEquipeRodadaService;
 import br.ufc.cin.service.RespostaService;
+import br.ufc.cin.service.UsuarioService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
@@ -39,6 +42,12 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 
 	@Inject
 	private NotaEquipeRodadaService notaEquipeRodadaService;
+	
+	@Inject
+	private UsuarioService usuarioService;
+	
+	@Inject
+	private JogoService jogoService;
 	
 	@Override
 	public List<Usuario> alunosSemEquipe(Jogo jogo) {
@@ -161,6 +170,61 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 			}
 		}
 		return notasEquipeRodadas;
+	}
+
+	@Override
+	public void removeEquipe(Jogo jogo, Equipe equipe) {
+		for (Usuario aluno : equipe.getAlunos()) {
+			aluno.getEquipes().remove(equipe);
+			usuarioService.update(aluno);
+		}
+		jogo.getEquipes().remove(equipe);
+		jogoService.update(jogo);
+		delete(equipe);
+	}
+
+	@Override
+	public void vincularParticipantes(Equipe equipeCompleta,
+			List<Usuario> alunos) {
+		boolean flag = false;
+		for (Usuario aluno : alunos) {
+			if(aluno.getId() != null){
+				aluno = usuarioService.find(Usuario.class, aluno.getId());
+				aluno.addEquipe(equipeCompleta);
+				flag = true;
+			}
+		}
+		if(flag){
+			update(equipeCompleta);
+		}else{
+			throw new IllegalStateException("Selecione usuários para associar à empresa.");
+		}
+	}
+
+	@Override
+	public void ativarSubmissaoEquipeRodada(Equipe equipe, Rodada rodada, StatusRodadaEquipe rodadaEquipe) {
+		if(rodadaEquipe == null){
+			rodadaEquipe = new StatusRodadaEquipe();
+			rodadaEquipe.setEquipe(equipe);
+			rodadaEquipe.setRodada(rodada);
+		}
+		rodadaEquipe.setAtiva(true);
+		equipe.addStatusRodadaEquipe(rodadaEquipe);
+		update(equipe);
+	}
+
+	@Override
+	public void desativarSubmissaoEquipeRodada(Equipe equipe, Rodada rodada,
+			StatusRodadaEquipe rodadaEquipe) {
+		if(rodadaEquipe == null){
+			rodadaEquipe = new StatusRodadaEquipe();
+			rodadaEquipe.setEquipe(equipe);
+			rodadaEquipe.setRodada(rodada);
+		}
+		rodadaEquipe.setAtiva(false);
+		equipe.addStatusRodadaEquipe(rodadaEquipe);
+		update(equipe);
+		
 	}
 
 }

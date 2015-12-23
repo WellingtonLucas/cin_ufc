@@ -16,20 +16,20 @@
 </head>
 <body>
 	<jsp:include page="../fragments/header.jsp" />
-	<c:if test="${not empty erro}">
-		<div class="alert alert-danger alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert">
-				<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-			</button>
-			<c:out value="${erro}"></c:out>
-		</div>
-	</c:if>
 	
 	<div class="section">
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-4 col-md-10 col-md-offset-2 main">
+					<c:if test="${not empty erro}">
+						<div class="alert alert-danger alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${erro}"></c:out>
+						</div>
+					</c:if>
 					<div class="panel with-nav-tabs panel-primary">
 						<div class="panel-heading">
 							<ul class="nav nav-tabs">
@@ -83,14 +83,6 @@
 												<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 											</button>
 											<c:out value="${info}"></c:out>
-										</div>
-									</c:if>
-									<c:if test="${not empty erro}">
-										<div class="alert alert-danger alert-dismissible" role="alert">
-											<button type="button" class="close" data-dismiss="alert">
-												<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-											</button>
-											<c:out value="${erro}"></c:out>
 										</div>
 									</c:if>
 									<div class="row placeholders">

@@ -9,7 +9,7 @@
 <html>
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<title>Informações da Equipe</title>
+	<title>Informações da Empresa</title>
 </head>
 
 <body>
@@ -39,7 +39,7 @@
 					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							Detalhes da equipe
+							Detalhes da Empresa
 						</div>
 						<div class="panel-body">
 						<h4><strong class="col-sm-1 field">Nome:</strong></h4>

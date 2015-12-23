@@ -75,7 +75,7 @@ public class Usuario {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
 	private List<Historico> historicos;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FOTO_ID")
 	private Documento foto;
 

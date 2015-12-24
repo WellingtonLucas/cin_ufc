@@ -8,7 +8,7 @@
 			<li><a href="<c:url value ="/formularios"></c:url>"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;Formulários</a></li>
 		</c:if>
 		<!-- OPCOES DO JOGO -->
-		<c:if test="${(permissao == 'professor')||(permissao == 'aluno') ||(permissao == 'alunoLogado') || (permissao == 'jogador')}">
+		<c:if test="${(permissao == 'professor')||(permissao == 'aluno') ||(permissao == 'alunoLogado') || (permissao == 'membro')}">
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;Home Jogo</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>"><i class="fa fa-industry"></i>&nbsp;&nbsp;Empresas</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>"><i class="fa fa-youtube-play"></i>&nbsp;&nbsp;Rodadas</a></li>
@@ -21,7 +21,7 @@
 			<li><a href="<c:url value ="/formularios"></c:url>"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;Formulários</a></li>
 			<hr>
 		</c:if>
-		<c:if test="${permissao == 'aluno'}">
+		<c:if test="${permissao == 'aluno' || permissao == 'membro'}">
 			<li><a href="<c:url value ="/usuario/${usuario.id }/detalhes/${jogo.id}"></c:url>"><i class="fa fa-user"></i>&nbsp;&nbsp;${usuario.nome }</a></li>
 		</c:if>
 		<!-- FORMULÁRIOS -->
@@ -55,18 +55,18 @@
 		</c:if>
 		
 		<c:if test="${(action == 'detalhesEquipe')}">
-			<c:if test="${ (permissao == 'professor') || (permissao == 'aluno') }">
+			<c:if test="${ (permissao == 'professor') || (permissao == 'membro') }">
 				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/avaliacoes"></c:url>"><i class="fa fa-archive"></i>&nbsp;&nbsp;Avaliações</a></li>
 			</c:if>
 			<c:if test="${ (permissao == 'professor') }">
 				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/vincular"></c:url>"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Vincular Membros</a></li>
 			</c:if>
-			<c:if test="${ (permissao == 'professor' || permissao== 'alunoLogado') }">
+			<c:if test="${ (permissao == 'professor' || permissao== 'membro') }">
 				<li><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }/historico"></c:url>"><i class="fa fa-history"></i>&nbsp;&nbsp;Histórico de Notas</a></li>
 			</c:if>
 		</c:if>
 		<c:if test="${(action == 'vincularEquipe')}">
-			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>"><i class="fa fa-industry"></i>&nbsp;&nbsp;${equipe.nome }</a></li>
+			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>"><i class="fa fa-industry"></i>&nbsp;&nbsp;Empresa</a></li>
 		</c:if>
 		<!-- DETALHES USUÁRIO  -->
 		<c:if test="${(action == 'detalhesUsuario')}">

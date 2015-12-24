@@ -175,4 +175,12 @@ public class RegrasServiceImpl implements RegrasService {
 		}		
 	}
 
+	@Override
+	public void verificaMembroOuProfessorEquipe(Usuario usuario, Equipe equipe) {
+		if((!equipe.getAlunos().contains(usuario)) && (!equipe.getJogo().getProfessor().equals(usuario))){
+			throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);
+		}
+		
+	}
+
 }

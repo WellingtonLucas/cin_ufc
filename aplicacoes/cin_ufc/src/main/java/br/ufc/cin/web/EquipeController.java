@@ -140,17 +140,19 @@ public class EquipeController {
 			@PathVariable("idEquipe") Integer idEquipe, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
+		Jogo jogo;
 		Usuario usuario = getUsuarioLogado(session);
-		Equipe equipe = equipeService.find(Equipe.class, idEquipe);
+		Equipe equipe;
 		String permissao;
 		List<Entrega>  entregas;
 		try {
+			jogo = jogoService.find(Jogo.class, idJogo);
+			equipe = equipeService.find(Equipe.class, idEquipe);
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
 			regrasService.verificaEquipe(equipe);
 			regrasService.verificaEquipeJogo(equipe, jogo);
-			permissao = usuarioService.definePermissao(jogo, usuario);
+			permissao = usuarioService.definePermissao(equipe, usuario);
 			model.addAttribute("action", "detalhesEquipe");
 			entregas = equipeService.getEntregasOrdenadasPorEquipe(equipe, jogo);
 			model.addAttribute("equipe", equipe);
@@ -179,6 +181,7 @@ public class EquipeController {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaEquipe(equipe);
 			regrasService.verificaEquipeJogo(equipe, jogo);
+			regrasService.verificaMembroOuProfessorEquipe(usuario, equipe);
 			permissao = usuarioService.definePermissao(equipe, usuario);
 			model.addAttribute("jogo", jogo);
 			model.addAttribute("equipe", equipe);
@@ -213,7 +216,7 @@ public class EquipeController {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaEquipe(oldEquipe);
 			regrasService.verificaEquipeJogo(oldEquipe, jogo);
-			usuarioService.definePermissao(oldEquipe, usuario);
+			regrasService.verificaMembroOuProfessorEquipe(usuario, oldEquipe);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;

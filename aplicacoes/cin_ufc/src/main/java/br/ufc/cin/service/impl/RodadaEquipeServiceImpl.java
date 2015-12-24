@@ -38,7 +38,7 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 	}
 
 	@Override
-	public List<Equipe> atualizaStatusEquipesNaRodada(List<Equipe> equipes,	Rodada rodada) {
+	public List<Equipe> atualizaStatusEquipesNaRodada(List<Equipe> equipes, Rodada rodada) {
 		List<Equipe> equipesAtualizadas = new ArrayList<Equipe>();
 		for (Equipe equipe : equipes) {
 			StatusRodadaEquipe temp = find(equipe, rodada);
@@ -52,11 +52,6 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 		return equipesAtualizadas;		
 	}
 
-	/**
-	 * 
-	 * Se a equipe ainda não tem um status na rodada 
-	 * então é retornado uma nova instância temporária
-	 * */
 	@Override
 	public StatusRodadaEquipe atualizaStatusRodadaEquipe(ReaberturaSubmissao reabertura) {
 		StatusRodadaEquipe status = find(reabertura.getEquipe(), reabertura.getRodada());

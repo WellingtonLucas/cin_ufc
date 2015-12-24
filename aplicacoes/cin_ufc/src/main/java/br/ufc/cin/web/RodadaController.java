@@ -189,6 +189,7 @@ public class RodadaController {
 			rodada = rodadaService.atualizaStatusRodada(rodada);
 			rodada = rodadaService.atualizaStatusPrazoRodada(rodada);
 			rodada = rodadaService.atualizaStatusAvaliacao(rodada);
+			model.addAttribute("prazoReabertura", rodadaService.isPosPrazoSubmissoesEReabertura(rodada));
 			permissao = usuarioService.definePermissao(jogo, usuario);
 			if(equipe != null && rodada.getJogo().getEquipes().contains(equipe)){
 				ReaberturaSubmissao reaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
@@ -227,12 +228,14 @@ public class RodadaController {
 					"Erro ao atualizar pedidos de reabertura de submissão.");
 			return "redirect:/jogo/" + idJogo + "/rodadas";
 		}
+		
 		model.addAttribute("permissao", permissao);
 		model.addAttribute("action", "detalhesRodada");		
 		model.addAttribute("editor", "rodada");
 		model.addAttribute("rodada", rodada);
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("equipes", equipes);
+		
 		return PAGINA_DETALHES_RODADA;
 	}
 	
@@ -345,9 +348,16 @@ public class RodadaController {
 			regrasService.verificaRodadaJogo(rodada, jogo);
 			regrasService.verificaEquipe(equipe);
 			regrasService.verificaEquipeJogo(equipe, jogo);
+			reaberturaSubmissaoService.verificaSeTemPedido(rodada, equipe);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
+			return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
 		}
 		StatusRodadaEquipe rodadaEquipe = rodadaEquipeService.find(equipe, rodada);
 		try {
@@ -377,9 +387,16 @@ public class RodadaController {
 			regrasService.verificaRodadaJogo(rodada, jogo);
 			regrasService.verificaEquipe(equipe);
 			regrasService.verificaEquipeJogo(equipe, jogo);
+			reaberturaSubmissaoService.verificaSeTemPedido(rodada, equipe);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
+			return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
 		}
 		StatusRodadaEquipe rodadaEquipe = rodadaEquipeService.find(equipe, rodada);
 		try {
@@ -410,6 +427,8 @@ public class RodadaController {
 		try {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
+			rodadaService.atualizaStatusPrazoRodada(rodada);
+			rodadaService.verificaSePrazoSubmissao(rodada);
 			documento = documentoService.verificaAnexoEntrega(anexo,usuario,rodada,jogo,equipe);
 			documentoService.save(documento);
 			entregaService.salvar(entrega, rodada, equipe, usuario, documento);
@@ -498,6 +517,8 @@ public class RodadaController {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaRodada(rodada);
 			regrasService.verificaRodadaJogo(rodada, jogo);
+			rodadaService.atualizaStatusPrazoRodada(rodada);
+			rodadaService.verificaSePrazoSubmissao(rodada);
 			regrasService.verificaParticipacao(usuario, jogo);
 			equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 			regrasService.verificaEquipe(equipe);

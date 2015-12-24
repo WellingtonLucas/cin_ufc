@@ -16,7 +16,11 @@ public interface RodadaEquipeService extends GenericService<StatusRodadaEquipe>{
 
 	public abstract List<Equipe> atualizaStatusEquipesNaRodada(List<Equipe> equipes,
 			Rodada rodada);
-
+	/**
+	 * Se a equipe ainda não tem um status na rodada 
+	 * então é retornado uma nova instância temporária
+	 * 
+	 * */
 	public abstract StatusRodadaEquipe atualizaStatusRodadaEquipe(ReaberturaSubmissao find);
 
 	public abstract void deletePor(Rodada rodada);

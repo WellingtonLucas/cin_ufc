@@ -28,4 +28,15 @@ public class JpaReaberturaRepository extends JpaGenericRepositoryImpl<Reabertura
 		return null;
 	}
 
+	@Override
+	public List<ReaberturaSubmissao> findByRodada(Rodada rodada) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("idR", rodada.getId());
+		List<ReaberturaSubmissao> result = find(QueryType.JPQL, "from reabertura_submissao where RODADA_ID = :idR " , params);
+		if(!result.isEmpty() && result != null){
+			return result;
+		}
+		return null;
+	}
+
 }

@@ -86,4 +86,23 @@ public class ReaberturaSubmissaoServiceImpl extends GenericServiceImpl<Reabertur
 		
 	}
 
+	@Override
+	public List<ReaberturaSubmissao> findByRodada(Rodada rodada) {
+		return reaberturaSubmissaorRepository.findByRodada(rodada);
+	}
+
+	@Override
+	public void verificaSeTemPedido(Rodada rodada, Equipe equipe) {
+		ReaberturaSubmissao reaberturaSubmissao = find(equipe, rodada);
+		if(reaberturaSubmissao==null){
+			throw new IllegalAccessError("Esta equipe não possui pedido de reabertura para a rodada.");
+		}else if(reaberturaSubmissao.getQuantidadeDia() == null){
+			throw new IllegalAccessError("Esta equipe não possui pedido de reabertura para a rodada."); 
+		}
+		Integer temp = Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
+		if(temp <= 0 || temp > 3){
+			throw new IllegalArgumentException("Esta equipe não possui pedido de reabertura para a rodada");
+		}
+	}
+
 }

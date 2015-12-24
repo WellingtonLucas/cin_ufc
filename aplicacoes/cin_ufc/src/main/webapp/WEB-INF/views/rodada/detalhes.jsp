@@ -140,7 +140,7 @@
 											</label>
 										</c:if>
 										<c:if test="${not empty rodada.formulario.titulo }">
-											<label>							
+											<label>
 												<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id}/formulario" />">
 													${rodada.formulario.titulo }
 												</a>
@@ -166,7 +166,12 @@
 									 	enctype="multipart/form-data" servletRelativeAction="/jogo/${jogo.id }/rodada/entrega" method="POST">
 										<form:hidden path="id" value="${rodada.id }"/>
 										<div class="form-group form-item">
-											<label for="entrega" class="col-sm-2 field">Entrega:</label>
+											<c:if test="${permissao == 'professor' }">
+												<label for="entrega" class="col-sm-2 field">Modelo:</label>
+											</c:if>
+											<c:if test="${permissao != 'professor' }">
+												<label for="entrega" class="col-sm-2 field">Entrega:</label>
+											</c:if>
 											<div class="col-sm-7 field-value">
 												<input type="file" id="entrega" class="file" name="anexo" required="required"></input>	
 											</div>
@@ -184,9 +189,9 @@
 							</div>	
 						</div>
 					</div>
-					<div class="col-sm-12">
-						<hr>
-						<c:if test="${not empty rodada.jogo.equipes }">
+					<c:if test="${(not empty rodada.jogo.equipes) && permissao == 'professor' }">
+						<div class="col-sm-12">
+							<hr>
 							<h3><strong>Empresas na Rodada</strong></h3>
 							<table id="table_id" class="table table-striped table-hover">
 								<thead>
@@ -194,7 +199,7 @@
 										<th>Nome</th>
 										<c:if test="${permissao eq 'professor' }">
 											<th>Submissão</th>
-											<th>Reabertura</th>
+											<th>Reabertura ${prazoReabertura }</th>
 										</c:if>
 									</tr>
 								</thead>
@@ -204,16 +209,23 @@
 											<td>
 												<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>">${equipe.nome}</a>
 											</td>
-											<c:if test="${(!equipe.statusNaRodada && !rodada.statusPrazo) && (permissao eq 'professor') }">
+											<c:if test="${!prazoReabertura }">
 												<td>
-													<a id="submeter" data-toggle="modal" data-target="#ativar-equipe" href="#"
-														data-href="<c:url value="equipe/${equipe.id}/ativar" ></c:url>" data-name="${equipe.nome }">
-														<button class="btn btn-primary" data-toggle="tooltip" data-placement="right" 
-														title="Clique aqui para reabrir as submissões para esta equipe.">
-															&nbsp;&nbsp;&nbsp;Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;&nbsp;&nbsp;
-														</button>
-													</a>
+													<span class="label label-info">Fora do prazo</span>
 												</td>
+											</c:if>
+											<c:if test="${((!equipe.statusNaRodada && !rodada.statusPrazo) && (permissao eq 'professor')) }">
+												<c:if test="${prazoReabertura }">
+													<td>
+														<a id="submeter" data-toggle="modal" data-target="#ativar-equipe" href="#"
+															data-href="<c:url value="equipe/${equipe.id}/ativar" ></c:url>" data-name="${equipe.nome }">
+															<button class="btn btn-primary" data-toggle="tooltip" data-placement="right" 
+															title="Clique aqui para reabrir as submissões para esta equipe.">
+																&nbsp;&nbsp;&nbsp;Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;&nbsp;&nbsp;
+															</button>
+														</a>
+													</td>
+												</c:if>
 												<c:if test="${equipe.statusReabertura }">
 													<td>
 														<span>
@@ -233,8 +245,8 @@
 													</td>
 												</c:if>
 											</c:if>
-											<c:if test="${(equipe.statusNaRodada || rodada.statusPrazo) && (permissao eq 'professor') }">
-												<c:if test="${!rodada.statusPrazo }">
+											<c:if test="${((equipe.statusNaRodada || rodada.statusPrazo) && (permissao eq 'professor'))}">
+												<c:if test="${prazoReabertura && !rodada.statusPrazo }">
 													<td>
 														<a id="submeter" data-toggle="modal" data-target="#inativar-equipe" href="#"
 															data-href="<c:url value="equipe/${equipe.id}/inativar" ></c:url>" data-name="${equipe.nome }">
@@ -246,9 +258,9 @@
 													</td>
 												</c:if>
 												<c:if test="${rodada.statusPrazo }">
-												<td>
-													<span class="label label-info">Submissões ativas</span>
-												</td>
+													<td>
+														<span class="label label-info">Submissões ativas</span>
+													</td>
 												</c:if>
 												<c:if test="${equipe.statusReabertura }">
 													<td>
@@ -273,14 +285,13 @@
 									</c:forEach>
 								</tbody>
 							</table>
-						</c:if>	
-					</div>
-					
-					<div class="col-sm-12">
-						<hr>
-						<div class="row placeholders">
-							<div class="form-group">	
-								<c:if test="${(permissao eq 'professor')}">			
+						</div>
+					</c:if>	
+					<c:if test="${(permissao eq 'professor')}">
+						<div class="col-sm-12">
+							<hr>
+							<div class="row placeholders">
+								<div class="form-group">	
 									<div class="col-sm-2">				
 										<a id="editar" href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/editar" ></c:url>">
 											<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
@@ -293,6 +304,8 @@
 												<button class="btn btn-success btn-lg">Gerar Notas&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
 											</a>					
 										</div>
+									</c:if>
+									<c:if test="${!rodada.statusAvaliacao }">
 										<div class="col-sm-1"></div>
 										<div class="col-sm-2">
 											<a id="ranking" data-toggle="modal" data-target="#confirm-gerar-ranking" href="#" 
@@ -308,10 +321,11 @@
 											<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="glyphicon glyphicon-trash"></i></button>
 										</a>					
 									</div>
-								</c:if>
+								
+								</div>
 							</div>
 						</div>
-					</div>
+					</c:if>
 				</div>
 			</div>
 		</div>
@@ -402,7 +416,7 @@
 			</div>
 		</div>
 	</c:if>	
-	<c:if test="${permissao == 'aluno' }">
+	<c:if test="${permissao == 'aluno' && rodada.statusPrazo }">
 		<jsp:include page="solicitarReabertura.jsp" />
 	</c:if>
 	<jsp:include page="../fragments/footer.jsp" />	

@@ -1,9 +1,9 @@
 package br.ufc.cin.web;
 
 import static br.ufc.cin.util.Constants.MENSAGEM_EQUIPE_INEXISTENTE;
+import static br.ufc.cin.util.Constants.MENSAGEM_EXCEPTION;
 import static br.ufc.cin.util.Constants.MENSAGEM_FORM_NAO_CRIADOS;
 import static br.ufc.cin.util.Constants.MENSAGEM_FORM_NAO_EXISTENTE;
-import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_INEXISTENTE;
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 import static br.ufc.cin.util.Constants.PAGINA_CADASTRAR_FORMULARIO;
 import static br.ufc.cin.util.Constants.PAGINA_DETALHES_FORM;
@@ -14,10 +14,6 @@ import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 import static br.ufc.cin.util.Constants.REDIRECT_PAGINA_LISTAR_JOGO;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -46,6 +42,7 @@ import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.OpcaoService;
 import br.ufc.cin.service.PerguntaService;
+import br.ufc.cin.service.RegrasService;
 import br.ufc.cin.service.RespostaService;
 import br.ufc.cin.service.RodadaService;
 import br.ufc.cin.service.UsuarioService;
@@ -76,6 +73,9 @@ public class FormularioController {
 	
 	@Inject
 	private RodadaService rodadaService;
+	
+	@Inject
+	private RegrasService regrasService;
 	
 	@RequestMapping(value = "/formularios", method = RequestMethod.GET)
 	public String listarFormularios(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
@@ -257,41 +257,36 @@ public class FormularioController {
 			@PathVariable("id") Integer id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if(jogo==null){
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
+		Usuario usuario = getUsuarioLogado(session);
+		Entrega entrega = entregaService.find(Entrega.class, id);
+		Formulario formulario = formularioService.find(Formulario.class, idForm);
+		String permissao;
+		try {
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaParticipacao(usuario, jogo);
+			regrasService.verificaEntrega(entrega);
+			regrasService.verificaFormulario(formulario);
+			permissao = usuarioService.definePermissao(jogo, usuario);
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		Formulario formulario = formularioService.find(Formulario.class, idForm);
-		if (formulario == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_FORMULARIOS;
-		}
-		Entrega entrega = entregaService.find(Entrega.class, id);
-		if (entrega == null) {
-			redirectAttributes.addFlashAttribute("erro", "Entrega inexistente.");
-			return "redirect:/jogo/"+ idJogo +"/rodadas";
-		}
-		
 		try {
+			rodadaService.atualizaStatusRodada(entrega.getRodada());
 			rodadaService.verificaStatusRodada(entrega.getRodada());
+			rodadaService.atualizaStatusPrazoRodada(entrega.getRodada());
 			rodadaService.verificaStatusPrazoSubmissao(entrega.getRodada());
+			rodadaService.atualizaStatusAvaliacao(entrega.getRodada());
 			rodadaService.verificaStatusAvaliacao(entrega.getRodada());
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+entrega.getRodada().getId()+"/detalhes";
 		}
 		
-		Usuario usuario = getUsuarioLogado(session);
-		if (usuario.equals(jogo.getProfessor()) &&  jogo.getProfessor().getFormulario().contains(formulario)) {			
-			model.addAttribute("permissao", "professor");
-		}else if(jogo.getAlunos().contains(usuario) && jogo.getProfessor().getFormulario().contains(formulario)) {
-			model.addAttribute("permissao", "aluno");
-		}else{			
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		
-		
+		model.addAttribute("permissao", permissao);
 		model.addAttribute("action", "responder");
 		model.addAttribute("formulario", formulario);
 		model.addAttribute("jogo", jogo);
@@ -305,53 +300,37 @@ public class FormularioController {
 			@PathVariable("id") Integer id, Model model, HttpSession session,
 			@ModelAttribute("resposta") Resposta resposta, RedirectAttributes redirectAttributes,
 			BindingResult result) {
-		
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("erro", "Erro ao cadastrar um formulário.");
 			return "redirect:/jogo/"+idJogo+"/formulario/"+idForm;
 		}
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if(jogo==null){
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		Formulario formulario = formularioService.find(Formulario.class, idForm);
-		if (formulario == null) {
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EQUIPE_INEXISTENTE);
-			return "redirect:/jogo/"+ idJogo +"/formularios";
-		}
-		Entrega entrega = entregaService.find(Entrega.class, id);
-		
-		List<Opcao> opcoes = new ArrayList<Opcao>();
-		for (Opcao opcao : resposta.getOpcoes()) {
-			if(!(opcao.getId()==null))
-				opcoes.add(opcaoService.find(Opcao.class, opcao.getId()));
-		}
-		if(opcoes.size()==0 || (formulario.getPerguntas().size() > opcoes.size())){
-			redirectAttributes.addFlashAttribute("erro", "É necessário responder todas às perguntas para efetuar uma avaliação.");
-			return  "redirect:/jogo/"+jogo.getId()+"/entrega/"+entrega.getId()+"/formulario/"+formulario.getId();
-		}
-		
+		Jogo jogo;
+		Formulario formulario;
+		Entrega entrega;
 		Usuario usuario = getUsuarioLogado(session);
-		Calendar calendario = Calendar.getInstance();
-		Date data =  calendario.getTime();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss");
-		simpleDateFormat.format(data);
-		
-		resposta.setOpcoes(opcoes);
-		resposta.setFormulario(formulario);
-		resposta.setUsuario(usuario);
-		if(usuario.equals(jogo.getProfessor())){
-			resposta.setEntregaGabarito(entrega);
-		}else{
-			resposta.setEntrega(entrega);
+		try {
+			jogo = jogoService.find(Jogo.class, idJogo);
+			formulario = formularioService.find(Formulario.class, idForm);
+			entrega = entregaService.find(Entrega.class, id);
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaParticipacao(usuario, jogo);
+			regrasService.verificaEntrega(entrega);
+			regrasService.verificaFormulario(formulario);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
+			return  REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		resposta.setDia(data);
-		respostaService.save(resposta);
-		
-		if(usuario.equals(jogo.getProfessor())){
-			entrega.setGabarito(respostaService.getRespostaByEntrega(entrega));
-			entregaService.update(entrega);
+		try {
+			respostaService.salvar(resposta,jogo, formulario, usuario, entrega);	
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/jogo/"+jogo.getId()+"/entrega/"+entrega.getId()+"/formulario/"+formulario.getId();
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
+			return  "redirect:/jogo/"+jogo.getId()+"/entrega/"+entrega.getId()+"/formulario/"+formulario.getId();
 		}
 		
 		redirectAttributes.addFlashAttribute("info", "Entrega da equipe "+entrega.getEquipe().getNome()+" avalidada.");
@@ -378,7 +357,6 @@ public class FormularioController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 			return REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 		}
-		
 		redirectAttributes.addFlashAttribute("info", "Formulário removido com sucesso.");
 		return REDIRECT_PAGINA_LISTAR_FORMULARIOS;
 

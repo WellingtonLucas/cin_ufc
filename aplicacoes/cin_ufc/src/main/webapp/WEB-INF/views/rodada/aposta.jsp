@@ -24,8 +24,7 @@
 		<jsp:include page="../fragments/menu.jsp" />
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-				<h2><strong>Rodada: ${rodada.nome }</strong> - Seu saldo é <strong>${aposta.saldo } R$</strong></h2>
+				<h2><strong>Rodada: ${rodada.nome }</strong> - Seu saldo é <strong>R$ ${aposta.saldo }</strong></h2>
 				<hr>
 				<c:if test="${not empty erro}">
 					<div class="alert alert-warning alert-dismissible" role="alert">
@@ -45,7 +44,7 @@
 				</c:if>
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">Equipe: ${equipe.nome }</h3>
+						<h3 class="panel-title">Invista na equipe: ${equipe.nome }</h3>
 					</div>
 					<div class="panel-body">
 						<form:form id="apostar" role="form" class="form-horizontal" commandName="deposito"

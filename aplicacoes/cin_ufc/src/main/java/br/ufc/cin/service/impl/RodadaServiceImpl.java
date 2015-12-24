@@ -7,8 +7,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Formulario;
+import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.service.FormularioService;
+import br.ufc.cin.service.ReaberturaSubmissaoService;
 import br.ufc.cin.service.RodadaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
@@ -17,6 +19,9 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 
 	@Inject
 	private FormularioService formularioService;
+	
+	@Inject
+	private ReaberturaSubmissaoService reaberturaSubmissaoService;
 	
 	@Override
 	public List<Rodada> ordenaPorInicio(List<Rodada> rodadas) {
@@ -86,7 +91,8 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	public Rodada atualizaStatusAvaliacao(Rodada rodada) {
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
-		if(rodada.getTerminoAvaliacao().getTime() < tempoAtual || rodada.getInicio().getTime() > tempoAtual){
+		Long prazoComReabertura = rodada.getPrazoSubmissao().getTime() + quantidadeDiasReaberturaMillis(rodada);
+		if(prazoComReabertura < tempoAtual && (rodada.getTerminoAvaliacao().getTime() < tempoAtual || rodada.getInicio().getTime() > tempoAtual)){
 			if(!rodada.isStatusAvaliacao())
 				return rodada;
 			rodada.setStatusAvaliacao(false);
@@ -206,5 +212,47 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 			throw new IllegalAccessError("O ranking da rodada ainda não está disponível, aguarde.");
 		}
 		
+	}
+	
+	@Override
+	public void verificaSePrazoSubmissao(Rodada rodada) {
+		if(!rodada.isStatusPrazo()){
+			throw new IllegalArgumentException("Rodada fora do prazo de submissão.");
+		}
+	}
+	
+	private Long quantidadeDiasReaberturaMillis(Rodada rodada){
+		List<ReaberturaSubmissao> reaberturaSubmissaos = reaberturaSubmissaoService.findByRodada(rodada);
+		Integer qtdDias = 0;
+		for (ReaberturaSubmissao reaberturaSubmissao : reaberturaSubmissaos) {
+			Integer temp = Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
+			if(qtdDias < temp){
+				qtdDias = temp;
+			}
+			if(qtdDias==3){
+				break;
+			}
+		}
+		return qtdDias * umDiaTimeInMillis();
+	}
+	
+	private Long umDiaTimeInMillis(){
+		Calendar cal1 = Calendar.getInstance();
+		cal1.set(2015, 10, 7);
+		
+		Calendar cal2 = Calendar.getInstance();
+		cal2.set(2015, 10, 8);
+		return cal2.getTimeInMillis() - cal1.getTimeInMillis();
+	}
+
+	@Override
+	public boolean isPosPrazoSubmissoesEReabertura(Rodada rodada) {
+		Calendar calendario = Calendar.getInstance();
+		long tempoAtual = calendario.getTimeInMillis();
+		Long prazoComReabertura = rodada.getPrazoSubmissao().getTime() + quantidadeDiasReaberturaMillis(rodada);
+		if(prazoComReabertura < tempoAtual || tempoAtual < rodada.getInicio().getTime()){
+			return false;
+		}
+		return true;
 	}
 }

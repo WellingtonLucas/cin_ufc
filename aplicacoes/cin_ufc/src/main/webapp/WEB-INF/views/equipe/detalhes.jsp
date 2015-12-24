@@ -119,49 +119,50 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-12">
-						<hr>
-						<div class="row placeholders">
-							<div class="form-group">	
-								<c:if test="${(permissao eq 'professor') || (permissao eq 'aluno') }">			
-									<div class="col-sm-2">				
-										<a id="editar" href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/editar" ></c:url>">
-											<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
-										</a>
-									</div>
-								</c:if>
-								<c:if test="${permissao eq 'professor' }">
-									<div class="col-sm-2">
-										<c:if test="${equipe.status == true}">									
-											<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-equipe" href="#" 
-												data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/inativar">
-												</c:url>" data-name="${equipe.nome }">
-												<button class="btn btn-warning btn-lg">
-													Inativar&nbsp;<i class="glyphicon glyphicon-ban-circle"></i>
-												</button>
+					<c:if test="${(permissao eq 'professor') || (permissao eq 'membro') }">
+						<div class="col-sm-12">
+							<hr>
+							<div class="row placeholders">
+								<div class="form-group">	
+												
+										<div class="col-sm-2">				
+											<a id="editar" href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/editar" ></c:url>">
+												<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
 											</a>
-										</c:if>
-										<c:if test="${equipe.status == false }">
-											<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-equipe" href="#" 
-												data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/ativar">
-												</c:url>" data-name="${equipe.nome }">
-												<button class="btn btn-success btn-lg">
-													Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>
-												</button>
-											</a>
-										</c:if>
-									</div>
-									<div class="col-sm-2">
-										<a id="excluir" data-toggle="modal" data-target="#confirm-delete2" href="#" 
-										data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/excluir"></c:url>" data-name="${equipe.nome }">
-											<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
-										</a>					
-									</div>
-								</c:if>
+										</div>
+									<c:if test="${permissao eq 'professor' }">
+										<div class="col-sm-2">
+											<c:if test="${equipe.status == true}">									
+												<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-equipe" href="#" 
+													data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/inativar">
+													</c:url>" data-name="${equipe.nome }">
+													<button class="btn btn-warning btn-lg">
+														Inativar&nbsp;<i class="glyphicon glyphicon-ban-circle"></i>
+													</button>
+												</a>
+											</c:if>
+											<c:if test="${equipe.status == false }">
+												<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-equipe" href="#" 
+													data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/ativar">
+													</c:url>" data-name="${equipe.nome }">
+													<button class="btn btn-success btn-lg">
+														Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>
+													</button>
+												</a>
+											</c:if>
+										</div>
+										<div class="col-sm-2">
+											<a id="excluir" data-toggle="modal" data-target="#confirm-delete2" href="#" 
+											data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/excluir"></c:url>" data-name="${equipe.nome }">
+												<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
+											</a>					
+										</div>
+									</c:if>
+								</div>
 							</div>
 						</div>
-					</div>
-					<c:if test="${not empty entregas }">
+					</c:if>
+					<c:if test="${(not empty entregas) && (permissao == 'membro') || (permissao == 'professor')}">
 						<div class="col-sm-12">
 							<hr>
 							<h3><strong>Histórico de submissões</strong></h3>

@@ -24,8 +24,8 @@ public class RegrasServiceImpl implements RegrasService {
 	public void verificaParticipacao(Usuario usuario, Jogo jogo) {
 		if (!jogo.isStatus() && jogo.getAlunos().contains(usuario)) {
 			throw new IllegalArgumentException(
-					"Jogo inativado no momento. Para mais informações "
-							+ jogo.getProfessor().getEmail());
+					"Jogo inativo no momento. Para mais informações: "
+							+ jogo.getProfessor().getEmail()+".");
 		} else if (!jogo.getAlunos().contains(usuario)
 				&& !jogo.getProfessor().equals(usuario)) {
 			throw new IllegalArgumentException(
@@ -173,6 +173,14 @@ public class RegrasServiceImpl implements RegrasService {
 		if (apostas == null || apostas.isEmpty()) {
 			throw new IllegalArgumentException("Não existem apostas até o momento.");
 		}		
+	}
+
+	@Override
+	public void verificaMembroOuProfessorEquipe(Usuario usuario, Equipe equipe) {
+		if((!equipe.getAlunos().contains(usuario)) && (!equipe.getJogo().getProfessor().equals(usuario))){
+			throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);
+		}
+		
 	}
 
 }

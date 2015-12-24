@@ -105,4 +105,7 @@ public interface RegrasService {
 			NotaEquipeRodada notaEquipeRodada);
 
 	public abstract void verificaApostas(List<Aposta> apostas);
+
+	public abstract void verificaMembroOuProfessorEquipe(Usuario usuario,
+			Equipe equipe);
 }

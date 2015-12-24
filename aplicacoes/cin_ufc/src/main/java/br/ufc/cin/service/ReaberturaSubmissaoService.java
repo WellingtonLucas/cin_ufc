@@ -15,4 +15,11 @@ public interface ReaberturaSubmissaoService extends GenericService<ReaberturaSub
 	
 	public abstract void solicitarReabertura(Rodada rodada, Equipe equipe,
 			ReaberturaSubmissao reaberturaSubmissao);
+	
+	public abstract List<ReaberturaSubmissao> findByRodada(Rodada rodada);
+	
+	/**
+	 * Verifica se a equipe possui pedido de reabertura para a rodada.
+	 * **/
+	public abstract void verificaSeTemPedido(Rodada rodada, Equipe equipe);
 }

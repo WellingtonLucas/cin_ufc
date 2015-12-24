@@ -109,6 +109,8 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 		if (equipe.getJogo().getProfessor().equals(usuario)) {
 			return "professor";
 		}else if(equipe.getAlunos().contains(usuario)){
+			return "membro";
+		}else if(equipe.getJogo().getAlunos().contains(usuario)){
 			return "aluno";
 		}
 		throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);

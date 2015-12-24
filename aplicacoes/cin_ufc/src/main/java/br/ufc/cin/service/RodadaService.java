@@ -16,12 +16,15 @@ public interface RodadaService extends GenericService<Rodada>{
 
 	public abstract Rodada atualizaStatusRodada(Rodada rodada);
 
+	/**
+	 * Atualiza o prazo de submissão da rodada.
+	 * */
 	public abstract Rodada atualizaStatusPrazoRodada(Rodada rodada);
 
 	public abstract Rodada atualizaStatusAvaliacao(Rodada rodada);
 
 	/**
-	 * Verifica se a rodada não está no prazo de submissões.
+	 * Verifica se a rodada não está no prazo de submissões. Caso esteja é lançado uma exception.
 	 * */
 	public abstract void verificaSeNaoPrazoSubmissao(Rodada rodada);
 	
@@ -42,4 +45,13 @@ public interface RodadaService extends GenericService<Rodada>{
 
 	public abstract void verificaStatusRaking(Rodada rodada);
 
+	/**
+	 * Verifica se a rodada está no prazo de submissões. Caso não esteja é lançado uma exception.
+	 * */
+	public abstract void verificaSePrazoSubmissao(Rodada rodada);
+	
+	/**
+	 * Verifica a visibilidade da ativação reaberturas de submissões para uma rodada.
+	 * */
+	public abstract boolean isPosPrazoSubmissoesEReabertura(Rodada rodada);
 }

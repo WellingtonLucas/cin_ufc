@@ -101,6 +101,8 @@ public class RodadaController {
 				model.addAttribute("info", "Nenhuma rodada cadastrada no momento.");
 			}else{
 				List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
+				rodadas = rodadaService.atualizaStatusRodadas(rodadas);
+				rodadas = rodadaService.organizarPorPerfil(rodadas, usuario);
 				model.addAttribute("rodadas", rodadas);
 			}
 			model.addAttribute("action", "rodadas");
@@ -189,6 +191,7 @@ public class RodadaController {
 			rodada = rodadaService.atualizaStatusRodada(rodada);
 			rodada = rodadaService.atualizaStatusPrazoRodada(rodada);
 			rodada = rodadaService.atualizaStatusAvaliacao(rodada);
+			regrasService.verificaSeProfessorPeriodoRodada(usuario, rodada);
 			model.addAttribute("prazoReabertura", rodadaService.isPosPrazoSubmissoesEReabertura(rodada));
 			permissao = usuarioService.definePermissao(jogo, usuario);
 			if(equipe != null && rodada.getJogo().getEquipes().contains(equipe)){
@@ -207,6 +210,9 @@ public class RodadaController {
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/rodadas";
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_EXCEPTION);

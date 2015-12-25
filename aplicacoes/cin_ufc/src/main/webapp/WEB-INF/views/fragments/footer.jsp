@@ -10,6 +10,7 @@
 <script src="<c:url value="/webjars/jquery-ui/1.11.1/jquery-ui.min.js" />"></script>
 <script src="<c:url value="/webjars/bootstrap/3.3.5/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/webjars/datatables/1.10.9/js/jquery.dataTables.min.js" />"></script>
+<script src="<c:url value="/webjars/datatables/1.10.9/js/dataTables.bootstrap.min.js" />"></script>
 <script src="<c:url value="/webjars/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-datepicker.pt-BR.js" />"></script>
 <c:if test="${editor != 'rodada' }">

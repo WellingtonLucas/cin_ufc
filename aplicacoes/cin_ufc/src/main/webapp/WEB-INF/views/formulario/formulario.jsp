@@ -59,7 +59,6 @@
 				<c:out value="${erro}"></c:out>
 			</div>
 		</c:if>
-		<hr>
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h4>${descricao }</h4>

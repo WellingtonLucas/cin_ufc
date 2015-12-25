@@ -26,9 +26,8 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Últimas submissões da rodada</small>
-							- Seu saldo é <strong>R$ ${aposta.saldo }</strong>
+							<c:if test="${permissao != 'professor' }">- Seu saldo é <strong>R$ ${aposta.saldo }</strong></c:if>
 						</h2>
-						<hr>
 						<c:if test="${not empty erro}">
 							<div class="alert alert-warning alert-dismissible" role="alert">
 								<button type="button" class="close" data-dismiss="alert">
@@ -57,9 +56,11 @@
 											<tr>
 												<th>Empresa</th>
 												<th>Documento</th>
-												<th>Avalie</th>
-												<th>Aposte</th>
 												<th>Data de Submissão</th>
+												<th>Avalie</th>
+												<c:if test="${permissao != 'professor' }">
+													<th>Aposte</th>
+												</c:if>
 											</tr>
 										</thead>
 										<tbody>
@@ -72,6 +73,10 @@
 														<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
 													</td>
 													<td>
+														<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />
+													</td>
+													
+													<td>
 														<c:if test="${!entrega.respondida }">
 															<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
 																<button class="btn btn-primary">Avaliar</button>
@@ -83,14 +88,13 @@
 															</a>
 														</c:if>
 													</td>
-													<td>
-														<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
-															<button class="btn btn-primary">Apostar</button>
-														</a>
-													</td>
-													<td>
-														<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />
-													</td>
+													<c:if test="${permissao != 'professor' }">
+														<td>
+															<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
+																<button class="btn btn-primary">Apostar</button>
+															</a>
+														</td>
+													</c:if>
 												</tr>
 											</c:forEach>
 										</tbody>

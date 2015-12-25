@@ -12,7 +12,7 @@
 			<li><a href="<c:url value ="/jogo/${jogo.id}/detalhes"></c:url>"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;Home Jogo</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/equipes"></c:url>"><i class="fa fa-industry"></i>&nbsp;&nbsp;Empresas</a></li>
 			<li><a href="<c:url value ="/jogo/${jogo.id}/rodadas"></c:url>"><i class="fa fa-youtube-play"></i>&nbsp;&nbsp;Rodadas</a></li>
-			<li><a href="<c:url value ="/jogo/${jogo.id}/rankings"></c:url>"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Rankings Gerais</a></li>
+			<li><a href="<c:url value ="/jogo/${jogo.id}/rankings"></c:url>"><i class="fa fa-line-chart"></i>&nbsp;&nbsp;Rankings Gerais</a></li>
 			<hr>
 		</c:if>
 		<!-- OPCOES DO JOGO PROFESSOR-->
@@ -68,6 +68,9 @@
 		<c:if test="${(action == 'vincularEquipe')}">
 			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>"><i class="fa fa-industry"></i>&nbsp;&nbsp;Empresa</a></li>
 		</c:if>
+		<c:if test="${(action == 'historicoEquipe')}">
+			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/equipe/${equipe.id }"></c:url>"><i class="fa fa-industry"></i>&nbsp;&nbsp;Empresa</a></li>
+		</c:if>
 		<!-- DETALHES USUÁRIO  -->
 		<c:if test="${(action == 'detalhesUsuario')}">
 			<c:if test="${ (permissao == 'professor' || permissao== 'alunoLogado') }">
@@ -105,7 +108,7 @@
 			</c:if>	
 			<c:if test="${(permissao == 'professor')||(permissao == 'aluno') }">
 				<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/submissoes"></c:url>"><i class="glyphicon glyphicon-open"></i>&nbsp;&nbsp;Submissões da rodada</a></li>
-				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/rankings"></c:url>"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Rankings</a></li>
+				<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/rankings"></c:url>"><i class="fa fa-line-chart"></i>&nbsp;&nbsp;Rankings Rodada</a></li>
 				<c:if test="${permissao == 'professor'}">
 					<li><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/apostas"></c:url>"><i class="fa fa-money"></i>&nbsp;&nbsp;Investimentos</a></li>
 				</c:if>
@@ -137,10 +140,6 @@
 		<!-- HISTORICO ALUNO -->
 		<c:if test="${(action =='historico') && (permissao == 'professor' || permissao== 'alunoLogado')}">
 			<li class="active"><a href="<c:url value ="/usuario/${requisitado.id }/detalhes/${jogo.id}"></c:url>"><i class="fa fa-user"></i>&nbsp;&nbsp;${requisitado.nome }</a></li>
-		</c:if>
-		<!-- RANKING -->
-		<c:if test="${rankingJogo == true && (permissao == 'professor' || permissao == 'aluno')}">
-			<li class="active"><a href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/detalhes"></c:url>">${rodada.nome }</a></li>
 		</c:if>
 	</ul>
 </div>

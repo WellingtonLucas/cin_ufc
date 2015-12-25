@@ -25,7 +25,6 @@
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h2><strong>Rodada: ${rodada.nome }</strong> - Seu saldo é <strong>R$ ${aposta.saldo }</strong></h2>
-				<hr>
 				<c:if test="${not empty erro}">
 					<div class="alert alert-warning alert-dismissible" role="alert">
 						<button type="button" class="close" data-dismiss="alert">

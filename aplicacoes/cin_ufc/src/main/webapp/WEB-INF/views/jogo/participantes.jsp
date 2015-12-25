@@ -22,64 +22,68 @@
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<div class="col-sm-12">
-						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-						<hr>
-						<c:if test="${not empty erro}">
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
+					<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
+					<c:if test="${not empty erro}">
+						<div class="alert alert-warning alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${erro}"></c:out>
+						</div>
+					</c:if>
+					<c:if test="${not empty info}">
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${info}"></c:out>
+						</div>
+					</c:if>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<i class="fa fa-users"></i>&nbsp;&nbsp;Participantes do Jogo
+						</div>
+						<div class="panel-body">
+							<div class="col-sm-12">
+								<c:if test="${not empty usuarios }">
+									<table id="participantes" class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th>Nome</th>
+												<th>Sorenome</th>
+												<th>Curso</th>
+												<th>Email</th>
+												<c:if test="${permissao eq 'professor' }">
+													<th></th>
+												</c:if>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="usuario" items="${usuarios}">
+												<tr>
+													<td>
+														<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
+													</td>
+													<td>	
+														${usuario.sobreNome}										
+													</td>
+													<td>${usuario.curso } </td>
+													<td>${usuario.email } </td>
+													<c:if test="${permissao eq 'professor' }">
+														<td>
+															<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
+																data-href="<c:url value="participantes/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
+																<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
+															</a>
+													</td>
+													</c:if>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</c:if>	
 							</div>
-						</c:if>
-						<c:if test="${not empty info}">
-							<div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${info}"></c:out>
-							</div>
-						</c:if>
-					</div>
-					<div class="col-sm-12">
-						<c:if test="${not empty usuarios }">
-							<table id="participantes" class="table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>Nome</th>
-										<th>Sorenome</th>
-										<th>Curso</th>
-										<th>Email</th>
-										<c:if test="${permissao eq 'professor' }">
-											<th></th>
-										</c:if>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="usuario" items="${usuarios}">
-										<tr>
-											<td>
-												<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
-											</td>
-											<td>	
-												${usuario.sobreNome}										
-											</td>
-											<td>${usuario.curso } </td>
-											<td>${usuario.email } </td>
-											<c:if test="${permissao eq 'professor' }">
-												<td>
-													<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
-														data-href="<c:url value="participantes/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
-														<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
-													</a>
-											</td>
-											</c:if>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</c:if>	
+						</div>
 					</div>
 				</div>
 			</div>

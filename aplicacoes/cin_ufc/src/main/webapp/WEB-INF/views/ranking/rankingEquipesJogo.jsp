@@ -5,7 +5,7 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">Melhores empresas do jogo</h3>
+		<i class="fa fa-money"></i>&nbsp;&nbsp;Melhores empresas do jogo
 	</div>
 	<div class="panel-body">
 		<c:forEach var="equipe" items="${equipes }" varStatus="idEqui">

@@ -39,6 +39,7 @@ import br.ufc.cin.model.Documento;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Historico;
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
@@ -47,6 +48,7 @@ import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.HistoricoService;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.NotaEquipeRodadaService;
 import br.ufc.cin.service.RegrasService;
 import br.ufc.cin.service.RespostaService;
 import br.ufc.cin.service.RodadaService;
@@ -79,6 +81,9 @@ public class UsuarioController {
 	
 	@Inject
 	private RegrasService regrasService;
+	
+	@Inject
+	private NotaEquipeRodadaService notaEquipeRodadaService;
 	
 	@Inject
 	private ApostaService apostaService;
@@ -336,62 +341,61 @@ public class UsuarioController {
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/historico", method = RequestMethod.GET)
 	public String historico(@PathVariable("idJogo") Integer idJogo, @PathVariable("id") Integer id, 
 			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-
-		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-		if(jogo == null){
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_JOGO_INEXISTENTE);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		Usuario requisitado = usuarioService.find(Usuario.class, id);
-		if(!jogo.getAlunos().contains(requisitado)){
-			redirectAttributes.addFlashAttribute("erro",
-					"Aluno não existe ou não pertence ao jogo.");
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-		if(jogo.getRodadas() == null || jogo.getRodadas().isEmpty()){
-			redirectAttributes.addFlashAttribute("erro",
-					"O jogo ainda não possui rodadas.");
-			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}
-			
+		
+		Jogo jogo;
+		Usuario requisitado;
 		Usuario usuario = getUsuarioLogado(session);
-		if(!jogo.isStatus() && jogo.getAlunos().contains(usuario)){
-			redirectAttributes.addFlashAttribute("erro",
-					"Jogo inativado no momento. Para mais informações "+jogo.getProfessor().getEmail());
+		String permissao;
+		Equipe equipe;
+		try {
+			jogo = jogoService.find(Jogo.class, idJogo);
+			requisitado = usuarioService.find(Usuario.class, id);
+			usuario = usuarioService.find(Usuario.class, usuario.getId());
+			regrasService.verificaJogo(jogo);
+			regrasService.verificaUsuario(requisitado);
+			regrasService.verificaParticipacao(usuario, jogo);
+			regrasService.verificaParticipacao(requisitado, jogo);
+			regrasService.verificaJogoComRodada(jogo);
+			permissao = usuarioService.definePermissaoHistorico(jogo,usuario,requisitado);
+			equipe = equipeService.equipePorAlunoNoJogo(requisitado, jogo);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
-		}else if(!jogo.getAlunos().contains(usuario) && !jogo.getProfessor().equals(usuario)){
-			redirectAttributes.addFlashAttribute("erro",
-					MENSAGEM_PERMISSAO_NEGADA);
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		
-		usuario = usuarioService.find(Usuario.class, usuario.getId());
-		
-		if (usuario.equals(jogo.getProfessor())) {			
-			model.addAttribute("permissao", "professor");
-		}else if(usuario.equals(requisitado) && jogo.getAlunos().contains(usuario)){
-			model.addAttribute("permissao", "alunoLogado");
-		}else{			
-			redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
-			return REDIRECT_PAGINA_LISTAR_JOGO;
+		List<Rodada> rodadas;
+		Historico historico;
+		try {
+			rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
+			rodadas = rodadaService.atualizaStatusRodadas(rodadas);
+			historico = historicoService.buscarPorJogoUsuario(jogo, requisitado);
+			if(historico == null){
+				historico = historicoService.criarHistorico(historico, rodadas, requisitado);
+			}else{
+				historico = historicoService.atualizarHistorico(historico, rodadas, requisitado);
+			}
+			Float media = historicoService.calculaMedia(historico);
+			List<NotaEquipeRodada> notasEquipeRodadas = notaEquipeRodadaService.buscarPorEquipe(equipe);
+			if(notasEquipeRodadas == null){
+				notasEquipeRodadas = equipeService.criarNotasEquipeRodadas(notasEquipeRodadas, equipe, permissao);
+			}
+			if(notasEquipeRodadas != null){
+				notasEquipeRodadas = equipeService.atualizarNotasEquipeRodadas(notasEquipeRodadas, equipe, permissao);
+			}
+			model.addAttribute("notasEquipeRodadas", notasEquipeRodadas);
+			model.addAttribute("permissao", permissao);
+			model.addAttribute("requisitado", requisitado);
+			model.addAttribute("usuario", usuario);
+			model.addAttribute("historico", historico);
+			model.addAttribute("media", media);
+			model.addAttribute("action", "historico");
+			model.addAttribute("jogo", jogo);
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
+			return "redirect:/usuario/"+requisitado.getId()+"/jogo/"+jogo.getId()+"/historico";
 		}
-		List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
-		rodadas = rodadaService.atualizaStatusRodadas(rodadas);
-		
-		Historico historico = historicoService.buscarPorJogoUsuario(jogo, requisitado);
-		if(historico == null){
-			historico = historicoService.criarHistorico(historico, rodadas, requisitado);
-		}else{
-			historico = historicoService.atualizarHistorico(historico, rodadas, requisitado);
-		}
-		Float media = historicoService.calculaMedia(historico);
-		model.addAttribute("requisitado", requisitado);
-		model.addAttribute("usuario", usuario);
-		model.addAttribute("historico", historico);
-		model.addAttribute("media", media);
-		model.addAttribute("action", "historico");
-		model.addAttribute("jogo", jogo);
-		model.addAttribute("rodadas", rodadas);
 		return PAGINA_HISTORICO_JOGADOR;
 	}
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/investimentos", method = RequestMethod.GET)

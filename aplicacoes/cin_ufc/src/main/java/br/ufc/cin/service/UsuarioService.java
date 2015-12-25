@@ -45,5 +45,13 @@ public interface UsuarioService  extends GenericService<Usuario>{
 	 * 
 	 * */
 	String definePermissao(Equipe equipe, Usuario usuario);
+
+	/**
+	 * Define as permissões de visualização do histórico, caso não tenha permissão será lançada uma IllegalArgument.
+	 * @author Wellington
+	 * 
+	 * */
+	String definePermissaoHistorico(Jogo jogo, Usuario usuario,
+			Usuario requisitado);
 	
 }

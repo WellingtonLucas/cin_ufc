@@ -76,17 +76,18 @@ public class RankingController {
 			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		if(!rodada.isStatusRaking()){
-			try{
-				apostaService.atualizaSaldoEquipes(jogo,rodada);
-				apostaService.atualizaSaldoAlunos(jogo,rodada);
-				rodada.setStatusRaking(true);
-				rodadaService.update(rodada);
-			}catch(Exception e){
-				redirectAttributes.addFlashAttribute("erro",
-						"Erro ao tentar publicar o ranking.");
-				return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
-			}
+		try{
+			apostaService.atualizaSaldoEquipes(jogo,rodada);
+			apostaService.atualizaSaldoAlunos(jogo,rodada);
+			rodada.setStatusRaking(true);
+			rodadaService.update(rodada);
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
+		} catch(Exception e){
+			redirectAttributes.addFlashAttribute("erro",
+					"Erro ao tentar publicar o ranking.");
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
 		}
 		redirectAttributes.addFlashAttribute("info",
 				"Os rankings e notas dessa rodada já podem ser consultados.");

@@ -22,7 +22,6 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<h2><strong>${rodada.nome }</strong> - Histórico de Investimentos</h2>
-					<hr>
 					<c:if test="${not empty info}">
 						<div class="alert alert-success alert-dismissible" role="alert">
 							<button type="button" class="close" data-dismiss="alert">
@@ -33,7 +32,7 @@
 					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4><strong>Investimentos</strong> </h4>
+							<strong>Investimentos</strong> 
 						</div>
 						<div class="panel-body">
 							<div class="col-sm-12">

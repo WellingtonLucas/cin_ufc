@@ -344,13 +344,11 @@ $(document).ready(function() {
 	
 	$('#tabela-submissoes').DataTable({
 		"order" : [[ 0, 'desc' ]],
-		"columnDefs" : [ 
-		    {className: "col-sm-4", "targets": [1]},
-		    {className: "col-sm-1", "targets": [2]},
-		    {className: "col-sm-1", "targets": [3]},
+		"columnDefs" : [
 		    {className: "col-sm-4", "targets": [0]},
-		    {"targets" : 2, "orderable" : false},
-		    {"targets" : 3, "orderable" : false}
+		    {className: "col-sm-4", "targets": [1]},
+		    {"targets" : 3, "orderable" : false},
+		    {"targets" : 4, "orderable" : false}
 		],
 		"language": {
             "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"

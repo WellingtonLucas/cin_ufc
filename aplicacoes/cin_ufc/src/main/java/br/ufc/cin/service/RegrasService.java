@@ -108,4 +108,14 @@ public interface RegrasService {
 
 	public abstract void verificaMembroOuProfessorEquipe(Usuario usuario,
 			Equipe equipe);
+
+	/**
+	 * Verifica se o usuário é o professor e se o status da rodada está ativo. 
+	 * Se o status não estiver ativo somente o professor poderá acessar a rodada. 
+	 * @author Wellington
+	 * */
+	public abstract void verificaSeProfessorPeriodoRodada(Usuario usuario,
+			Rodada rodada);
+
+	public abstract void verificaUsuario(Usuario requisitado);
 }

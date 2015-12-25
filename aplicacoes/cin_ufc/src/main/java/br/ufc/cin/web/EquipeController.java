@@ -119,6 +119,7 @@ public class EquipeController {
 			imagem = documentoService.verificaAnexoImagem(anexo, equipe);
 			equipe.setLogo(imagem);
 			equipe.setJogo(jogo);
+			equipe.setSaldo(0F);
 			equipe.setStatus(true);
 			equipeService.save(equipe);
 		} catch (IOException e) {
@@ -232,6 +233,9 @@ public class EquipeController {
 					imagem.setId(oldEquipe.getLogo().getId());
 				}
 				oldEquipe.setLogo(imagem);
+			}
+			if(oldEquipe.getSaldo()==null){
+				oldEquipe.setSaldo(0f);
 			}
 			oldEquipe.setNome(equipe.getNome());
 			oldEquipe.setIdeiaDeNegocio(equipe.getIdeiaDeNegocio());
@@ -515,21 +519,23 @@ public class EquipeController {
 			regrasService.verificaEquipeJogo(equipe,jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
 			permissao = usuarioService.definePermissao(jogo, usuario);
+			List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
+		    rodadaService.atualizaStatusRodadas(rodadas);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
-		rodadas = rodadaService.atualizaStatusRodadas(rodadas);
-		
 		List<NotaEquipeRodada> notasEquipeRodadas = notaEquipeRodadaService.buscarPorEquipe(equipe);
-		
 		if(notasEquipeRodadas == null){
 			notasEquipeRodadas = equipeService.criarNotasEquipeRodadas(notasEquipeRodadas, equipe, permissao);
 		}
 		if(notasEquipeRodadas != null){
 			notasEquipeRodadas = equipeService.atualizarNotasEquipeRodadas(notasEquipeRodadas, equipe, permissao);
 		}
+		model.addAttribute("action", "historicoEquipe");
 		model.addAttribute("permissao", permissao);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("notasEquipeRodadas", notasEquipeRodadas);

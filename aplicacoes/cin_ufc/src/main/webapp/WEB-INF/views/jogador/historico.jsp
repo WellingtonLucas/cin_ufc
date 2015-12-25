@@ -22,7 +22,6 @@
 					<h2>
 						<strong>Visualizar histórico </strong><small>${requisitado.nome } ${requisitado.sobreNome }</small>
 					</h2>
-					<hr>
 					<c:if test="${not empty erro}">
 						<div class="alert alert-warning alert-dismissible" role="alert">
 							<button type="button" class="close" data-dismiss="alert">
@@ -31,58 +30,101 @@
 							<c:out value="${erro}"></c:out>
 						</div>
 					</c:if>		
-						
-					<div class="panel-group" id="accordion" role="tablist"
-						aria-multiselectable="true">
-						<div class="panel panel-info">
-							<div class="panel-heading" role="tab" id="headingOne">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion"
-										href="#collapseOne" aria-expanded="true"
-										aria-controls="collapseOne"> <strong>Suas Notas</strong> </a>
-								</h4>
-							</div>
-							<div id="collapseOne" class="panel-collapse collapse in"
-								role="tabpanel" aria-labelledby="headingOne">
-								<div class="panel-body">
-									<c:if test="${historico.notas != null }">
-										<table id="table" class="table table-striped table-hover">
-											<thead>
+					<div class="panel panel-primary">
+						<div class="panel-heading" role="tab" id="headingOne">
+							<h4 class="panel-title">
+								<a role="button" data-toggle="collapse" data-parent="#accordion"
+									href="#collapseOne" aria-expanded="true"
+									aria-controls="collapseOne"> <strong>Suas Notas</strong> </a>
+							</h4>
+						</div>
+						<div id="collapseOne" class="panel-collapse collapse in"
+							role="tabpanel" aria-labelledby="headingOne">
+							<div class="panel-body">
+								<c:if test="${historico.notas != null }">
+									<table id="tabela-notas-aluno" class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<td><strong>Rodada </strong></td>
+												<td><strong>Nota </strong></td>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="nota" items="${historico.notas }">
 												<tr>
-													<td><strong>Rodada </strong></td>
-													<td><strong>Nota </strong></td>
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach var="nota" items="${historico.notas }">
-													<tr>
-														<td>${nota.rodada.nome }</td>
-														<c:if test="${nota.valor != null && nota.valor >= 0}">
-															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
-																value= "${nota.valor }" />
-															</td>
-														</c:if>
-														<c:if test="${nota.valor == null || nota.valor < 0 }">
-															<td>-</td>
-														</c:if>
-													</tr>
-												</c:forEach>
-												<tr>
-													<td><strong>Média</strong></td>
-													<c:if test="${media >= 0 }">
-														<td>
-															<fmt:formatNumber type="number" maxFractionDigits="2" 
-																value= "${media }" />
+													<td>${nota.rodada.nome }</td>
+													<c:if test="${nota.valor != null && nota.valor >= 0}">
+														<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+															value= "${nota.valor }" />
 														</td>
 													</c:if>
-													<c:if test="${media < 0 }">
-														<td>0.0</td>
+													<c:if test="${nota.valor == null || nota.valor < 0 }">
+														<td>-</td>
 													</c:if>
 												</tr>
-											</tbody>
-										</table>
-									</c:if>
-								</div>
+											</c:forEach>
+										</tbody>
+									</table>
+									<strong>Média:
+										<c:if test="${media >= 0 }">
+											<fmt:formatNumber type="number" maxFractionDigits="2" 
+													value= "${media }" />
+										</c:if>
+										<c:if test="${media < 0 }">
+											0.0
+										</c:if>
+									</strong>
+								</c:if>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-heading" role="tab" id="headingDois">
+							<h4 class="panel-title">
+								<a role="button" data-toggle="collapse" data-parent="#accordion"
+									href="#collapseDois" aria-expanded="true"
+									aria-controls="collapseDois"> <strong>Notas da Empresa</strong> </a>
+							</h4>
+						</div>
+						<div id="collapseDois" class="panel-collapse collapse in"
+							role="tabpanel" aria-labelledby="headingDois">
+							<div class="panel-body">
+								<c:if test="${notasEquipeRodadas != null }">
+									<table id="tabela-notas-equipe2" class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<td><strong>Rodada </strong></td>
+												<td><strong>Fator de aposta </strong></td>
+												<td><strong>Nota </strong></td>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="nota" items="${notasEquipeRodadas }">
+												<tr>
+													<td>${nota.rodada.nome }</td>
+													<c:if test="${nota.fatorDeAposta == null }">
+														<td>-</td>
+													</c:if>
+													<c:if test="${nota.fatorDeAposta != null }">
+														<td>
+															<fmt:formatNumber type="number" maxFractionDigits="2">
+																 ${nota.fatorDeAposta }
+															 </fmt:formatNumber>
+														</td>
+													</c:if>
+													<c:if test="${nota.valor != null }">
+														<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+															value= "${nota.valor }" />
+														</td>
+													</c:if>
+													<c:if test="${nota.valor == null }">
+														<td>-</td>
+													</c:if>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</c:if>
 							</div>
 						</div>
 					</div>

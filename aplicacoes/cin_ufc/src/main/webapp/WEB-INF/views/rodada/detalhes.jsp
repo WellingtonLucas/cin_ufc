@@ -42,7 +42,7 @@
 					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4>Rodada: <strong>${rodada.nome }</strong> </h4>
+							Rodada: <strong>${rodada.nome }</strong>
 						</div>
 						<div class="panel-body">
 							<div class="form-horizontal">

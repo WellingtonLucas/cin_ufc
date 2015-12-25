@@ -2,6 +2,7 @@ package br.ufc.cin.service.impl;
 
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Named;
@@ -179,6 +180,23 @@ public class RegrasServiceImpl implements RegrasService {
 	public void verificaMembroOuProfessorEquipe(Usuario usuario, Equipe equipe) {
 		if((!equipe.getAlunos().contains(usuario)) && (!equipe.getJogo().getProfessor().equals(usuario))){
 			throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);
+		}
+		
+	}
+
+	@Override
+	public void verificaSeProfessorPeriodoRodada(Usuario usuario, Rodada rodada) {
+		Long now = new Date().getTime();
+		if(!rodada.getJogo().getProfessor().equals(usuario) && (!rodada.isStatus() && (rodada.getTermino().getTime() > now))){
+			throw new IllegalAccessError("Rodada não está ativa no momento.");
+		}
+		
+	}
+
+	@Override
+	public void verificaUsuario(Usuario requisitado) {
+		if(requisitado==null){
+			throw new IllegalArgumentException("Usuário não existe.");
 		}
 		
 	}

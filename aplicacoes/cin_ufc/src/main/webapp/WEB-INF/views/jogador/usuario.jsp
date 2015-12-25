@@ -28,7 +28,7 @@
 			<div class="col-sm-8 col-sm-offset-4 col-md-10 col-md-offset-2 toppad">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h2 class="panel-title">${usuarioParticipante.nome } ${usuarioParticipante.sobreNome }</h2>
+						<i class="fa fa-user"></i>&nbsp;&nbsp;${usuarioParticipante.nome } ${usuarioParticipante.sobreNome }
 					</div>
 					<div class="panel-body">
 						<div class="row">

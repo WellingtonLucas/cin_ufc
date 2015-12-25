@@ -1,6 +1,8 @@
 package br.ufc.cin.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,6 +11,7 @@ import javax.inject.Named;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.ReaberturaSubmissaoService;
 import br.ufc.cin.service.RodadaService;
@@ -41,15 +44,9 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 
 	@Override
 	public List<Rodada> atualizaStatusRodadas(List<Rodada> rodadas) {
-		Calendar calendario = Calendar.getInstance();
-		long tempoAtual = calendario.getTimeInMillis();
 		for (Rodada rodada : rodadas) {
-			if(rodada.getTermino().getTime() < tempoAtual){
-				rodada.setStatus(false);
-				update(rodada);
-			}
+			atualizaStatusRodada(rodada);
 		}
-		
 		return rodadas;
 	}
 
@@ -224,13 +221,15 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	private Long quantidadeDiasReaberturaMillis(Rodada rodada){
 		List<ReaberturaSubmissao> reaberturaSubmissaos = reaberturaSubmissaoService.findByRodada(rodada);
 		Integer qtdDias = 0;
-		for (ReaberturaSubmissao reaberturaSubmissao : reaberturaSubmissaos) {
-			Integer temp = Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
-			if(qtdDias < temp){
-				qtdDias = temp;
-			}
-			if(qtdDias==3){
-				break;
+		if(reaberturaSubmissaos!=null && !reaberturaSubmissaos.isEmpty()){
+			for (ReaberturaSubmissao reaberturaSubmissao : reaberturaSubmissaos) {
+				Integer temp = Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
+				if(qtdDias < temp){
+					qtdDias = temp;
+				}
+				if(qtdDias==3){
+					break;
+				}
 			}
 		}
 		return qtdDias * umDiaTimeInMillis();
@@ -254,5 +253,20 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public List<Rodada> organizarPorPerfil(List<Rodada> rodadas, Usuario usuario) {
+		List<Rodada> novaOrganizacao = new ArrayList<Rodada>();
+		Long now = new Date().getTime();
+		for (Rodada rodada : rodadas) {
+			if(rodada.getJogo().getProfessor().equals(usuario)){
+				return rodadas;
+			}
+			if(rodada.isStatus() || rodada.getTermino().getTime() < now){
+				novaOrganizacao.add(rodada);
+			}
+		}
+		return novaOrganizacao;
 	}
 }

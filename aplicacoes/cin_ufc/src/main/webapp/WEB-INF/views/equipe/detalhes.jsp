@@ -42,13 +42,13 @@
 							Detalhes da Empresa
 						</div>
 						<div class="panel-body">
-						<h4><strong class="col-sm-1 field">Nome:</strong></h4>
+						<h4><strong><label class="col-sm-2 field">Nome:</label></strong></h4>
 							<div class="col-sm-5 field-value">
 								<label>							
 									${equipe.nome }
 								</label>
 							</div>			
-							<h4><strong class="col-sm-2 field">Logo:</strong></h4>
+							<h4><strong><label class="col-sm-1 field">Logo:</label></strong></h4>
 							<c:if test="${ equipe.logo != null}">
 								<div  class="col-sm-3">
 									<img class="img-thumbnail" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }" alt="Logo da equipe" width="200" height="200" />
@@ -60,19 +60,30 @@
 								</div>
 							</c:if>
 							<br><br><br><br><br><br><br>	
-							<h4><strong class="col-sm-2 field">Ideia de Negócio:</strong></h4>
+							<h4><strong><label class="col-sm-2 field">Ideia de Negócio:</label></strong></h4>
 							<div class="col-sm-10 field-value">
 								<c:if test="${empty equipe.ideiaDeNegocio }">
 									<label>-</label>
 								</c:if>
 								<c:if test="${not empty equipe.ideiaDeNegocio }">
 									<article>
-										<label>							
+										<label>
 											${equipe.ideiaDeNegocio }
 										</label>
 									</article>
 								</c:if>
-							</div>		
+							</div>
+							<div class="form-group">
+								<h4><strong><label class="col-sm-2 field">Saldo (R$):</label></strong></h4>
+								<c:if test="${ equipe.saldo != null}">
+									<div class="col-sm-2 field-value">
+										${equipe.saldo}
+									</div>
+								</c:if>
+								<c:if test="${ equipe.saldo == null}">
+									<label>-</label>
+								</c:if>
+							</div>
 						</div>
 					</div>
 					<div class="panel panel-primary">

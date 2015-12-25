@@ -22,57 +22,59 @@
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<div class="col-sm-12">
-						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-						<h2><strong>Equipe: ${equipe.nome }</strong> - <small>Avaliações da Empresa</small></h2>
-						<hr>
-						<c:if test="${not empty erro}">
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
-							</div>
-						</c:if>
-						<c:if test="${not empty info}">
-							<div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${info}"></c:out>
-							</div>
-						</c:if>
-					</div>
-					<c:if test="${not empty entregas }">
-				       	<div class="col-sm-12">
-							<table id="tabela-avaliacoes" class="table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>Rodada</th>
-										<th>Entrega</th>
-										<th>Avaliação</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
-										<tr>
-											<td>
-												<a href="<c:url value="/jogo/${jogo.id}/rodada/${entrega.rodada.id }/detalhes"></c:url>">${entrega.rodada.nome}</a>
-											</td>
-											<td>
-												<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
-											</td>
-											<td>
-												<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/entrega/${entrega.id }/formulario/${entrega.gabarito.formulario.id }/avaliacao" ></c:url>">
-													<button class="btn btn-primary">Ver avaliação</button>
-												</a>
-											</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+					<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
+					<h2><strong>Equipe: ${equipe.nome }</strong> - <small>Avaliações da Empresa</small></h2>
+					<c:if test="${not empty erro}">
+						<div class="alert alert-warning alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${erro}"></c:out>
 						</div>
-					</c:if>	
+					</c:if>
+					<c:if test="${not empty info}">
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${info}"></c:out>
+						</div>
+					</c:if>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							Avaliações da Empresa
+						</div>
+						<div class="panel-body">
+					       	<div class="col-sm-12">
+								<table id="tabela-avaliacoes" class="table table-striped table-hover">
+									<thead>
+										<tr>
+											<th>Rodada</th>
+											<th>Entrega</th>
+											<th>Avaliação</th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
+											<tr>
+												<td>
+													<a href="<c:url value="/jogo/${jogo.id}/rodada/${entrega.rodada.id }/detalhes"></c:url>">${entrega.rodada.nome}</a>
+												</td>
+												<td>
+													<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
+												</td>
+												<td>
+													<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/entrega/${entrega.id }/formulario/${entrega.gabarito.formulario.id }/avaliacao" ></c:url>">
+														<button class="btn btn-primary">Ver avaliação</button>
+													</a>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

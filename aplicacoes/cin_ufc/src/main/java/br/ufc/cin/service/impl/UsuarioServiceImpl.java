@@ -115,4 +115,17 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario> implements U
 		}
 		throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);
 	}
+
+	@Override
+	public String definePermissaoHistorico(Jogo jogo, Usuario usuario,
+			Usuario requisitado) {
+		if (usuario.equals(jogo.getProfessor())) {			
+			return "professor";
+		}else if(usuario.equals(requisitado) && jogo.getAlunos().contains(usuario)){
+			return "alunoLogado";
+		}else{			
+			throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);
+		}
+		
+	}
 }

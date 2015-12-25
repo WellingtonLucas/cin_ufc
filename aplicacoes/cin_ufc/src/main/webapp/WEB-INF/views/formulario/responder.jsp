@@ -24,7 +24,6 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<h2><strong>${formulario.titulo }</strong></h2>						
-					<hr>				
 					<c:if test="${not empty erro}">
 						<div class="alert alert-warning alert-dismissible" role="alert">
 							<button type="button" class="close" data-dismiss="alert">
@@ -43,7 +42,7 @@
 					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4><strong>Equipe avaliada: ${entrega.equipe.nome }</strong> </h4>
+							<strong>Equipe avaliada: ${entrega.equipe.nome }</strong>
 						</div>
 						<div class="panel-body">
 							<form:form id="responderForm" role="form" commandName="resposta" class="form-horizontal" method="POST"

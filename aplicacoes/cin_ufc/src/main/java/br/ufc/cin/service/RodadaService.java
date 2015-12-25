@@ -3,6 +3,7 @@ package br.ufc.cin.service;
 import java.util.List;
 
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.Usuario;
 import br.ufc.quixada.npi.service.GenericService;
 
 public interface RodadaService extends GenericService<Rodada>{
@@ -54,4 +55,10 @@ public interface RodadaService extends GenericService<Rodada>{
 	 * Verifica a visibilidade da ativação reaberturas de submissões para uma rodada.
 	 * */
 	public abstract boolean isPosPrazoSubmissoesEReabertura(Rodada rodada);
+
+	/**
+	 * Lista somente as rodadas que estão ativas ou que se encerraram, eliminando as futuras da visão dos alunos.
+	 * Retorna todas as rodadas caso seja professor.
+	 * **/
+	public abstract List<Rodada> organizarPorPerfil(List<Rodada> rodadas, Usuario usuario);
 }

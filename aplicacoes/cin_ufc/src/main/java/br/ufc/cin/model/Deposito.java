@@ -20,6 +20,9 @@ public class Deposito {
 	
 	@Column
 	private Float quantia;
+	
+	@Column
+	private Float retorno;
 
 	public Integer getId() {
 		return id;
@@ -44,7 +47,15 @@ public class Deposito {
 	public void setQuantia(Float quantia) {
 		this.quantia = quantia;
 	}
-	
+
+	public Float getRetorno() {
+		return retorno;
+	}
+
+	public void setRetorno(Float retorno) {
+		this.retorno = retorno;
+	}
+
 	@Override
 	public String toString() {
 		return "ID: "+getId()+" quantia: " +getQuantia();

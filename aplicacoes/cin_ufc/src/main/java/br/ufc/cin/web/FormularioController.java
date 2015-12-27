@@ -90,7 +90,6 @@ public class FormularioController {
 		model.addAttribute("action", "formularios");
 		model.addAttribute("permissao", "professorForm");
 		model.addAttribute("formularios", formularios);
-
 		return PAGINA_LISTAR_FORMULARIOS;
 	}
 	
@@ -105,11 +104,13 @@ public class FormularioController {
 	}
 	
 	@RequestMapping(value = "/formulario", method = RequestMethod.POST)
-	public String cadastroFormulario(@ModelAttribute("formulario") Formulario formulario, Model model,
+	public String cadastroFormulario(@Valid@ModelAttribute("formulario") Formulario formulario, Model model,
 			HttpSession session, RedirectAttributes redirect, BindingResult result) {
 		if (result.hasErrors()) {
-			redirect.addFlashAttribute("erro", "Erro na formação do formulário.");
-			return REDIRECT_PAGINA_FORMULARIO;
+			model.addAttribute("erro", "Verifique os campos obrigatórios e tente novamente.");
+			model.addAttribute("action","erroCadastro");
+			model.addAttribute("formulario", formulario);
+			return PAGINA_CADASTRAR_FORMULARIO;
 		}
 		Usuario usuario = getUsuarioLogado(session);
 		try {
@@ -175,8 +176,10 @@ public class FormularioController {
 			HttpSession session, RedirectAttributes redirect, BindingResult result) {
 		
 		if (result.hasErrors()) {
-			redirect.addFlashAttribute("erro", "Erro ao editar formulário.");
-			return "redirect:/formulario/"+formulario.getId()+"/editar";
+			model.addAttribute("erro", "Verifique os campos obrigatórios e tente novamente.");
+			model.addAttribute("action","editar");
+			model.addAttribute("formulario", formulario);
+			return PAGINA_CADASTRAR_FORMULARIO;
 		}
 		try {
 			formularioService.verificaCamposObrigatorios(formulario);
@@ -226,7 +229,6 @@ public class FormularioController {
 		 	model.addAttribute("action", "copiar");
 			return PAGINA_CADASTRAR_FORMULARIO;
 		}
-
 		redirectAttributes.addFlashAttribute("erro", MENSAGEM_PERMISSAO_NEGADA);
 		return REDIRECT_PAGINA_LISTAR_JOGO;
 	}
@@ -295,13 +297,18 @@ public class FormularioController {
 		return PAGINA_RESPONDER_FORMULARIO;
 	}
 	
+	@RequestMapping(value = "/{idJogo}/entrega/{id}/formulario/{idForm}/responder", method = RequestMethod.GET)
+	public String responder(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,	
+			@PathVariable("id") Integer id) {
+		return "redirect:/jogo/"+idJogo+"/entrega/"+id+"/formulario/"+idForm;
+	}
 	@RequestMapping(value = "/{idJogo}/entrega/{id}/formulario/{idForm}/responder", method = RequestMethod.POST)
 	public String responder(@PathVariable("idJogo") Integer idJogo, @PathVariable("idForm") Integer idForm,	
 			@PathVariable("id") Integer id, Model model, HttpSession session,
 			@ModelAttribute("resposta") Resposta resposta, RedirectAttributes redirectAttributes,
 			BindingResult result) {
 		if (result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("erro", "Erro ao cadastrar um formulário.");
+			redirectAttributes.addFlashAttribute("erro", "Erro ao responder questionário.");
 			return "redirect:/jogo/"+idJogo+"/formulario/"+idForm;
 		}
 		Jogo jogo;

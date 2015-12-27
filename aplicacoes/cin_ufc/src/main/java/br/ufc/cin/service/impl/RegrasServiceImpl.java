@@ -14,6 +14,7 @@ import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.SolicitacaoConsultoria;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.RegrasService;
 import br.ufc.cin.util.Constants;
@@ -197,6 +198,31 @@ public class RegrasServiceImpl implements RegrasService {
 	public void verificaUsuario(Usuario requisitado) {
 		if(requisitado==null){
 			throw new IllegalArgumentException("Usuário não existe.");
+		}
+		
+	}
+
+	@Override
+	public void verificaSolicitacao(
+			SolicitacaoConsultoria solicitacaoConsultoria) {
+		if(solicitacaoConsultoria==null){
+			throw new IllegalArgumentException("Solicitação de consultoria não existe.");
+		}
+	}
+
+	@Override
+	public void verificaEquipeSolicitacao(Equipe equipe,
+			SolicitacaoConsultoria solicitacaoConsultoria) {
+		if(!solicitacaoConsultoria.getEquipe().equals(equipe)){
+			throw new IllegalArgumentException("Solicitação de consultoria não é da equipe informada.");
+		}
+	}
+
+	@Override
+	public void verificaRodadaSolicitacao(Rodada rodada,
+			SolicitacaoConsultoria solicitacaoConsultoria) {
+		if(!solicitacaoConsultoria.getConsultoria().getRodada().equals(rodada)){
+			throw new IllegalArgumentException("A consultoria não pertence a rodada especificada.");
 		}
 		
 	}

@@ -61,4 +61,6 @@ public interface RodadaService extends GenericService<Rodada>{
 	 * Retorna todas as rodadas caso seja professor.
 	 * **/
 	public abstract List<Rodada> organizarPorPerfil(List<Rodada> rodadas, Usuario usuario);
+
+	public abstract void atualizaStatusRanking(Rodada rodada);
 }

@@ -20,7 +20,7 @@
 	<div class="container-fluid">
 		<jsp:include page="../fragments/menu.jsp" />
 		<div class="row">
-			<div class="col-sm-8 col-sm-offset-4 col-md-10 col-md-offset-2 toppad">
+			<div class="col-sm-8 col-md-10 main">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">${usuario.nome } ${usuario.sobreNome }</h3>

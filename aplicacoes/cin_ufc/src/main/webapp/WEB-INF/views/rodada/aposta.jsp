@@ -23,7 +23,7 @@
 	<div class="container-fluid">
 		<jsp:include page="../fragments/menu.jsp" />
 		<div class="row">
-			<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<div class="col-sm-8 col-md-10 main">
 				<h2><strong>Rodada: ${rodada.nome }</strong> - Seu saldo é <strong>R$ ${aposta.saldo }</strong></h2>
 				<c:if test="${not empty erro}">
 					<div class="alert alert-warning alert-dismissible" role="alert">
@@ -49,7 +49,6 @@
 						<form:form id="apostar" role="form" class="form-horizontal" commandName="deposito"
 							servletRelativeAction="/jogo/${jogo.id }/rodada/${rodada.id }/apostar" method="POST">
 							<form:hidden path="equipe.id" value="${equipe.id }" />
-							
 							<div class="form-group">
 								<div class="form-item">
 									<label for="quantia" class="col-sm-3 control-label">Valor de aposta (R$):</label>

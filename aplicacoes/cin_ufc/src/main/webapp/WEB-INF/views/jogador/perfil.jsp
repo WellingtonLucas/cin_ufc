@@ -19,7 +19,7 @@
 
 	<div class="container-fluid">
 		<jsp:include page="../fragments/menu.jsp" />
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		<div class="col-sm-8 col-md-10 main">
 			<h2>${usuario.nome } ${usuario.sobreNome }</h2>
 			<c:if test="${not empty erro}">
 				<div class="alert alert-warning alert-dismissible" role="alert">

@@ -23,7 +23,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<jsp:include page="../fragments/menu.jsp" />
-					<div class="col-sm-8 col-sm-offset-4 col-md-10 col-md-offset-2 main">
+					<div class="col-sm-8 col-md-10 main">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<i class="fa fa-line-chart"></i>&nbsp;&nbsp;Rankings Rodada

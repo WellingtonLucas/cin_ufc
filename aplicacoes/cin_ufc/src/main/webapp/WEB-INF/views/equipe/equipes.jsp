@@ -20,7 +20,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../fragments/menu.jsp" />
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<div class="col-sm-8 col-md-10 main">
 				<h2>
 					<strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small>
 				</h2>
@@ -59,7 +59,10 @@
 							                    
 							                    <p> Veja mais detalhes
 							                    </p>    
-							                    <p><a class="btn btn-info" href="<c:url value="equipe/${equipe.id }" />">Detalhes</a></p>
+							                    <p>
+							                    	<a data-toggle="tooltip" data-placement="top" title="Veja detalhes da empresa."
+							                    		class="btn btn-success" href="<c:url value="equipe/${equipe.id }" />">Detalhes</a>
+							                    </p>
 							                </div>
 							            </div>
 							        </div>

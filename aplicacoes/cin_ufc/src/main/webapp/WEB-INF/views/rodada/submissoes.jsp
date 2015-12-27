@@ -24,7 +24,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
-				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<div class="col-sm-8 col-md-10 main">
 						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Últimas submissões da rodada</small>
 							<c:if test="${permissao != 'professor' }">- Seu saldo é <strong>R$ ${aposta.saldo }</strong></c:if>
 						</h2>

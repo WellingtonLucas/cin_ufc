@@ -26,14 +26,6 @@
 		<jsp:include page="../fragments/header.jsp" />
 		<div class ="container">
 			<h2><strong>${titulo}</strong></h2>
-			<c:if test="${not empty erro}">
-				<div class="alert alert-danger alert-dismissible" role="alert">
-					<button type="button" class="close" data-dismiss="alert">
-						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-					</button>
-					<c:out value="${erro}"></c:out>
-				</div>
-			</c:if>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<div class="panel-title">
@@ -43,7 +35,15 @@
 						</a>
 					</div>
 				</div>	
-				<div class="panel-body">			
+				<div class="panel-body">
+					<c:if test="${not empty erro}">
+						<div class="alert alert-danger alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${erro}"></c:out>
+						</div>
+					</c:if>
 					<form:form id="adicionarEquipeForm" role="form" class="form-horizontal" commandName="equipe" 
 					enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
 					
@@ -62,7 +62,7 @@
 						</div>
 						<div class="form-group">
 							<div class="form-item">
-								<label for="ideiaDeNegocio" class="col-sm-2 control-label">Ideia de negócio:</label>
+								<label for="ideiaDeNegocio" class="col-sm-2 control-label">Idéia de negócio:</label>
 								<div class="col-sm-8">
 									<form:textarea name="ideiaDeNegocio" id="ideiaDeNegocio" path="ideiaDeNegocio" class="form-control" />
 								</div>

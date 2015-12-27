@@ -19,47 +19,57 @@
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
-				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<div class="col-sm-8 col-md-10 main">
 					<h2><strong>${equipe.nome }</strong></h2>						
-					<c:if test="${not empty erro}">
-						<div class="alert alert-warning alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${erro}"></c:out>
-						</div>
-					</c:if>
-					<c:if test="${not empty info}">
-						<div class="alert alert-success alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${info}"></c:out>
-						</div>
-					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							Detalhes da Empresa
 						</div>
 						<div class="panel-body">
-						<h4><strong><label class="col-sm-2 field">Nome:</label></strong></h4>
-							<div class="col-sm-5 field-value">
-								<label>							
-									${equipe.nome }
-								</label>
-							</div>			
-							<h4><strong><label class="col-sm-1 field">Logo:</label></strong></h4>
-							<c:if test="${ equipe.logo != null}">
-								<div  class="col-sm-3">
-									<img class="img-thumbnail" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }" alt="Logo da equipe" width="200" height="200" />
+							<c:if test="${not empty erro}">
+								<div class="alert alert-warning alert-dismissible" role="alert">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<c:out value="${erro}"></c:out>
 								</div>
 							</c:if>
-							<c:if test="${ equipe.logo == null}">
-								<div  class="col-sm-3">
-									<img class="img-thumbnail"  src="<c:url value="/resources/imagens/boxvazia.gif" />" alt="Logo da equipe" width="200" height="200" />
+							<c:if test="${not empty info}">
+								<div class="alert alert-success alert-dismissible" role="alert">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<c:out value="${info}"></c:out>
 								</div>
 							</c:if>
-							<br><br><br><br><br><br><br>	
+							<div class="row">
+								<div class="col-md-3 col-lg-3 " align="center">
+									<c:if test="${ equipe.logo != null}">
+										<img class="img-circle"  width="200" height="200" 
+										src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }" 
+										alt="Logo da equipe" />
+									</c:if>
+									<c:if test="${ equipe.logo == null}">
+										<img class="img-circle"  width="200" height="200"  
+										src="<c:url value="/resources/imagens/boxvazia.gif" />" 
+										alt="Logo da equipe" />
+									</c:if>
+								</div>
+								<div class=" col-md-9 col-lg-9 ">
+									<table class="table table-user-information">
+										<tbody>
+											<tr>
+												<td><h4><strong>Nome:</strong></h4></td>
+												<td>${equipe.nome }</td>
+											</tr>
+											<tr>
+												<td><h4><strong>Saldo (R$):</strong></h4></td>
+												<td>${equipe.saldo }</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>	
 							<h4><strong><label class="col-sm-2 field">Ideia de Negócio:</label></strong></h4>
 							<div class="col-sm-10 field-value">
 								<c:if test="${empty equipe.ideiaDeNegocio }">
@@ -73,18 +83,39 @@
 									</article>
 								</c:if>
 							</div>
-							<div class="form-group">
-								<h4><strong><label class="col-sm-2 field">Saldo (R$):</label></strong></h4>
-								<c:if test="${ equipe.saldo != null}">
-									<div class="col-sm-2 field-value">
-										${equipe.saldo}
-									</div>
-								</c:if>
-								<c:if test="${ equipe.saldo == null}">
-									<label>-</label>
+						</div>
+						<c:if test="${(permissao eq 'professor') || (permissao eq 'membro') }">
+							<div class="panel-footer">
+								<a id="editar" href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/editar" ></c:url>">
+									<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
+								</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<c:if test="${permissao eq 'professor' }">
+									<c:if test="${equipe.status == true}">									
+										<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-equipe" href="#" 
+											data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/inativar">
+											</c:url>" data-name="${equipe.nome }">
+											<button class="btn btn-warning btn-lg">
+												Inativar&nbsp;<i class="glyphicon glyphicon-ban-circle"></i>
+											</button>
+										</a>
+									</c:if>
+									<c:if test="${equipe.status == false }">
+										<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-equipe" href="#" 
+											data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/ativar">
+											</c:url>" data-name="${equipe.nome }">
+											<button class="btn btn-success btn-lg">
+												Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>
+											</button>
+										</a>
+									</c:if>
+									<a id="excluir" data-toggle="modal" data-target="#confirm-delete2" href="#" 
+									data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/excluir"></c:url>" data-name="${equipe.nome }">
+										<button class="btn btn-danger btn-lg pull-right">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
+									</a>
 								</c:if>
 							</div>
-						</div>
+						</c:if>
 					</div>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
@@ -130,118 +161,9 @@
 							</div>
 						</div>
 					</div>
-					<c:if test="${(permissao eq 'professor') || (permissao eq 'membro') }">
-						<div class="col-sm-12">
-							<hr>
-							<div class="row placeholders">
-								<div class="form-group">	
-												
-										<div class="col-sm-2">				
-											<a id="editar" href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/editar" ></c:url>">
-												<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="fa fa-edit"></i></button>
-											</a>
-										</div>
-									<c:if test="${permissao eq 'professor' }">
-										<div class="col-sm-2">
-											<c:if test="${equipe.status == true}">									
-												<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-equipe" href="#" 
-													data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/inativar">
-													</c:url>" data-name="${equipe.nome }">
-													<button class="btn btn-warning btn-lg">
-														Inativar&nbsp;<i class="glyphicon glyphicon-ban-circle"></i>
-													</button>
-												</a>
-											</c:if>
-											<c:if test="${equipe.status == false }">
-												<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-equipe" href="#" 
-													data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/ativar">
-													</c:url>" data-name="${equipe.nome }">
-													<button class="btn btn-success btn-lg">
-														Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>
-													</button>
-												</a>
-											</c:if>
-										</div>
-										<div class="col-sm-2">
-											<a id="excluir" data-toggle="modal" data-target="#confirm-delete2" href="#" 
-											data-href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/excluir"></c:url>" data-name="${equipe.nome }">
-												<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="fa fa-trash-o"></i></button>
-											</a>					
-										</div>
-									</c:if>
-								</div>
-							</div>
-						</div>
-					</c:if>
+					
 					<c:if test="${(not empty entregas) && (permissao == 'membro') || (permissao == 'professor')}">
-						<div class="col-sm-12">
-							<hr>
-							<h3><strong>Histórico de submissões</strong></h3>
-							<div class="row placeholders">
-								<div class="timeline-centered">
-	    							<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
-										<c:if test="${entregaId.index == 0 }">
-											<div class="timeline-entry">
-												<div class="timeline-entry-inner">
-													<time class="timeline-time" datetime="${entrega.dia }">
-														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
-														<span>Hora: <span><fmt:formatDate pattern="HH:mm:ss" value="${entrega.dia }" /></span></span>
-													</time>
-													<div class="timeline-icon bg-success">
-														<i class="entypo-feather"></i>
-													</div>
-													<div class="timeline-label">
-														<h2>${entrega.usuario.nome } ${entrega.usuario.sobreNome }:
-													    	<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
-														</h2>
-														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
-													</div>
-												</div>
-											</div>
-										</c:if>
-										<c:if test="${(entregaId.index != 0) && (entregaId.index % 2 == 1) }">	
-											<div class="timeline-entry left-aligned">
-												<div class="timeline-entry-inner">
-													<time class="timeline-time" datetime="${entrega.dia }">
-														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
-														<span>Hora: <span><fmt:formatDate pattern="HH:mm:ss" value="${entrega.dia }" /></span></span>
-													</time>
-													<div class="timeline-icon bg-secondary">
-														<i class="entypo-suitcase"></i>
-													</div>
-													<div class="timeline-label">
-														<h2>${entrega.usuario.nome } ${entrega.usuario.sobreNome }:
-													    	<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
-														</h2>
-														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
-													</div>
-												</div>
-											</div>
-										</c:if>
-										<c:if test="${(entregaId.index != 0) && (entregaId.index % 2 == 0) }">	
-											<div class="timeline-entry">
-												<div class="timeline-entry-inner">
-													<time class="timeline-time" datetime="${entrega.dia }">
-														<span><fmt:formatDate pattern="dd/MM/yyyy" value="${entrega.dia }" /></span>
-														<span>Hora: <span><fmt:formatDate pattern="HH:mm:ss" value="${entrega.dia }" /></span></span>
-													</time>
-													<div class="timeline-icon bg-secondary">
-														<i class="entypo-suitcase"></i>
-													</div>
-													<div class="timeline-label">
-														<h2>${entrega.usuario.nome } ${entrega.usuario.sobreNome }:
-													    	<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
-														</h2>
-														<h2>Entrega feita na rodada: ${entrega.rodada.nome}</h2>
-													</div>
-												</div>
-											</div>
-										</c:if>
-							
-									</c:forEach>
-								</div>
-							</div>
-						</div>
+						<jsp:include page="historicoSubmissoes.jsp" />
 					</c:if>
 				</div>
 			</div>
@@ -252,7 +174,7 @@
 		<div class="modal fade" id="confirm-delete2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header btn-danger">
 	        			<h4 class="modal-title" id="excluirModalLabel">Excluir</h4>
 						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					</div>
@@ -286,7 +208,7 @@
 		<div class="modal fade" id="confirm-inativar-equipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header btn-warning">
 	        			<h4 class="modal-title" id="inativarModalLabel">Inativar</h4>
 	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					</div>

@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 @Entity
 public class Equipe {
 	public Equipe() {
@@ -31,6 +33,7 @@ public class Equipe {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@NotEmpty(message = "O nome é obrigatório.")
 	@Column
 	private String nome;
 	
@@ -63,6 +66,9 @@ public class Equipe {
 	private List<SaldoNaRodada> saldosNasRodadas;
 	
 	private Float saldo;
+	
+	@OneToMany(mappedBy = "equipe", cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE})
+	private List<SolicitacaoConsultoria> statusConsultorias;
 	
 	@Transient
 	private boolean statusNaRodada;
@@ -101,6 +107,14 @@ public class Equipe {
 		if (!usuario.getEquipes().contains(this)) {
 			usuario.getEquipes().add(this);
 		}
+	}
+	
+	public boolean addStatusConsultoria(SolicitacaoConsultoria statusConsultoria) {
+		if (!getStatusConsultorias().contains(statusConsultoria)) {
+			getStatusConsultorias().add(statusConsultoria);
+			return true;
+		}
+		return false;
 	}
 	
 	public List<SaldoNaRodada> getSaldosNasRodadas() {
@@ -198,6 +212,14 @@ public class Equipe {
 
 	public void setSaldo(Float saldo) {
 		this.saldo = saldo;
+	}
+	
+	public List<SolicitacaoConsultoria> getStatusConsultorias() {
+		return statusConsultorias;
+	}
+
+	public void setStatusConsultorias(List<SolicitacaoConsultoria> statusConsultorias) {
+		this.statusConsultorias = statusConsultorias;
 	}
 
 	public String toString(){

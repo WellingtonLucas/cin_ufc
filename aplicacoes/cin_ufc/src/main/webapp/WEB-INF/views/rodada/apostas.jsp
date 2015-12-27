@@ -20,7 +20,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
-				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<div class="col-sm-8 col-md-10 main">
 					<h2><strong>${rodada.nome }</strong> - Histórico de Investimentos</h2>
 					<c:if test="${not empty info}">
 						<div class="alert alert-success alert-dismissible" role="alert">

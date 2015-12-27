@@ -102,20 +102,31 @@ public class EquipeController {
 		return PAGINA_CADASTRAR_EQUIPE;
 	}
 
+	@RequestMapping(value = "/{idEquipe}/equipe/nova", method = RequestMethod.GET)
+	public String cadastrar(@PathVariable("idEquipe") Integer id){
+		return "redirect:/jogo/" + id + "/equipe/nova";
+	}
+	
 	@RequestMapping(value = "/{idEquipe}/equipe/nova", method = RequestMethod.POST)
 	public String cadastrar(
 			@PathVariable("idEquipe") Integer id,
-			@ModelAttribute("equipe") Equipe equipe, BindingResult result,
+			@Valid Equipe equipe, BindingResult result,
 			@RequestParam("anexo") MultipartFile anexo,
 			HttpSession session, RedirectAttributes redirect, Model model) {
 		if (result.hasErrors()) {
-			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
-			return "redirect:/jogo/" + id + "/equipe/nova";
+			model.addAttribute("equipe", equipe);
+			model.addAttribute("action", "cadastrar");
+			model.addAttribute("editor", "equipe");
+			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
+			return PAGINA_CADASTRAR_EQUIPE;
 		}
 		Jogo jogo = jogoService.find(Jogo.class, id);
 		Documento imagem;
+		Usuario usuario = getUsuarioLogado(session);
 		try {
 			regrasService.verificaJogo(jogo);
+			regrasService.verificaSeProfessor(usuario, jogo);
+			equipeService.verificaNome(equipe);
 			imagem = documentoService.verificaAnexoImagem(anexo, equipe);
 			equipe.setLogo(imagem);
 			equipe.setJogo(jogo);
@@ -204,11 +215,13 @@ public class EquipeController {
 			@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
 			@RequestParam("anexo") MultipartFile anexo, @PathVariable("idEquipe") Integer idE, 
 			@PathVariable("idJogo") Integer idJ, @Valid Equipe equipe, BindingResult result, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, Model model) {
 		if (result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("erro", "Erro ao editar equipe.");
-			return "redirect:/jogo/" + idJ + "/equipe/" + equipe.getId()
-					+ "/editar";
+			model.addAttribute("equipe", equipe);
+			model.addAttribute("editor", "equipe");
+			model.addAttribute("action", "editar");
+			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
+			return PAGINA_CADASTRAR_EQUIPE;
 		}
 		Jogo jogo = jogoService.find(Jogo.class, idJ);
 		Equipe oldEquipe = equipeService.find(Equipe.class, equipe.getId());
@@ -216,6 +229,7 @@ public class EquipeController {
 		try {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaEquipe(oldEquipe);
+			equipeService.verificaNome(equipe);
 			regrasService.verificaEquipeJogo(oldEquipe, jogo);
 			regrasService.verificaMembroOuProfessorEquipe(usuario, oldEquipe);
 		} catch (IllegalArgumentException e) {
@@ -394,6 +408,11 @@ public class EquipeController {
 		return PAGINA_ADD_PARTICIPANTES_EQUIPE;
 	}
 	
+	@RequestMapping(value = "jogo/equipe/participantes/vincular", method = RequestMethod.GET)
+	public String vincular(){
+		return REDIRECT_PAGINA_LISTAR_JOGO;
+	}
+	
 	@RequestMapping(value = "jogo/equipe/participantes/vincular", method = RequestMethod.POST)
 	public String vincular(Model model, HttpSession session, @ModelAttribute("equipe") Equipe equipe, 
 			RedirectAttributes redirectAttributes, BindingResult result) {
@@ -542,6 +561,14 @@ public class EquipeController {
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("equipe", equipe);
 		return PAGINA_HISTORICO_EQUIPE;
+	}
+	
+	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/fator/{idFator}", method = RequestMethod.GET)
+	public String atualizarFator(@RequestParam("fatorDeAposta") String fatorString,
+			@PathVariable("idEquipe") Integer idEquipe,
+			@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("idFator") Integer idFator){
+		return "redirect:/jogo/"+idJogo+"/equipe/"+idEquipe+"/historico";
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/fator/{idFator}", method = RequestMethod.POST)

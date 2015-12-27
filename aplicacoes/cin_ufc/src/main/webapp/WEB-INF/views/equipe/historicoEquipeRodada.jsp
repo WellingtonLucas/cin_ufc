@@ -17,7 +17,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../fragments/menu.jsp" />
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<div class="col-sm-8 col-md-10 main">
 				<div class="col-sm-12">
 					<h2>
 						<strong>Histórico da empresa </strong><small>${equipe.nome } </small>

@@ -240,6 +240,22 @@ $(document).ready(function() {
         }
 	});
 	
+	$('#servico-form').bootstrapValidator({
+        feedbackIcons: {
+        	valid: 'glyphicon glyphicon-ok',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+        	valor:{
+            	validators:{
+            		notEmpty:{
+            			message: 'Você precisa definir um valor para o serviço.'
+            		}
+            	}
+            }
+        }
+	});
+	
     $("#inicio").datepicker({
 		format : "dd/mm/yyyy",
 		todayBtn : "linked",
@@ -358,6 +374,19 @@ $(document).ready(function() {
 		"order" : [[ 0, 'desc' ]],
 		"columnDefs" : [ 
 		    {className: "col-sm-2", "targets": [2]},
+		 ],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	
+	$('#tabela-solicitacoes').DataTable({
+		"order" : [[ 2, 'desc' ]],
+		"columnDefs" : [ 
+            {"targets" : 1, "orderable" : false},
+            {className: "text-center", "targets": [1]},
+            {className: "text-center", "targets": [2]},
+            {className: "text-center", "targets": [3]}
 		 ],
 		"language": {
             "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"

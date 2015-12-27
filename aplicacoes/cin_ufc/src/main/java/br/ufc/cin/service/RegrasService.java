@@ -9,6 +9,7 @@ import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.SolicitacaoConsultoria;
 import br.ufc.cin.model.Usuario;
 
 /**
@@ -118,4 +119,13 @@ public interface RegrasService {
 			Rodada rodada);
 
 	public abstract void verificaUsuario(Usuario requisitado);
+
+	public abstract void verificaSolicitacao(
+			SolicitacaoConsultoria solicitacaoConsultoria);
+
+	public abstract void verificaEquipeSolicitacao(Equipe equipe,
+			SolicitacaoConsultoria solicitacaoConsultoria);
+
+	public abstract void verificaRodadaSolicitacao(Rodada rodada,
+			SolicitacaoConsultoria solicitacaoConsultoria);
 }

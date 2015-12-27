@@ -32,20 +32,22 @@ public class Usuario {
 	private Integer id;
 
 	@Column(nullable = false)
-	@NotEmpty
+	@NotEmpty(message = "O nome é obrigatório.")
 	private String nome;
 
 	@Column
 	private String sobreNome;
 
 	@Column
+	@NotEmpty(message = "O curso é obrigatório.")
 	private String curso;
 
-	@Column(nullable=false)
+	@Column
+	@NotEmpty(message = "A senha é obrigatória.")
 	private String senha;
 
 	@Column(nullable = false, unique = true)
-	@NotEmpty
+	@NotEmpty(message = "O email é obrigatório.")
 	private String email;
 
 	@Column

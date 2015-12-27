@@ -77,10 +77,12 @@ public class RankingController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		try{
-			apostaService.atualizaSaldoEquipes(jogo,rodada);
-			apostaService.atualizaSaldoAlunos(jogo,rodada);
-			rodada.setStatusRaking(true);
-			rodadaService.update(rodada);
+			if(!rodada.isStatusRaking()){
+				apostaService.atualizaSaldoEquipes(jogo,rodada);
+				apostaService.atualizaSaldoAlunos(jogo,rodada);
+				rodada.setStatusRaking(true);
+				rodadaService.update(rodada);
+			}
 		} catch (IllegalAccessError e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
@@ -167,7 +169,6 @@ public class RankingController {
 	public String equipes(@PathVariable("idJogo") Integer idJogo,@PathVariable("idRodada") Integer idRodada,
 			HttpSession session,
 			RedirectAttributes redirectAttributes, Model model) {
-
 		Jogo jogo;
 		Rodada rodada;
 		Usuario usuario = getUsuarioLogado(session);

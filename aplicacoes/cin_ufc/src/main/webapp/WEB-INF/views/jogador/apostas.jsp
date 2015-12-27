@@ -20,7 +20,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
-				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<div class="col-sm-8 col-md-10 main">
 					<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
 					<h2>Histórico de Investimentos</h2>
 					<c:if test="${not empty info}">
@@ -43,6 +43,7 @@
 											<th>Rodada</th>
 											<th>Equipe</th>
 											<th>Quantia</th>
+											<th>Retorno</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -56,6 +57,7 @@
 														<a href="<c:url value="/jogo/${jogo.id}/equipe/${deposito.equipe.id }"></c:url>">${deposito.equipe.nome }</a> 
 													</td>
 													<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.quantia }" /></td>
+													<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.retorno }" /> </td>
 												</tr>
 											</c:forEach>
 										</c:forEach>

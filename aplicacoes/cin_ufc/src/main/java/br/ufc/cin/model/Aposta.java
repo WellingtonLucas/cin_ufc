@@ -24,7 +24,7 @@ public class Aposta {
 	@ManyToOne
 	private Usuario apostador;
 	
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
+	@OneToMany(cascade = {CascadeType.ALL})
 	private List<Deposito> depositos;
 
 	@OneToOne

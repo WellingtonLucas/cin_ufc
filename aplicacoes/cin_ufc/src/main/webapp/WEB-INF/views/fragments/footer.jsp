@@ -12,7 +12,7 @@
 <script src="<c:url value="/webjars/datatables/1.10.9/js/jquery.dataTables.min.js" />"></script>
 <script src="<c:url value="/webjars/datatables/1.10.9/js/dataTables.bootstrap.min.js" />"></script>
 <script src="<c:url value="/webjars/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.js" />"></script>
-<script src="<c:url value="/resources/js/bootstrap-datepicker.pt-BR.js" />"></script>
+<script src="<c:url value="/webjars/bootstrap-datepicker/1.4.0/locales/bootstrap-datepicker.pt-BR.min.js" />"></script>
 <c:if test="${editor != 'rodada' }">
 	<script src="<c:url value="/resources/js/funcoes.js" />"></script>
 </c:if>
@@ -33,7 +33,8 @@
 <script src="<c:url value="/resources/js/dynamic-avatar-blur.js" />"></script>
 <script src="<c:url value="/resources/js/readmore.min.js" />"></script>
 <script src="<c:url value="/webjars/ckeditor/4.5.4/full/ckeditor.js"/>"></script>
-<c:if test="${editor eq 'equipe' }">
+<script src="<c:url value="/resources/js/cin.js" />"></script>
+<c:if test="${editor eq 'equipe'}">
 	<script>
 		CKEDITOR.replace('ideiaDeNegocio');
 		CKEDITOR.config.resize_enabled = false;
@@ -46,13 +47,9 @@
 		CKEDITOR.config.resize_enabled = false;
 	</script>
 </c:if>
-<c:if test="${editor eq 'rodada' }">
+<c:if test="${editor eq 'rodada' && (action eq 'editar' || action eq 'cadastrar') }">
 	<script>
 		CKEDITOR.replace('descricao');
 		CKEDITOR.config.resize_enabled = false;
 	</script>
 </c:if>
-
-<script>
-	$('article').readmore();
-</script>

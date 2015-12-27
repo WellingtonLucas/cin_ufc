@@ -45,7 +45,7 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 	
 	@Inject
 	private NotaEquipeRodadaService notaEquipeRodadaService;
-	
+
 	@Override
 	public Aposta findByUsuarioRodada(Usuario apostador, Rodada rodada) {
 		return apostaRepository.findByUsuarioRodada(apostador, rodada);
@@ -189,6 +189,8 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 			if(now > rodada.getTermino().getTime() || rodada.isStatus()){
 				Aposta aposta = findByUsuarioRodada(requisitado, rodada);
 				if(aposta!=null){
+					atualizaDepositos(aposta.getDepositos(), rodada);
+					update(aposta);
 					apostas.add(aposta);
 				}
 			}
@@ -199,5 +201,12 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 		return apostas;
 	}
 
-	
+	private void atualizaDepositos(List<Deposito> depositos, Rodada rodada){
+		for (Deposito deposito : depositos) {
+			NotaEquipeRodada nota = notaEquipeRodadaService.findByEquipeRodada(deposito.getEquipe(), rodada);
+			if(nota!=null && nota.getFatorDeAposta()!=null){
+				deposito.setRetorno(nota.getFatorDeAposta() * deposito.getQuantia());
+			}
+		}
+	}
 }

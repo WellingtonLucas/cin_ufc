@@ -11,8 +11,8 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">			
-				<li><a class="glyphicon glyphicon-home btn-lg" data-tooggle="tooltip"  data-placement="bottom"
-				title="Principal" href="<c:url value="/jogo/listar" />"></a></li>
+				<li><a class="glyphicon glyphicon-home btn-lg" data-toggle="tooltip" data-placement="bottom"
+				title="Página principal" href="<c:url value="/jogo/listar" />"></a></li>
 				<li class="dropdown">
 	              <a href="#" class="dropdown-toggle glyphicon glyphicon-menu-down btn-lg" data-toggle="dropdown" role="button" 
 	              aria-haspopup="true" aria-expanded="false"></a>

@@ -164,22 +164,22 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	@Override
 	public void verificarDatas(Rodada rodada) {
 		if(rodada.getInicio().getTime() > rodada.getTermino().getTime()){
-			throw new IllegalArgumentException("A data de início deve ser anterior a data de término.");
+			throw new IllegalAccessError("A data de início deve ser anterior a data de término.");
 		}
 		if(rodada.getInicio().getTime() > rodada.getPrazoSubmissao().getTime()){
-			throw new IllegalArgumentException("O prazo de submissão deve ser posterior a data de início.");
+			throw new IllegalAccessError("O prazo de submissão deve ser posterior a data de início.");
 		}
 		if(rodada.getInicio().getTime() > rodada.getTerminoAvaliacao().getTime()){
-			throw new IllegalArgumentException("O prazo de avaliação deve ser posterior a data de início.");
+			throw new IllegalAccessError("O prazo de avaliação deve ser posterior a data de início.");
 		}
 		if(rodada.getTermino().getTime() < rodada.getPrazoSubmissao().getTime()){
-			throw new IllegalArgumentException("O prazo de submissão deve ser anterior a data de término.");
+			throw new IllegalAccessError("O prazo de submissão deve ser anterior a data de término.");
 		}
 		if(rodada.getTermino().getTime() < rodada.getTerminoAvaliacao().getTime()){
-			throw new IllegalArgumentException("O prazo de Avaliação deve ser anterior a data de término.");
+			throw new IllegalAccessError("O prazo de Avaliação deve ser anterior a data de término.");
 		}
 		if(rodada.getTerminoAvaliacao().getTime() < rodada.getPrazoSubmissao().getTime()){
-			throw new IllegalArgumentException("O prazo de submissão deve ser anterior ao prazo de avaliação.");
+			throw new IllegalAccessError("O prazo de submissão deve ser anterior ao prazo de avaliação.");
 		}
 	}
 
@@ -268,5 +268,14 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 			}
 		}
 		return novaOrganizacao;
+	}
+
+	@Override
+	public void atualizaStatusRanking(Rodada rodada) {
+		Long now = new Date().getTime();
+		if(rodada.getTerminoAvaliacao().getTime() > now && rodada.isStatusRaking()){
+			rodada.setStatusRaking(false);
+			update(rodada);
+		}
 	}
 }

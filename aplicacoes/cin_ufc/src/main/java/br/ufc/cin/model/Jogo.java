@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,6 +45,7 @@ public class Jogo implements Serializable {
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
+	@NotEmpty(message = "A descrição é obrigatória.")
 	@Column
 	private String descricao;
 
@@ -52,17 +54,19 @@ public class Jogo implements Serializable {
 	@Column
 	private String regras;
 
+	@NotNull(message = "Data de início é obrigatória.")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date inicio;
 
+	@NotNull(message = "Data de término é obrigatória.")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date termino;
 
-	@NotEmpty
+	@NotEmpty(message = "O semestre é obrigatório.")
 	@Column
 	private String semestre;
 
-	@NotEmpty
+	@NotEmpty(message="O nome do curso é obrigatório.")
 	@Column(name = "nome_curso")
 	private String nomeDoCurso;
 

@@ -20,6 +20,7 @@ public class Pergunta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@NotNull(message = "O enunciado é obrigatório.")
 	@Column(columnDefinition="TEXT")
 	private String descricao;
 	

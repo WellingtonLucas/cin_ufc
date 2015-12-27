@@ -14,7 +14,7 @@
 			<c:set var="titulo" value="Novo Jogo"></c:set>
 		</c:if>
 		<c:if test="${action eq 'editar' }">
-			<c:set var="url" value="/jogo/editar"></c:set>
+			<c:set var="url" value="/jogo/${jogo.id}/editar"></c:set>
 			<c:set var="titulo" value="Editar - ${jogo.nomeDoCurso } "></c:set>
 		</c:if>
 		
@@ -26,16 +26,6 @@
 		<jsp:include page="../fragments/header.jsp" />
 		<div class ="container">
 			<h2>${titulo}</h2>
-			<c:if test="${not empty erro}">
-				<div class="col-sm-12">
-					<div class="alert alert-danger alert-dismissible" role="alert">
-						<button type="button" class="close" data-dismiss="alert">
-							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-						</button>
-						<c:out value="${erro}"></c:out>
-					</div>
-				</div>
-			</c:if>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<div class="panel-title">
@@ -46,10 +36,19 @@
 					</div>
 				</div>	
 				<div class="panel-body">
+					<c:if test="${not empty erro}">
+						<div class="col-sm-12">
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert">
+									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+								</button>
+								<c:out value="${erro}"></c:out>
+							</div>
+						</div>
+					</c:if>
 					<form:form id="adicionarJogoForm" role="form" class="form-horizontal" commandName="jogo" enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
 						<form:hidden path="id" />
 						<form:hidden path="status" />
-		
 						<div class="form-group">
 							<div class="form-item">
 								<label for="nomeDoCurso" class="col-sm-2 control-label" >Nome do Curso:<span class="required">*</span></label>

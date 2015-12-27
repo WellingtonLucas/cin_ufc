@@ -16,6 +16,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,18 +31,22 @@ public class Rodada {
 	private Integer id;
 	
 	@Column
-	@NotEmpty
+	@NotEmpty(message = "O nome é obrigatório.")
 	private String nome;
 	
+	@NotNull(message = "A data de início é obrigatória.")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date inicio;
-
+	
+	@NotNull(message = "A data de término é obrigatória.")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date termino;
 	
+	@NotNull(message = "O prazo de submissões é obrigatório.")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date prazoSubmissao;
 	
+	@NotNull(message = "O prazo para avaliações é obrigatório.")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date terminoAvaliacao;
 	

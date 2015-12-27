@@ -87,13 +87,16 @@ public class UsuarioController {
 	
 	@Inject
 	private ApostaService apostaService;
+	
 	@RequestMapping(value = "/cadastre-se", method = RequestMethod.POST)
 	public String cadastrarPessoa(HttpSession session, Model model,
 			@Valid @ModelAttribute("usuario") Usuario usuario,
 			BindingResult result, RedirectAttributes redirect) {
 		
 		if (result.hasErrors()) {
+			model.addAttribute("erro", "Preencha todos os campos obrigatórios.");
 			model.addAttribute("cadastro", true);
+			model.addAttribute("usuario", usuario);
 			return "login";
 		}
 		if(usuarioService.getUsuarioByEmail(usuario.getEmail()) != null){
@@ -107,8 +110,6 @@ public class UsuarioController {
 			redirect.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LOGIN;
 		}
-		
-			
 		usuario.setHabilitado(true);
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		usuario.setSenha(encoder.encodePassword(usuario.getSenha(), ""));
@@ -183,6 +184,11 @@ public class UsuarioController {
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("action", "profile");
 		return PAGINA_PROFILE_JOGADOR;
+	}
+	
+	@RequestMapping(value = "/atualizar", method = RequestMethod.GET)
+	public String atualizar(){
+		return "redirect:/usuario/perfil";
 	}
 	
 	@RequestMapping(value = "/atualizar", method = RequestMethod.POST)

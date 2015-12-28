@@ -8,6 +8,7 @@ import java.util.List;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Aposta;
+import br.ufc.cin.model.Consultoria;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
@@ -225,6 +226,21 @@ public class RegrasServiceImpl implements RegrasService {
 			throw new IllegalArgumentException("A consultoria não pertence a rodada especificada.");
 		}
 		
+	}
+
+	@Override
+	public void verificaSeAluno(Usuario usuario, Jogo jogo) {
+		if(!jogo.getAlunos().contains(usuario)){
+			throw new IllegalArgumentException("Somente alunos podem efetuar apostas.");
+		}
+		
+	}
+
+	@Override
+	public void verificaConsultoria(Consultoria consultoria) {
+		if(consultoria.getId()==null){
+			throw new IllegalArgumentException("Primeiramente crie a consultoria para esta rodada.");
+		}
 	}
 
 }

@@ -6,35 +6,35 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<i class="fa fa-money"></i>&nbsp;&nbsp;Melhores empresas da rodada.
+		<h3 class="panel-title">Melhores investidores da rodada</h3>
 	</div>
 	<div class="panel-body">
-		<c:forEach var="saldo" items="${saldos }" varStatus="idEqui">
+		<c:forEach var="aposta" items="${apostas }" varStatus="idAlu">
 			<ul class="media-list">
 				<li class="media">
 					<div class="col-md-3 col-lg-3 " align="center">
 						<a class="pull-left" href="#"> 
-							<c:if test="${saldo.equipe.logo == null }">
+							<c:if test="${aposta.apostador.foto == null }">
 								<img class="img-circle"  width="200" height="200"
-								src="<c:url value="/resources/imagens/boxvazia.gif" />"
-								alt="Foto de ${saldo.equipe.nome }" />
+								src="<c:url value="/resources/imagens/empty_profile.gif" />"
+								alt="Foto de ${aposta.apostador.nome }" />
 							</c:if>
-							<c:if test="${saldo.equipe.logo != null }">
-								<img alt="Foto de ${saldo.equipe.nome} "
-									src="data:${saldo.equipe.logo.extensao };base64,${saldo.equipe.logo.encode }"
+							<c:if test="${aposta.apostador.foto != null }">
+								<img alt="Foto de ${aposta.apostador.nome} "
+									src="data:${aposta.apostador.foto.extensao };base64,${aposta.apostador.foto.encode }"
 									class="img-circle"  width="200" height="200" />
 							</c:if>
 						</a>
 					</div>
 					<div class="container media-body">
 						<div class="well well-lg">
-							<h1 class="media-heading text-uppercase reviews"><span class="label label-success">${idEqui.count }º</span>
-								${saldo.equipe.nome} 
+							<h1 class="media-heading text-uppercase reviews"><span class="label label-success">${idAlu.count }º</span>
+								${aposta.apostador.nome} ${aposta.apostador.sobreNome}
 							</h1>
 							<h2>
-								Saldo na Rodada = R$ <fmt:formatNumber currencyCode="BRL" maxFractionDigits="2" value="${saldo.saldoComFator}" />
+								Saldo = R$ <fmt:formatNumber currencyCode="BRL" maxFractionDigits="2" value="${aposta.retorno}" />
 							</h2>
-							<p class="media-comment"><i class="glyphicon glyphicon-asterisk"></i>Parabéns pelo ótimo desempenho!</p>
+							<p class="media-comment"><i class="glyphicon glyphicon-asterisk"></i>Parabéns pelas escolhas!</p>
 						</div>
 					</div>
 				</li>

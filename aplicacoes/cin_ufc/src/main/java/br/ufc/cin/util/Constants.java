@@ -150,4 +150,6 @@ public class Constants {
 	public static final String MENSAGEM_ERRO_CONSULTORIA_CAMPOS_OBG = "Tente novamente, algum campo obrigatório ficou em branco.";
 	
 	public static final String MENSAGEM_SOLICITACAO_CONSULTORIA = "Solicitação de consultoria enviada com sucesso.";
+	
+	public static final String MENSAGEM_RODADA_ATUALIZADO = "Rodada atualizada com sucesso.";
 }

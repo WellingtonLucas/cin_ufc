@@ -32,11 +32,17 @@
 							<div class="panel-body">
 						        <p class="lead">Escolha uma das opções abaixo para visualizar os respectivos rankings gerais.</p>
 						        <div>
-						        	<a class="btn btn-lg btn-success col-sm-3" href="<c:url value="/jogo/${jogo.id }/rankings-alunos"></c:url>" role="button">Investidores <i class="glyphicon glyphicon-list"></i></a>
+						        	<a data-toggle="tooltip" data-placement="top" title="Ranking com os alunos com maior retorno de investimento no jogo."
+						        		class="btn btn-lg btn-success col-sm-3" href="<c:url value="/jogo/${jogo.id }/rankings-alunos"></c:url>" 
+						        		role="button"><i class="fa fa-money"></i>&nbsp;&nbsp;Investidores
+						        	</a>
 						        </div>
 						        <div class="col-sm-1"></div>
 						        <div>
-						        	<a class="btn btn-lg btn-primary col-sm-3" href="<c:url value="/jogo/${jogo.id }/rankings-equipes"></c:url>" role="button">Empresas <i class="glyphicon glyphicon-list"></i></a>
+						        	<a data-toggle="tooltip" data-placement="top" title="Ranking com as equipes com maiores investimentos recebidos no jogo."
+						        		class="btn btn-lg btn-primary col-sm-3" href="<c:url value="/jogo/${jogo.id }/rankings-equipes"></c:url>" 
+						        		role="button"><i class="fa fa-industry"></i>&nbsp;&nbsp;Empresas
+						        	</a>
 						        </div>
 					        </div>
 					    </div> 
@@ -50,5 +56,6 @@
 				</div>
 			</div>
 		</div>
+		<jsp:include page="../fragments/footer.jsp" />
 	</body>
 </html>

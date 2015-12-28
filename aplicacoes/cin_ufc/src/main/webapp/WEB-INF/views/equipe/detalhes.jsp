@@ -20,7 +20,6 @@
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-md-10 main">
-					<h2><strong>${equipe.nome }</strong></h2>						
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							Detalhes da Empresa
@@ -59,12 +58,15 @@
 									<table class="table table-user-information">
 										<tbody>
 											<tr>
-												<td><h4><strong>Nome:</strong></h4></td>
-												<td>${equipe.nome }</td>
+												<td><h4><strong>Nome: ${equipe.nome }</strong></h4></td>
 											</tr>
 											<tr>
-												<td><h4><strong>Saldo (R$):</strong></h4></td>
-												<td>${equipe.saldo }</td>
+												<td>
+													<h4><strong>
+													Saldo (R$): &nbsp;&nbsp;<fmt:formatNumber currencyCode="BRL" maxFractionDigits="2" value="${equipe.saldo }" />
+														</strong>
+													</h4>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -149,7 +151,8 @@
 														<td>
 															<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
 																data-href="<c:url value="${equipe.id }/usuario/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
-																<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
+																<button data-tooggle="tooltip"  data-placement="left" title="Desvincule ${usuario.nome } da empresa ${equipe.nome}" 
+																 class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
 															</a>
 														</td>
 													</c:if>

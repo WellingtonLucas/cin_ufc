@@ -18,6 +18,7 @@ import br.ufc.cin.service.CalculoNotaService;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.HistoricoService;
 import br.ufc.cin.service.RespostaService;
+import br.ufc.cin.service.RodadaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
@@ -35,6 +36,9 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 	@Inject
 	private EntregaService entregaService;
 	
+	@Inject
+	private RodadaService rodadaService;
+	
 	@Override
 	public Historico buscarPorJogoUsuario(Jogo jogo, Usuario usuario) {
 		return historicoRepository.buscarPorJogoUsuario(jogo, usuario);
@@ -42,16 +46,16 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 
 	@Override
 	public Float calculaMedia(Historico historico) {
-		Float media = -0f;
+		Float media = 0f;
 		if(historico.getNotas()!= null && !historico.getNotas().isEmpty()){
 			for (Nota nota : historico.getNotas()) {
 				if(nota != null && nota.getValor()!= null){
 					media += nota.getValor();
 				}
 			}
-			return media/historico.getNotas().size();
+			media = media/historico.getNotas().size();
 		}
-		return -1f;
+		return media;
 	}
 
 	@Override
@@ -61,23 +65,22 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 			historico = criarNovasNotas(historico, rodadas);
 		}
 		for (Rodada rodada : rodadas) {
-			if(rodada.isStatusRaking()){
-				if(!historico.getNotas().isEmpty()){
-					for(Nota nota: historico.getNotas()){
-						if(nota.getRodada().equals(rodada)){
-							List<Resposta> respostas = new ArrayList<Resposta>();
-							for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
-								Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
-								if(resposta != null){		
-									respostas.add(resposta);
-								}
-							}
-							if(rodada.isStatusRaking() && !respostas.isEmpty()){
-								nota.setValor(calculoNotaService.calculoMedia(respostas));
-								historico.addNota(nota);
-							}
+			for(Nota nota: historico.getNotas()){
+				if(nota.getRodada().equals(rodada)){
+					List<Resposta> respostas = new ArrayList<Resposta>();
+					for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
+						Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
+						if(resposta != null){		
+							respostas.add(resposta);
 						}
 					}
+					nota.setSatus(false);
+					nota.setValor(0F);
+					if(rodada.isStatusRaking() && !respostas.isEmpty()){
+						nota.setSatus(true);
+						nota.setValor(calculoNotaService.calculoMedia(respostas));
+					}
+					historico.addNota(nota);
 				}
 			}
 		}
@@ -102,7 +105,10 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 			}	
 			Nota nota = new Nota();
 			nota.setRodada(rodada);
+			nota.setSatus(false);
+			nota.setValor(0f);
 			if(rodada.isStatusRaking() && !respostas.isEmpty()){
+				nota.setSatus(true);
 				nota.setValor(calculoNotaService.calculoMedia(respostas));
 			}
 			notas.add(nota);
@@ -115,13 +121,35 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 	@Override
 	public Historico criarNovasNotas(Historico historico, List<Rodada> rodadas) {
 		for(int i=historico.getNotas().size(); i<rodadas.size();i++){
-			Nota noaNota = new Nota();
-			noaNota.setRodada(rodadas.get(i));
-			noaNota.setValor(-1f);
-			historico.addNota(noaNota);	
+			Nota novaNota = new Nota();
+			novaNota.setRodada(rodadas.get(i));
+			novaNota.setValor(0f);
+			novaNota.setSatus(false);
+			historico.addNota(novaNota);	
 		}
 		update(historico);
 		return historico;
+	}
+
+	@Override
+	public void atualizaNotas(List<Historico> historicos, Jogo jogo) {
+		List<Rodada> rodadas;
+		rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
+		rodadas = rodadaService.atualizaStatusRodadas(rodadas);
+		for (Usuario aluno : jogo.getAlunos()) {
+			Historico historico;
+			historico = buscarPorJogoUsuario(jogo, aluno);
+			if(historico == null){
+				historico = criarHistorico(historico, rodadas, aluno);
+			}else{
+				historico = atualizarHistorico(historico, rodadas, aluno);
+			}			
+		}
+	}
+
+	@Override
+	public List<Historico> findByJogo(Jogo jogo) {
+		return historicoRepository.findByJogo(jogo);
 	}
 
 }

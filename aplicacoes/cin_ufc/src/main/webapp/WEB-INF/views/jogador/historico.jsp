@@ -29,7 +29,7 @@
 							</button>
 							<c:out value="${erro}"></c:out>
 						</div>
-					</c:if>		
+					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading" role="tab" id="headingOne">
 							<h4 class="panel-title">
@@ -65,7 +65,7 @@
 											</c:forEach>
 										</tbody>
 									</table>
-									<strong>Média:
+									<strong>Média:&nbsp;&nbsp;
 										<c:if test="${media >= 0 }">
 											<fmt:formatNumber type="number" maxFractionDigits="2" 
 													value= "${media }" />
@@ -112,18 +112,22 @@
 															 </fmt:formatNumber>
 														</td>
 													</c:if>
-													<c:if test="${nota.valor != null }">
-														<td><fmt:formatNumber type="number" maxFractionDigits="2" 
-															value= "${nota.valor }" />
-														</td>
-													</c:if>
-													<c:if test="${nota.valor == null }">
-														<td>-</td>
-													</c:if>
+													<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+														value= "${nota.valor }" />
+													</td>
 												</tr>
 											</c:forEach>
 										</tbody>
 									</table>
+									<strong>Média:&nbsp;&nbsp;
+										<c:if test="${mediaEquipe >= 0 }">
+											<fmt:formatNumber type="number" maxFractionDigits="2" 
+													value= "${mediaEquipe }" />
+										</c:if>
+										<c:if test="${mediaEquipe < 0 }">
+											0.0
+										</c:if>
+									</strong>
 								</c:if>
 							</div>
 						</div>

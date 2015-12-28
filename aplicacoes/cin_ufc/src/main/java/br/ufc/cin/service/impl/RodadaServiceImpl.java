@@ -89,7 +89,8 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
 		Long prazoComReabertura = rodada.getPrazoSubmissao().getTime() + quantidadeDiasReaberturaMillis(rodada);
-		if(prazoComReabertura < tempoAtual && (rodada.getTerminoAvaliacao().getTime() < tempoAtual || rodada.getInicio().getTime() > tempoAtual)){
+		Long terminoAva = rodada.getTerminoAvaliacao().getTime();
+		if(prazoComReabertura > tempoAtual ||  terminoAva < tempoAtual){
 			if(!rodada.isStatusAvaliacao())
 				return rodada;
 			rodada.setStatusAvaliacao(false);
@@ -223,12 +224,14 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		Integer qtdDias = 0;
 		if(reaberturaSubmissaos!=null && !reaberturaSubmissaos.isEmpty()){
 			for (ReaberturaSubmissao reaberturaSubmissao : reaberturaSubmissaos) {
-				Integer temp = Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
-				if(qtdDias < temp){
-					qtdDias = temp;
-				}
-				if(qtdDias==3){
-					break;
+				if(reaberturaSubmissao.isStatus()){
+					Integer temp = Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
+					if(qtdDias < temp){
+						qtdDias = temp;
+					}
+					if(qtdDias==3){
+						break;
+					}
 				}
 			}
 		}
@@ -277,5 +280,12 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 			rodada.setStatusRaking(false);
 			update(rodada);
 		}
+	}
+
+	@Override
+	public boolean defineStatusBtnRankings(Rodada rodada) {
+		return rodada.isStatus() && !rodada.isStatusAvaliacao() 
+				&& !rodada.isStatusPrazo() && !rodada.isStatusRaking() 
+				&& !isPosPrazoSubmissoesEReabertura(rodada); 
 	}
 }

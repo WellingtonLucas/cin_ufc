@@ -1,11 +1,12 @@
 package br.ufc.cin.web;
 
-import static br.ufc.cin.util.Constants.*;
+import static br.ufc.cin.util.Constants.MENSAGEM_CONSULTORIA_ATUALIZADA;
 import static br.ufc.cin.util.Constants.MENSAGEM_CONSULTORIA_CADASTRADA;
+import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_AO_CADASTRAR_RODADA;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_CONSULTORIA_CAMPOS_OBG;
 import static br.ufc.cin.util.Constants.MENSAGEM_ERRO_UPLOAD;
 import static br.ufc.cin.util.Constants.MENSAGEM_EXCEPTION;
-import static br.ufc.cin.util.Constants.MENSAGEM_JOGO_ATUALIZADO;
+import static br.ufc.cin.util.Constants.MENSAGEM_RODADA_ATUALIZADO;
 import static br.ufc.cin.util.Constants.MENSAGEM_SOLICITACAO_CONSULTORIA;
 import static br.ufc.cin.util.Constants.PAGINA_APOSTAS_RODADA;
 import static br.ufc.cin.util.Constants.PAGINA_APOSTA_RODADA;
@@ -235,6 +236,7 @@ public class RodadaController {
 				model.addAttribute("equipe", equipe);
 				model.addAttribute("reaberturaSubmissao", new ReaberturaSubmissao());
 			}
+			model.addAttribute("btnRanking", rodadaService.defineStatusBtnRankings(rodada));
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -341,7 +343,7 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		redirectAttributes.addFlashAttribute("info",MENSAGEM_JOGO_ATUALIZADO);
+		redirectAttributes.addFlashAttribute("info",MENSAGEM_RODADA_ATUALIZADO);
 		return "redirect:/jogo/" + id + "/rodada/"+rodada.getId()+"/detalhes";
 	}
 	
@@ -612,6 +614,7 @@ public class RodadaController {
 			regrasService.verificaRodada(rodada);
 			regrasService.verificaEquipe(equipe);
 			regrasService.verificaParticipacao(usuario, jogo);
+			regrasService.verificaSeAluno(usuario, jogo);
 			regrasService.verificaExistencia(rodada, equipe, jogo);
 			usuario = usuarioService.find(Usuario.class, usuario.getId());
 			permissao = usuarioService.definePermissao(jogo, usuario);
@@ -663,20 +666,22 @@ public class RodadaController {
 	public String apostar(@ModelAttribute("deposito") Deposito deposito, 
 			BindingResult result, @PathVariable("idJogo") Integer idJogo,
 			@PathVariable("idRodada") Integer idRodada,	RedirectAttributes redirectAttributes, HttpSession session ){
+		if(result.hasErrors()){
+			redirectAttributes.addFlashAttribute("erro", "A quantia é obrigatória.");
+			return "redirect:/jogo/"+idJogo+"/rodada/"+idRodada+"/equipe/"+deposito.getEquipe().getId()+"/apostar";
+		}
 		Jogo jogo;
 		Rodada rodada ;
 		Equipe equipeDestinio;
 		Usuario logado = getUsuarioLogado(session);
 		try{
 			jogo = jogoService.find(Jogo.class, idJogo);
+			logado = usuarioService.find(Usuario.class, logado.getId());
 			rodada = rodadaService.find(Rodada.class, idRodada);
 			equipeDestinio = equipeService.find(Equipe.class, deposito.getEquipe().getId());
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaParticipacao(logado, jogo);
-			if(jogo.getProfessor().equals(logado)){
-				redirectAttributes.addFlashAttribute("erro", "Você não pode apostar em equipes do jogo!");
-				return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/equipe/"+equipeDestinio.getId()+"/apostar";
-			}
+			regrasService.verificaSeAluno(logado, jogo);
 			regrasService.verificaRodada(rodada);
 			regrasService.verificaRodadaJogo(rodada, jogo);
 			rodadaService.atualizaStatusAvaliacao(rodada);
@@ -702,7 +707,7 @@ public class RodadaController {
 			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/equipe/"+equipeDestinio.getId()+"/apostar";
 		}
 		redirectAttributes.addFlashAttribute("info", "Depósito efetuado com sucesso.");
-		return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/equipe/"+equipeDestinio.getId()+"/apostar";
+		return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/submissoes";
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{id}/apostas", method = RequestMethod.GET)
@@ -773,8 +778,8 @@ public class RodadaController {
 			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
 		}
 		redirectAttributes.addFlashAttribute("info",
-				usuario.getNome()+" você pode conferir as notas das equipes e alterar os fatores de aposta. "
-						+ "Basta ir na página de cada equipe.");
+				usuario.getNome()+" você pode conferir as notas das empresas e alterar os fatores de aposta. "
+						+ "Basta ir na página de cada empresa e consultar os históricos de notas.");
 		return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
 	}
 
@@ -980,12 +985,23 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		Consultoria consultoria = consultoriaService.findByRodada(rodada);
-		List<SolicitacaoConsultoria> solicitacoesConsultoria = solicitacaoConsultoriaService.solicitacoesPorConsulta(consultoria);
+		Consultoria consultoria;
+		List<SolicitacaoConsultoria> solicitacoesConsultoria;
+		try {
+			consultoria = consultoriaService.findByRodada(rodada);
+			regrasService.verificaConsultoria(consultoria);
+			solicitacoesConsultoria = solicitacaoConsultoriaService.solicitacoesPorConsulta(consultoria);
+			model.addAttribute("solicitacoes", solicitacoesConsultoria);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/servicos";
+		}	catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/servicos";
+		}
 		model.addAttribute("permissao", "professor");
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("rodada", rodada);
-		model.addAttribute("solicitacoes", solicitacoesConsultoria);
 		model.addAttribute("editor", "rodada");
 		model.addAttribute("menu", "solicitacoes");
 		return PAGINA_SOLICITACOES_RODADA;
@@ -1009,6 +1025,8 @@ public class RodadaController {
 			rodada = rodadaService.find(Rodada.class, id);
 			regrasService.verificaRodada(rodada);
 			regrasService.verificaRodadaJogo(rodada, jogo);
+			rodadaService.atualizaStatusPrazoRodada(rodada);
+			rodadaService.verificaSePrazoSubmissao(rodada);
 			equipe = equipeService.find(Equipe.class, idE);
 			regrasService.verificaEquipe(equipe);
 			regrasService.verificaEquipeJogo(equipe, jogo);

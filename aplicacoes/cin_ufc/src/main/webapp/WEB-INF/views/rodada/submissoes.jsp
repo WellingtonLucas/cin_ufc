@@ -25,30 +25,30 @@
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-md-10 main">
-						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Últimas submissões da rodada</small>
-							<c:if test="${permissao != 'professor' }">- Seu saldo é <strong>R$ ${aposta.saldo }</strong></c:if>
-						</h2>
-						<c:if test="${not empty erro}">
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
-							</div>
-						</c:if>
-						<c:if test="${not empty info}">
-							<div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${info}"></c:out>
-							</div>
-						</c:if>
+					<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Últimas submissões da rodada</small>
+						<c:if test="${permissao != 'professor' }">- Seu saldo é <strong>R$ <fmt:formatNumber currencyCode="BRL" value="${aposta.saldo }" /></strong></c:if>.
+					</h2>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4><strong>Últimas Submissões</strong> </h4>
 						</div>
 						<div class="panel-body">
+							<c:if test="${not empty erro}">
+								<div class="alert alert-warning alert-dismissible" role="alert">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<c:out value="${erro}"></c:out>
+								</div>
+							</c:if>
+							<c:if test="${not empty info}">
+								<div class="alert alert-success alert-dismissible" role="alert">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<c:out value="${info}"></c:out>
+								</div>
+							</c:if>
 							<c:if test="${not empty entregas }">
 						       	<div class="col-sm-12">
 									<table id="tabela-submissoes" class="table table-striped table-hover">

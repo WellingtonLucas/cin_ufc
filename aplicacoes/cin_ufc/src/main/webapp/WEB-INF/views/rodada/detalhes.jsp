@@ -7,14 +7,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <html>
-<head>
-	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<c:if test="${action eq 'cadastrar' }">
-		<c:set var="url" value="/rodada/${rodada.id}/entrega"></c:set>
-	</c:if>
-	<title>${rodada.nome }</title>
-</head>
-
+	<head>
+		<jsp:include page="../fragments/header-estrutura.jsp" />
+		<c:if test="${action eq 'cadastrar' }">
+			<c:set var="url" value="/rodada/${rodada.id}/entrega"></c:set>
+		</c:if>
+		<title>${rodada.nome }</title>
+	</head>
 <body>
 	<jsp:include page="../fragments/header.jsp" />
 	<div class="section">
@@ -190,20 +189,21 @@
 						<c:if test="${(permissao eq 'professor')}">
 							<div class="panel-footer">
 								<div class="col-sm-2">
-									<a id="editar" href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/editar" ></c:url>">
+									<a  data-tooggle="tooltip"  data-placement="bottom" title="Edite os dados da rodada"
+										id="editar" href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/editar" ></c:url>">
 										<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
 									</a>
 								</div>
 								<c:if test="${rodada.statusAvaliacao }">
-									<div class="col-sm-2">
+									<div class="col-sm-2" >
 										<a id="notas" data-toggle="modal" data-target="#confirm-gerar-notas" href="#" 
 										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/gerarNotas"></c:url>" data-name="${rodada.nome }">
-											<button class="btn btn-success btn-lg">Gerar Notas&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
+											<button data-tooggle="tooltip"  data-placement="top" title="Gere notas e fatores de aposta das equipes" 
+											 class="btn btn-success btn-lg">Gerar Notas&nbsp;<i class="glyphicon glyphicon-refresh"></i></button>
 										</a>
 									</div>
 								</c:if>
-								<c:if test="${!rodada.statusAvaliacao }">
-									<div class="col-sm-1"></div>
+								<c:if test="${btnRanking }">
 									<div class="col-sm-2">
 										<a id="ranking" data-toggle="modal" data-target="#confirm-gerar-ranking" href="#" 
 										data-href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/publicarRankings"></c:url>" data-name="${rodada.nome }">
@@ -378,17 +378,17 @@
 			</div>
 		</div>
 		
-		<!-- Modal liberar rankings -->
+		<!-- Modal gerar notas -->
 		<div class="modal fade" id="confirm-gerar-notas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header btn-success">
 	        			<h4 class="modal-title" id="notasModalLabel">Gere as Notas para esta rodada</h4>
 	        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					</div>
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<a href="#" class="btn btn-success">Gerar&nbsp;<i class="glyphicon glyphicon-refresh"></i></a>
+						<a href="#" id="id-gerar-nota" class="btn btn-success">Gerar&nbsp;<i class="glyphicon glyphicon-refresh"></i></a>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>

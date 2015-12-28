@@ -57,6 +57,7 @@
 												<tr>
 													<td><strong>Rodada </strong></td>
 													<td><strong>Fator de aposta </strong></td>
+													<td><strong>Valor Recebido</strong></td>
 													<td><strong>Nota </strong></td>
 												</tr>
 											</thead>
@@ -94,6 +95,14 @@
 																</c:if>
 															</td>
 														</c:if>
+														<c:if test="${nota.retorno != null }">
+															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+																value= "${nota.retorno }" />
+															</td>
+														</c:if>
+														<c:if test="${nota.retorno == null }">
+															<td>-</td>
+														</c:if>
 														<c:if test="${nota.valor != null }">
 															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
 																value= "${nota.valor }" />
@@ -106,6 +115,15 @@
 												</c:forEach>
 											</tbody>
 										</table>
+										<strong>Média:&nbsp;&nbsp;
+											<c:if test="${mediaEquipe >= 0 }">
+												<fmt:formatNumber type="number" maxFractionDigits="2" 
+														value= "${mediaEquipe }" />
+											</c:if>
+											<c:if test="${mediaEquipe < 0 }">
+												0.0
+											</c:if>
+										</strong>
 									</c:if>
 								</div>
 							</div>

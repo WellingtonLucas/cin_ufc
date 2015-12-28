@@ -28,7 +28,18 @@ public class NotaEquipeRodada {
 	private Float fatorDeAposta;
 	
 	@Column
+	private Float retorno;
+	
+	@Column
 	private Float valor;
+	
+	public Float getRetorno() {
+		return retorno;
+	}
+
+	public void setRetorno(Float retorno) {
+		this.retorno = retorno;
+	}
 
 	public Integer getId() {
 		return id;

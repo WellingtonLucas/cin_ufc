@@ -87,12 +87,14 @@ public class ConcultoriaServiceImpl extends GenericServiceImpl<Consultoria> impl
 
 	@Override
 	public Integer quantidadeSolicitacoes(Consultoria consultoria) {
-		List<SolicitacaoConsultoria> solicitacoesConsultoria = solicitacaoConsultoriaService.solicitacoesPorConsulta(consultoria);
 		Integer temp = 0;
-		if(solicitacoesConsultoria != null){
-			for (SolicitacaoConsultoria solicitacaoConsultoria : solicitacoesConsultoria) {
-				if(!solicitacaoConsultoria.isStatus()){
-					temp++;
+		if(consultoria.getId()!=null){
+			List<SolicitacaoConsultoria> solicitacoesConsultoria = solicitacaoConsultoriaService.solicitacoesPorConsulta(consultoria);
+			if(solicitacoesConsultoria != null){
+				for (SolicitacaoConsultoria solicitacaoConsultoria : solicitacoesConsultoria) {
+					if(!solicitacaoConsultoria.isStatus()){
+						temp++;
+					}
 				}
 			}
 		}

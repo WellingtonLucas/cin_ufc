@@ -42,6 +42,7 @@
 											<th>Nome</th>
 											<th>Equipe</th>
 											<th>Quantia</th>
+											<th>Dia - Hora</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -55,6 +56,10 @@
 														<a href="<c:url value="/jogo/${jogo.id}/equipe/${deposito.equipe.id }"></c:url>">${deposito.equipe.nome }</a> 
 													</td>
 													<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.quantia }" /></td>
+													<td>
+														<c:if test="${empty deposito.dia}">-</c:if>
+														<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${deposito.dia }" />
+													</td>
 												</tr>
 											</c:forEach>
 										</c:forEach>

@@ -17,4 +17,7 @@ public interface SolicitacaoConsultoriaService extends GenericService<Solicitaca
 	public abstract void verificaConsistencia(
 			SolicitacaoConsultoria solicitacaoConsultoria, Equipe equipe,
 			Rodada rodada);
+	
+	public abstract SolicitacaoConsultoria findByEquipeConsulta(Equipe equipe, Consultoria consultoria);
+	
 }

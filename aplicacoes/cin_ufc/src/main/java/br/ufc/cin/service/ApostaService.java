@@ -35,6 +35,10 @@ public interface ApostaService extends GenericService<Aposta>{
 	 * @author Wellington
 	 * */
 	public abstract List<Aposta> findByUsuarioRodada(Usuario requisitado, Jogo jogo);
+
+	public abstract List<Aposta> atualizaTotalRetorno(List<Aposta> apostas);
+
+	public abstract List<Aposta> ordenaPorRetorno(List<Aposta> apostas);
 	
 	
 }

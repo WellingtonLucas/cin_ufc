@@ -34,6 +34,9 @@ public class Aposta {
 	@Column(name = "saldo")
 	private Float saldo;
 	
+	@Column
+	private Float retorno;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -50,6 +53,13 @@ public class Aposta {
 		this.rodada = rodada;
 	}
 
+	public Float getRetorno() {
+		return retorno;
+	}
+
+	public void setRetorno(Float retorno) {
+		this.retorno = retorno;
+	}
 
 	public List<Deposito> getDepositos() {
 		return depositos;

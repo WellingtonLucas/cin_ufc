@@ -347,7 +347,6 @@ public class UsuarioController {
 	@RequestMapping(value = "/{id}/jogo/{idJogo}/historico", method = RequestMethod.GET)
 	public String historico(@PathVariable("idJogo") Integer idJogo, @PathVariable("id") Integer id, 
 			Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-		
 		Jogo jogo;
 		Usuario requisitado;
 		Usuario usuario = getUsuarioLogado(session);
@@ -390,12 +389,14 @@ public class UsuarioController {
 			if(notasEquipeRodadas != null){
 				notasEquipeRodadas = equipeService.atualizarNotasEquipeRodadas(notasEquipeRodadas, equipe, permissao);
 			}
+			Float mediaEquipe = notaEquipeRodadaService.calculaMedia(notasEquipeRodadas);
 			model.addAttribute("notasEquipeRodadas", notasEquipeRodadas);
 			model.addAttribute("permissao", permissao);
 			model.addAttribute("requisitado", requisitado);
 			model.addAttribute("usuario", usuario);
 			model.addAttribute("historico", historico);
 			model.addAttribute("media", media);
+			model.addAttribute("mediaEquipe", mediaEquipe);
 			model.addAttribute("action", "historico");
 			model.addAttribute("jogo", jogo);
 		} catch (Exception e) {

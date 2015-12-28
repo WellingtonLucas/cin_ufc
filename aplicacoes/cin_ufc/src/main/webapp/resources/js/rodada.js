@@ -339,8 +339,10 @@ $(document).ready(function() {
 	});
 	
 	$('#confirm-gerar-notas').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza que deseja gerar as Notas para \"' + $(e.relatedTarget).data('name') + '\"?');
-		$(this).find('.btn-success').attr('href', $(e.relatedTarget).data('href'));
+		$(this).find('.modal-body').text('Tem certeza que deseja gerar as Notas e Fatores de Aposta para \"' + $(e.relatedTarget).data('name') + '\"?\n'+
+				'Por enquanto só você poderá ver esses dados. Para alterar os fatores de aposta vá no perfil das empresas '+
+				'e acesse os hitóricos dessas.');
+		$(this).find('#id-gerar-nota').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$('.confirm-delete-file').on('click', function(e) {

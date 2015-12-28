@@ -20,7 +20,6 @@
 	<div class="container-fluid">
 		<jsp:include page="../fragments/menu.jsp" />
 		<div class="col-sm-8 col-md-10 main">
-			<h2>${usuario.nome } ${usuario.sobreNome }</h2>
 			<c:if test="${not empty erro}">
 				<div class="alert alert-warning alert-dismissible" role="alert">
 					<button type="button" class="close" data-dismiss="alert">
@@ -40,61 +39,58 @@
 					<form:form id="perfil" role="form" class="form-horizontal"
 						commandName="usuario" enctype="multipart/form-data" servletRelativeAction="atualizar"
 						method="POST">
-		
 						<div id="myTabContent" class="tab-content">
 							<div class="tab-pane active in" id="geral">
 								<form:hidden path="id"/>
 								<form:hidden path="papel"/>
 								<form:hidden path="habilitado"/>
 								<form:hidden path="email"/>
-								<br>
 								<div class="form-group">
 									<label for="nome" class="col-sm-1 control-label">Nome:</label>
 									<div class="col-sm-3">
+										<form:input id="nome" path="nome" type="text"
+											class="form-control" name="nome" placeholder="Nome" />
 										<div class="error-validation">
 											<form:errors path="nome"></form:errors>
 										</div>
-										<form:input id="nome" path="nome" type="text"
-											class="form-control" name="nome" placeholder="Nome" />
 									</div>
-									<label for="snome" class="col-sm-2 control-label">Sobrenome:</label>
+									<label for="sobreNome" class="col-sm-2 control-label">Sobrenome:</label>
 									<div class="col-sm-3">
+										<form:input type="text" path="sobreNome"
+											placeholder="Sobrenome" class="form-control" />
 										<div class="error-validation">
 											<form:errors path="sobreNome"></form:errors>
 										</div>
-										<form:input id="snome" type="text" path="sobreNome"
-											placeholder="Sobrenome" class="form-control" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="curso" class="col-sm-1 control-label">Matricula:</label>
+									<label for="matricula" class="col-sm-1 control-label">Matricula:</label>
 									<div class="col-sm-3">
+										<form:input path="matricula" type="text"
+											cssClass="form-control" placeholder="Matricula" />
 										<div class="error-validation">
 											<form:errors path="matricula"></form:errors>
 										</div>
-										<form:input id="matricula" path="matricula" type="text"
-											cssClass="form-control" placeholder="Matricula" />
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="curso" class="col-sm-1 control-label">Curso:</label>
 									<div class="col-sm-8">
+										<form:input path="curso" type="text"
+											cssClass="form-control" placeholder="Curso" />
 										<div class="error-validation">
 											<form:errors path="curso"></form:errors>
 										</div>
-										<form:input id="curso" path="curso" type="text"
-											cssClass="form-control" placeholder="Curso" />
 									</div>
 								</div>
-		
 								<div class="form-group">
 									<label for="email" class="col-sm-1 control-label">Email:</label>
 									<div class="col-sm-8">
+										<form:input id="email" type="email" path="email"
+											placeholder="Email" class="form-control" disabled="true" />
 										<div class="error-validation">
 											<form:errors path="email"></form:errors>
 										</div>
-										<form:input id="email" type="email" path="email"
-											placeholder="Email" class="form-control" disabled="true" />
 									</div>
 								</div>
 								<div class="form-group">
@@ -111,7 +107,6 @@
 										</div>
 									</div>
 								</c:if>
-		
 							</div>
 							<div class="tab-pane fade" id="profile">
 								<br>

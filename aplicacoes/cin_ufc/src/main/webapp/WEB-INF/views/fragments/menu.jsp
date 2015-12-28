@@ -35,7 +35,8 @@
 			<!-- OPCOES DO JOGO PROFESSOR-->
 			<c:if test="${permissao == 'professor'}">
 				<li><a data-toggle="tooltip" data-placement="top" title="Veja os participantes do jogo."
-					href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>"><i class="fa fa-users"></i>&nbsp;&nbsp;Participantes</a></li>
+					href="<c:url value ="/jogo/${jogo.id}/participantes"></c:url>">
+					<i class="fa fa-users"></i>&nbsp;&nbsp;Participantes</a></li>
 				<li><a data-toggle="tooltip" data-placement="top" title="Veja seus formulários."
 					href="<c:url value ="/formularios"></c:url>"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;Formulários</a></li>
 			</c:if>

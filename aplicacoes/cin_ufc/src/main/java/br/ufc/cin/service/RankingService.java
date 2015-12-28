@@ -18,4 +18,6 @@ public interface RankingService {
 	public abstract List<Equipe> ordenaEquipes(Jogo jogo);
 
 	public abstract List<SaldoPorJogo> ordenaSaldosPorJogo(Jogo jogo);
+
+	public abstract List<Nota> cincoPrimeiras(List<Nota> notas);
 }

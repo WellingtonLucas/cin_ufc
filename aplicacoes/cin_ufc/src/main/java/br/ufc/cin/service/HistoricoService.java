@@ -19,4 +19,8 @@ public interface HistoricoService extends GenericService<Historico>{
 	public abstract Historico atualizarHistorico(Historico historico, List<Rodada> rodadas, Usuario usuario);
 	
 	public abstract Historico criarNovasNotas(Historico historico, List<Rodada> rodadas);
+	
+	public abstract void atualizaNotas(List<Historico> historicos, Jogo jogo);
+	
+	public abstract List<Historico> findByJogo(Jogo jogo);
 }

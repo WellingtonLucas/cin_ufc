@@ -65,4 +65,10 @@ public class SolicitacaoConsultoriaServiceImpl extends GenericServiceImpl<Solici
 		regrasService.verificaEquipeSolicitacao(equipe, solicitacaoConsultoria);
 		regrasService.verificaRodadaSolicitacao(rodada, solicitacaoConsultoria);
 	}
+
+	@Override
+	public SolicitacaoConsultoria findByEquipeConsulta(Equipe equipe,
+			Consultoria consultoria) {
+		return solicitacaoConsultoriaRepository.findByEquipeConsulta(equipe, consultoria);
+	}
 }

@@ -554,6 +554,9 @@ public class EquipeController {
 		if(notasEquipeRodadas != null){
 			notasEquipeRodadas = equipeService.atualizarNotasEquipeRodadas(notasEquipeRodadas, equipe, permissao);
 		}
+		notasEquipeRodadas = notaEquipeRodadaService.somaInvestimentos(notasEquipeRodadas);
+		Float mediaEquipe = notaEquipeRodadaService.calculaMedia(notasEquipeRodadas);
+		model.addAttribute("mediaEquipe", mediaEquipe);
 		model.addAttribute("action", "historicoEquipe");
 		model.addAttribute("permissao", permissao);
 		model.addAttribute("usuario", usuario);

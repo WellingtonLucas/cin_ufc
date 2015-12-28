@@ -1,5 +1,6 @@
 package br.ufc.cin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -108,6 +109,30 @@ public class RankingServiceImpl implements RankingService{
 		}
 		throw new IllegalArgumentException(
 				"Nenhum períogo de apostas finalizado até o momento.");
+	}
+
+	@Override
+	public List<Nota> cincoPrimeiras(List<Nota> notas) {
+		List<Nota> novas = new ArrayList<Nota>();
+		for (int i =0; i < notas.size(); i++) {
+			if(notas.size() < 6){
+				return notas;
+			}
+			if(novas.size() < 5){
+				novas.add(notas.get(i));
+			}else{
+				int temp = i-1;
+				float tem1 = notas.get(temp).getValor();
+				float tem2 = notas.get(i).getValor();
+				if((tem1 == tem2)){
+					novas.add(notas.get(i));
+				}else if((novas.size() >= 5)){
+					break;
+				}
+			}
+			
+					}
+		return novas;
 	}
 
 	

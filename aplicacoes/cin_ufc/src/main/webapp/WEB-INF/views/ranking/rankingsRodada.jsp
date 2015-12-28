@@ -11,14 +11,6 @@
 	</head>
 	<body>
 		<jsp:include page="../fragments/header.jsp" />
-		<c:if test="${not empty erro}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<c:out value="${erro}"></c:out>
-			</div>
-		</c:if>
 		<div class="section">
 			<div class="container-fluid">
 				<div class="row">
@@ -29,13 +21,35 @@
 								<i class="fa fa-line-chart"></i>&nbsp;&nbsp;Rankings Rodada
 							</div>
 							<div class="panel-body">
+								<c:if test="${not empty erro}">
+									<div class="alert alert-danger alert-dismissible" role="alert">
+										<button type="button" class="close" data-dismiss="alert">
+											<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+										</button>
+										<c:out value="${erro}"></c:out>
+									</div>
+								</c:if>
 						        <p class="lead">Escolha uma das opções abaixo para visualizar os respectivos Rankings.</p>
 						        <div>
-						        	<a class="btn btn-lg btn-success col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/alunos"></c:url>" role="button">Avaliadores <i class="glyphicon glyphicon-list"></i></a>
+						        	<a data-toggle="tooltip" data-placement="top" title="Ranking com os melhores avaliadores da rodada."
+						        	 	class="btn btn-lg btn-info col-sm-3" 
+						        	 	href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/alunos"></c:url>" 
+						        	 	role="button"><i class="fa fa-users"></i>&nbsp;&nbsp;Avaliadores
+						        	 </a>
 						        </div>
 						        <div class="col-sm-1"></div>
 						        <div>
-						        	<a class="btn btn-lg btn-primary col-sm-3" href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/equipes"></c:url>" role="button">Empresas <i class="glyphicon glyphicon-list"></i></a>
+						        	<a class="btn btn-lg btn-primary col-sm-3" data-toggle="tooltip" data-placement="top" title="Ranking com as equipes com maiores investimentos da rodada."
+						        		href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/equipes"></c:url>" 
+						        		role="button"><i class="fa fa-industry"></i>&nbsp;&nbsp;Empresas
+						        	</a>
+						        </div>
+						        <div class="col-sm-1"></div>
+						        <div>
+						        	<a class="btn btn-lg btn-success col-sm-3" data-toggle="tooltip" data-placement="top" title="Ranking com os alunos com maior retorno de investimento na rodada."
+						        		href="<c:url value="/jogo/${jogo.id }/rodada/${rodada.id}/investidores"></c:url>" 
+						        		role="button"><i class="fa fa-money"></i>&nbsp;&nbsp;Investidores
+						        	</a>
 						        </div>
 						    </div>
 					    </div>
@@ -45,9 +59,13 @@
 					    <c:if test="${saldos != null && rankingEquipes}">
 					    	<jsp:include page="rankingEquipesRodada.jsp" />
 					    </c:if>
+					    <c:if test="${apostas != null && melhoresInvestidores}">
+					    	<jsp:include page="melhoresInvestidores.jsp" />
+					    </c:if>
 				    </div>
 				</div>
 			</div>
 		</div>
+		<jsp:include page="../fragments/footer.jsp" />
 	</body>
 </html>

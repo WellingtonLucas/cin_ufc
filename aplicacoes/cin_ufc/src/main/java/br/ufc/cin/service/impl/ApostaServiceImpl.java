@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Aposta;
+import br.ufc.cin.model.Consultoria;
 import br.ufc.cin.model.Deposito;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
@@ -15,14 +16,17 @@ import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.SaldoNaRodada;
 import br.ufc.cin.model.SaldoPorJogo;
+import br.ufc.cin.model.SolicitacaoConsultoria;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.ApostaRepository;
 import br.ufc.cin.repository.DepositoRepository;
 import br.ufc.cin.service.ApostaService;
+import br.ufc.cin.service.ConsultoriaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.NotaEquipeRodadaService;
 import br.ufc.cin.service.SaldoNaRodadaService;
 import br.ufc.cin.service.SaldoPorJogoService;
+import br.ufc.cin.service.SolicitacaoConsultoriaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
@@ -44,8 +48,14 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 	private EquipeService equipeService;
 	
 	@Inject
+	private ConsultoriaService ConsultoriaService;
+	
+	@Inject
 	private NotaEquipeRodadaService notaEquipeRodadaService;
 
+	@Inject
+	private SolicitacaoConsultoriaService solicitacaoConsultoriaService;
+	
 	@Override
 	public Aposta findByUsuarioRodada(Usuario apostador, Rodada rodada) {
 		return apostaRepository.findByUsuarioRodada(apostador, rodada);
@@ -89,6 +99,7 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 		if(!verificaSaldo(aposta, deposito.getQuantia())){
 			throw new IllegalArgumentException("Saldo insuficiente!");
 		}
+		deposito.setDia(new Date());
 		depositoRepository.save(deposito);
 		SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(deposito.getEquipe(), aposta.getRodada());
 		if(saldoNaRodada == null){
@@ -116,15 +127,19 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 	public void atualizaSaldoEquipes(Jogo jogo, Rodada rodada) {
 		for (Equipe equipe : jogo.getEquipes()) {
 			SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(equipe, rodada);
+			Consultoria consultoria = ConsultoriaService.findByRodada(rodada);
+			SolicitacaoConsultoria solicitacao = solicitacaoConsultoriaService.findByEquipeConsulta(equipe, consultoria);
 			if(saldoNaRodada != null){
 				NotaEquipeRodada notaEquipeRodada = notaEquipeRodadaService.findByEquipeRodada(equipe, rodada);
 				if(notaEquipeRodada != null){
-					if(equipe.getSaldo()==null)
-						equipe.setSaldo(0F);
-					equipe.setSaldo(equipe.getSaldo() + (saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta()));
+					Float valor = 0F;
+					if(solicitacao != null && solicitacao.isStatus()){
+						valor = consultoria.getValor();
+					}
+					equipe.setSaldo(equipe.getSaldo() + (saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta()) - valor);
 					equipeService.update(equipe);
 					
-					saldoNaRodada.setSaldoComFator(saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta());
+					saldoNaRodada.setSaldoComFator(saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta() - valor);
 					saldoNaRodadaService.update(saldoNaRodada);
 				}
 			}
@@ -208,5 +223,43 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 				deposito.setRetorno(nota.getFatorDeAposta() * deposito.getQuantia());
 			}
 		}
+	}
+
+	@Override
+	public List<Aposta> atualizaTotalRetorno(List<Aposta> apostas) {
+		if(apostas == null ||apostas.isEmpty()){
+			throw new IllegalArgumentException("A rodada não possui investimentos.");
+		}
+		List<Aposta> atuaisApostas = new ArrayList<Aposta>();
+		for (Aposta aposta : apostas) {
+			atualizaDepositos(aposta.getDepositos(), aposta.getRodada());
+			Float temp = 0f;
+			for (Deposito deposito : aposta.getDepositos()) {
+				temp += deposito.getRetorno();
+			}
+			aposta.setRetorno(temp);
+			update(aposta);
+			atuaisApostas.add(aposta);
+		}
+		return atuaisApostas;
+	}
+
+	@Override
+	public List<Aposta> ordenaPorRetorno(List<Aposta> apostas) {
+		if(apostas != null){
+			for (int i=0;i<apostas.size();i++) {
+				for (int j = i+1; j < apostas.size(); j++) {
+					if(apostas.get(i).getRetorno() < apostas.get(j).getRetorno()){
+						Aposta aux = apostas.get(i);
+						apostas.add(i, apostas.get(j));
+						apostas.remove(i+1);
+						apostas.add(j, aux);
+						apostas.remove(j+1);
+					}
+				}
+			}
+			return apostas;
+		}
+		return null;
 	}
 }

@@ -29,4 +29,15 @@ public class JpaHistoricoRepository extends JpaGenericRepositoryImpl<Historico> 
 
 	}
 
+	@Override
+	public List<Historico> findByJogo(Jogo jogo) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("idJ", jogo.getId());
+		List<Historico> result = find(QueryType.JPQL, "from Historico where JOGO_ID = :idJ", params);
+		if(result != null && !result.isEmpty()) {
+			return result;
+		}
+		return null;
+	}
+
 }

@@ -3,6 +3,7 @@ package br.ufc.cin.service;
 import java.util.List;
 
 import br.ufc.cin.model.Aposta;
+import br.ufc.cin.model.Consultoria;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
@@ -128,4 +129,12 @@ public interface RegrasService {
 
 	public abstract void verificaRodadaSolicitacao(Rodada rodada,
 			SolicitacaoConsultoria solicitacaoConsultoria);
+
+	/**
+	 * Verifica se o usuário é aluno, caso contrário é lançado uma IllegalArgument 
+	 * @author Wellington
+	 * */
+	public abstract void verificaSeAluno(Usuario usuario, Jogo jogo);
+
+	public abstract void verificaConsultoria(Consultoria consultoria);
 }

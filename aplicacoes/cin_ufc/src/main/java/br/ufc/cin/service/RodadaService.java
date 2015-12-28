@@ -22,6 +22,10 @@ public interface RodadaService extends GenericService<Rodada>{
 	 * */
 	public abstract Rodada atualizaStatusPrazoRodada(Rodada rodada);
 
+	/**
+	 * Atualiza o status de avaliação da rodada com base no prazo de submissão mais o maior tempo 
+	 * dos pedidos de reabertura confirmados, além do período de término de avaliação. 
+	 * */
 	public abstract Rodada atualizaStatusAvaliacao(Rodada rodada);
 
 	/**
@@ -63,4 +67,6 @@ public interface RodadaService extends GenericService<Rodada>{
 	public abstract List<Rodada> organizarPorPerfil(List<Rodada> rodadas, Usuario usuario);
 
 	public abstract void atualizaStatusRanking(Rodada rodada);
+
+	public abstract boolean defineStatusBtnRankings(Rodada rodada);
 }

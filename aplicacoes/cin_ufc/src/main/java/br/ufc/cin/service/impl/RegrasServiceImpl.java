@@ -243,4 +243,12 @@ public class RegrasServiceImpl implements RegrasService {
 		}
 	}
 
+	@Override
+	public void verificaStatusRanking(Rodada rodada) {
+		if(rodada.isStatusRaking()){
+			throw new IllegalArgumentException("O ranking da rodada já está publicado.");
+		}
+		
+	}
+
 }

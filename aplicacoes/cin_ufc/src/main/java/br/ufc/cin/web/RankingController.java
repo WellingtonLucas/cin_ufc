@@ -90,16 +90,19 @@ public class RankingController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		try{
-			if(!rodada.isStatusRaking()){
-				apostaService.atualizaSaldoEquipes(jogo,rodada);
-				apostaService.atualizaSaldoAlunos(jogo,rodada);
-				apostaService.atualizaTotalRetorno(apostaService.findByRodada(rodada));
-				if(!rodada.isStatusNota())
-					rodada.setStatusNota(true);
-				rodada.setStatusRaking(true);
-				rodadaService.update(rodada);
-			}
-		} catch (IllegalAccessError e) {
+			regrasService.verificaStatusRanking(rodada);
+			apostaService.atualizaSaldosEquipeRodada(jogo, rodada);
+			apostaService.atualizaSaldoEquipes(jogo,rodada);
+			apostaService.atualizaSaldoAlunos(jogo,rodada);
+			apostaService.atualizaTotalRetorno(apostaService.findByRodada(rodada));
+			if(!rodada.isStatusNota())
+				rodada.setStatusNota(true);
+			rodada.setStatusRaking(true);
+			rodadaService.update(rodada);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
+		}catch (IllegalAccessError e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return "redirect:/jogo/" + idJogo + "/rodada/"+idRodada+"/detalhes";
 		} catch(Exception e){

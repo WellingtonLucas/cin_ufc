@@ -136,11 +136,11 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 					if(solicitacao != null && solicitacao.isStatus()){
 						valor = consultoria.getValor();
 					}
-					equipe.setSaldo(equipe.getSaldo() + (saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta()) - valor);
-					equipeService.update(equipe);
-					
 					saldoNaRodada.setSaldoComFator(saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta() - valor);
 					saldoNaRodadaService.update(saldoNaRodada);
+					
+					equipe.setSaldo(equipe.getSaldo() + saldoNaRodada.getSaldoComFator());
+					equipeService.update(equipe);
 				}
 			}
 		}
@@ -194,7 +194,6 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 			throw new IllegalArgumentException("Quantidade de dias inválida para uma reabertura.");
 		}
 	}
-
 
 	@Override
 	public List<Aposta> findByUsuarioRodada(Usuario requisitado, Jogo jogo) {
@@ -261,5 +260,22 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 			return apostas;
 		}
 		return null;
+	}
+
+
+	@Override
+	public void atualizaSaldosEquipeRodada(Jogo jogo, Rodada rodada) {
+		for (Equipe equipe : jogo.getEquipes()) {
+			SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(equipe, rodada);
+			List<Aposta> apostas = findByRodada(rodada);
+			for (Aposta aposta : apostas) {
+				for (Deposito deposito : aposta.getDepositos()) {
+					if(deposito.getEquipe().equals(saldoNaRodada.getEquipe())){
+						saldoNaRodada.setSaldo(saldoNaRodada.getSaldo() + deposito.getQuantia());
+					}
+				}
+			}
+			saldoNaRodadaService.update(saldoNaRodada);
+		}
 	}
 }

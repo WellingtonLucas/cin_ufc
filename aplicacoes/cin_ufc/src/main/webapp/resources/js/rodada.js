@@ -334,7 +334,8 @@ $(document).ready(function() {
 	});
 
 	$('#confirm-gerar-ranking').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza que deseja gerar os Rankings para \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.modal-body').text('Tem certeza que deseja gerar os Rankings para \"' + $(e.relatedTarget).data('name') + 
+				'\"? Lembre-se o ranking só será gerado uma vez por rodada.');
 		$(this).find('.btn-success').attr('href', $(e.relatedTarget).data('href'));
 	});
 	

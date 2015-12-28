@@ -137,4 +137,6 @@ public interface RegrasService {
 	public abstract void verificaSeAluno(Usuario usuario, Jogo jogo);
 
 	public abstract void verificaConsultoria(Consultoria consultoria);
+
+	public abstract void verificaStatusRanking(Rodada rodada);
 }

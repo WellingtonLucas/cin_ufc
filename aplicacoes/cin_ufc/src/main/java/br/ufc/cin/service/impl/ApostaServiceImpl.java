@@ -91,7 +91,7 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 		if(verificaSaldo(aposta, deposito)){
 			aposta.setSaldo(aposta.getSaldo() - deposito);
 		}
-		apostaRepository.update(aposta);
+		update(aposta);
 	}
 
 	@Override

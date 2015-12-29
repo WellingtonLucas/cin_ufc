@@ -10,7 +10,6 @@ $(document).ready(function() {
                 validators: {
                     stringLength: {
                         min: 5,
-                        max:255,
                         message: 'O nome deve ter no mínimo 5 caracteres'
                     },
                     notEmpty:{
@@ -203,8 +202,15 @@ $(document).ready(function() {
                     },
                     notEmpty:{
             			message: 'Prazo é obrigatório.'
-            		}
+            		},
             	}
+            },
+            valorReabertura: {
+                validators: {
+                    notEmpty:{
+            			message: 'O de reabertura é obrigatório.'
+            		}
+                }
             }
         }
        

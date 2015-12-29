@@ -62,6 +62,7 @@ import br.ufc.cin.service.ReaberturaSubmissaoService;
 import br.ufc.cin.service.RegrasService;
 import br.ufc.cin.service.RodadaEquipeService;
 import br.ufc.cin.service.RodadaService;
+import br.ufc.cin.service.SaldoNaRodadaService;
 import br.ufc.cin.service.SolicitacaoConsultoriaService;
 import br.ufc.cin.service.UsuarioService;
 
@@ -103,6 +104,9 @@ public class RodadaController {
 
 	@Inject
 	private SolicitacaoConsultoriaService solicitacaoConsultoriaService;
+	
+	@Inject
+	private SaldoNaRodadaService saldoNaRodadaService;
 	
 	@RequestMapping(value ="/jogo/{id}/rodadas", method = RequestMethod.GET)
 	public String rodadas(@PathVariable("id") Integer id, Model model, HttpSession session,
@@ -187,6 +191,7 @@ public class RodadaController {
 			rodadaService.verificarDatas(rodada);
 			rodadaService.salvar(rodada, allIn);
 			rodadaEquipeService.setStatusEquipeRodada(rodada, jogo.getEquipes(), false);
+			saldoNaRodadaService.criarSaldoEquipesRodada(jogo, rodada);
 		} catch (IllegalAccessError e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return "redirect:/jogo/"+id+"/rodada/nova";
@@ -211,6 +216,7 @@ public class RodadaController {
 		Equipe equipe;
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		String permissao;
+		List<Equipe> equipes = new ArrayList<Equipe>();
 		try {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
@@ -222,6 +228,7 @@ public class RodadaController {
 			rodada = rodadaService.atualizaStatusAvaliacao(rodada);
 			regrasService.verificaSeProfessorPeriodoRodada(usuario, rodada);
 			model.addAttribute("prazoReabertura", rodadaService.isPosPrazoSubmissoesEReabertura(rodada));
+			equipes = rodadaEquipeService.atualizaStatusEquipesNaRodada(jogo.getEquipes(), rodada);
 			permissao = usuarioService.definePermissao(jogo, usuario);
 			if(equipe != null && rodada.getJogo().getEquipes().contains(equipe)){
 				ReaberturaSubmissao reaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
@@ -237,6 +244,7 @@ public class RodadaController {
 				model.addAttribute("reaberturaSubmissao", new ReaberturaSubmissao());
 			}
 			model.addAttribute("btnRanking", rodadaService.defineStatusBtnRankings(rodada));
+			equipes = reaberturaSubmissaoService.atualizarSolitacoesDeReabertura(equipes, rodada);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -249,21 +257,6 @@ public class RodadaController {
 			return "redirect:/jogo/" + idJogo + "/rodadas";
 		}
 		
-		List<Equipe> equipes = new ArrayList<Equipe>();
-		try{
-			equipes = rodadaEquipeService.atualizaStatusEquipesNaRodada(jogo.getEquipes(), rodada);
-		}catch(Exception e){
-			redirectAttributes.addFlashAttribute("erro",
-					"Erro ao atualizar os status das equipes para a rodada.");
-			return "redirect:/jogo/" + idJogo + "/rodadas";
-		}
-		try {
-			equipes = reaberturaSubmissaoService.atualizarSolitacoesDeReabertura(equipes, rodada);	
-		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("erro",
-					"Erro ao atualizar pedidos de reabertura de submissão.");
-			return "redirect:/jogo/" + idJogo + "/rodadas";
-		}
 		model.addAttribute("permissao", permissao);
 		model.addAttribute("action", "detalhesRodada");		
 		model.addAttribute("editor", "rodada");
@@ -534,7 +527,7 @@ public class RodadaController {
 			}
 			entregas = entregaService.verificaSeRespondidas(entregas, usuario);
 			aposta  = apostaService.findByUsuarioRodada(usuario, rodada);
-			if(aposta == null){
+			if(aposta == null && !permissao.equals("professor")){
 				aposta = apostaService.criarAposta(usuario, rodada);
 			}	
 			model.addAttribute("action", "submissoes");
@@ -638,7 +631,7 @@ public class RodadaController {
 			rodadaService.verificaStatusPrazoSubmissao(rodada);
 			rodadaEquipeService.verificaSeTemSolicitacao(jogo.getEquipes(), rodada);
 			aposta  = apostaService.findByUsuarioRodada(usuario, rodada);
-			if(aposta == null){
+			if(aposta == null && !permissao.equals("professor")){
 				aposta = apostaService.criarAposta(usuario, rodada);
 			}
 		} catch (IllegalArgumentException e) {

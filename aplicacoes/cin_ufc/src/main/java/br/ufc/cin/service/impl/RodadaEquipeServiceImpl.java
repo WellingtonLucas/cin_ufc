@@ -56,9 +56,8 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 	public StatusRodadaEquipe atualizaStatusRodadaEquipe(ReaberturaSubmissao reabertura) {
 		StatusRodadaEquipe status = find(reabertura.getEquipe(), reabertura.getRodada());
 		if(status != null){
-			if(!status.isAtiva())
-				return status;
-			status.setAtiva(verificaPrazo(reabertura));
+			boolean prazo = verificaPrazo(reabertura);
+			status.setAtiva(prazo);
 		}else{
 			status = new StatusRodadaEquipe();
 			status.setEquipe(reabertura.getEquipe());
@@ -86,10 +85,10 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 		Long prazoSubmissao =reabertura.getRodada().getPrazoSubmissao().getTime(); 
 		Long prazoFinal = prazoSubmissao + (umDiaTimeInMillis() * qtdDias);
 		
-		if((prazoFinal < hojeMillis || reabertura.getRodada().isStatusPrazo())){
-			return false;
+		if((prazoFinal > hojeMillis || reabertura.getRodada().isStatusPrazo())){
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -117,7 +116,8 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 
 	@Override
 	public void verificaStatusEquipeRodada(Equipe equipe, Rodada rodada) {
-		if(equipe !=null){
+		if(equipe !=null && !rodada.isStatusPrazo()){
+			atualizaStatusEquipesNaRodada(equipe.getJogo().getEquipes(), rodada);
 			StatusRodadaEquipe statusRodadaEquipe = find(equipe, rodada);
 			if(!statusRodadaEquipe.isAtiva()){
 				throw new IllegalArgumentException("A sua equipe não possui permissão de submissão.");

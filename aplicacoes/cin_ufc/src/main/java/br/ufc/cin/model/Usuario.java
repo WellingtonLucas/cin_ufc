@@ -43,7 +43,6 @@ public class Usuario {
 	private String curso;
 
 	@Column
-	@NotEmpty(message = "A senha é obrigatória.")
 	private String senha;
 
 	@Column(nullable = false, unique = true)

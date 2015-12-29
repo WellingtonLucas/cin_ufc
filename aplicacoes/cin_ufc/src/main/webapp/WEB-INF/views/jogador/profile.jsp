@@ -28,12 +28,12 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-md-3 col-lg-3 " align="center">
-								<c:if test="${usuario.foto == null }">
+								<c:if test="${usuario.foto == null || usuario.foto.extensao == null}">
 									<img alt="Foto do usuário"
 										src="<c:url value="/resources/imagens/empty_profile.gif" />"
 										class="img-circle img-responsive" />
 								</c:if>
-								<c:if test="${usuario.foto != null }">
+								<c:if test="${usuario.foto != null && usuario.foto.extensao != null}">
 									<img alt="Foto do usuário" width="200" height="200"
 										src="data:${usuario.foto.extensao };base64,${usuario.foto.encode }"
 										class="img-circle" />

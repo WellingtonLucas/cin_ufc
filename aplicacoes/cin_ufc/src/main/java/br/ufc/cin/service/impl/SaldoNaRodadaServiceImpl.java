@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.SaldoNaRodada;
 import br.ufc.cin.repository.SaldoNaRodadaRepository;
@@ -26,6 +27,17 @@ public class SaldoNaRodadaServiceImpl extends GenericServiceImpl<SaldoNaRodada> 
 	@Override
 	public List<SaldoNaRodada> findByRodada(Rodada rodada) {
 		return saldoNaRodadaRespository.findByRodada(rodada);
+	}
+
+	@Override
+	public void criarSaldoEquipesRodada(Jogo jogo, Rodada rodada) {
+		for (Equipe equipe : jogo.getEquipes()) {
+			SaldoNaRodada saldoNaRodada = new SaldoNaRodada();
+			saldoNaRodada.setEquipe(equipe);
+			saldoNaRodada.setRodada(rodada);
+			save(saldoNaRodada);
+		}
+		
 	}
 
 }

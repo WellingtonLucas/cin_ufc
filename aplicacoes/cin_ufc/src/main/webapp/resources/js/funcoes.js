@@ -281,5 +281,41 @@ $(document).ready(function() {
             "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
         }
 	});
+	
+	$('#tabela-notas-aluno').DataTable({
+		"searching": false,
+		"paging": false,
+		"info": false,
+		"columnDefs" : [ 
+		    {"targets" : 1, "orderable" : false},
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	
+	$('#tabela-notas-equipe2').DataTable({
+		"searching": false,
+		"paging": false,
+		"info": false,
+		"columnDefs" : [
+		    {className: "text-center", "targets": [1]},
+		    {className: "text-center", "targets": [2]},
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	
+	$('#tabela-investimentos').DataTable({
+		"columnDefs" : [ 
+		    {className: "text-center", "targets": [2]},
+		],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	
+	
 });
 

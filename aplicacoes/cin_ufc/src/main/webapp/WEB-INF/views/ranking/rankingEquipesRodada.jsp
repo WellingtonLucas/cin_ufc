@@ -2,10 +2,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%><html>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">Melhores empresas da rodada</h3>
+		<i class="fa fa-money"></i>&nbsp;&nbsp;Melhores empresas da rodada.
 	</div>
 	<div class="panel-body">
 		<c:forEach var="saldo" items="${saldos }" varStatus="idEqui">
@@ -31,7 +32,7 @@
 								${saldo.equipe.nome} 
 							</h1>
 							<h2>
-								Saldo na Rodada = R$ ${saldo.saldoComFator}
+								Saldo na Rodada = R$ <fmt:formatNumber currencyCode="BRL" maxFractionDigits="2" value="${saldo.saldoComFator}" />
 							</h2>
 							<p class="media-comment"><i class="glyphicon glyphicon-asterisk"></i>Parabéns pelo ótimo desempenho!</p>
 						</div>

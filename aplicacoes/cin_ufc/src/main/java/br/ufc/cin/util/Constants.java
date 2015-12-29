@@ -45,6 +45,10 @@ public class Constants {
 	
 	public static final String PAGINA_SUBMISSOES_RODADA = "rodada/submissoes";
 	
+	public static final String PAGINA_SERVICOS_RODADA = "rodada/servicos";
+	
+	public static final String PAGINA_SOLICITACOES_RODADA = "rodada/solicitacoes";
+	
 	/** FORMULARIO */
 	public static final String PAGINA_DETALHES_FORM = "formulario/detalhes";
 
@@ -87,17 +91,19 @@ public class Constants {
 	public static final String REDIRECT_PAGINA_NOVO_JOGO = "redirect:/jogo/novo-jogo";
 	
 	/** Mensagens */
-	public static final String MENSAGEM_ERRO_AO_CADASTRAR_JOGO = "Aconteceu algum erro ao cadastrar um novo jogo";
+	public static final String MENSAGEM_ERRO_AO_CADASTRAR_JOGO = "Verifique os campos obrigatórios e tente novamente.";
 
-	public static final String MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE = "Aconteceu algum erro ao cadastrar uma nova equipe";
+	public static final String MENSAGEM_ERRO_AO_CADASTRAR_RODADA = "Aconteceu algum erro ao cadastrar a rodada. Verifique os campos obrigatórios e tente novamente.";
+	
+	public static final String MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE = "Verifique os campos obrigatórios e tente novamente.";
 	
 	public static final String MENSAGEM_PERMISSAO_NEGADA = "Você não possui permissão de acesso.";
 
 	public static final String MENSAGEM_CAMPO_OBRIGATORIO = "Campo obrigatório";
 
-	public static final String MENSAGEM_JOGO_INEXISTENTE = "Jogo inexistente";
+	public static final String MENSAGEM_JOGO_INEXISTENTE = "Jogo inexistente.";
 	
-	public static final String MENSAGEM_EQUIPE_INEXISTENTE = "Equipe inexistente";
+	public static final String MENSAGEM_EQUIPE_INEXISTENTE = "Equipe inexistente.";
 
 	public static final String MENSAGEM_JOGO_ATUALIZADO = "Jogo atualizado com sucesso!";
 
@@ -136,4 +142,14 @@ public class Constants {
 	public static final String MENSAGEM_FORM_NAO_EXISTENTE = "Formulário não existe. Ou não está ativo.";
 	
 	public static final String MENSAGEM_EXCEPTION = "O sistema se comportou de forma inesperada, tente novamente ou contacte o administrador.";
+	
+	public static final String MENSAGEM_CONSULTORIA_CADASTRADA = "Consultoria cadastrada com sucesso.";
+	
+	public static final String MENSAGEM_CONSULTORIA_ATUALIZADA = "Consultoria atualizada com sucesso.";
+	
+	public static final String MENSAGEM_ERRO_CONSULTORIA_CAMPOS_OBG = "Tente novamente, algum campo obrigatório ficou em branco.";
+	
+	public static final String MENSAGEM_SOLICITACAO_CONSULTORIA = "Solicitação de consultoria enviada com sucesso.";
+	
+	public static final String MENSAGEM_RODADA_ATUALIZADO = "Rodada atualizada com sucesso.";
 }

@@ -20,55 +20,61 @@
 	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../fragments/menu.jsp" />
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<div class="col-sm-12">
-					<h2>
-						<strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small>
-					</h2>
-					<hr>
-					<c:if test="${not empty erro}">
-						<div class="alert alert-warning alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${erro}"></c:out>
+			<div class="col-sm-8 col-md-10 main">
+				<h2>
+					<strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small>
+				</h2>
+				<c:if test="${not empty erro}">
+					<div class="alert alert-warning alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<c:out value="${erro}"></c:out>
+					</div>
+				</c:if>
+				<c:if test="${not empty info}">
+					<div class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<c:out value="${info}"></c:out>
+					</div>
+				</c:if>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<i class="fa fa-industry"></i>&nbsp;&nbsp;Empresas
+					</div>
+					<div class="panel-body">
+						<div class="row placeholders">
+							<c:if test="${not empty equipes }">
+								<c:forEach var="equipe" items="${equipes}">
+									<div class="col-sm-3">
+							            <div class="card">
+							                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+							                <div class="avatar">
+							                    <img src="" alt="Logo da Equipe" />
+							                </div>
+							                <div class="content">
+							                    <h4>${equipe.nome }</h4> <br>
+							                    
+							                    <p> Veja mais detalhes</p>    
+							                    <p>
+							                    	<a data-toggle="tooltip" data-placement="top" title="Veja detalhes da empresa."
+							                    		class="btn btn-success" href="<c:url value="equipe/${equipe.id }" />">Detalhes</a>
+							                    </p>
+							                </div>
+							            </div>
+							        </div>
+							        <c:if test="${equipe.logo ==null }">
+							       		<img class="src-image"  src="<c:url value="/resources/imagens/boxvazia.gif" />"/>
+							       	</c:if>
+							        <c:if test="${equipe.logo !=null }">
+							        	<img class="src-image" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }"/>
+							        </c:if>
+								</c:forEach>
+							</c:if>
 						</div>
-					</c:if>
-					<c:if test="${not empty info}">
-						<div class="alert alert-success alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${info}"></c:out>
-						</div>
-					</c:if>
-				</div>
-				<div class="row placeholders">
-					<c:if test="${not empty equipes }">
-						<c:forEach var="equipe" items="${equipes}">
-							<div class="col-sm-3">
-					            <div class="card">
-					                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
-					                <div class="avatar">
-					                    <img src="" alt="Logo da Equipe" />
-					                </div>
-					                <div class="content">
-					                    <h4>${equipe.nome }</h4> <br>
-					                    
-					                    <p> Veja mais detalhes
-					                    </p>    
-					                    <p><a class="btn btn-info" href="<c:url value="equipe/${equipe.id }" />">Detalhes</a></p>
-					                </div>
-					            </div>
-					        </div>
-					        <c:if test="${equipe.logo ==null }">
-					       		<img class="src-image"  src="<c:url value="/resources/imagens/boxvazia.gif" />"/>
-					       	</c:if>
-					        <c:if test="${equipe.logo !=null }">
-					        	<img class="src-image" src="data:${equipe.logo.extensao };base64,${equipe.logo.encode }"/>
-					        </c:if>
-						</c:forEach>
-					</c:if>
+					</div>
 				</div>
 			</div>
 		</div>

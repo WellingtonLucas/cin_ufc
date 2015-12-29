@@ -38,7 +38,6 @@ import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
-import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EntregaService;
@@ -102,23 +101,35 @@ public class EquipeController {
 		return PAGINA_CADASTRAR_EQUIPE;
 	}
 
+	@RequestMapping(value = "/{idEquipe}/equipe/nova", method = RequestMethod.GET)
+	public String cadastrar(@PathVariable("idEquipe") Integer id){
+		return "redirect:/jogo/" + id + "/equipe/nova";
+	}
+	
 	@RequestMapping(value = "/{idEquipe}/equipe/nova", method = RequestMethod.POST)
 	public String cadastrar(
 			@PathVariable("idEquipe") Integer id,
-			@ModelAttribute("equipe") Equipe equipe, BindingResult result,
+			@Valid Equipe equipe, BindingResult result,
 			@RequestParam("anexo") MultipartFile anexo,
 			HttpSession session, RedirectAttributes redirect, Model model) {
 		if (result.hasErrors()) {
-			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
-			return "redirect:/jogo/" + id + "/equipe/nova";
+			model.addAttribute("equipe", equipe);
+			model.addAttribute("action", "cadastrar");
+			model.addAttribute("editor", "equipe");
+			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
+			return PAGINA_CADASTRAR_EQUIPE;
 		}
 		Jogo jogo = jogoService.find(Jogo.class, id);
 		Documento imagem;
+		Usuario usuario = getUsuarioLogado(session);
 		try {
 			regrasService.verificaJogo(jogo);
+			regrasService.verificaSeProfessor(usuario, jogo);
+			equipeService.verificaNome(equipe);
 			imagem = documentoService.verificaAnexoImagem(anexo, equipe);
 			equipe.setLogo(imagem);
 			equipe.setJogo(jogo);
+			equipe.setSaldo(0F);
 			equipe.setStatus(true);
 			equipeService.save(equipe);
 		} catch (IOException e) {
@@ -203,11 +214,13 @@ public class EquipeController {
 			@RequestParam(value = "idParticipantes", required = false) List<String> idAlunos,
 			@RequestParam("anexo") MultipartFile anexo, @PathVariable("idEquipe") Integer idE, 
 			@PathVariable("idJogo") Integer idJ, @Valid Equipe equipe, BindingResult result, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, Model model) {
 		if (result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("erro", "Erro ao editar equipe.");
-			return "redirect:/jogo/" + idJ + "/equipe/" + equipe.getId()
-					+ "/editar";
+			model.addAttribute("equipe", equipe);
+			model.addAttribute("editor", "equipe");
+			model.addAttribute("action", "editar");
+			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_EQUIPE);
+			return PAGINA_CADASTRAR_EQUIPE;
 		}
 		Jogo jogo = jogoService.find(Jogo.class, idJ);
 		Equipe oldEquipe = equipeService.find(Equipe.class, equipe.getId());
@@ -215,6 +228,7 @@ public class EquipeController {
 		try {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaEquipe(oldEquipe);
+			equipeService.verificaNome(equipe);
 			regrasService.verificaEquipeJogo(oldEquipe, jogo);
 			regrasService.verificaMembroOuProfessorEquipe(usuario, oldEquipe);
 		} catch (IllegalArgumentException e) {
@@ -232,6 +246,9 @@ public class EquipeController {
 					imagem.setId(oldEquipe.getLogo().getId());
 				}
 				oldEquipe.setLogo(imagem);
+			}
+			if(oldEquipe.getSaldo()==null){
+				oldEquipe.setSaldo(0f);
 			}
 			oldEquipe.setNome(equipe.getNome());
 			oldEquipe.setIdeiaDeNegocio(equipe.getIdeiaDeNegocio());
@@ -390,6 +407,11 @@ public class EquipeController {
 		return PAGINA_ADD_PARTICIPANTES_EQUIPE;
 	}
 	
+	@RequestMapping(value = "jogo/equipe/participantes/vincular", method = RequestMethod.GET)
+	public String vincular(){
+		return REDIRECT_PAGINA_LISTAR_JOGO;
+	}
+	
 	@RequestMapping(value = "jogo/equipe/participantes/vincular", method = RequestMethod.POST)
 	public String vincular(Model model, HttpSession session, @ModelAttribute("equipe") Equipe equipe, 
 			RedirectAttributes redirectAttributes, BindingResult result) {
@@ -514,28 +536,43 @@ public class EquipeController {
 			regrasService.verificaEquipe(equipe);
 			regrasService.verificaEquipeJogo(equipe,jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
-			permissao = usuarioService.definePermissao(jogo, usuario);
+			regrasService.verificaMembroOuProfessorEquipe(usuario, equipe);
+			permissao = usuarioService.definePermissao(equipe, usuario);
+		    rodadaService.atualizaStatusRodadas(jogo.getRodadas());
+		    if(!permissao.equals("professor"))
+		    	regrasService.verificaStatusRanking(jogo);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
-		rodadas = rodadaService.atualizaStatusRodadas(rodadas);
-		
 		List<NotaEquipeRodada> notasEquipeRodadas = notaEquipeRodadaService.buscarPorEquipe(equipe);
-		
 		if(notasEquipeRodadas == null){
 			notasEquipeRodadas = equipeService.criarNotasEquipeRodadas(notasEquipeRodadas, equipe, permissao);
 		}
 		if(notasEquipeRodadas != null){
 			notasEquipeRodadas = equipeService.atualizarNotasEquipeRodadas(notasEquipeRodadas, equipe, permissao);
 		}
+		notasEquipeRodadas = notaEquipeRodadaService.somaInvestimentos(notasEquipeRodadas);
+		Float mediaEquipe = notaEquipeRodadaService.calculaMedia(notasEquipeRodadas);
+		model.addAttribute("mediaEquipe", mediaEquipe);
+		model.addAttribute("action", "historicoEquipe");
 		model.addAttribute("permissao", permissao);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("notasEquipeRodadas", notasEquipeRodadas);
 		model.addAttribute("jogo", jogo);
 		model.addAttribute("equipe", equipe);
 		return PAGINA_HISTORICO_EQUIPE;
+	}
+	
+	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/fator/{idFator}", method = RequestMethod.GET)
+	public String atualizarFator(@RequestParam("fatorDeAposta") String fatorString,
+			@PathVariable("idEquipe") Integer idEquipe,
+			@PathVariable("idJogo") Integer idJogo,
+			@PathVariable("idFator") Integer idFator){
+		return "redirect:/jogo/"+idJogo+"/equipe/"+idEquipe+"/historico";
 	}
 
 	@RequestMapping(value = "/jogo/{idJogo}/equipe/{idEquipe}/fator/{idFator}", method = RequestMethod.POST)
@@ -560,10 +597,14 @@ public class EquipeController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		try {
+			regrasService.verificaStatusRanking(notaEquipeRodada.getRodada());
 			regrasService.verificaNoraEquipeRodada(notaEquipeRodada);
 			fator = converteFator(fatorString);
 			notaEquipeRodada.setFatorDeAposta(fator);
 			notaEquipeRodadaService.update(notaEquipeRodada);	
+		} catch (NumberFormatException e) {
+			redirectAttributes.addFlashAttribute("erro", "Insira apenas valores válidos. "+fatorString +" não pode ser convertido.");
+			return "redirect:/jogo/"+idJogo+"/equipe/"+idEquipe+"/historico";
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return "redirect:/jogo/"+idJogo+"/equipe/"+idEquipe+"/historico";
@@ -575,7 +616,7 @@ public class EquipeController {
 		return "redirect:/jogo/"+jogo.getId()+"/equipe/"+equipe.getId()+"/historico";
 	}
 	
-	private Float converteFator(String fatorString){
+	private Float converteFator(String fatorString) throws NumberFormatException{
 		fatorString = fatorString.replace(',', '.');
 		return Float.parseFloat(fatorString);
 	}

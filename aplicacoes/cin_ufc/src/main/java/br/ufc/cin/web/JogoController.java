@@ -117,12 +117,14 @@ public class JogoController {
 	}
 	
 	@RequestMapping(value = "/novo-jogo", method = RequestMethod.POST)
-	public String cadastrar(@ModelAttribute("jogo") Jogo jogo, @RequestParam("anexos") List<MultipartFile> anexos, 
-			@RequestParam("logo") MultipartFile logo, BindingResult result, HttpSession session, RedirectAttributes redirect, Model model){
-		
+	public String cadastrar(@Valid Jogo jogo, BindingResult result, @RequestParam("anexos") List<MultipartFile> anexos, 
+			@RequestParam("logo") MultipartFile logo, HttpSession session, RedirectAttributes redirect, Model model){
 		if (result.hasErrors()) {
-			redirect.addFlashAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
-			return REDIRECT_PAGINA_NOVO_JOGO;
+			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
+			model.addAttribute("action", "cadastrar");
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("editor", "jogo");
+			return PAGINA_CADASTRAR_JOGO;
 		}
 		Usuario usuario = getUsuarioLogado(session);
 		if(jogo.getDescricao() == null || jogo.getDescricao().isEmpty()){
@@ -193,25 +195,29 @@ public class JogoController {
 		return PAGINA_CADASTRAR_JOGO;
 	}
 	
-	@RequestMapping(value = "/editar", method = RequestMethod.POST)
-	public String editar(@RequestParam("anexos") List<MultipartFile> anexos, @RequestParam("logo") MultipartFile imagem, 
-			@Valid Jogo jogo, BindingResult result, HttpSession session, RedirectAttributes redirect) {
-		
+	@RequestMapping(value = "/{id}/editar", method = RequestMethod.POST)
+	public String editar(@PathVariable("id") Integer id, @RequestParam("anexos") List<MultipartFile> anexos, @RequestParam("logo") MultipartFile imagem, 
+			@Valid Jogo jogo, BindingResult result, HttpSession session, RedirectAttributes redirect, Model model) {
 		if (result.hasErrors()) {
-			redirect.addFlashAttribute("erro", "Erro ao na edição do jogo");
-			return "redirect:/jogo/"+jogo.getId()+"/editar";
+			model.addAttribute("editor", "jogo");
+			model.addAttribute("erro", MENSAGEM_ERRO_AO_CADASTRAR_JOGO);
+			model.addAttribute("action", "cadastrar");
+			model.addAttribute("jogo", jogo);
+			model.addAttribute("editor", "jogo");
+			return PAGINA_CADASTRAR_JOGO;
 		}
 		if(jogo.getDescricao() == null || jogo.getDescricao().isEmpty()){
 			redirect.addFlashAttribute("erro", "A descrição do jogo é obrigatória!");
 			redirect.addFlashAttribute("error_descricao", "A descrição do jogo é obrigatória!");
 			return "redirect:/jogo/"+jogo.getId()+"/editar";
 		}
-		
+		Usuario usuario = getUsuarioLogado(session);
 		Jogo oldJogo = jogoService.find(Jogo.class, jogo.getId());
 		List<Documento> documentos = new ArrayList<Documento>();
 		try {
 			jogoService.verificaDatas(jogo);
 			jogoService.verificaNomeSemestre(jogo);
+			regrasService.verificaSeProfessor(usuario, oldJogo);
 			documentoService.verificaArquivos(anexos);
 			documentos = documentoService.criaDocumentos(anexos, oldJogo);
 			Documento logo = documentoService.verificaAnexoImagem(imagem, oldJogo);
@@ -241,7 +247,6 @@ public class JogoController {
 		oldJogo.setSemestre(jogo.getSemestre());
 		oldJogo.setInicio(jogo.getInicio());
 		oldJogo.setTermino(jogo.getTermino());
-		
 		try{
 			jogoService.update(oldJogo);
 		}catch(Exception e){
@@ -252,7 +257,7 @@ public class JogoController {
 		return "redirect:/jogo/"+jogo.getId()+"/detalhes";
 	}
 	
-	@RequestMapping(value = "/{id}/detalhes")
+	@RequestMapping(value = "/{id}/detalhes", method = RequestMethod.GET)
 	public String verDetalhes(@PathVariable("id") Integer id, Model model, HttpSession session,
 			RedirectAttributes redirectAttributes) {
 		
@@ -275,7 +280,7 @@ public class JogoController {
 		return PAGINA_DETALHES_JOGO;
 	}
 	
-	@RequestMapping(value = "/{id}/excluir")
+	@RequestMapping(value = "/{id}/excluir", method = RequestMethod.GET)
 	public String excluir(@PathVariable("id") Integer id, HttpSession session, RedirectAttributes redirectAttributes) {
 		Jogo jogo = jogoService.find(Jogo.class,id);
 		Usuario usuario = getUsuarioLogado(session);
@@ -377,20 +382,30 @@ public class JogoController {
 		model.addAttribute("action","vincularAoJogo");
 		model.addAttribute("usuarios", usuarios);
 		return PAGINA_ADD_PARTICIPANES_JOGO;
+	}
 
+	@RequestMapping(value = "/participantes/vincular", method = RequestMethod.GET)
+	public String vincularParticipantes(){
+		return "redirect:/jogo/listar";
 	}
 	
 	@RequestMapping(value = "/participantes/vincular", method = RequestMethod.POST)
 	public String vincular(Model model, HttpSession session, @ModelAttribute("jogo") Jogo jogo, 
 			RedirectAttributes redirectAttributes, BindingResult result) {
-		
 		Jogo jogoCompleto = jogoService.find(Jogo.class, jogo.getId());
-		List<Usuario> alunos = new ArrayList<Usuario>();
-		
 		if(result.hasErrors()){
 			redirectAttributes.addFlashAttribute("erro",
 					"Conceteu algum erro ao associar usuários.");
 			return "redirect:/jogo/"+jogo.getId()+"/vincular";
+		}
+		List<Usuario> alunos = new ArrayList<Usuario>();
+		Usuario usuario = getUsuarioLogado(session);
+		try {
+			regrasService.verificaJogo(jogoCompleto);
+			regrasService.verificaSeProfessor(usuario, jogoCompleto);
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		for (Usuario aluno : jogo.getAlunos()) {
 			if(aluno.getId() != null){
@@ -400,7 +415,6 @@ public class JogoController {
 			}
 		}
 		if(!alunos.isEmpty()){
-			jogo.getAlunos().addAll(alunos);
 			jogoService.update(jogoCompleto);
 			redirectAttributes.addFlashAttribute("info",
 					"Usuários associados ao jogo com sucesso!");
@@ -417,10 +431,8 @@ public class JogoController {
 	public String desvincularUsuario(@PathVariable("idUsuario") Integer idUsuario,			
 			@PathVariable("idJogo") Integer idJogo, HttpSession session,
 			RedirectAttributes redirectAttributes, Model model) {
-
 		Usuario user = usuarioService.find(Usuario.class, idUsuario);
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
-
 		if (jogo == null) {
 			redirectAttributes.addFlashAttribute("erro",
 					MENSAGEM_JOGO_INEXISTENTE);
@@ -431,10 +443,8 @@ public class JogoController {
 					"Participante inexistente");
 			return "redirect:/jogo/" + jogo.getId() + "/participantes";
 		}
-		
 		Usuario usuario = usuarioService.find(Usuario.class, getUsuarioLogado(session).getId());
 		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
-		
 		if (usuario.equals(jogo.getProfessor())) {
 			user.getJogoParticipa().remove(jogo);
 			if(equipe != null){

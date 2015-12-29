@@ -17,12 +17,11 @@
 	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../fragments/menu.jsp" />
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<div class="col-sm-8 col-md-10 main">
 				<div class="col-sm-12">
 					<h2>
 						<strong>Histórico da empresa </strong><small>${equipe.nome } </small>
 					</h2>
-					<hr>
 					<c:if test="${not empty erro}">
 						<div class="alert alert-warning alert-dismissible" role="alert">
 							<button type="button" class="close" data-dismiss="alert">
@@ -41,7 +40,7 @@
 					</c:if>	
 					<div class="panel-group" id="accordion" role="tablist"
 						aria-multiselectable="true">
-						<div class="panel panel-info">
+						<div class="panel panel-primary">
 							<div class="panel-heading" role="tab" id="headingOne">
 								<h4 class="panel-title">
 									<a role="button" data-toggle="collapse" data-parent="#accordion"
@@ -53,11 +52,12 @@
 								role="tabpanel" aria-labelledby="headingOne">
 								<div class="panel-body">
 									<c:if test="${notasEquipeRodadas != null }">
-										<table id="table" class="table table-striped table-hover">
+										<table id="tabela-notas-equipe" class="table table-striped table-hover">
 											<thead>
 												<tr>
 													<td><strong>Rodada </strong></td>
 													<td><strong>Fator de aposta </strong></td>
+													<td><strong>Valor Recebido</strong></td>
 													<td><strong>Nota </strong></td>
 												</tr>
 											</thead>
@@ -70,7 +70,7 @@
 														</c:if>
 														<c:if test="${nota.fatorDeAposta != null }">
 															<td>
-																<c:if test="${permissao == 'professor' }">
+																<c:if test="${permissao == 'professor' && !nota.rodada.statusRaking}">
 																	<form id="fatorForm" role="form"
 																		class="form-horizontal" 
 																		action="<c:url value="/jogo/${jogo.id}/equipe/${nota.equipe.id }/fator/${nota.id }"></c:url>"
@@ -88,12 +88,20 @@
 																		</div>	 
 																	</form>
 																</c:if>
-																<c:if test="${permissao == 'aluno' }">
+																<c:if test="${permissao == 'membro' || (permissao == 'professor' && nota.rodada.statusRaking)}">
 																	<fmt:formatNumber type="number" maxFractionDigits="2">
 																		 ${nota.fatorDeAposta }
 																	 </fmt:formatNumber>
 																</c:if>
 															</td>
+														</c:if>
+														<c:if test="${nota.retorno != null }">
+															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+																value= "${nota.retorno }" />
+															</td>
+														</c:if>
+														<c:if test="${nota.retorno == null }">
+															<td>-</td>
 														</c:if>
 														<c:if test="${nota.valor != null }">
 															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
@@ -105,20 +113,17 @@
 														</c:if>
 													</tr>
 												</c:forEach>
-												<%-- <tr>
-													<td><strong>Média</strong></td>
-													<c:if test="${media >= 0 }">
-														<td>
-															<fmt:formatNumber type="number" maxFractionDigits="2" 
-																value= "${media }" />
-														</td>
-													</c:if>
-													<c:if test="${media < 0 }">
-														<td>-</td>
-													</c:if>
-												</tr> --%>
 											</tbody>
 										</table>
+										<strong>Média:&nbsp;&nbsp;
+											<c:if test="${mediaEquipe >= 0 }">
+												<fmt:formatNumber type="number" maxFractionDigits="2" 
+														value= "${mediaEquipe }" />
+											</c:if>
+											<c:if test="${mediaEquipe < 0 }">
+												0.0
+											</c:if>
+										</strong>
 									</c:if>
 								</div>
 							</div>

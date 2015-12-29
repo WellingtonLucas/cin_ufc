@@ -1,6 +1,8 @@
 package br.ufc.cin.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,6 +11,7 @@ import javax.inject.Named;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.ReaberturaSubmissaoService;
 import br.ufc.cin.service.RodadaService;
@@ -41,15 +44,9 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 
 	@Override
 	public List<Rodada> atualizaStatusRodadas(List<Rodada> rodadas) {
-		Calendar calendario = Calendar.getInstance();
-		long tempoAtual = calendario.getTimeInMillis();
 		for (Rodada rodada : rodadas) {
-			if(rodada.getTermino().getTime() < tempoAtual){
-				rodada.setStatus(false);
-				update(rodada);
-			}
+			atualizaStatusRodada(rodada);
 		}
-		
 		return rodadas;
 	}
 
@@ -74,6 +71,7 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	public Rodada atualizaStatusPrazoRodada(Rodada rodada) {
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
+		
 		if( rodada.getPrazoSubmissao().getTime() < tempoAtual || rodada.getInicio().getTime() > tempoAtual){
 			if(!rodada.isStatusPrazo())
 				return rodada;
@@ -92,7 +90,8 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
 		Long prazoComReabertura = rodada.getPrazoSubmissao().getTime() + quantidadeDiasReaberturaMillis(rodada);
-		if(prazoComReabertura < tempoAtual && (rodada.getTerminoAvaliacao().getTime() < tempoAtual || rodada.getInicio().getTime() > tempoAtual)){
+		Long terminoAva = rodada.getTerminoAvaliacao().getTime();
+		if(prazoComReabertura > tempoAtual ||  terminoAva < tempoAtual){
 			if(!rodada.isStatusAvaliacao())
 				return rodada;
 			rodada.setStatusAvaliacao(false);
@@ -148,8 +147,8 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		if(allIn.equals("sim")){
 			rodada.setAllIn(true);
 		}else{
-			if(rodada.getValorLiberado() == null){
-				throw new IllegalAccessError("Preencha o valor liberado para a rodada e tente novamente.");
+			if(rodada.getValorLiberado() == null || rodada.getValorLiberado() < 0){
+				throw new IllegalAccessError("Verifique o valor liberado para a rodada e tente novamente.");
 			}
 			rodada.setAllIn(false);
 		}
@@ -167,22 +166,22 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	@Override
 	public void verificarDatas(Rodada rodada) {
 		if(rodada.getInicio().getTime() > rodada.getTermino().getTime()){
-			throw new IllegalArgumentException("A data de início deve ser anterior a data de término.");
+			throw new IllegalAccessError("A data de início deve ser anterior a data de término.");
 		}
 		if(rodada.getInicio().getTime() > rodada.getPrazoSubmissao().getTime()){
-			throw new IllegalArgumentException("O prazo de submissão deve ser posterior a data de início.");
+			throw new IllegalAccessError("O prazo de submissão deve ser posterior a data de início.");
 		}
 		if(rodada.getInicio().getTime() > rodada.getTerminoAvaliacao().getTime()){
-			throw new IllegalArgumentException("O prazo de avaliação deve ser posterior a data de início.");
+			throw new IllegalAccessError("O prazo de avaliação deve ser posterior a data de início.");
 		}
 		if(rodada.getTermino().getTime() < rodada.getPrazoSubmissao().getTime()){
-			throw new IllegalArgumentException("O prazo de submissão deve ser anterior a data de término.");
+			throw new IllegalAccessError("O prazo de submissão deve ser anterior a data de término.");
 		}
 		if(rodada.getTermino().getTime() < rodada.getTerminoAvaliacao().getTime()){
-			throw new IllegalArgumentException("O prazo de Avaliação deve ser anterior a data de término.");
+			throw new IllegalAccessError("O prazo de Avaliação deve ser anterior a data de término.");
 		}
 		if(rodada.getTerminoAvaliacao().getTime() < rodada.getPrazoSubmissao().getTime()){
-			throw new IllegalArgumentException("O prazo de submissão deve ser anterior ao prazo de avaliação.");
+			throw new IllegalAccessError("O prazo de submissão deve ser anterior ao prazo de avaliação.");
 		}
 	}
 
@@ -224,13 +223,17 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	private Long quantidadeDiasReaberturaMillis(Rodada rodada){
 		List<ReaberturaSubmissao> reaberturaSubmissaos = reaberturaSubmissaoService.findByRodada(rodada);
 		Integer qtdDias = 0;
-		for (ReaberturaSubmissao reaberturaSubmissao : reaberturaSubmissaos) {
-			Integer temp = Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
-			if(qtdDias < temp){
-				qtdDias = temp;
-			}
-			if(qtdDias==3){
-				break;
+		if(reaberturaSubmissaos!=null && !reaberturaSubmissaos.isEmpty()){
+			for (ReaberturaSubmissao reaberturaSubmissao : reaberturaSubmissaos) {
+				if(reaberturaSubmissao.isStatus()){
+					Integer temp = Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
+					if(qtdDias < temp){
+						qtdDias = temp;
+					}
+					if(qtdDias==3){
+						break;
+					}
+				}
 			}
 		}
 		return qtdDias * umDiaTimeInMillis();
@@ -254,5 +257,36 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public List<Rodada> organizarPorPerfil(List<Rodada> rodadas, Usuario usuario) {
+		List<Rodada> novaOrganizacao = new ArrayList<Rodada>();
+		Long now = new Date().getTime();
+		for (Rodada rodada : rodadas) {
+			if(rodada.getJogo().getProfessor().equals(usuario)){
+				return rodadas;
+			}
+			if(rodada.isStatus() || rodada.getTermino().getTime() < now){
+				novaOrganizacao.add(rodada);
+			}
+		}
+		return novaOrganizacao;
+	}
+
+	@Override
+	public void atualizaStatusRanking(Rodada rodada) {
+		Long now = new Date().getTime();
+		if(rodada.getTerminoAvaliacao().getTime() > now && rodada.isStatusRaking()){
+			rodada.setStatusRaking(false);
+			update(rodada);
+		}
+	}
+
+	@Override
+	public boolean defineStatusBtnRankings(Rodada rodada) {
+		return rodada.isStatus() && !rodada.isStatusAvaliacao() 
+				&& !rodada.isStatusPrazo() && !rodada.isStatusRaking() 
+				&& !isPosPrazoSubmissoesEReabertura(rodada); 
 	}
 }

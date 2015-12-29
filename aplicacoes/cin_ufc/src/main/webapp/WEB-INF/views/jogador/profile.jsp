@@ -18,9 +18,9 @@
 	<jsp:include page="../fragments/header.jsp" />
 
 	<div class="container-fluid">
-		<jsp:include page="../fragments/menu.jsp" />
 		<div class="row">
-			<div class="col-sm-8 col-sm-offset-4 col-md-10 col-md-offset-2 toppad">
+			<jsp:include page="../fragments/menu.jsp" />
+			<div class="col-sm-8 col-md-10 main">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">${usuario.nome } ${usuario.sobreNome }</h3>
@@ -66,8 +66,8 @@
 					<div class="panel-footer">
 						<span> 
 							<a href="<c:url value="/usuario/perfil" />"
-								data-original-title="Edit this user" data-toggle="tooltip"
-								type="button" class="btn btn-warning">
+								data-original-title="Edite seus dados." data-toggle="tooltip"
+								type="button" class="btn btn-warning btn-lg">
 								Editar
 								<i class="glyphicon glyphicon-edit"></i>
 							</a>

@@ -11,8 +11,8 @@
 		type="image/png" sizes="16x16" />
 	<link href="<c:url value="/webjars/bootstrap/3.3.5/css/bootstrap.min.css" />"	rel="stylesheet" />
 	<link href="<c:url value="/resources/css/dashboard.css"/>"	rel="stylesheet" />
-	<link href="<c:url value="/resources/css/bootstrapValidator.css" />" rel="stylesheet" />
-	<link href="<c:url value="/resources/css/font-awesome.min.css"/>" rel="stylesheet"/>
+	<link href="<c:url value="/webjars/bootstrapvalidator/0.5.3/css/bootstrapValidator.css" />" rel="stylesheet" />
+	<link href="<c:url value="/webjars/font-awesome/4.5.0/css/font-awesome.min.css"/>" rel="stylesheet"/>
 	<link href="<c:url value="/resources/css/estilo.css"/>" rel="stylesheet" />
 	
 </head>
@@ -87,43 +87,43 @@
 			
 			<div class="form-group">					
 				<div class="col-sm-4">
-					<div class="error-validation"><form:errors path="nome"></form:errors></div>
 					<form:input id="nome" path="nome" type="text" class="form-control" name="nome" placeholder="Nome" />
+					<div class="error-validation"><form:errors path="nome"></form:errors></div>
 				</div>
 				<div class="col-sm-4">
-					<div class="error-validation"><form:errors path="sobreNome"></form:errors></div>
 					<form:input id="snome" type="text" path="sobreNome"
 						placeholder="Sobrenome" class="form-control" />
+					<div class="error-validation"><form:errors path="sobreNome"></form:errors></div>
 				</div>
 			</div>	
 			
 			<div class="form-group">					
 				<div class="col-sm-4">
-					<div class="error-validation"><form:errors path="matricula"></form:errors></div>
 					<form:input id="matricula" path="matricula" type="text" cssClass="form-control" placeholder="Matricula" />
+					<div class="error-validation"><form:errors path="matricula"></form:errors></div>
 				</div>
 			</div>
 				
 			<div class="form-group">					
 				<div class="col-sm-8">
-					<div class="error-validation"><form:errors path="curso"></form:errors></div>
 					<form:input id="curso" path="curso" type="text" cssClass="form-control" placeholder="Curso" />
+					<div class="error-validation"><form:errors path="curso"></form:errors></div>
 				</div>
 			</div>		
 			
 			<div class="form-group">					
 				<div class="col-sm-8">
-					<div class="error-validation"><form:errors path="email"></form:errors></div>
 					<form:input id="email" type="email" path="email"
 						placeholder="Email" class="form-control" />
+					<div class="error-validation"><form:errors path="email"></form:errors></div>
 				</div>
 			</div>
 			
 			<div class="form-group">					
 				<div class="col-sm-8">
-					<div class="error-validation"><form:errors path="senha"></form:errors></div>			
 					<form:input id="senha" type="password" path="senha" placeholder="Senha"
 					class="form-control" />
+					<div class="error-validation"><form:errors path="senha"></form:errors></div>
 				</div>
 			</div>
 			
@@ -137,10 +137,10 @@
 		</form:form>
 
 	</div>
-	<script src="<c:url value="/webjars/jquery/2.1.0/jquery.js" />"></script>
+	<script src="<c:url value="/webjars/jquery/2.1.0/jquery.min.js" />"></script>
 	<script	src="<c:url value="/webjars/bootstrap/3.3.5/js/bootstrap.min.js" />"></script>
 	<script src="<c:url value="/resources/js/cadastro.js" />"></script>
-	<script src="<c:url value="/resources/js/bootstrapValidator.min.js" />"></script>
+	<script src="<c:url value="/webjars/bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js" />"></script>
 	
 
 </body>

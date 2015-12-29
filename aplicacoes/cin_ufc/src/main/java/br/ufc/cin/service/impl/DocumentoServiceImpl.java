@@ -75,11 +75,10 @@ public class DocumentoServiceImpl extends GenericServiceImpl<Documento> implemen
 				documento.setExtensao(anexo.getContentType());
 				if (!verificaExtensao(documento.getExtensao())) {
 					throw new IllegalArgumentException(
-							"O arquivo deve está com algum desses formatos: "
+							"O arquivo deve está com algum destes formatos: "
 									+ "doc, docx, pdf, odt ou fodt!");
 				}
-			}			
-
+			}
 		} else if(anexo.getSize() == 0){
 			throw new IllegalArgumentException(
 					"Selecione um arquivo para a entrega!");

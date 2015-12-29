@@ -19,85 +19,91 @@
 			<c:set var="titulo" value="Editar - ${equipe.nome } "></c:set>
 			<c:set var="txtBtn" value="Atualizar"></c:set>
 		</c:if>
-		
 		<jsp:include page="../fragments/header-estrutura.jsp" />	
-		<title>${titulo}</title>
+		<title>${titulo}</title>	
 	</head>
 	<body>
-	
 		<jsp:include page="../fragments/header.jsp" />
 		<div class ="container">
-			<div class="col-sm-12">
-				<h2>${titulo}</h2>
-				<hr>
-				<c:if test="${not empty erro}">
-					<div class="alert alert-danger alert-dismissible" role="alert">
-						<button type="button" class="close" data-dismiss="alert">
-							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-						</button>
-						<c:out value="${erro}"></c:out>
+			<h2><strong>${titulo}</strong></h2>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<div class="panel-title">
+						<i class="fa fa-plus"></i>&nbsp;&nbsp;${titulo}
+						<a href="javascript:history.back();" class="btn btn-warning btn-sm pull-right">
+							<i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;Voltar
+						</a>
 					</div>
-				</c:if>
-				<br>				
-			</div>
-			<form:form id="adicionarEquipeForm" role="form" class="form-horizontal" commandName="equipe" 
-			enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
-			
-				<form:hidden path="id"/>
-				<form:hidden path="status"/>
-				<div class="form-group">
-					<div class="form-item">
-						<label for="nomeDoCurso" class="col-sm-2 control-label" >Nome da Empresa:<span class="required">*</span></label>
-						<div class="col-sm-8">
-							<form:input type="text" class="form-control" id="nome" path="nome" placeholder="Nome da Equipe" />
-							<div class="error-validation">
-								<form:errors path="nome"></form:errors>
+				</div>	
+				<div class="panel-body">
+					<c:if test="${not empty erro}">
+						<div class="alert alert-danger alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${erro}"></c:out>
+						</div>
+					</c:if>
+					<form:form id="adicionarEquipeForm" role="form" class="form-horizontal" commandName="equipe" 
+					enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
+					
+						<form:hidden path="id"/>
+						<form:hidden path="status"/>
+						<div class="form-group">
+							<div class="form-item">
+								<label for="nomeDoCurso" class="col-sm-2 control-label" >Nome da Empresa:<span class="required">*</span></label>
+								<div class="col-sm-8">
+									<form:input type="text" class="form-control" id="nome" path="nome" placeholder="Nome da Equipe" />
+									<div class="error-validation">
+										<form:errors path="nome"></form:errors>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="form-item">
-						<label for="ideiaDeNegocio" class="col-sm-2 control-label">Ideia de negócio:</label>
-						<div class="col-sm-8">
-							<form:textarea name="ideiaDeNegocio" id="ideiaDeNegocio" path="ideiaDeNegocio" class="form-control" />
+						<div class="form-group">
+							<div class="form-item">
+								<label for="ideiaDeNegocio" class="col-sm-2 control-label">Idéia de negócio:</label>
+								<div class="col-sm-8">
+									<form:textarea name="ideiaDeNegocio" id="ideiaDeNegocio" path="ideiaDeNegocio" class="form-control" />
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
-				
-				<div class="form-group form-item">
-					<label for="idFoto" class="col-sm-2 control-label">Logo:</label>
-					<div class="col-sm-8">
-						<input type="file" id="idfoto" name="anexo"></input>
-					</div>
-				</div>
-				<c:if test="${action eq 'editar' }">
-					<div class="form-group">
-						<div class="col-sm-2"></div>
-						<div class="col-sm-8">
-							<p class="bg-info">Para mudar o logo da sua equipe escolha outra imagem.</p>
+						
+						<div class="form-group form-item">
+							<label for="idFoto" class="col-sm-2 control-label">Logo:</label>
+							<div class="col-sm-8">
+								<input type="file" id="idfoto" name="anexo"></input>
+							</div>
 						</div>
-					</div>
-				</c:if>
-				<div class="form-group">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-2">
-						<span class="campo-obrigatorio"><span class="required">*</span> Campos obrigatórios</span>
-					</div>
+						<c:if test="${action eq 'editar' }">
+							<div class="form-group">
+								<div class="col-sm-2"></div>
+								<div class="col-sm-8">
+									<p class="bg-info">Para mudar o logo da sua equipe escolha outra imagem.</p>
+								</div>
+							</div>
+						</c:if>
+						<div class="form-group">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-2">
+								<span class="campo-obrigatorio"><span class="required">*</span> Campos obrigatórios</span>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-2">		
+								<button type="submit" class="btn btn-primary btn-lg" >
+									${txtBtn } <i class="glyphicon glyphicon-floppy-disk"></i>
+								</button>						
+							</div>
+							<div class="col-sm-2">
+								<a href="javascript:history.back();" class="btn btn-warning btn-lg">Cancelar</a>
+							</div>
+						</div>
+					</form:form>
 				</div>
-				
-				<div class="form-group">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-2">		
-						<button type="submit" class="btn btn-primary btn-lg" >
-							${txtBtn } <i class="glyphicon glyphicon-floppy-disk"></i>
-						</button>						
-					</div>
-					<div class="col-sm-2">
-						<a href="javascript:history.back();" class="btn btn-warning btn-lg">Cancelar</a>
-					</div>
-				</div>
-			</form:form>
+			</div>	
 		</div>
 		<jsp:include page="../fragments/footer.jsp" />
 	</body>

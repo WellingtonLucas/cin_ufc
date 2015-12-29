@@ -40,7 +40,7 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 	}
 
 	private Entrega getUltimaEntrega(Rodada rodada, Equipe equipe) {
-			Long ultima = (long) 0;
+			Long ultima = 0L;
 			Entrega ultimaEntrega = null;
 			for(Usuario aluno : equipe.getAlunos()){
 				for(Entrega entrega : aluno.getEntregas()){

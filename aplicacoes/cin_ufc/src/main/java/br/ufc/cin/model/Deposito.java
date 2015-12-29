@@ -1,11 +1,16 @@
 package br.ufc.cin.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Deposito {
@@ -18,8 +23,23 @@ public class Deposito {
 	@OneToOne
 	private Equipe equipe;
 	
+	@NotNull(message ="A quantia é obrigatória.")
 	@Column
 	private Float quantia;
+	
+	@Column
+	private Float retorno;
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy'T'HH:mm:ss")
+	private Date dia;
+	
+	public Date getDia() {
+		return dia;
+	}
+
+	public void setDia(Date dia) {
+		this.dia = dia;
+	}
 
 	public Integer getId() {
 		return id;
@@ -44,7 +64,15 @@ public class Deposito {
 	public void setQuantia(Float quantia) {
 		this.quantia = quantia;
 	}
-	
+
+	public Float getRetorno() {
+		return retorno;
+	}
+
+	public void setRetorno(Float retorno) {
+		this.retorno = retorno;
+	}
+
 	@Override
 	public String toString() {
 		return "ID: "+getId()+" quantia: " +getQuantia();

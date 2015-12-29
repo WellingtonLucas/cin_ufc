@@ -19,10 +19,7 @@
 
 	<div class="container-fluid">
 		<jsp:include page="../fragments/menu.jsp" />
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-			<h2>${usuario.nome } ${usuario.sobreNome }</h2>
-			<h3>Informações</h3>
-			<hr>
+		<div class="col-sm-8 col-md-10 main">
 			<c:if test="${not empty erro}">
 				<div class="alert alert-warning alert-dismissible" role="alert">
 					<button type="button" class="close" data-dismiss="alert">
@@ -31,104 +28,104 @@
 					<c:out value="${erro}"></c:out>
 				</div>
 			</c:if>
-			
-			<ul class="nav nav-tabs">
-				<li class="active"><a href="#geral" data-toggle="tab">Profile</a></li>
-				<li><a href="#profile" data-toggle="tab">Password</a></li>
-			</ul>
-			<form:form id="perfil" role="form" class="form-horizontal"
-				commandName="usuario" enctype="multipart/form-data" servletRelativeAction="atualizar"
-				method="POST">
-
-				<div id="myTabContent" class="tab-content">
-					<div class="tab-pane active in" id="geral">
-						<form:hidden path="id"/>
-						<form:hidden path="papel"/>
-						<form:hidden path="habilitado"/>
-						<form:hidden path="email"/>
-						<br>
-						<div class="form-group">
-							<label for="nome" class="col-sm-1 control-label">Nome:</label>
-							<div class="col-sm-3">
-								<div class="error-validation">
-									<form:errors path="nome"></form:errors>
-								</div>
-								<form:input id="nome" path="nome" type="text"
-									class="form-control" name="nome" placeholder="Nome" />
-							</div>
-							<label for="snome" class="col-sm-2 control-label">Sobrenome:</label>
-							<div class="col-sm-3">
-								<div class="error-validation">
-									<form:errors path="sobreNome"></form:errors>
-								</div>
-								<form:input id="snome" type="text" path="sobreNome"
-									placeholder="Sobrenome" class="form-control" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="curso" class="col-sm-1 control-label">Matricula:</label>
-							<div class="col-sm-3">
-								<div class="error-validation">
-									<form:errors path="matricula"></form:errors>
-								</div>
-								<form:input id="matricula" path="matricula" type="text"
-									cssClass="form-control" placeholder="Matricula" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="curso" class="col-sm-1 control-label">Curso:</label>
-							<div class="col-sm-8">
-								<div class="error-validation">
-									<form:errors path="curso"></form:errors>
-								</div>
-								<form:input id="curso" path="curso" type="text"
-									cssClass="form-control" placeholder="Curso" />
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label for="email" class="col-sm-1 control-label">Email:</label>
-							<div class="col-sm-8">
-								<div class="error-validation">
-									<form:errors path="email"></form:errors>
-								</div>
-								<form:input id="email" type="email" path="email"
-									placeholder="Email" class="form-control" disabled="true" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="idFoto" class="col-sm-1 control-label">Foto:</label>
-							<div class="col-sm-8">
-								<input type="file" id="idfoto" name="anexo"></input>
-							</div>
-						</div>
-						<c:if test="${action eq 'perfil' }">
-							<div class="form-group">
-								<div class="col-sm-1"></div>
-								<div class="col-sm-8">
-									<p class="bg-info">Para mudar sua foto escolha outra imagem.</p>
-								</div>
-							</div>
-						</c:if>
-
-					</div>
-					<div class="tab-pane fade" id="profile">
-						<br>
-						<div class="form-group">
-							<label for="senha" class="col-sm-1 control-label">Senha:</label>
-							<div class="col-sm-4">
-								<input type="password" id="senha" name="senha"
-									placeholder="Preencha caso queira alterar" class="form-control" />
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-2">
-						<button type="submit" class="btn btn-primary btn-lg">
-							Salvar</button>
-					</div>
+			<div class="panel with-nav-tabs panel-primary">
+				<div class="panel-heading">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#geral" data-toggle="tab">Profile</a></li>
+						<li><a href="#profile" data-toggle="tab">Password</a></li>
+					</ul>
 				</div>
-			</form:form>
-			<br>
+				<div class="panel-body">
+					<form:form id="perfil" role="form" class="form-horizontal"
+						commandName="usuario" enctype="multipart/form-data" servletRelativeAction="atualizar"
+						method="POST">
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane active in" id="geral">
+								<form:hidden path="id"/>
+								<form:hidden path="papel"/>
+								<form:hidden path="habilitado"/>
+								<form:hidden path="email"/>
+								<div class="form-group">
+									<label for="nome" class="col-sm-1 control-label">Nome:</label>
+									<div class="col-sm-3">
+										<form:input id="nome" path="nome" type="text"
+											class="form-control" name="nome" placeholder="Nome" />
+										<div class="error-validation">
+											<form:errors path="nome"></form:errors>
+										</div>
+									</div>
+									<label for="sobreNome" class="col-sm-2 control-label">Sobrenome:</label>
+									<div class="col-sm-3">
+										<form:input type="text" path="sobreNome"
+											placeholder="Sobrenome" class="form-control" />
+										<div class="error-validation">
+											<form:errors path="sobreNome"></form:errors>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="matricula" class="col-sm-1 control-label">Matricula:</label>
+									<div class="col-sm-3">
+										<form:input path="matricula" type="text"
+											cssClass="form-control" placeholder="Matricula" />
+										<div class="error-validation">
+											<form:errors path="matricula"></form:errors>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="curso" class="col-sm-1 control-label">Curso:</label>
+									<div class="col-sm-8">
+										<form:input path="curso" type="text"
+											cssClass="form-control" placeholder="Curso" />
+										<div class="error-validation">
+											<form:errors path="curso"></form:errors>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="email" class="col-sm-1 control-label">Email:</label>
+									<div class="col-sm-8">
+										<form:input id="email" type="email" path="email"
+											placeholder="Email" class="form-control" disabled="true" />
+										<div class="error-validation">
+											<form:errors path="email"></form:errors>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="idFoto" class="col-sm-1 control-label">Foto:</label>
+									<div class="col-sm-8">
+										<input type="file" id="idfoto" name="anexo"></input>
+									</div>
+								</div>
+								<c:if test="${action eq 'perfil' }">
+									<div class="form-group">
+										<div class="col-sm-1"></div>
+										<div class="col-sm-8">
+											<p class="bg-info">Para mudar sua foto escolha outra imagem.</p>
+										</div>
+									</div>
+								</c:if>
+							</div>
+							<div class="tab-pane fade" id="profile">
+								<br>
+								<div class="form-group">
+									<label for="senha" class="col-sm-1 control-label">Senha:</label>
+									<div class="col-sm-4">
+										<input type="password" id="senha" name="senha"
+											placeholder="Preencha caso queira alterar" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<button type="submit" class="btn btn-primary btn-lg">
+									Salvar</button>
+							</div>
+						</div>
+					</form:form>
+				</div>
+			</div>
 		</div>
 	</div>
 	<jsp:include page="../fragments/footer.jsp" />

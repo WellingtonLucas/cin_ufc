@@ -5,7 +5,7 @@
 <link href="<c:url value="/webjars/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.css"/>" rel="stylesheet" />
 <link href="<c:url value="/resources/css/tabs.css"/>" rel="stylesheet" />
 <link href="<c:url value="/webjars/bootstrap/3.3.5/css/bootstrap.min.css" />" rel="stylesheet" />
-<link href="<c:url value="/webjars/datatables/1.10.9/css/jquery.dataTables.min.css" />" rel="stylesheet" />
+<link href="<c:url value="/resources/css/dataTables.bootstrap.min.css"/>" rel="stylesheet" />
 <link href="<c:url value="/resources/css/dashboard.css"/>" rel="stylesheet" />
 <link href="<c:url value="/webjars/bootstrapvalidator/0.5.3/css/bootstrapValidator.css" />" rel="stylesheet" />
 <link href="<c:url value="/resources/css/fileinput.min.css"/>" rel="stylesheet"/>

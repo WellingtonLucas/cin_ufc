@@ -1,6 +1,6 @@
 package br.ufc.cin.web;
 
-import static br.ufc.cin.util.Constants.MENSAGEM_DOCUMENTO_INEXISTENTE;
+import static br.ufc.cin.util.Constants.*;
 import static br.ufc.cin.util.Constants.USUARIO_LOGADO;
 
 import java.io.ByteArrayInputStream;
@@ -92,6 +92,11 @@ public class DocumentoController {
 	public String documento(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes){
 		Documento documento = documentoService.find(Documento.class, id);
 		return "redirect:/documento/"+documento.getJogo().getId()+"/"+documento.getId();	
+	}
+	
+	@RequestMapping(value = "/ajax/remover/{id}", method = RequestMethod.GET)
+	private String excluirDocumento(@PathVariable("id") Integer id){
+		return REDIRECT_PAGINA_LISTAR_JOGO;
 	}
 	
 	@RequestMapping(value = "/ajax/remover/{id}", method = RequestMethod.POST)

@@ -51,23 +51,21 @@
 			</button>
 			<h3><c:out value="${subDescri}"></c:out></h3>
 		</div>
-		<c:if test="${not empty erro}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<c:out value="${erro}"></c:out>
-			</div>
-		</c:if>
-		<hr>
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h4>${descricao }</h4>
 			</div>
 			<div class="panel-body">
+				<c:if test="${not empty erro}">
+					<div class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<c:out value="${erro}"></c:out>
+					</div>
+				</c:if>
 				<form:form id="id-formulario" role="form" class="form-horizontal" servletRelativeAction="${url }" 
 					commandName="formulario" method="POST">
-					
 					<c:if test="${formulario.id != null}">
 						<c:if test="${action eq 'editar' }">							
 							<form:input type="hidden" path="id" value="${formulario.id}" />
@@ -168,7 +166,6 @@
 							</div>
 						</c:forEach>
 					</c:if>
-					
 					<c:if test="${action eq 'cadastrar'}">
 						<div class="form-group">
 							<label class="col-xs-2 control-label">Titulo do formulário</label>

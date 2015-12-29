@@ -3,12 +3,14 @@ package br.ufc.cin.service;
 import java.util.List;
 
 import br.ufc.cin.model.Aposta;
+import br.ufc.cin.model.Consultoria;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.SolicitacaoConsultoria;
 import br.ufc.cin.model.Usuario;
 
 /**
@@ -108,4 +110,33 @@ public interface RegrasService {
 
 	public abstract void verificaMembroOuProfessorEquipe(Usuario usuario,
 			Equipe equipe);
+
+	/**
+	 * Verifica se o usuário é o professor e se o status da rodada está ativo. 
+	 * Se o status não estiver ativo somente o professor poderá acessar a rodada. 
+	 * @author Wellington
+	 * */
+	public abstract void verificaSeProfessorPeriodoRodada(Usuario usuario,
+			Rodada rodada);
+
+	public abstract void verificaUsuario(Usuario requisitado);
+
+	public abstract void verificaSolicitacao(
+			SolicitacaoConsultoria solicitacaoConsultoria);
+
+	public abstract void verificaEquipeSolicitacao(Equipe equipe,
+			SolicitacaoConsultoria solicitacaoConsultoria);
+
+	public abstract void verificaRodadaSolicitacao(Rodada rodada,
+			SolicitacaoConsultoria solicitacaoConsultoria);
+
+	/**
+	 * Verifica se o usuário é aluno, caso contrário é lançado uma IllegalArgument 
+	 * @author Wellington
+	 * */
+	public abstract void verificaSeAluno(Usuario usuario, Jogo jogo);
+
+	public abstract void verificaConsultoria(Consultoria consultoria);
+
+	public abstract void verificaStatusRanking(Rodada rodada);
 }

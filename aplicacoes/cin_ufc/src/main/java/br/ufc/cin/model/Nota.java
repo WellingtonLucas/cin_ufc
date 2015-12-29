@@ -29,6 +29,17 @@ public class Nota {
 	@Column
 	private Float valor;
 	
+	@Column
+	private boolean satus;
+	
+	public boolean isSatus() {
+		return satus;
+	}
+
+	public void setSatus(boolean satus) {
+		this.satus = satus;
+	}
+
 	public Integer getId() {
 		return id;
 	}

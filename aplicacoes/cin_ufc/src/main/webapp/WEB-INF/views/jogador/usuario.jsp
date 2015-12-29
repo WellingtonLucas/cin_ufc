@@ -15,22 +15,22 @@
 	<jsp:include page="../fragments/header.jsp" />
 	
 	<div class="container-fluid">
-	<jsp:include page="../fragments/menu.jsp" />		
-		<c:if test="${not empty erro}">
-			<div class="alert alert-warning alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<c:out value="${erro}"></c:out>
-			</div>
-		</c:if>		
 		<div class="row">
-			<div class="col-sm-8 col-sm-offset-4 col-md-10 col-md-offset-2 toppad">
+		<jsp:include page="../fragments/menu.jsp" />		
+			<div class="col-sm-8 col-md-10 main">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h2 class="panel-title">${usuarioParticipante.nome } ${usuarioParticipante.sobreNome }</h2>
+						<i class="fa fa-user"></i>&nbsp;&nbsp;${usuarioParticipante.nome } ${usuarioParticipante.sobreNome }
 					</div>
 					<div class="panel-body">
+						<c:if test="${not empty erro}">
+							<div class="alert alert-warning alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert">
+									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+								</button>
+								<c:out value="${erro}"></c:out>
+							</div>
+						</c:if>
 						<div class="row">
 							<div class="col-md-3 col-lg-3 " align="center">
 								<c:if test="${usuarioParticipante.foto == null }">
@@ -44,7 +44,6 @@
 										class="img-circle"  width="200" height="200" />
 								</c:if>
 							</div>
-
 							<div class=" col-md-9 col-lg-9 ">
 								<table class="table table-user-information">
 									<tbody>
@@ -74,10 +73,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="panel-footer">
-						
-					</div>
-
 				</div>
 			</div>
 		</div>

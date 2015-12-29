@@ -21,11 +21,10 @@
 	<jsp:include page="../fragments/header.jsp" />
 	
 	<div class="container-fluid">
-		<jsp:include page="../fragments/menu.jsp" />
 		<div class="row">
-			<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h2><strong>Rodada: ${rodada.nome }</strong> - Seu saldo é <strong>R$ ${aposta.saldo }</strong></h2>
-				<hr>
+			<jsp:include page="../fragments/menu.jsp" />
+			<div class="col-sm-8 col-md-10 main">
+				<h2><strong>Rodada: ${rodada.nome }</strong> - Seu saldo é <strong>R$ <fmt:formatNumber currencyCode="BRL" value="${aposta.saldo }" /></strong></h2>
 				<c:if test="${not empty erro}">
 					<div class="alert alert-warning alert-dismissible" role="alert">
 						<button type="button" class="close" data-dismiss="alert">
@@ -50,12 +49,11 @@
 						<form:form id="apostar" role="form" class="form-horizontal" commandName="deposito"
 							servletRelativeAction="/jogo/${jogo.id }/rodada/${rodada.id }/apostar" method="POST">
 							<form:hidden path="equipe.id" value="${equipe.id }" />
-							
 							<div class="form-group">
 								<div class="form-item">
 									<label for="quantia" class="col-sm-3 control-label">Valor de aposta (R$):</label>
 									<div class="col-sm-2">
-										<form:input type="number" step="0.1" path="quantia" min="0.1" max="${aposta.saldo }" class="form-control" />
+										<form:input type="number" step="0.1" path="quantia" min="0.0" class="form-control" />
 										<div class="error-validation">
 											<form:errors path="quantia"></form:errors>
 										</div>

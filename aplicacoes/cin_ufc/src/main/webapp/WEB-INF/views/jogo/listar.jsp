@@ -21,7 +21,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
-				<div class="col-sm-8 col-sm-offset-4 col-md-10 col-md-offset-2 main">
+				<div class="col-sm-8 col-md-10 main">
 					<c:if test="${not empty erro}">
 						<div class="alert alert-danger alert-dismissible" role="alert">
 							<button type="button" class="close" data-dismiss="alert">
@@ -122,7 +122,6 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>

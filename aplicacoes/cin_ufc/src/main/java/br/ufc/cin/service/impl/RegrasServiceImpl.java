@@ -2,17 +2,20 @@ package br.ufc.cin.service.impl;
 
 import static br.ufc.cin.util.Constants.MENSAGEM_PERMISSAO_NEGADA;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Named;
 
 import br.ufc.cin.model.Aposta;
+import br.ufc.cin.model.Consultoria;
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.SolicitacaoConsultoria;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.RegrasService;
 import br.ufc.cin.util.Constants;
@@ -179,6 +182,71 @@ public class RegrasServiceImpl implements RegrasService {
 	public void verificaMembroOuProfessorEquipe(Usuario usuario, Equipe equipe) {
 		if((!equipe.getAlunos().contains(usuario)) && (!equipe.getJogo().getProfessor().equals(usuario))){
 			throw new IllegalArgumentException(MENSAGEM_PERMISSAO_NEGADA);
+		}
+		
+	}
+
+	@Override
+	public void verificaSeProfessorPeriodoRodada(Usuario usuario, Rodada rodada) {
+		Long now = new Date().getTime();
+		if(!rodada.getJogo().getProfessor().equals(usuario) && (!rodada.isStatus() && (rodada.getTermino().getTime() > now))){
+			throw new IllegalAccessError("Rodada não está ativa no momento.");
+		}
+		
+	}
+
+	@Override
+	public void verificaUsuario(Usuario requisitado) {
+		if(requisitado==null){
+			throw new IllegalArgumentException("Usuário não existe.");
+		}
+		
+	}
+
+	@Override
+	public void verificaSolicitacao(
+			SolicitacaoConsultoria solicitacaoConsultoria) {
+		if(solicitacaoConsultoria==null){
+			throw new IllegalArgumentException("Solicitação de consultoria não existe.");
+		}
+	}
+
+	@Override
+	public void verificaEquipeSolicitacao(Equipe equipe,
+			SolicitacaoConsultoria solicitacaoConsultoria) {
+		if(!solicitacaoConsultoria.getEquipe().equals(equipe)){
+			throw new IllegalArgumentException("Solicitação de consultoria não é da equipe informada.");
+		}
+	}
+
+	@Override
+	public void verificaRodadaSolicitacao(Rodada rodada,
+			SolicitacaoConsultoria solicitacaoConsultoria) {
+		if(!solicitacaoConsultoria.getConsultoria().getRodada().equals(rodada)){
+			throw new IllegalArgumentException("A consultoria não pertence a rodada especificada.");
+		}
+		
+	}
+
+	@Override
+	public void verificaSeAluno(Usuario usuario, Jogo jogo) {
+		if(!jogo.getAlunos().contains(usuario)){
+			throw new IllegalArgumentException("Somente alunos podem efetuar apostas.");
+		}
+		
+	}
+
+	@Override
+	public void verificaConsultoria(Consultoria consultoria) {
+		if(consultoria.getId()==null){
+			throw new IllegalArgumentException("Primeiramente crie a consultoria para esta rodada.");
+		}
+	}
+
+	@Override
+	public void verificaStatusRanking(Rodada rodada) {
+		if(rodada.isStatusRaking()){
+			throw new IllegalArgumentException("O ranking da rodada já está publicado.");
 		}
 		
 	}

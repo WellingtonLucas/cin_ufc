@@ -40,4 +40,6 @@ public interface EquipeService extends GenericService<Equipe>{
 	public abstract void ativarSubmissaoEquipeRodada(Equipe equipe, Rodada rodada, StatusRodadaEquipe rodadaEquipe);
 	
 	public abstract void desativarSubmissaoEquipeRodada(Equipe equipe, Rodada rodada, StatusRodadaEquipe rodadaEquipe);
+
+	public abstract void verificaNome(Equipe equipe);
 }

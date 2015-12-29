@@ -12,7 +12,6 @@
 <head>
 	<jsp:include page="../fragments/header-estrutura.jsp" />
 	<title>Avaliações do aluno</title>
-
 </head>
 <body>
 	<jsp:include page="../fragments/header.jsp" />
@@ -21,62 +20,64 @@
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
-				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<div class="col-sm-12">
-						<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-						<h2><strong>Aluno: ${usuarioRequisitado.nome }</strong> - <small>Avaliações efetuadas pelo aluno</small></h2>
-						<hr>
-						<c:if test="${not empty erro}">
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
-							</div>
-						</c:if>
-						<c:if test="${not empty info}">
-							<div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${info}"></c:out>
-							</div>
-						</c:if>
-					</div>
-					<c:if test="${not empty respostas }">
-				       	<div class="col-sm-12">
-							<table id="tabela-avaliacoes-user" class="table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>Rodada</th>
-										<th>Empresa</th>
-										<th>Entrega</th>
-										<th>Avaliação</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="resposta" items="${respostas}" varStatus="respostaId">
-										<tr>
-											<td>
-												<a href="<c:url value="/jogo/${jogo.id}/rodada/${resposta.entrega.rodada.id }/detalhes"></c:url>">${resposta.entrega.rodada.nome}</a>
-											</td>
-											<td>
-												<a href="<c:url value="/jogo/${jogo.id}/equipe/${resposta.entrega.equipe.id }"></c:url>">${resposta.entrega.equipe.nome}</a>
-											</td>
-											<td>
-												<a href="<c:url value="/documento/downloadDocumento/${resposta.entrega.documento.id }"></c:url>">${resposta.entrega.documento.nomeOriginal}</a>
-											</td>
-											<td>
-												<a href="<c:url value="/usuario/${usuarioRequisitado.id }/jogo/${jogo.id}/resposta/${resposta.id }/avaliacao" ></c:url>">
-													<button class="btn btn-primary">Ver avaliação</button>
-												</a>
-											</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+				<div class="col-sm-8 col-md-10 main">
+					<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
+					<h2><strong>Aluno: ${usuarioRequisitado.nome }</strong> - <small>Avaliações efetuadas pelo aluno</small></h2>
+					<c:if test="${not empty erro}">
+						<div class="alert alert-warning alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${erro}"></c:out>
 						</div>
-					</c:if>	
+					</c:if>
+					<c:if test="${not empty info}">
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<c:out value="${info}"></c:out>
+						</div>
+					</c:if>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<i class="fa fa-archive"></i>&nbsp;&nbsp;Avaliações
+						</div>
+						<div class="panel-body">
+					       	<div class="col-sm-12">
+								<table id="tabela-avaliacoes-user" class="table table-striped table-hover">
+									<thead>
+										<tr>
+											<th>Rodada</th>
+											<th>Empresa</th>
+											<th>Entrega</th>
+											<th>Avaliação</th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach var="resposta" items="${respostas}" varStatus="respostaId">
+											<tr>
+												<td>
+													<a href="<c:url value="/jogo/${jogo.id}/rodada/${resposta.entrega.rodada.id }/detalhes"></c:url>">${resposta.entrega.rodada.nome}</a>
+												</td>
+												<td>
+													<a href="<c:url value="/jogo/${jogo.id}/equipe/${resposta.entrega.equipe.id }"></c:url>">${resposta.entrega.equipe.nome}</a>
+												</td>
+												<td>
+													<a href="<c:url value="/documento/downloadDocumento/${resposta.entrega.documento.id }"></c:url>">${resposta.entrega.documento.nomeOriginal}</a>
+												</td>
+												<td>
+													<a href="<c:url value="/usuario/${usuarioRequisitado.id }/jogo/${jogo.id}/resposta/${resposta.id }/avaliacao" ></c:url>">
+														<button class="btn btn-primary">Ver avaliação</button>
+													</a>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -240,6 +240,22 @@ $(document).ready(function() {
         }
 	});
 	
+	$('#servico-form').bootstrapValidator({
+        feedbackIcons: {
+        	valid: 'glyphicon glyphicon-ok',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+        	valor:{
+            	validators:{
+            		notEmpty:{
+            			message: 'Você precisa definir um valor para o serviço.'
+            		}
+            	}
+            }
+        }
+	});
+	
     $("#inicio").datepicker({
 		format : "dd/mm/yyyy",
 		todayBtn : "linked",
@@ -318,13 +334,16 @@ $(document).ready(function() {
 	});
 
 	$('#confirm-gerar-ranking').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza que deseja gerar os Rankings para \"' + $(e.relatedTarget).data('name') + '\"?');
+		$(this).find('.modal-body').text('Tem certeza que deseja gerar os Rankings para \"' + $(e.relatedTarget).data('name') + 
+				'\"? Lembre-se o ranking só será gerado uma vez por rodada.');
 		$(this).find('.btn-success').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$('#confirm-gerar-notas').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza que deseja gerar as Notas para \"' + $(e.relatedTarget).data('name') + '\"?');
-		$(this).find('.btn-success').attr('href', $(e.relatedTarget).data('href'));
+		$(this).find('.modal-body').text('Tem certeza que deseja gerar as Notas e Fatores de Aposta para \"' + $(e.relatedTarget).data('name') + '\"?\n'+
+				'Por enquanto só você poderá ver esses dados. Para alterar os fatores de aposta vá no perfil das empresas '+
+				'e acesse os hitóricos dessas.');
+		$(this).find('#id-gerar-nota').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$('.confirm-delete-file').on('click', function(e) {
@@ -344,13 +363,11 @@ $(document).ready(function() {
 	
 	$('#tabela-submissoes').DataTable({
 		"order" : [[ 0, 'desc' ]],
-		"columnDefs" : [ 
-		    {className: "col-sm-4", "targets": [1]},
-		    {className: "col-sm-1", "targets": [2]},
-		    {className: "col-sm-1", "targets": [3]},
+		"columnDefs" : [
 		    {className: "col-sm-4", "targets": [0]},
-		    {"targets" : 2, "orderable" : false},
-		    {"targets" : 3, "orderable" : false}
+		    {className: "col-sm-4", "targets": [1]},
+		    {"targets" : 3, "orderable" : false},
+		    {"targets" : 4, "orderable" : false}
 		],
 		"language": {
             "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
@@ -360,6 +377,19 @@ $(document).ready(function() {
 		"order" : [[ 0, 'desc' ]],
 		"columnDefs" : [ 
 		    {className: "col-sm-2", "targets": [2]},
+		 ],
+		"language": {
+            "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
+        }
+	});
+	
+	$('#tabela-solicitacoes').DataTable({
+		"order" : [[ 2, 'desc' ]],
+		"columnDefs" : [ 
+            {"targets" : 1, "orderable" : false},
+            {className: "text-center", "targets": [1]},
+            {className: "text-center", "targets": [2]},
+            {className: "text-center", "targets": [3]}
 		 ],
 		"language": {
             "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"

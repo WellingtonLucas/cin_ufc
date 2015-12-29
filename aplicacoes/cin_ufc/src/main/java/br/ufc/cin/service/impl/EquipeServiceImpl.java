@@ -2,6 +2,7 @@ package br.ufc.cin.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -85,9 +86,11 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 
 	@Override
 	public Equipe equipePorAlunoNoJogo(Usuario aluno, Jogo jogo) {
-		for (Equipe equipe : aluno.getEquipes()) {
-			if(equipe.getJogo().equals(jogo))
-				return find(Equipe.class, equipe.getId());
+		if(!jogo.getProfessor().equals(aluno) && jogo.getAlunos().contains(aluno)){
+			for (Equipe equipe : aluno.getEquipes()) {
+				if(equipe.getJogo().equals(jogo))
+					return find(Equipe.class, equipe.getId());
+			}
 		}
 		return null;
 	}
@@ -139,12 +142,12 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 				notaEquipeRodada.setRodada(entrega.getRodada());
 				Float nota = calculoNotaService.calculoNotaEquipe(resposta);
 				notaEquipeRodada.setValor(nota);
-				notaEquipeRodada.setFatorDeAposta(nota);
+				Float fator = nota/10 + 1;
+				notaEquipeRodada.setFatorDeAposta(fator);
 				notaEquipeRodadaService.save(notaEquipeRodada);
 				notasEquipeRodadas.add(notaEquipeRodada);
 			}
 		}	
-		
 		return notasEquipeRodadas;
 	}
 
@@ -164,7 +167,8 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 				notaEquipeRodada.setRodada(entregas.get(i).getRodada());
 				Float nota = calculoNotaService.calculoNotaEquipe(resposta);
 				notaEquipeRodada.setValor(nota);
-				notaEquipeRodada.setFatorDeAposta(nota);
+				Float fator = nota/10 + 1;
+				notaEquipeRodada.setFatorDeAposta(fator);
 				notaEquipeRodadaService.save(notaEquipeRodada);
 				notasEquipeRodadas.add(notaEquipeRodada);
 			}
@@ -225,6 +229,14 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 		equipe.addStatusRodadaEquipe(rodadaEquipe);
 		update(equipe);
 		
+	}
+
+	@Override
+	public void verificaNome(Equipe equipe) {
+		boolean soEspacos = Pattern.matches("\\s+", equipe.getNome());
+		if(soEspacos || equipe.getNome().isEmpty()){
+			throw new IllegalArgumentException("O nome da empresa é obrigatório.");
+		}
 	}
 
 }

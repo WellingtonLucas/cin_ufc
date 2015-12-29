@@ -24,32 +24,31 @@
 		<div class="container-fluid">
 			<div class="row">
 				<jsp:include page="../fragments/menu.jsp" />
-				<div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-						<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Últimas submissões da rodada</small>
-							- Seu saldo é <strong>R$ ${aposta.saldo }</strong>
-						</h2>
-						<hr>
-						<c:if test="${not empty erro}">
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
-							</div>
-						</c:if>
-						<c:if test="${not empty info}">
-							<div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${info}"></c:out>
-							</div>
-						</c:if>
+				<div class="col-sm-8 col-md-10 main">
+					<h2><strong>Rodada: ${rodada.nome }</strong> - <small>Últimas submissões da rodada</small>
+						<c:if test="${permissao != 'professor' }">- Seu saldo é <strong>R$ <fmt:formatNumber currencyCode="BRL" value="${aposta.saldo }" /></strong></c:if>.
+					</h2>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4><strong>Últimas Submissões</strong> </h4>
 						</div>
 						<div class="panel-body">
+							<c:if test="${not empty erro}">
+								<div class="alert alert-warning alert-dismissible" role="alert">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<c:out value="${erro}"></c:out>
+								</div>
+							</c:if>
+							<c:if test="${not empty info}">
+								<div class="alert alert-success alert-dismissible" role="alert">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<c:out value="${info}"></c:out>
+								</div>
+							</c:if>
 							<c:if test="${not empty entregas }">
 						       	<div class="col-sm-12">
 									<table id="tabela-submissoes" class="table table-striped table-hover">
@@ -57,9 +56,11 @@
 											<tr>
 												<th>Empresa</th>
 												<th>Documento</th>
-												<th>Avalie</th>
-												<th>Aposte</th>
 												<th>Data de Submissão</th>
+												<th>Avalie</th>
+												<c:if test="${permissao != 'professor' }">
+													<th>Aposte</th>
+												</c:if>
 											</tr>
 										</thead>
 										<tbody>
@@ -72,6 +73,10 @@
 														<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
 													</td>
 													<td>
+														<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />
+													</td>
+													
+													<td>
 														<c:if test="${!entrega.respondida }">
 															<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
 																<button class="btn btn-primary">Avaliar</button>
@@ -83,14 +88,13 @@
 															</a>
 														</c:if>
 													</td>
-													<td>
-														<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
-															<button class="btn btn-primary">Apostar</button>
-														</a>
-													</td>
-													<td>
-														<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />
-													</td>
+													<c:if test="${permissao != 'professor' }">
+														<td>
+															<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
+																<button class="btn btn-primary">Apostar</button>
+															</a>
+														</td>
+													</c:if>
 												</tr>
 											</c:forEach>
 										</tbody>

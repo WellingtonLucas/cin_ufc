@@ -26,7 +26,7 @@ public class CalculoNotaServiceImpl implements CalculoNotaService{
 			if(diferenca == 0)
 				valor = 10f;
 			if(diferenca == 1)
-				valor = 5f;
+				valor = 3f;
 			if(diferenca >= 2)
 				valor = 0f;
 			somatorio += valor;
@@ -50,7 +50,6 @@ public class CalculoNotaServiceImpl implements CalculoNotaService{
 	@Override
 	public Float calculoNotaEquipe(Resposta resposta) {
 		List<Opcao> gabarito = resposta.getEntrega().getGabarito().getOpcoes();
-		
 		float somatorio = 0f;
 		for (int i = 0; i < gabarito.size(); i++) {
 			List<Opcao> opcoes = gabarito.get(i).getPergunta().getOpcoes();
@@ -65,7 +64,6 @@ public class CalculoNotaServiceImpl implements CalculoNotaService{
 			somatorio += inicial;
 		}
 		return somatorio/gabarito.size();
-		
 	}
 	
 	private List<Opcao> ordenaOpcoesPorId(List<Opcao>opcoes){

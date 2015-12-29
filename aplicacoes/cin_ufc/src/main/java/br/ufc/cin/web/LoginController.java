@@ -64,6 +64,12 @@ public class LoginController {
 		return "403";
 	}
 	
+	@RequestMapping(value = "/400", method = RequestMethod.POST)
+	public String paginaRequisicaoNaoPresente(ModelMap model, Principal user) {
+		model.addAttribute("message", "Verifique se preencheu todos os campos requeridos.");
+		return "400";
+	}
+	
 	@RequestMapping(value = "/404", method = RequestMethod.GET)
 	public String paginaInexistente(ModelMap model, Principal user) {
 		model.addAttribute("message", "Oops, página não encontrada.");

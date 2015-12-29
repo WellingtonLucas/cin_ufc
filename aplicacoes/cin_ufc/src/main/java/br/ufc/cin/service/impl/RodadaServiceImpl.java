@@ -193,6 +193,7 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		rodada.setJogo(oldRodada.getJogo());
 		if(allIn.equals("sim")){
 			rodada.setAllIn(true);
+			rodada.setValorLiberado(0F);
 		}else{
 			if(rodada.getValorLiberado() == null){
 				throw new IllegalAccessError("Preencha o valor liberado para a rodada e tente novamente.");

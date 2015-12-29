@@ -224,7 +224,9 @@ public class UsuarioController {
 				return "redirect:/usuario/perfil";
 			}
 		}
-		perfilAnterior.setFoto(imagem);
+		if(imagem!=null){
+			perfilAnterior.setFoto(imagem);
+		}
 		if(!(usuario.getSenha().isEmpty())){
 			ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 			perfilAnterior.setSenha(encoder.encodePassword(usuario.getSenha(), ""));

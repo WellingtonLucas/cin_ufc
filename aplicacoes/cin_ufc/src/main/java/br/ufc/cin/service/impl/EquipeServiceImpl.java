@@ -13,6 +13,7 @@ import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
+import br.ufc.cin.model.SaldoNaRodada;
 import br.ufc.cin.model.StatusRodadaEquipe;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.EquipeRepository;
@@ -22,6 +23,7 @@ import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.NotaEquipeRodadaService;
 import br.ufc.cin.service.RespostaService;
+import br.ufc.cin.service.SaldoNaRodadaService;
 import br.ufc.cin.service.UsuarioService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
@@ -49,6 +51,10 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 	
 	@Inject
 	private JogoService jogoService;
+	
+	@Inject
+	private SaldoNaRodadaService saldoNaRodadaService;
+	
 	
 	@Override
 	public List<Usuario> alunosSemEquipe(Jogo jogo) {
@@ -157,7 +163,7 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
 		List<Resposta> respostas = new ArrayList<Resposta>();
 		for (int i= notasEquipeRodadas.size(); i<entregas.size();i++) {
-			Resposta resposta = respostaService.findUltimaRespostaPorEntrega(entregas.get(i).getUsuario(), entregas.get(i));
+			Resposta resposta = respostaService.findUltimaRespostaPorEquipe(equipe, entregas.get(i));
 			if(resposta!= null){
 				respostas.add(resposta);
 			}
@@ -212,6 +218,8 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 			rodadaEquipe.setEquipe(equipe);
 			rodadaEquipe.setRodada(rodada);
 		}
+		SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(equipe, rodada);
+		saldoNaRodada.setSaldo(-rodada.getValorReabertura());
 		rodadaEquipe.setAtiva(true);
 		equipe.addStatusRodadaEquipe(rodadaEquipe);
 		update(equipe);

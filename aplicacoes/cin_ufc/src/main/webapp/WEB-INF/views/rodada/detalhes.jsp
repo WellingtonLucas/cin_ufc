@@ -92,10 +92,10 @@
 								<div class="form-group">
 									<label class="col-sm-2 field">Valor de aposta:</label>
 									<div class="col-sm-4 field-value">
-										<c:if test="${empty rodada.valorLiberado }">
+										<c:if test="${empty rodada.valorLiberado || rodada.valorLiberado == 0}">
 											<label>-</label>
 										</c:if>
-										<c:if test="${not empty rodada.valorLiberado }">
+										<c:if test="${not empty rodada.valorLiberado && rodada.valorLiberado > 0}">
 											<label>R$ <fmt:formatNumber currencyCode="BRL" value="${rodada.valorLiberado }" /></label>
 										</c:if>
 									</div>

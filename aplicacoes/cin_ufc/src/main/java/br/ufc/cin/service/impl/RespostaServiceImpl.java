@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Entrega;
+import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.Opcao;
@@ -81,7 +82,7 @@ public class RespostaServiceImpl extends GenericServiceImpl<Resposta> implements
 		}
 		return null;
 	}
-
+	
 	@Override
 	public void salvar(Resposta resposta, Jogo jogo, Formulario formulario, Usuario usuario, Entrega entrega) {
 		List<Opcao> opcoes = new ArrayList<Opcao>();
@@ -113,5 +114,26 @@ public class RespostaServiceImpl extends GenericServiceImpl<Resposta> implements
 			entregaService.update(entrega);
 		}
 		
+	}
+
+	@Override
+	public Resposta findUltimaRespostaPorEquipe(Equipe equipe,
+			Entrega entrega) {
+		Resposta ultima = new Resposta();
+		int i=0;
+		for (Usuario usuario : equipe.getAlunos()) {
+			Resposta resposta = findUltimaRespostaPorEntrega(usuario, entrega);
+			if(resposta!=null){
+				if(i==0){
+					ultima = resposta;
+					i++;
+				}else{
+					if(ultima.getDia().getTime()<resposta.getDia().getTime()){
+						ultima = resposta;
+					}
+				}
+			}
+		}
+		return ultima;
 	}
 }

@@ -89,6 +89,10 @@ public class Rodada {
 	@Column(name="all_in")
 	private boolean allIn;
 	
+	@Column(name = "valor_reabertura")
+	@NotNull(message = "O valor de reabertura de uma rodada é obrigatório.")
+	private Float valorReabertura;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -231,6 +235,14 @@ public class Rodada {
 
 	public void setAllIn(boolean allIn) {
 		this.allIn = allIn;
+	}
+	
+	public Float getValorReabertura() {
+		return valorReabertura;
+	}
+
+	public void setValorReabertura(Float valorReabertura) {
+		this.valorReabertura = valorReabertura;
 	}
 
 	@Override

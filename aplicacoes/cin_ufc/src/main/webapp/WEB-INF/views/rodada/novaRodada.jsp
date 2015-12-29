@@ -140,7 +140,8 @@
 							<div class="form-item">
 								<label for="valorLiberado" class="col-sm-2 control-label">Valor de aposta (R$):</label>
 								<div class="col-sm-2">
-									<form:input type="number" step="0.5" path="valorLiberado" min="0.0" class="form-control"/>
+									<form:input data-toggle="tooltip" data-placement="top" title="Este é o valor atribuido para investimentos na rodada por parte dos alunos." 
+									type="number" step="0.5" path="valorLiberado" min="0.0" class="form-control"/>
 									<div class="error-validation">
 											<form:errors path="valorLiberado"></form:errors>
 									</div>
@@ -180,6 +181,18 @@
 									</div>
 								</c:if>
 								
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-item">
+								<label for="valorReabertura" class="col-sm-2 control-label">Reabertura (R$):<span class="required">*</span></label>
+								<div class="col-sm-2">
+									<form:input data-toggle="tooltip" data-placement="top" title="Este é o valor cobrado por cada dia em um pedido de reabertura desta rodada."
+									type="number" step="0.5" path="valorReabertura" min="0.0" class="form-control"/>
+									<div class="error-validation">
+											<form:errors path="valorReabertura"></form:errors>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="form-group">

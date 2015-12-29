@@ -315,5 +315,7 @@ $(document).ready(function() {
             "url": "/cin_ufc/resources/js/Portuguese-Brasil.json"
         }
 	});
+	
+	
 });
 

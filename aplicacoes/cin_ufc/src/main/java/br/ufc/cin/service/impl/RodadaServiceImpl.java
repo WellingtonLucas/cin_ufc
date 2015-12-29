@@ -71,6 +71,7 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	public Rodada atualizaStatusPrazoRodada(Rodada rodada) {
 		Calendar calendario = Calendar.getInstance();
 		long tempoAtual = calendario.getTimeInMillis();
+		
 		if( rodada.getPrazoSubmissao().getTime() < tempoAtual || rodada.getInicio().getTime() > tempoAtual){
 			if(!rodada.isStatusPrazo())
 				return rodada;
@@ -146,8 +147,8 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		if(allIn.equals("sim")){
 			rodada.setAllIn(true);
 		}else{
-			if(rodada.getValorLiberado() == null){
-				throw new IllegalAccessError("Preencha o valor liberado para a rodada e tente novamente.");
+			if(rodada.getValorLiberado() == null || rodada.getValorLiberado() < 0){
+				throw new IllegalAccessError("Verifique o valor liberado para a rodada e tente novamente.");
 			}
 			rodada.setAllIn(false);
 		}

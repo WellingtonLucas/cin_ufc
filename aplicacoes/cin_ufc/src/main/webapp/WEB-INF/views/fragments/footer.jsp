@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
  <div class="mastfoot">
 	 <div class="inner">	
-		 	<p>&copy; Projeto de Extensão 2015</p>
+		 	<p>&copy; Projeto de Extensão Jogo de Empreendedorismo.</p><br>
+		 	<p>Desenvolvido por Wellington Lucas Moura</p>
 	 </div>
  </div>
 

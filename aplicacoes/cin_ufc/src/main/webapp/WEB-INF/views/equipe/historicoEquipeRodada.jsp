@@ -70,7 +70,7 @@
 														</c:if>
 														<c:if test="${nota.fatorDeAposta != null }">
 															<td>
-																<c:if test="${permissao == 'professor' }">
+																<c:if test="${permissao == 'professor' && !nota.rodada.statusRaking}">
 																	<form id="fatorForm" role="form"
 																		class="form-horizontal" 
 																		action="<c:url value="/jogo/${jogo.id}/equipe/${nota.equipe.id }/fator/${nota.id }"></c:url>"
@@ -88,7 +88,7 @@
 																		</div>	 
 																	</form>
 																</c:if>
-																<c:if test="${permissao == 'aluno' }">
+																<c:if test="${permissao == 'membro' || (permissao == 'professor' && nota.rodada.statusRaking)}">
 																	<fmt:formatNumber type="number" maxFractionDigits="2">
 																		 ${nota.fatorDeAposta }
 																	 </fmt:formatNumber>

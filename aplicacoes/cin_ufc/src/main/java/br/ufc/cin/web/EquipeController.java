@@ -38,7 +38,6 @@ import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
-import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.service.DocumentoService;
 import br.ufc.cin.service.EntregaService;
@@ -537,9 +536,11 @@ public class EquipeController {
 			regrasService.verificaEquipe(equipe);
 			regrasService.verificaEquipeJogo(equipe,jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
-			permissao = usuarioService.definePermissao(jogo, usuario);
-			List<Rodada> rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
-		    rodadaService.atualizaStatusRodadas(rodadas);
+			regrasService.verificaMembroOuProfessorEquipe(usuario, equipe);
+			permissao = usuarioService.definePermissao(equipe, usuario);
+		    rodadaService.atualizaStatusRodadas(jogo.getRodadas());
+		    if(!permissao.equals("professor"))
+		    	regrasService.verificaStatusRanking(jogo);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -596,10 +597,14 @@ public class EquipeController {
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
 		try {
+			regrasService.verificaStatusRanking(notaEquipeRodada.getRodada());
 			regrasService.verificaNoraEquipeRodada(notaEquipeRodada);
 			fator = converteFator(fatorString);
 			notaEquipeRodada.setFatorDeAposta(fator);
 			notaEquipeRodadaService.update(notaEquipeRodada);	
+		} catch (NumberFormatException e) {
+			redirectAttributes.addFlashAttribute("erro", "Insira apenas valores válidos. "+fatorString +" não pode ser convertido.");
+			return "redirect:/jogo/"+idJogo+"/equipe/"+idEquipe+"/historico";
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return "redirect:/jogo/"+idJogo+"/equipe/"+idEquipe+"/historico";
@@ -611,7 +616,7 @@ public class EquipeController {
 		return "redirect:/jogo/"+jogo.getId()+"/equipe/"+equipe.getId()+"/historico";
 	}
 	
-	private Float converteFator(String fatorString){
+	private Float converteFator(String fatorString) throws NumberFormatException{
 		fatorString = fatorString.replace(',', '.');
 		return Float.parseFloat(fatorString);
 	}

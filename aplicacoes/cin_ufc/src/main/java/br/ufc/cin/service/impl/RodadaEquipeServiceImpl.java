@@ -115,4 +115,14 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 		return false;
 	}
 
+	@Override
+	public void verificaStatusEquipeRodada(Equipe equipe, Rodada rodada) {
+		if(equipe !=null){
+			StatusRodadaEquipe statusRodadaEquipe = find(equipe, rodada);
+			if(!statusRodadaEquipe.isAtiva()){
+				throw new IllegalArgumentException("A sua equipe não possui permissão de submissão.");
+			}
+		}
+	}
+
 }

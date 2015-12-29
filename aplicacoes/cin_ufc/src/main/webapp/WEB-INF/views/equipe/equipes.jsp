@@ -57,8 +57,7 @@
 							                <div class="content">
 							                    <h4>${equipe.nome }</h4> <br>
 							                    
-							                    <p> Veja mais detalhes
-							                    </p>    
+							                    <p> Veja mais detalhes</p>    
 							                    <p>
 							                    	<a data-toggle="tooltip" data-placement="top" title="Veja detalhes da empresa."
 							                    		class="btn btn-success" href="<c:url value="equipe/${equipe.id }" />">Detalhes</a>

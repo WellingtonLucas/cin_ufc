@@ -148,7 +148,6 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 				notasEquipeRodadas.add(notaEquipeRodada);
 			}
 		}	
-		
 		return notasEquipeRodadas;
 	}
 

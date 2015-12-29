@@ -76,17 +76,22 @@ public class NotaEquipeRodadaServiceImpl extends GenericServiceImpl<NotaEquipeRo
 			List<NotaEquipeRodada> notasEquipeRodadas) {
 		for (NotaEquipeRodada notaEquipeRodada : notasEquipeRodadas) {
 			Consultoria consultoria = ConsultoriaService.findByRodada(notaEquipeRodada.getRodada());
-			SolicitacaoConsultoria solicitacao = solicitacaoConsultoriaService.findByEquipeConsulta(notaEquipeRodada.getEquipe(), consultoria);
+			SolicitacaoConsultoria solicitacao;
 			Float valConsulta = 0F;
-			if(solicitacao!=null && solicitacao.isStatus()){
-				valConsulta = consultoria.getValor();
+			if(consultoria.getId()!=null){
+				solicitacao = solicitacaoConsultoriaService.findByEquipeConsulta(notaEquipeRodada.getEquipe(), consultoria);
+				if(solicitacao!=null && solicitacao.isStatus()){
+					valConsulta = consultoria.getValor();
+				}
 			}
 			Float valor = 0F;
 			List<Aposta> apostas = apostaService.findByRodada(notaEquipeRodada.getRodada());
-			for (Aposta aposta : apostas) {
-				for (Deposito deposito : aposta.getDepositos()) {
-					if(deposito.getEquipe().equals(notaEquipeRodada.getEquipe()))
-						valor += deposito.getQuantia();
+			if(apostas!=null){
+				for (Aposta aposta : apostas) {
+					for (Deposito deposito : aposta.getDepositos()) {
+						if(deposito.getEquipe().equals(notaEquipeRodada.getEquipe()))
+							valor += deposito.getQuantia();
+					}
 				}
 			}
 			notaEquipeRodada.setRetorno(valor * notaEquipeRodada.getFatorDeAposta() - valConsulta);

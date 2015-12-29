@@ -26,5 +26,11 @@ public interface RodadaEquipeService extends GenericService<StatusRodadaEquipe>{
 	public abstract void deletePor(Rodada rodada);
 
 	public abstract boolean verificaSeTemSolicitacao(List<Equipe> equipes, Rodada rodada);
+	
+	/**
+	 * Verifica se a equipe tem permissão de submissão para a rodada.
+	 * 
+	 * */
+	public abstract void verificaStatusEquipeRodada(Equipe equipe, Rodada rodada);
 
 }

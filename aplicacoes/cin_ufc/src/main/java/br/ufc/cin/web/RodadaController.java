@@ -472,13 +472,14 @@ public class RodadaController {
 		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
 		Entrega entrega = new Entrega();
-		Equipe equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		Equipe equipe;
 		Documento documento;
 		try {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaParticipacao(usuario, jogo);
+			equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
 			rodadaService.atualizaStatusPrazoRodada(rodada);
-			rodadaService.verificaSePrazoSubmissao(rodada);
+			rodadaEquipeService.verificaStatusEquipeRodada(equipe, rodada);
 			documento = documentoService.verificaAnexoEntrega(anexo,usuario,rodada,jogo,equipe);
 			documentoService.save(documento);
 			entregaService.salvar(entrega, rodada, equipe, usuario, documento);
@@ -566,6 +567,7 @@ public class RodadaController {
 		Jogo jogo = jogoService.find(Jogo.class, idJogo);
 		Rodada rodada = rodadaService.find(Rodada.class, idRodada);
 		Usuario usuario = getUsuarioLogado(session);
+		usuario = usuarioService.find(Usuario.class, usuario.getId());
 		Equipe equipe;
 		if (result.hasErrors()) {
 			redirect.addFlashAttribute("erro", "Erro ao solicitar reabertura da submissão de entrega.");

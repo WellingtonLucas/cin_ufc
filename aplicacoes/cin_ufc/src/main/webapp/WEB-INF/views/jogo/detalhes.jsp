@@ -11,7 +11,6 @@
 	<jsp:include page="../fragments/header-estrutura.jsp" />
 	<title>Informações do Jogo</title>
 </head>
-
 <body>
 	<jsp:include page="../fragments/header.jsp" />
 	<div class="section">
@@ -20,28 +19,13 @@
 				<jsp:include page="../fragments/menu.jsp" />		
 				<div class="col-sm-8 col-md-10 main">	
 					<h2><strong>${jogo.nomeDoCurso }</strong> <small> ${jogo.semestre }</small></h2>	
-					<c:if test="${not empty erro}">
-						<div class="alert alert-warning alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${erro}"></c:out>
-						</div>
-					</c:if>		
-					<c:if test="${not empty info}">
-						<div class="alert alert-success alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${info}"></c:out>
-						</div>
-					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							Informações do Jogo
 						</div>
-						<div class="panel-body">			
-							<div class="form-horizontal">		
+						<div class="panel-body">
+							<jsp:include page="../fragments/mensagens.jsp" />
+							<div class="form-horizontal">
 								<div class="form-group">
 									<label for="inicio" class="col-sm-2 field">Início:</label>
 									<div class="col-sm-4 field-value">

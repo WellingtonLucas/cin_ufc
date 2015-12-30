@@ -59,7 +59,7 @@ public class CalculoNotaServiceImpl implements CalculoNotaService{
 				if(opcao.equals(gabarito.get(i))){
 					break;
 				}
-				inicial -= 2;
+				inicial -= 2.5;
 			}
 			somatorio += inicial;
 		}

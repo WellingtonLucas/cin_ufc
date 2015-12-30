@@ -11,7 +11,7 @@
 		<div class="col-sm-12">
 			<div class="row placeholders">
 				<div class="timeline-centered">
-								<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
+					<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
 						<c:if test="${entregaId.index == 0 }">
 							<div class="timeline-entry">
 								<div class="timeline-entry-inner">

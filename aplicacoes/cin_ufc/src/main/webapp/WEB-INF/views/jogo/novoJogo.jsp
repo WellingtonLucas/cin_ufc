@@ -36,16 +36,7 @@
 					</div>
 				</div>	
 				<div class="panel-body">
-					<c:if test="${not empty erro}">
-						<div class="col-sm-12">
-							<div class="alert alert-danger alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
-							</div>
-						</div>
-					</c:if>
+					<jsp:include page="../fragments/mensagens.jsp" />
 					<form:form id="adicionarJogoForm" role="form" class="form-horizontal" commandName="jogo" enctype="multipart/form-data" servletRelativeAction="${url }" method="POST">
 						<form:hidden path="id" />
 						<form:hidden path="status" />

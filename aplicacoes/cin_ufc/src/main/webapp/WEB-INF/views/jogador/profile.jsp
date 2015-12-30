@@ -9,11 +9,10 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <html>
-<head>
-<jsp:include page="../fragments/header-estrutura.jsp" />
-<title>Perfil</title>
-</head>
-
+	<head>
+		<jsp:include page="../fragments/header-estrutura.jsp" />
+		<title>Perfil</title>
+	</head>
 <body>
 	<jsp:include page="../fragments/header.jsp" />
 
@@ -21,6 +20,7 @@
 		<div class="row">
 			<jsp:include page="../fragments/menu.jsp" />
 			<div class="col-sm-8 col-md-10 main">
+				<jsp:include page="../fragments/mensagens.jsp" />
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">${usuario.nome } ${usuario.sobreNome }</h3>

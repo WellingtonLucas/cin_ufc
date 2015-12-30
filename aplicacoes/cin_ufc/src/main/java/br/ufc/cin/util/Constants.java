@@ -103,19 +103,19 @@ public class Constants {
 
 	public static final String MENSAGEM_JOGO_INEXISTENTE = "Jogo inexistente.";
 	
-	public static final String MENSAGEM_EQUIPE_INEXISTENTE = "Equipe inexistente.";
+	public static final String MENSAGEM_EQUIPE_INEXISTENTE = "Empresa inexistente.";
 
 	public static final String MENSAGEM_JOGO_ATUALIZADO = "Jogo atualizado com sucesso!";
 
-	public static final String MENSAGEM_EQUIPE_ATUALIZADA = "Equipe atualizada com sucesso";
+	public static final String MENSAGEM_EQUIPE_ATUALIZADA = "Empresa atualizada com sucesso";
 	
 	public static final String MENSAGEM_JOGO_CADASTRADO = "Jogo cadastrado com sucesso";
 	
-	public static final String MENSAGEM_EQUIPE_CADASTRADA = "Equipe cadastrada com sucesso";
+	public static final String MENSAGEM_EQUIPE_CADASTRADA = "Empresa cadastrada com sucesso";
 
 	public static final String MENSAGEM_JOGO_REMOVIDO = "Jogo removido com sucesso";	
 	
-	public static final String MENSAGEM_EQUIPE_REMOVIDA = "Equipe removida com sucesso";
+	public static final String MENSAGEM_EQUIPE_REMOVIDA = "Empresa removida com sucesso";
 
 	public static final String MENSAGEM_DATA_TERMINO_FUTURA = "A data de término não pode ser anterior à data atual";
 
@@ -135,7 +135,7 @@ public class Constants {
 	
 	public static final String MENSAGEM_USUARIOS_NAO_ASSOCIADOS = "Não existem participantes associados ao jogo!";
 	
-	public static final String MENSAGEM_EQUIPES_NAO_CRIADAS = "Não existem equipes no jogo.";
+	public static final String MENSAGEM_EQUIPES_NAO_CRIADAS = "Não existem empresas no jogo.";
 	
 	public static final String MENSAGEM_FORM_NAO_CRIADOS = "Não existem formulários no jogo. Crie formulários.";
 	

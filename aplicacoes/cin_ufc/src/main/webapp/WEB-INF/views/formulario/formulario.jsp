@@ -56,14 +56,7 @@
 				<h4>${descricao }</h4>
 			</div>
 			<div class="panel-body">
-				<c:if test="${not empty erro}">
-					<div class="alert alert-danger alert-dismissible" role="alert">
-						<button type="button" class="close" data-dismiss="alert">
-							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-						</button>
-						<c:out value="${erro}"></c:out>
-					</div>
-				</c:if>
+				<jsp:include page="../fragments/mensagens.jsp" />
 				<form:form id="id-formulario" role="form" class="form-horizontal" servletRelativeAction="${url }" 
 					commandName="formulario" method="POST">
 					<c:if test="${formulario.id != null}">

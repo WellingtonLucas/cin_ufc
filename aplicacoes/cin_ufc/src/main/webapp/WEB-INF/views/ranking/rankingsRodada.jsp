@@ -21,14 +21,7 @@
 								<i class="fa fa-line-chart"></i>&nbsp;&nbsp;Rankings Rodada
 							</div>
 							<div class="panel-body">
-								<c:if test="${not empty erro}">
-									<div class="alert alert-danger alert-dismissible" role="alert">
-										<button type="button" class="close" data-dismiss="alert">
-											<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-										</button>
-										<c:out value="${erro}"></c:out>
-									</div>
-								</c:if>
+								<jsp:include page="../fragments/mensagens.jsp" />
 						        <p class="lead">Escolha uma das opções abaixo para visualizar os respectivos Rankings.</p>
 						        <div>
 						        	<a data-toggle="tooltip" data-placement="top" title="Ranking com os melhores avaliadores da rodada."

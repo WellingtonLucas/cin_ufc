@@ -11,14 +11,6 @@
 	</head>
 	<body>
 		<jsp:include page="../fragments/header.jsp" />
-		<c:if test="${not empty erro}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<c:out value="${erro}"></c:out>
-			</div>
-		</c:if>
 		<div class="section">
 			<div class="container-fluid">
 				<div class="row">
@@ -30,6 +22,7 @@
 								<i class="fa fa-line-chart"></i>&nbsp;&nbsp;Rankings Gerais
 							</div>
 							<div class="panel-body">
+								<jsp:include page="../fragments/mensagens.jsp" />
 						        <p class="lead">Escolha uma das opções abaixo para visualizar os respectivos rankings gerais.</p>
 						        <div>
 						        	<a data-toggle="tooltip" data-placement="top" title="Ranking com os alunos com maior retorno de investimento no jogo."

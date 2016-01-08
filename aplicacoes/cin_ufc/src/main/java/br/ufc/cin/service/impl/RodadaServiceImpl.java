@@ -8,10 +8,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.FormularioService;
 import br.ufc.cin.service.ReaberturaSubmissaoService;
 import br.ufc.cin.service.RodadaService;
@@ -25,6 +27,9 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	
 	@Inject
 	private ReaberturaSubmissaoService reaberturaSubmissaoService;
+	
+	@Inject
+	private EntregaService entregaService;
 	
 	@Override
 	public List<Rodada> ordenaPorInicio(List<Rodada> rodadas) {
@@ -217,7 +222,7 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	@Override
 	public void verificaSePrazoSubmissao(Rodada rodada) {
 		if(!rodada.isStatusPrazo()){
-			throw new IllegalArgumentException("Rodada fora do prazo de submissão.");
+			throw new IllegalAccessError("Rodada fora do prazo de submissão.");
 		}
 	}
 	
@@ -289,5 +294,19 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 		return rodada.isStatus() && !rodada.isStatusAvaliacao() 
 				&& !rodada.isStatusPrazo() && !rodada.isStatusRaking() 
 				&& !isPosPrazoSubmissoesEReabertura(rodada); 
+	}
+
+	@Override
+	public void verificaGabaritos(Rodada rodada) {
+		List<Entrega> entregas = entregaService.getUltimasEntregasDaRodada(rodada);
+		if(entregas==null || entregas.isEmpty()){
+			throw new IllegalArgumentException("Esta rodada ainda não possui entregas.");
+		}
+		for (Entrega entrega : entregas) {
+			if(entrega.getGabarito()==null){
+				throw new IllegalArgumentException("Certifique-se de avaliar todas as entregas antes de gerar notas.");
+			}
+		}
+		
 	}
 }

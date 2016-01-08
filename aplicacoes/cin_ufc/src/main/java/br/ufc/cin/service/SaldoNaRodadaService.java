@@ -15,4 +15,6 @@ public interface SaldoNaRodadaService extends GenericService<SaldoNaRodada>{
 	public abstract List<SaldoNaRodada> findByRodada(Rodada rodada);
 
 	public abstract void criarSaldoEquipesRodada(Jogo jogo, Rodada rodada);
+
+	public abstract void deletePor(Rodada rodada);
 }

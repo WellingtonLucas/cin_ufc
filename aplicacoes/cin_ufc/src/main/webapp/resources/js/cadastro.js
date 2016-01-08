@@ -33,7 +33,10 @@ $(document).ready(function() {
 				validators : {				
 					notEmpty : {
 						message : 'O email é obrigatório'
-					}
+					},
+					emailAddress: {
+		                message: 'Este não é um email válido.'
+		            }
 				}
 			},
 			senha : {

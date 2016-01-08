@@ -29,4 +29,6 @@ public interface ConsultoriaService extends GenericService<Consultoria>{
 	 * **/
 	public abstract Integer quantidadeSolicitacoes(Consultoria consultoria);
 
+	public abstract void verificaConsultoria(Rodada rodada);
+
 }

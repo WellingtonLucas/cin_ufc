@@ -30,8 +30,6 @@
 			<button type="submit" class="btn btn-primary btn-lg" >
 				Solicitar consultoria 
 			</button>		
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;				
-			<a href="javascript:history.back();" class="btn btn-warning btn-lg">Cancelar</a>
 		</form:form>		
 	</div>
 </div>

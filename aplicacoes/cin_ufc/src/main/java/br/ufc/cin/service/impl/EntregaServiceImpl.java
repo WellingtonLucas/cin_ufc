@@ -82,11 +82,9 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 	public List<Entrega> getUltimasEntregasDaEquipe(Equipe equipe) {
 		List<Entrega> entregas = new ArrayList<Entrega>();
 		for (Rodada rodada : equipe.getJogo().getRodadas()) {
-			if(rodada.isStatus()){
-				Entrega entrega = getUltimaEntrega(rodada, equipe);
-				if(entrega!=null){
-					entregas.add(entrega);
-				}
+			Entrega entrega = getUltimaEntrega(rodada, equipe);
+			if(entrega!=null){
+				entregas.add(entrega);
 			}
 		}
 		return entregas;

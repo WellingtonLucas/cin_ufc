@@ -360,6 +360,7 @@ public class RodadaController {
 			jogo.getRodadas().remove(rodada);
 			jogoService.update(jogo);
 			rodadaEquipeService.deletePor(rodada);
+			saldoNaRodadaService.deletePor(rodada);
 			rodadaService.delete(rodada);
 		}catch(Exception e){
 			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
@@ -760,6 +761,7 @@ public class RodadaController {
 				redirectAttributes.addFlashAttribute("erro",e.getMessage());
 				return REDIRECT_PAGINA_LISTAR_JOGO;
 			}
+			rodadaService.verificaGabaritos(rodada);
 			rodadaService.verificaSeNaoPrazoSubmissao(rodada);
 			rodada.setStatusNota(true);
 			rodadaService.update(rodada);
@@ -820,7 +822,14 @@ public class RodadaController {
 			regrasService.verificaRodada(rodada);
 			regrasService.verificaRodadaJogo(rodada, jogo);
 			permissao = usuarioService.definePermissao(jogo, usuario);
+			if(!permissao.equals("professor")){
+				rodadaService.verificaSePrazoSubmissao(rodada);
+				consultoriaService.verificaConsultoria(rodada);
+			}
 			equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/detalhes";
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -841,7 +850,7 @@ public class RodadaController {
 	}
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/servico/salvar", method = RequestMethod.GET)
 	public String servicoSalvarGet(@PathVariable("idJogo") Integer idJogo,@PathVariable("idRodada") Integer id) {
-		return "rerirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
+		return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/servico/salvar", method = RequestMethod.POST)
@@ -878,7 +887,7 @@ public class RodadaController {
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/servico/editar", method = RequestMethod.GET)
 	public String servicoEditarGet(@PathVariable("idJogo") Integer idJogo,@PathVariable("idRodada") Integer id) {
-		return "rerirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
+		return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/servico/editar", method = RequestMethod.POST)
@@ -918,7 +927,7 @@ public class RodadaController {
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/adquirirServico/{idEquipe}", method = RequestMethod.GET)
 	public String adquirirServicoGet(@PathVariable("idJogo") Integer idJogo,@PathVariable("idRodada") Integer id) {
-		return "rerirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
+		return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/adquirirServico/{idEquipe}", method = RequestMethod.POST)
@@ -1031,6 +1040,9 @@ public class RodadaController {
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/detalhes";
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
 			return REDIRECT_PAGINA_LISTAR_JOGO;

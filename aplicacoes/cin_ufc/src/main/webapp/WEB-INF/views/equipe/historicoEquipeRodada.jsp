@@ -60,7 +60,7 @@
 																		class="form-horizontal" 
 																		action="<c:url value="/jogo/${jogo.id}/equipe/${nota.equipe.id }/fator/${nota.id }"></c:url>"
 																		method="POST">
-																		<div class="form-group col-sm-3">
+																		<div class="form-group col-sm-5">
 																			<input class="form-control" type="text" name="fatorDeAposta"  
 																			 value='<fmt:formatNumber type="number"
 																			 maxFractionDigits="2">${nota.fatorDeAposta }
@@ -101,13 +101,8 @@
 											</tbody>
 										</table>
 										<strong>Média:&nbsp;&nbsp;
-											<c:if test="${mediaEquipe >= 0 }">
-												<fmt:formatNumber type="number" maxFractionDigits="2" 
-														value= "${mediaEquipe }" />
-											</c:if>
-											<c:if test="${mediaEquipe < 0 }">
-												0.0
-											</c:if>
+											<fmt:formatNumber type="number" maxFractionDigits="2" 
+													value= "${mediaEquipe }" />
 										</strong>
 									</c:if>
 								</div>

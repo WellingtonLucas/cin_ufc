@@ -11,7 +11,6 @@ import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
-import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.SaldoNaRodada;
 import br.ufc.cin.model.StatusRodadaEquipe;
@@ -22,7 +21,6 @@ import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.JogoService;
 import br.ufc.cin.service.NotaEquipeRodadaService;
-import br.ufc.cin.service.RespostaService;
 import br.ufc.cin.service.SaldoNaRodadaService;
 import br.ufc.cin.service.UsuarioService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
@@ -38,9 +36,6 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 	private EntregaService entregaService;
 	
 	@Inject
-	private RespostaService respostaService;
-	
-	@Inject
 	private CalculoNotaService calculoNotaService;
 
 	@Inject
@@ -54,7 +49,6 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 	
 	@Inject
 	private SaldoNaRodadaService saldoNaRodadaService;
-	
 	
 	@Override
 	public List<Usuario> alunosSemEquipe(Jogo jogo) {
@@ -136,17 +130,12 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe, String permissao) {
 		notasEquipeRodadas = new ArrayList<NotaEquipeRodada>();
 		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
-		List<Resposta> respostas = new ArrayList<Resposta>();
 		for (Entrega entrega : entregas) {
-			Resposta resposta = respostaService.findUltimaRespostaPorEntrega(entrega.getUsuario(), entrega);
-			if(resposta!= null){
-				respostas.add(resposta);
-			}
-			if(((entrega.getRodada().isStatusNota() && permissao.equals("professor")) || entrega.getRodada().isStatusRaking()) && !respostas.isEmpty()){
+			if(((entrega.getRodada().isStatusNota() && permissao.equals("professor")) || entrega.getRodada().isStatusRaking())){
 				NotaEquipeRodada notaEquipeRodada = new NotaEquipeRodada();
 				notaEquipeRodada.setEquipe(equipe);
 				notaEquipeRodada.setRodada(entrega.getRodada());
-				Float nota = calculoNotaService.calculoNotaEquipe(resposta);
+				Float nota = calculoNotaService.calculoNotaEquipe(entrega);
 				notaEquipeRodada.setValor(nota);
 				Float fator = nota/10 + 1;
 				notaEquipeRodada.setFatorDeAposta(fator);
@@ -161,17 +150,13 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 	public List<NotaEquipeRodada> atualizarNotasEquipeRodadas(
 			List<NotaEquipeRodada> notasEquipeRodadas, Equipe equipe, String permissao) {
 		List<Entrega> entregas = entregaService.getUltimasEntregasDaEquipe(equipe);
-		List<Resposta> respostas = new ArrayList<Resposta>();
 		for (int i= notasEquipeRodadas.size(); i<entregas.size();i++) {
-			Resposta resposta = respostaService.findUltimaRespostaPorEquipe(equipe, entregas.get(i));
-			if(resposta!= null){
-				respostas.add(resposta);
-			}
-			if(((entregas.get(i).getRodada().isStatusNota() && permissao.equals("professor")) || entregas.get(i).getRodada().isStatusRaking()) && !respostas.isEmpty()){
+			if(((entregas.get(i).getGabarito()!=null && entregas.get(i).getRodada().isStatusNota() 
+					&& permissao.equals("professor")) || entregas.get(i).getRodada().isStatusRaking())){
 				NotaEquipeRodada notaEquipeRodada = new NotaEquipeRodada();
 				notaEquipeRodada.setEquipe(equipe);
 				notaEquipeRodada.setRodada(entregas.get(i).getRodada());
-				Float nota = calculoNotaService.calculoNotaEquipe(resposta);
+				Float nota = calculoNotaService.calculoNotaEquipe(entregas.get(i));
 				notaEquipeRodada.setValor(nota);
 				Float fator = nota/10 + 1;
 				notaEquipeRodada.setFatorDeAposta(fator);

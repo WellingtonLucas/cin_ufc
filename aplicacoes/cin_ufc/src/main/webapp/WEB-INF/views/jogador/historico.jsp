@@ -51,28 +51,25 @@
 										</thead>
 										<tbody>
 											<c:forEach var="nota" items="${historico.notas }">
-												<tr>
-													<td>${nota.rodada.nome }</td>
-													<c:if test="${nota.valor != null && nota.valor >= 0}">
-														<td><fmt:formatNumber type="number" maxFractionDigits="2" 
-															value= "${nota.valor }" />
-														</td>
-													</c:if>
-													<c:if test="${nota.valor == null || nota.valor < 0 }">
-														<td>-</td>
-													</c:if>
-												</tr>
+												<c:if test="${nota.rodada.statusRaking }">
+													<tr>
+														<td>${nota.rodada.nome }</td>
+														<c:if test="${nota.valor != null && nota.valor >= 0}">
+															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+																value= "${nota.valor }" />
+															</td>
+														</c:if>
+														<c:if test="${nota.valor == null || nota.valor < 0 }">
+															<td>-</td>
+														</c:if>
+													</tr>
+												</c:if>
 											</c:forEach>
 										</tbody>
 									</table>
 									<strong>Média:&nbsp;&nbsp;
-										<c:if test="${media >= 0 }">
-											<fmt:formatNumber type="number" maxFractionDigits="2" 
-													value= "${media }" />
-										</c:if>
-										<c:if test="${media < 0 }">
-											0.0
-										</c:if>
+										<fmt:formatNumber type="number" maxFractionDigits="2" 
+												value= "${media }" />
 									</strong>
 								</c:if>
 							</div>
@@ -100,22 +97,24 @@
 										</thead>
 										<tbody>
 											<c:forEach var="nota" items="${notasEquipeRodadas }">
-												<tr>
-													<td>${nota.rodada.nome }</td>
-													<c:if test="${nota.fatorDeAposta == null }">
-														<td>-</td>
-													</c:if>
-													<c:if test="${nota.fatorDeAposta != null }">
-														<td>
-															<fmt:formatNumber type="number" maxFractionDigits="2">
-																 ${nota.fatorDeAposta }
-															 </fmt:formatNumber>
+												<c:if test="${nota.rodada.statusRaking }">
+													<tr>
+														<td>${nota.rodada.nome }</td>
+														<c:if test="${nota.fatorDeAposta == null }">
+															<td>-</td>
+														</c:if>
+														<c:if test="${nota.fatorDeAposta != null }">
+															<td>
+																<fmt:formatNumber type="number" maxFractionDigits="2">
+																	 ${nota.fatorDeAposta }
+																 </fmt:formatNumber>
+															</td>
+														</c:if>
+														<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+															value= "${nota.valor }" />
 														</td>
-													</c:if>
-													<td><fmt:formatNumber type="number" maxFractionDigits="2" 
-														value= "${nota.valor }" />
-													</td>
-												</tr>
+													</tr>
+												</c:if>
 											</c:forEach>
 										</tbody>
 									</table>

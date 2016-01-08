@@ -56,8 +56,10 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 	public StatusRodadaEquipe atualizaStatusRodadaEquipe(ReaberturaSubmissao reabertura) {
 		StatusRodadaEquipe status = find(reabertura.getEquipe(), reabertura.getRodada());
 		if(status != null){
-			boolean prazo = verificaPrazo(reabertura);
-			status.setAtiva(prazo);
+			if(status.isAtiva()){
+				boolean prazo = verificaPrazo(reabertura);
+				status.setAtiva(prazo);
+			}
 		}else{
 			status = new StatusRodadaEquipe();
 			status.setEquipe(reabertura.getEquipe());

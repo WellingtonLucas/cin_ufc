@@ -35,9 +35,21 @@ public class SaldoNaRodadaServiceImpl extends GenericServiceImpl<SaldoNaRodada> 
 			SaldoNaRodada saldoNaRodada = new SaldoNaRodada();
 			saldoNaRodada.setEquipe(equipe);
 			saldoNaRodada.setRodada(rodada);
+			saldoNaRodada.setSaldo(0F);
+			saldoNaRodada.setSaldoComFator(0F);
 			save(saldoNaRodada);
 		}
 		
+	}
+
+	@Override
+	public void deletePor(Rodada rodada) {
+		List<SaldoNaRodada> saldos = findByRodada(rodada);
+		if(saldos!=null){
+			for (SaldoNaRodada saldoNaRodada : saldos) {
+				delete(saldoNaRodada);
+			}		
+		}
 	}
 
 }

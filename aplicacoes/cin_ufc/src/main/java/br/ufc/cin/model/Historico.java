@@ -28,8 +28,7 @@ public class Historico {
 	private Integer id;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "historico", cascade = {
-			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE,
-			CascadeType.REMOVE })
+			CascadeType.ALL })
 	private List<Nota> notas;
 
 	@ManyToOne(fetch = FetchType.LAZY)

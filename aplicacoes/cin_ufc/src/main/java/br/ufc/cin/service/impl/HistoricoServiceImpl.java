@@ -17,6 +17,7 @@ import br.ufc.cin.repository.HistoricoRepository;
 import br.ufc.cin.service.CalculoNotaService;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.HistoricoService;
+import br.ufc.cin.service.NotaService;
 import br.ufc.cin.service.RespostaService;
 import br.ufc.cin.service.RodadaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
@@ -39,6 +40,9 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 	@Inject
 	private RodadaService rodadaService;
 	
+	@Inject
+	private NotaService notaService;
+	
 	@Override
 	public Historico buscarPorJogoUsuario(Jogo jogo, Usuario usuario) {
 		return historicoRepository.buscarPorJogoUsuario(jogo, usuario);
@@ -48,12 +52,15 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 	public Float calculaMedia(Historico historico) {
 		Float media = 0f;
 		if(historico.getNotas()!= null && !historico.getNotas().isEmpty()){
+			int cont =0 ;
 			for (Nota nota : historico.getNotas()) {
-				if(nota != null && nota.getValor()!= null){
+				if(nota != null && nota.getRodada().isStatusRaking() && nota.getValor()!= null){
 					media += nota.getValor();
+					cont++;
 				}
 			}
-			media = media/historico.getNotas().size();
+			if(cont>0)
+				media = (Float) media/cont;
 		}
 		return media;
 	}
@@ -94,7 +101,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 		historico = new Historico();
 		historico.setJogo(rodadas.get(0).getJogo());
 		historico.setUsuario(usuario);
-		List<Nota> notas = new ArrayList<Nota>();
+		save(historico);
 		for (Rodada rodada : rodadas) {
 			List<Resposta> respostas = new ArrayList<Resposta>();
 			for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
@@ -111,10 +118,10 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 				nota.setSatus(true);
 				nota.setValor(calculoNotaService.calculoMedia(respostas));
 			}
-			notas.add(nota);
+			historico.addNota(nota);
+			notaService.save(nota);
 		}
-		historico.setNotas(notas);
-		save(historico);
+		update(historico);
 		return historico;
 	}
 

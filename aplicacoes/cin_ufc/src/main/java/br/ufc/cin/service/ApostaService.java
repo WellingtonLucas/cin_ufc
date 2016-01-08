@@ -40,5 +40,4 @@ public interface ApostaService extends GenericService<Aposta>{
 
 	public abstract List<Aposta> ordenaPorRetorno(List<Aposta> apostas);
 	
-	public abstract void atualizaSaldosEquipeRodada(Jogo jogo, Rodada rodada);
 }

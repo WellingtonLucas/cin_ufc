@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.inject.Named;
 
+import br.ufc.cin.model.Historico;
 import br.ufc.cin.model.Nota;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.repository.NotaRepository;
@@ -24,6 +25,15 @@ public class JpaNotaRepository extends JpaGenericRepositoryImpl<Nota> implements
 			return result;
 		}
 		return null;
+	}
+
+	@Override
+	public Nota findByHistoricoRodada(Historico historico, Rodada rodada) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("idR", rodada.getId());
+		params.put("idH", historico.getId());
+		Nota result = findFirst(QueryType.JPQL, "from Nota where RODADA_ID = :idR and HISTORICO_ID = :idH", params, 0);
+		return result;
 	}
 
 }

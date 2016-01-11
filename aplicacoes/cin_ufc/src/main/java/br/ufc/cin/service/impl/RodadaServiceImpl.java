@@ -13,10 +13,16 @@ import br.ufc.cin.model.Formulario;
 import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.service.ApostaService;
+import br.ufc.cin.service.ConsultoriaService;
 import br.ufc.cin.service.EntregaService;
 import br.ufc.cin.service.FormularioService;
+import br.ufc.cin.service.NotaEquipeRodadaService;
+import br.ufc.cin.service.NotaService;
 import br.ufc.cin.service.ReaberturaSubmissaoService;
+import br.ufc.cin.service.RodadaEquipeService;
 import br.ufc.cin.service.RodadaService;
+import br.ufc.cin.service.SaldoNaRodadaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
@@ -31,6 +37,24 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 	@Inject
 	private EntregaService entregaService;
 	
+	@Inject
+	private RodadaEquipeService rodadaEquipeService;
+
+	@Inject
+	private SaldoNaRodadaService saldoNaRodadaService;
+	
+	@Inject
+	private ApostaService apostaService;
+
+	@Inject
+	private ConsultoriaService consultoriaService;
+	
+	@Inject
+	private NotaService notaService;
+	
+	@Inject
+	private NotaEquipeRodadaService notaEquipeRodadaService;
+
 	@Override
 	public List<Rodada> ordenaPorInicio(List<Rodada> rodadas) {
 		for (int i=0;i<rodadas.size();i++) {
@@ -308,5 +332,18 @@ public class RodadaServiceImpl extends GenericServiceImpl<Rodada> implements Rod
 			}
 		}
 		
+	}
+
+	@Override
+	public void remover(Rodada rodada) {
+		rodadaEquipeService.deletePor(rodada);
+		saldoNaRodadaService.deletePor(rodada);
+		apostaService.deletePor(rodada);
+		consultoriaService.deletePor(rodada);
+		notaService.deletePor(rodada);
+		notaEquipeRodadaService.findByRodada(rodada);
+		reaberturaSubmissaoService.deletePor(rodada);
+		entregaService.deletePor(rodada);
+		delete(rodada);
 	}
 }

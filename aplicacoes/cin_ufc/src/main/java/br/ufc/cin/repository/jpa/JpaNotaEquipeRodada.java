@@ -36,4 +36,16 @@ public class JpaNotaEquipeRodada extends JpaGenericRepositoryImpl<NotaEquipeRoda
 		return result;
 	}
 
+	@Override
+	public List<NotaEquipeRodada> findByRodada(Rodada rodada) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("idRodada", rodada.getId());
+		List<NotaEquipeRodada> result = find(QueryType.JPQL, "from nota_equipe_rodada where RODADA_ID = :idRodada", params);
+		if(result != null && !result.isEmpty()) {
+			return result;
+		}
+		return null;
+		
+	}
+
 }

@@ -31,4 +31,6 @@ public interface ConsultoriaService extends GenericService<Consultoria>{
 
 	public abstract void verificaConsultoria(Rodada rodada);
 
+	public abstract void deletePor(Rodada rodada);
+
 }

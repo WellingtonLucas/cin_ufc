@@ -71,4 +71,6 @@ public interface RodadaService extends GenericService<Rodada>{
 	public abstract boolean defineStatusBtnRankings(Rodada rodada);
 
 	public abstract void verificaGabaritos(Rodada rodada);
+
+	public abstract void remover(Rodada rodada);
 }

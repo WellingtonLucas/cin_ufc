@@ -31,20 +31,20 @@ public class Resposta {
 	@OneToOne
 	private Usuario usuario;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="entrega_gabarito_id")
 	private Entrega entregaGabarito;
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy'T'HH:mm:ss")
 	private Date dia;
 	
-	@ManyToMany (cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@ManyToMany (fetch = FetchType.LAZY)
 	private List<Opcao> opcoes;
 	
 	@ManyToOne
 	private Formulario formulario;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	private Entrega entrega;
 
 	public Integer getId() {

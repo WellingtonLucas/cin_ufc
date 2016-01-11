@@ -21,4 +21,6 @@ public interface NotaEquipeRodadaService extends GenericService<NotaEquipeRodada
 
 	public abstract List<NotaEquipeRodada> somaInvestimentos(List<NotaEquipeRodada> notasEquipeRodadas);
 
+	public abstract void findByRodada(Rodada rodada);
+
 }

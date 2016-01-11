@@ -37,7 +37,7 @@ public class Entrega {
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "DOC_ID")
 	private Documento documento;
 
@@ -45,7 +45,7 @@ public class Entrega {
 	@JoinColumn(name = "EQUIPE_ID")
 	private Equipe equipe;
 
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Resposta gabarito;
 
 	@OneToMany(mappedBy ="entrega", cascade=CascadeType.ALL)

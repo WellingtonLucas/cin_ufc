@@ -31,6 +31,9 @@ public class SaldoNaRodada {
 	@Column(name="saldo_com_fator")
 	private Float saldoComFator;
 
+	@Column
+	private Float debito;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -71,6 +74,14 @@ public class SaldoNaRodada {
 		this.saldo = saldo;
 	}
 	
+	public Float getDebito() {
+		return debito;
+	}
+
+	public void setDebito(Float debito) {
+		this.debito = debito;
+	}
+
 	@Override
 	public String toString(){
 		return "Saldo id: "+getId()+ " valor: " +getSaldo()+";" ;

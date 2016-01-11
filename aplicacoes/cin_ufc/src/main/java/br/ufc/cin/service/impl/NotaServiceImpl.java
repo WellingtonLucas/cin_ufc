@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.ufc.cin.model.Historico;
 import br.ufc.cin.model.Nota;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.repository.NotaRepository;
@@ -20,6 +21,21 @@ public class NotaServiceImpl extends GenericServiceImpl<Nota> implements NotaSer
 	@Override
 	public List<Nota> findByRodada(Rodada rodada) {
 		return notaRepository.findByRodada(rodada);
+	}
+
+	@Override
+	public void deletePor(Rodada rodada) {
+		List<Nota> notas = findByRodada(rodada);
+		if(notas!=null){
+			for (Nota nota : notas) {
+				delete(nota);
+			}
+		}
+	}
+
+	@Override
+	public Nota findByHistoricoRodada(Historico historico, Rodada rodada) {
+		return notaRepository.findByHistoricoRodada(historico,rodada);
 	}
 
 }

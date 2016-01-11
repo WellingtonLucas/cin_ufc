@@ -118,4 +118,14 @@ public class NotaEquipeRodadaServiceImpl extends GenericServiceImpl<NotaEquipeRo
 		return notasEquipeRodadas;
 	}
 
+	@Override
+	public void findByRodada(Rodada rodada) {
+		List<NotaEquipeRodada> notas = notaEquipeRodadaRepository.findByRodada(rodada);
+		if(notas!=null){
+			for (NotaEquipeRodada notaEquipeRodada : notas) {
+				delete(notaEquipeRodada);
+			}
+		}
+	}
+
 }

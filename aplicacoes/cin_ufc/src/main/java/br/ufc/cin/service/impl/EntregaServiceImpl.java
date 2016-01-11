@@ -15,7 +15,9 @@ import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.Usuario;
+import br.ufc.cin.repository.EntregaRepository;
 import br.ufc.cin.service.EntregaService;
+import br.ufc.cin.service.RespostaService;
 import br.ufc.cin.service.RodadaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
@@ -25,6 +27,12 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 
 	@Inject
 	private RodadaService rodadaService;
+	
+	@Inject
+	private EntregaRepository entregaRepository;
+	
+	@Inject
+	private RespostaService respostaService;
 	
 	@Override
 	public List<Entrega> getUltimasEntregasDaRodada(Rodada rodada) {
@@ -137,5 +145,21 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega> implements
 		if(entregas.isEmpty() || entregas == null){
 			throw new IllegalArgumentException("Não existem entregas para está rodada até o momento.");
 		}
+	}
+
+	@Override
+	public List<Entrega> findByRodada(Rodada rodada) {
+		return entregaRepository.findByRodada(rodada);
+	}
+
+	@Override
+	public void deletePor(Rodada rodada) {
+		List<Entrega> entregas = findByRodada(rodada);
+		if(entregas!=null){
+			for (Entrega entrega : entregas) {
+			    respostaService.deletePor(entrega);
+			}
+		}
+		
 	}
 }

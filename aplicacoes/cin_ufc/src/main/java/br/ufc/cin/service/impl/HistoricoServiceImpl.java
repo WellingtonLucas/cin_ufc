@@ -72,26 +72,24 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 			historico = criarNovasNotas(historico, rodadas);
 		}
 		for (Rodada rodada : rodadas) {
-			for(Nota nota: historico.getNotas()){
-				if(nota.getRodada().equals(rodada)){
-					List<Resposta> respostas = new ArrayList<Resposta>();
-					for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
-						Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
-						if(resposta != null){		
-							respostas.add(resposta);
-						}
+			Nota nota = notaService.findByHistoricoRodada(historico, rodada);
+			if(nota != null){
+				List<Resposta> respostas = new ArrayList<Resposta>();
+				for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
+					Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
+					if(resposta != null){		
+						respostas.add(resposta);
 					}
-					nota.setSatus(false);
-					nota.setValor(0F);
-					if(rodada.isStatusRaking() && !respostas.isEmpty()){
-						nota.setSatus(true);
-						nota.setValor(calculoNotaService.calculoMedia(respostas));
-					}
-					historico.addNota(nota);
 				}
+				nota.setSatus(false);
+				nota.setValor(0F);
+				if(rodada.isStatusRaking() && !respostas.isEmpty()){
+					nota.setSatus(true);
+					nota.setValor(calculoNotaService.calculoMedia(respostas));
+				}
+				notaService.update(nota);
 			}
 		}
-		update(historico);
 		return historico;
 	}
 
@@ -127,12 +125,15 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 
 	@Override
 	public Historico criarNovasNotas(Historico historico, List<Rodada> rodadas) {
-		for(int i=historico.getNotas().size(); i<rodadas.size();i++){
-			Nota novaNota = new Nota();
-			novaNota.setRodada(rodadas.get(i));
-			novaNota.setValor(0f);
-			novaNota.setSatus(false);
-			historico.addNota(novaNota);	
+		for (Rodada rodada : rodadas) {
+			Nota nota = notaService.findByHistoricoRodada(historico, rodada);
+			if(nota==null){
+				Nota novaNota = new Nota();
+				novaNota.setRodada(rodada);
+				novaNota.setValor(0f);
+				novaNota.setSatus(false);
+				historico.addNota(novaNota);
+			}
 		}
 		update(historico);
 		return historico;
@@ -143,6 +144,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 		List<Rodada> rodadas;
 		rodadas = rodadaService.ordenaPorInicio(jogo.getRodadas());
 		rodadas = rodadaService.atualizaStatusRodadas(rodadas);
+		rodadas = rodadaService.ordenaPorInicio(rodadas);
 		for (Usuario aluno : jogo.getAlunos()) {
 			Historico historico;
 			historico = buscarPorJogoUsuario(jogo, aluno);

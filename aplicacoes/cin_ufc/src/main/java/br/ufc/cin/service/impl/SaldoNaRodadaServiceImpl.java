@@ -36,6 +36,7 @@ public class SaldoNaRodadaServiceImpl extends GenericServiceImpl<SaldoNaRodada> 
 			saldoNaRodada.setEquipe(equipe);
 			saldoNaRodada.setRodada(rodada);
 			saldoNaRodada.setSaldo(0F);
+			saldoNaRodada.setDebito(0F);
 			saldoNaRodada.setSaldoComFator(0F);
 			save(saldoNaRodada);
 		}

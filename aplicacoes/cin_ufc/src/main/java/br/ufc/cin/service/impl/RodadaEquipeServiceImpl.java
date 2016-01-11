@@ -8,10 +8,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.StatusRodadaEquipe;
 import br.ufc.cin.repository.RodadaEquipeRepository;
+import br.ufc.cin.service.ReaberturaSubmissaoService;
 import br.ufc.cin.service.RodadaEquipeService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
@@ -20,6 +22,9 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 
 	@Inject
 	private RodadaEquipeRepository rodadaEquipeRepository;
+	
+	@Inject
+	private ReaberturaSubmissaoService reaberturaSubmissaoService;
 	
 	@Override
 	public StatusRodadaEquipe find(Equipe equipe, Rodada rodada) {
@@ -123,6 +128,18 @@ public class RodadaEquipeServiceImpl extends GenericServiceImpl<StatusRodadaEqui
 			StatusRodadaEquipe statusRodadaEquipe = find(equipe, rodada);
 			if(!statusRodadaEquipe.isAtiva()){
 				throw new IllegalArgumentException("A sua equipe não possui permissão de submissão.");
+			}
+		}
+	}
+
+	@Override
+	public void atualizaStatusRodadaEquipes(Jogo jogo, Rodada rodada) {
+		if(jogo.getEquipes()!=null){
+			for (Equipe equipe : jogo.getEquipes()) {
+				ReaberturaSubmissao reaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
+				if(reaberturaSubmissao != null){
+					atualizaStatusRodadaEquipe(reaberturaSubmissao);
+				}
 			}
 		}
 	}

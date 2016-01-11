@@ -3,6 +3,7 @@ package br.ufc.cin.service;
 import java.util.List;
 
 import br.ufc.cin.model.Equipe;
+import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.StatusRodadaEquipe;
@@ -21,7 +22,7 @@ public interface RodadaEquipeService extends GenericService<StatusRodadaEquipe>{
 	 * então é retornado uma nova instância temporária
 	 * 
 	 * */
-	public abstract StatusRodadaEquipe atualizaStatusRodadaEquipe(ReaberturaSubmissao find);
+	public abstract StatusRodadaEquipe atualizaStatusRodadaEquipe(ReaberturaSubmissao reaberturaSubmissao);
 
 	public abstract void deletePor(Rodada rodada);
 
@@ -32,5 +33,11 @@ public interface RodadaEquipeService extends GenericService<StatusRodadaEquipe>{
 	 * 
 	 * */
 	public abstract void verificaStatusEquipeRodada(Equipe equipe, Rodada rodada);
+
+	/**
+	 * Atualiza o status de todas as equipes na rodada
+	 * 
+	 * */
+	public abstract void atualizaStatusRodadaEquipes(Jogo jogo, Rodada rodada);
 
 }

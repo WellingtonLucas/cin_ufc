@@ -8,27 +8,21 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Aposta;
-import br.ufc.cin.model.Consultoria;
 import br.ufc.cin.model.Deposito;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
 import br.ufc.cin.model.NotaEquipeRodada;
-import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.SaldoNaRodada;
 import br.ufc.cin.model.SaldoPorJogo;
-import br.ufc.cin.model.SolicitacaoConsultoria;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.ApostaRepository;
 import br.ufc.cin.repository.DepositoRepository;
 import br.ufc.cin.service.ApostaService;
-import br.ufc.cin.service.ConsultoriaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.NotaEquipeRodadaService;
-import br.ufc.cin.service.ReaberturaSubmissaoService;
 import br.ufc.cin.service.SaldoNaRodadaService;
 import br.ufc.cin.service.SaldoPorJogoService;
-import br.ufc.cin.service.SolicitacaoConsultoriaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
@@ -50,17 +44,8 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 	private EquipeService equipeService;
 	
 	@Inject
-	private ConsultoriaService ConsultoriaService;
-	
-	@Inject
 	private NotaEquipeRodadaService notaEquipeRodadaService;
 
-	@Inject
-	private SolicitacaoConsultoriaService solicitacaoConsultoriaService;
-	
-	@Inject
-	private ReaberturaSubmissaoService reaberturaSubmissaoService;
-	
 	@Override
 	public Aposta findByUsuarioRodada(Usuario apostador, Rodada rodada) {
 		return apostaRepository.findByUsuarioRodada(apostador, rodada);
@@ -137,25 +122,10 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 	public void atualizaSaldoEquipes(Jogo jogo, Rodada rodada) {
 		for (Equipe equipe : jogo.getEquipes()) {
 			SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(equipe, rodada);
-			Consultoria consultoria = ConsultoriaService.findByRodada(rodada);
-			SolicitacaoConsultoria solicitacao;
-			ReaberturaSubmissao reaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
-			Float valReabertura = 0f;
-			if(reaberturaSubmissao!=null && reaberturaSubmissao.isStatus()){
-				Integer qtdDias =Integer.parseInt(reaberturaSubmissao.getQuantidadeDia());
-				valReabertura =  qtdDias *rodada.getValorReabertura();
-			}
 			if(saldoNaRodada != null){
 				NotaEquipeRodada notaEquipeRodada = notaEquipeRodadaService.findByEquipeRodada(equipe, rodada);
 				if(notaEquipeRodada != null){
-					Float valor = 0F;
-					if(consultoria.getId()!=null){
-						solicitacao = solicitacaoConsultoriaService.findByEquipeConsulta(equipe, consultoria);
-						if(solicitacao != null && solicitacao.isStatus()){
-							valor = consultoria.getValor();
-						}
-					}
-					saldoNaRodada.setSaldoComFator(saldoNaRodada.getSaldo()*notaEquipeRodada.getFatorDeAposta() - valor - valReabertura);
+					saldoNaRodada.setSaldoComFator((saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta()) - saldoNaRodada.getDebito());
 					saldoNaRodadaService.update(saldoNaRodada);
 					
 					equipe.setSaldo(equipe.getSaldo() + saldoNaRodada.getSaldoComFator());
@@ -277,6 +247,17 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 			return apostas;
 		}
 		return null;
+	}
+
+
+	@Override
+	public void deletePor(Rodada rodada) {
+		List<Aposta> apostas = findByRodada(rodada);
+		if(apostas!=null){
+			for (Aposta aposta : apostas) {
+				delete(aposta);
+			}
+		}
 	}
 
 }

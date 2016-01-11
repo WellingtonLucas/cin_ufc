@@ -204,7 +204,15 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 			rodadaEquipe.setRodada(rodada);
 		}
 		SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(equipe, rodada);
-		saldoNaRodada.setSaldo(-rodada.getValorReabertura());
+		if(saldoNaRodada==null){
+			saldoNaRodada = new SaldoNaRodada();
+			saldoNaRodada.setEquipe(equipe);
+			saldoNaRodada.setSaldo(0F);
+			saldoNaRodada.setDebito(0f);
+			saldoNaRodada.setRodada(rodada);
+		}
+		saldoNaRodada.setDebito(saldoNaRodada.getDebito() + rodada.getValorReabertura());
+		saldoNaRodadaService.update(saldoNaRodada);
 		rodadaEquipe.setAtiva(true);
 		equipe.addStatusRodadaEquipe(rodadaEquipe);
 		update(equipe);

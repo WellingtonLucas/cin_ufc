@@ -24,4 +24,8 @@ public interface EntregaService extends GenericService<Entrega>{
 
 	void verificaExistenciaEntregas(List<Entrega> entregas);
 
+	List<Entrega> findByRodada(Rodada rodada);
+	
+	void deletePor(Rodada rodada);
+
 }

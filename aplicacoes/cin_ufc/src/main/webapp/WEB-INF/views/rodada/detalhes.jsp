@@ -57,9 +57,13 @@
 										</c:if>
 										<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.termino }" /></label>
 									</div>
+									<div class="col-sm-7"></div>
+									<span class="label label-default">A rodada se encerra 
+										<fmt:formatDate pattern="dd/MM/yyyy - HH:mm:ss" value="${rodada.termino }" />
+									</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 field">Prazo de submissão:</label>
+									<label class="col-sm-2 field">Submissões:</label>
 									<div class="col-sm-3 field-value">
 										<c:if test="${empty rodada.prazoSubmissao }">
 											<label>-</label>
@@ -73,6 +77,19 @@
 										</c:if>
 										<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.terminoAvaliacao }" /></label>
 									</div>
+									<div class="col-sm-1"></div>
+									<div class="col-sm-5">
+										<span class="label label-default">O prazo de submissões se encerra 
+											<fmt:formatDate pattern="dd/MM/yyyy - HH:mm:ss" value="${rodada.prazoSubmissao }" />
+										</span>
+									</div>
+									<div class="col-sm-5">
+										<span class="label label-default">O prazo de avaliações se encerra 
+											<fmt:formatDate pattern="dd/MM/yyyy - HH:mm:ss" value="${rodada.terminoAvaliacao }" />
+										</span>
+									</div>
+								</div>
+								<div class="form-group">
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 field">Valor de aposta:</label>

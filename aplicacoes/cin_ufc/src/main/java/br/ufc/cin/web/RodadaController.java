@@ -230,6 +230,7 @@ public class RodadaController {
 			model.addAttribute("prazoReabertura", rodadaService.isPosPrazoSubmissoesEReabertura(rodada));
 			equipes = rodadaEquipeService.atualizaStatusEquipesNaRodada(jogo.getEquipes(), rodada);
 			permissao = usuarioService.definePermissao(jogo, usuario);
+			rodadaEquipeService.atualizaStatusRodadaEquipes(jogo,rodada);
 			if(equipe != null && rodada.getJogo().getEquipes().contains(equipe)){
 				ReaberturaSubmissao reaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
 				if(reaberturaSubmissao != null){
@@ -359,9 +360,7 @@ public class RodadaController {
 		try{
 			jogo.getRodadas().remove(rodada);
 			jogoService.update(jogo);
-			rodadaEquipeService.deletePor(rodada);
-			saldoNaRodadaService.deletePor(rodada);
-			rodadaService.delete(rodada);
+			rodadaService.remover(rodada);
 		}catch(Exception e){
 			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
 			return "redirect:/jogo/" + jogo.getId() + "/rodada/"+rodada.getId()+"/detalhes";
@@ -405,7 +404,7 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
 			return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
 		}
-		redirectAttributes.addFlashAttribute("info","Equipe ativada com sucesso.");
+		redirectAttributes.addFlashAttribute("info","Empresa " +equipe.getNome()+ " ativada com sucesso.");
 		return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
 	}
 	
@@ -1037,17 +1036,17 @@ public class RodadaController {
 			solicitacaoConsultoria = solicitacaoConsultoriaService.find(SolicitacaoConsultoria.class, idS);
 			solicitacaoConsultoriaService.verificaConsistencia(solicitacaoConsultoria, equipe, rodada);
 			solicitacaoConsultoriaService.confirmarSolicitacao(solicitacaoConsultoria, equipe);
-		} catch (IllegalArgumentException e) {
-			redirectAttributes.addFlashAttribute("erro",e.getMessage());
-			return REDIRECT_PAGINA_LISTAR_JOGO;
 		} catch (IllegalAccessError e) {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/detalhes";
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return REDIRECT_PAGINA_LISTAR_JOGO;
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		redirectAttributes.addFlashAttribute("info", "Solicitação da equipe \""+equipe.getNome()+"\" confirmada.");
+		redirectAttributes.addFlashAttribute("info", "Solicitação da empresa	 \""+equipe.getNome()+"\" confirmada.");
 		return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/solicitacoes";
 	}
 	

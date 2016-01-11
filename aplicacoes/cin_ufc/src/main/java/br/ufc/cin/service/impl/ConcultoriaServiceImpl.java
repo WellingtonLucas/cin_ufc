@@ -109,5 +109,15 @@ public class ConcultoriaServiceImpl extends GenericServiceImpl<Consultoria> impl
 		}
 	}
 
+	@Override
+	public void deletePor(Rodada rodada) {
+		Consultoria consultoria = findByRodada(rodada);
+		if(consultoria.getId()!=null){
+			solicitacaoConsultoriaService.deletePor(consultoria);
+			delete(consultoria);
+		}
+		
+	}
+
 
 }

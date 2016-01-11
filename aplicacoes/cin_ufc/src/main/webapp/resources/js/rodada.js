@@ -325,12 +325,12 @@ $(document).ready(function() {
 	});
 	
 	$('#ativar-equipe').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja ativar a equipe \"' + $(e.relatedTarget).data('name') + '\"? Isso fará com que a equipe possa efetuar novas entregas.');
+		$(this).find('.modal-body').text('Tem certeza de que deseja ativar a empresa \"' + $(e.relatedTarget).data('name') + '\"? Isso fará com que a equipe possa efetuar novas entregas.');
 		$(this).find('.btn-primary').attr('href', $(e.relatedTarget).data('href'));
 	});
 	
 	$('#inativar-equipe').on('show.bs.modal', function(e) {
-		$(this).find('.modal-body').text('Tem certeza de que deseja inativar a equipe \"' + $(e.relatedTarget).data('name') + '\"? Isso fará com que a equipe não possa efetuar novas entregas após o prazo.');
+		$(this).find('.modal-body').text('Tem certeza de que deseja inativar a empresa \"' + $(e.relatedTarget).data('name') + '\"? Isso fará com que a equipe não possa efetuar novas entregas após o prazo.');
 		$(this).find('.btn-warning').attr('href', $(e.relatedTarget).data('href'));
 	});
 	

@@ -19,5 +19,7 @@ public interface SolicitacaoConsultoriaService extends GenericService<Solicitaca
 			Rodada rodada);
 	
 	public abstract SolicitacaoConsultoria findByEquipeConsulta(Equipe equipe, Consultoria consultoria);
+
+	public abstract void deletePor(Consultoria consultoria);
 	
 }

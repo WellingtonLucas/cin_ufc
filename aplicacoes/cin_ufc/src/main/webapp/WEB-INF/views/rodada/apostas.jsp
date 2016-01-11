@@ -22,19 +22,12 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-md-10 main">
 					<h2><strong>${rodada.nome }</strong> - Histórico de Investimentos</h2>
-					<c:if test="${not empty info}">
-						<div class="alert alert-success alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${info}"></c:out>
-						</div>	
-					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<strong>Investimentos</strong> 
 						</div>
 						<div class="panel-body">
+							<jsp:include page="../fragments/mensagens.jsp" />
 							<div class="col-sm-12">
 								<table id="tabela-apostas" class="table table-striped table-hover">
 									<thead>

@@ -9,14 +9,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
-<head>
-	<jsp:include page="../fragments/header-estrutura.jsp" />
-	<c:if test="${action eq 'vincularEquipeRodada' }">
-		<c:set var="url" value="/jogo/rodada/equipes/vincular"></c:set>
-	</c:if>
-	<title>Apostas</title>
-
-</head>
+	<head>
+		<jsp:include page="../fragments/header-estrutura.jsp" />
+		<c:if test="${action eq 'vincularEquipeRodada' }">
+			<c:set var="url" value="/jogo/rodada/equipes/vincular"></c:set>
+		</c:if>
+		<title>Apostas</title>
+	</head>
 <body>
 	<jsp:include page="../fragments/header.jsp" />
 	
@@ -25,22 +24,7 @@
 			<jsp:include page="../fragments/menu.jsp" />
 			<div class="col-sm-8 col-md-10 main">
 				<h2><strong>Rodada: ${rodada.nome }</strong> - Seu saldo é <strong>R$ <fmt:formatNumber currencyCode="BRL" value="${aposta.saldo }" /></strong></h2>
-				<c:if test="${not empty erro}">
-					<div class="alert alert-warning alert-dismissible" role="alert">
-						<button type="button" class="close" data-dismiss="alert">
-							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-						</button>
-						<c:out value="${erro}"></c:out>
-					</div>
-				</c:if>
-				<c:if test="${not empty info}">
-					<div class="alert alert-success alert-dismissible" role="alert">
-						<button type="button" class="close" data-dismiss="alert">
-							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-						</button>
-						<c:out value="${info}"></c:out>
-					</div>
-				</c:if>
+				<jsp:include page="../fragments/mensagens.jsp" />
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Invista na equipe: ${equipe.nome }</h3>

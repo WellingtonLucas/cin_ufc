@@ -6,14 +6,7 @@
 		Solicitar consultoria
 	</div>
 	<div class="panel-body">
-	 	<c:if test="${not empty erro}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<c:out value="${erro}"></c:out>
-			</div>
-		</c:if>
+	 	<jsp:include page="../fragments/mensagens.jsp" />
 		<h4><strong><label class="col-sm-2 field" for="descricaoC">Descrição:</label></strong></h4>
 		<div class="col-sm-10 field-value">
 			<article>
@@ -37,8 +30,6 @@
 			<button type="submit" class="btn btn-primary btn-lg" >
 				Solicitar consultoria 
 			</button>		
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;				
-			<a href="javascript:history.back();" class="btn btn-warning btn-lg">Cancelar</a>
 		</form:form>		
 	</div>
 </div>

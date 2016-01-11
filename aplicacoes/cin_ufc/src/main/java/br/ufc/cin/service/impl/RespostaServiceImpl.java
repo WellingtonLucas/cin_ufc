@@ -136,4 +136,15 @@ public class RespostaServiceImpl extends GenericServiceImpl<Resposta> implements
 		}
 		return ultima;
 	}
+
+	@Override
+	public void deletePor(Entrega entrega) {
+		if(entrega.getEquipe()==null){
+			for (Resposta resposta : entrega.getRespostas()) {
+				resposta.setOpcoes(null);
+				update(resposta);
+				delete(resposta);
+			}
+		}
+	}
 }

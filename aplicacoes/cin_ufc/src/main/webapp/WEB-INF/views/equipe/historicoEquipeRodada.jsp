@@ -22,22 +22,7 @@
 					<h2>
 						<strong>Histórico da empresa </strong><small>${equipe.nome } </small>
 					</h2>
-					<c:if test="${not empty erro}">
-						<div class="alert alert-warning alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${erro}"></c:out>
-						</div>
-					</c:if>		
-					<c:if test="${not empty info}">
-						<div class="alert alert-success alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${info}"></c:out>
-						</div>
-					</c:if>	
+					<jsp:include page="../fragments/mensagens.jsp" />
 					<div class="panel-group" id="accordion" role="tablist"
 						aria-multiselectable="true">
 						<div class="panel panel-primary">
@@ -75,7 +60,7 @@
 																		class="form-horizontal" 
 																		action="<c:url value="/jogo/${jogo.id}/equipe/${nota.equipe.id }/fator/${nota.id }"></c:url>"
 																		method="POST">
-																		<div class="form-group col-sm-3">
+																		<div class="form-group col-sm-5">
 																			<input class="form-control" type="text" name="fatorDeAposta"  
 																			 value='<fmt:formatNumber type="number"
 																			 maxFractionDigits="2">${nota.fatorDeAposta }
@@ -116,13 +101,8 @@
 											</tbody>
 										</table>
 										<strong>Média:&nbsp;&nbsp;
-											<c:if test="${mediaEquipe >= 0 }">
-												<fmt:formatNumber type="number" maxFractionDigits="2" 
-														value= "${mediaEquipe }" />
-											</c:if>
-											<c:if test="${mediaEquipe < 0 }">
-												0.0
-											</c:if>
+											<fmt:formatNumber type="number" maxFractionDigits="2" 
+													value= "${mediaEquipe }" />
 										</strong>
 									</c:if>
 								</div>

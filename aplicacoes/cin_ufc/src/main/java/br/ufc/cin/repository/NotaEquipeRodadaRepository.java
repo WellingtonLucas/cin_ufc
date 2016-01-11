@@ -14,4 +14,6 @@ public interface NotaEquipeRodadaRepository extends GenericRepository<NotaEquipe
 	public abstract NotaEquipeRodada findByEquipeRodada(Equipe equipe,
 			Rodada rodada);
 
+	public abstract List<NotaEquipeRodada> findByRodada(Rodada rodada);
+
 }

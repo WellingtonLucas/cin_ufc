@@ -22,27 +22,12 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-md-10 main">
 					<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
-					<c:if test="${not empty erro}">
-						<div class="alert alert-warning alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${erro}"></c:out>
-						</div>
-					</c:if>
-					<c:if test="${not empty info}">
-						<div class="alert alert-success alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${info}"></c:out>
-						</div>
-					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							Rodada: <strong>${rodada.nome }</strong>
 						</div>
 						<div class="panel-body">
+							<jsp:include page="../fragments/mensagens.jsp" />
 							<div class="form-horizontal">
 								<div class="form-group">
 									<label class="col-sm-2 field">Nome:</label>
@@ -72,9 +57,13 @@
 										</c:if>
 										<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.termino }" /></label>
 									</div>
+									<div class="col-sm-7"></div>
+									<span class="label label-default">A rodada se encerra 
+										<fmt:formatDate pattern="dd/MM/yyyy - HH:mm:ss" value="${rodada.termino }" />
+									</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 field">Prazo de submissão:</label>
+									<label class="col-sm-2 field">Submissões:</label>
 									<div class="col-sm-3 field-value">
 										<c:if test="${empty rodada.prazoSubmissao }">
 											<label>-</label>
@@ -88,6 +77,19 @@
 										</c:if>
 										<label><fmt:formatDate pattern="dd/MM/yyyy" value="${rodada.terminoAvaliacao }" /></label>
 									</div>
+									<div class="col-sm-1"></div>
+									<div class="col-sm-5">
+										<span class="label label-default">O prazo de submissões se encerra 
+											<fmt:formatDate pattern="dd/MM/yyyy - HH:mm:ss" value="${rodada.prazoSubmissao }" />
+										</span>
+									</div>
+									<div class="col-sm-5">
+										<span class="label label-default">O prazo de avaliações se encerra 
+											<fmt:formatDate pattern="dd/MM/yyyy - HH:mm:ss" value="${rodada.terminoAvaliacao }" />
+										</span>
+									</div>
+								</div>
+								<div class="form-group">
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 field">Valor de aposta:</label>

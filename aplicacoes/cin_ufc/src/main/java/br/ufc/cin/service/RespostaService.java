@@ -29,4 +29,7 @@ public interface RespostaService extends GenericService<Resposta>{
 
 	public abstract Resposta findUltimaRespostaPorEquipe(Equipe equipe, Entrega entrega);
 
+	public abstract void deletePor(Entrega entrega);
+
+
 }

@@ -16,7 +16,7 @@
 				<div class="row">
 					<jsp:include page="../fragments/menu.jsp" />
 					<div class="col-sm-8 col-md-10 main">
-						<c:if test="${not empty info}">
+						<c:if test="${not empty info && (permissao == 'professor')}">
 							<div class="alert alert-success alert-dismissible" role="alert">
 								<button type="button" class="close" data-dismiss="alert">
 									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>

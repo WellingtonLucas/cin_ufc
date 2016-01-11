@@ -417,7 +417,7 @@ public class JogoController {
 		if(!alunos.isEmpty()){
 			jogoService.update(jogoCompleto);
 			redirectAttributes.addFlashAttribute("info",
-					"Usuários associados ao jogo com sucesso!");
+					"Participantes associados ao jogo com sucesso!");
 			return "redirect:/jogo/"+jogo.getId()+"/participantes";
 		}else{
 			redirectAttributes.addFlashAttribute("erro",

@@ -91,7 +91,6 @@ public class RankingController {
 		}
 		try{
 			regrasService.verificaStatusRanking(rodada);
-			apostaService.atualizaSaldosEquipeRodada(jogo, rodada);
 			apostaService.atualizaSaldoEquipes(jogo,rodada);
 			apostaService.atualizaSaldoAlunos(jogo,rodada);
 			apostaService.atualizaTotalRetorno(apostaService.findByRodada(rodada));

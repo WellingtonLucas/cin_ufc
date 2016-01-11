@@ -73,14 +73,14 @@ public class Rodada {
 	@Column
 	private boolean statusNota;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(cascade= CascadeType.ALL ,fetch = FetchType.LAZY)
 	private Documento modelo;
 	
 	@OneToOne
 	@JoinColumn(name = "FORM_ID")
 	private Formulario formulario;
 	
-	@OneToMany(mappedBy = "rodada", cascade={CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.REFRESH,CascadeType.MERGE})
+	@OneToMany(mappedBy = "rodada", cascade={CascadeType.ALL})
 	private List<Entrega> entregas;
 	
 	@Column(name = "valor_liberado")

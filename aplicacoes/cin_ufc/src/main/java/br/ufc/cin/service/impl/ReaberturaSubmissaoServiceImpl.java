@@ -10,7 +10,6 @@ import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.ReaberturaSubmissao;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.repository.ReaberturaSubmissaoRepository;
-import br.ufc.cin.service.ApostaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.ReaberturaSubmissaoService;
 import br.ufc.cin.service.RodadaService;
@@ -24,9 +23,6 @@ public class ReaberturaSubmissaoServiceImpl extends GenericServiceImpl<Reabertur
 	
 	@Inject
 	private RodadaService rodadaService;
-	
-	@Inject
-	private ApostaService apostaService;
 	
 	@Inject
 	private EquipeService equipeService;
@@ -59,22 +55,21 @@ public class ReaberturaSubmissaoServiceImpl extends GenericServiceImpl<Reabertur
 		}else{
 			ReaberturaSubmissao oldReaberturaSubmissao = find(equipe, rodada);
 			if(oldReaberturaSubmissao == null){
-				reaberturaSubmissao.setStatus(true);
 				if(equipe.getId() == reaberturaSubmissao.getEquipe().getId()){
 					reaberturaSubmissao.setEquipe(equipe);
 				}else{
 					throw new IllegalArgumentException("Tente não burlar o sistema. :)");
 				}
 				if(rodada.getId() == reaberturaSubmissao.getRodada().getId()){
-					reaberturaSubmissao.setRodada(rodadaService.find(Rodada.class, reaberturaSubmissao.getRodada().getId()));
+					reaberturaSubmissao.setRodada(rodadaService.find(Rodada.class, rodada.getId()));
 				}else{
 					throw new IllegalArgumentException("Tente não burlar o sistema. :)");
 				}
 				try {
-					apostaService.realizarDeposito(equipe, reaberturaSubmissao.getQuantidadeDia());
+					reaberturaSubmissao.setStatus(true);
 					update(reaberturaSubmissao);
 					equipe.addReaberturaSubmissao(reaberturaSubmissao);
-					equipeService.update(equipe);			
+					equipeService.update(equipe);
 				}catch (IllegalArgumentException e) {
 					throw new IllegalArgumentException("Erro ao efetuar pedido. Verifique seus valores e tente novamente.");
 				}
@@ -103,6 +98,17 @@ public class ReaberturaSubmissaoServiceImpl extends GenericServiceImpl<Reabertur
 		if(temp <= 0 || temp > 3){
 			throw new IllegalArgumentException("Esta equipe não possui pedido de reabertura para a rodada");
 		}
+	}
+
+	@Override
+	public void deletePor(Rodada rodada) {
+		List<ReaberturaSubmissao> reaberturas = findByRodada(rodada);
+		if(reaberturas!=null){
+			for (ReaberturaSubmissao reaberturaSubmissao : reaberturas) {
+				delete(reaberturaSubmissao);
+			}
+		}
+		
 	}
 
 }

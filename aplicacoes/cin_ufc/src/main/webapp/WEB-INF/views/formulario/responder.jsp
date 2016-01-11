@@ -24,27 +24,12 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-md-10 main">
 					<h2><strong>${formulario.titulo }</strong></h2>						
-					<c:if test="${not empty erro}">
-						<div class="alert alert-warning alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${erro}"></c:out>
-						</div>
-					</c:if>
-					<c:if test="${not empty info}">
-						<div class="alert alert-success alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${info}"></c:out>
-						</div>
-					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<strong>Equipe avaliada: ${entrega.equipe.nome }</strong>
 						</div>
 						<div class="panel-body">
+							<jsp:include page="../fragments/mensagens.jsp" />
 							<form:form id="responderForm" role="form" commandName="resposta" class="form-horizontal" method="POST"
 							servletRelativeAction="${url }" >
 								<div class="col-sm-12">

@@ -23,27 +23,12 @@
 				<div class="col-sm-8 col-md-10 main">
 					<h2><strong>${jogo.nomeDoCurso }</strong> <small>${jogo.semestre }</small></h2>
 					<h2><strong>Aluno: ${usuarioRequisitado.nome }</strong> - <small>Avaliações efetuadas pelo aluno</small></h2>
-					<c:if test="${not empty erro}">
-						<div class="alert alert-warning alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${erro}"></c:out>
-						</div>
-					</c:if>
-					<c:if test="${not empty info}">
-						<div class="alert alert-success alert-dismissible" role="alert">
-							<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-							</button>
-							<c:out value="${info}"></c:out>
-						</div>
-					</c:if>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<i class="fa fa-archive"></i>&nbsp;&nbsp;Avaliações
 						</div>
 						<div class="panel-body">
+							<jsp:include page="../fragments/mensagens.jsp" />
 					       	<div class="col-sm-12">
 								<table id="tabela-avaliacoes-user" class="table table-striped table-hover">
 									<thead>

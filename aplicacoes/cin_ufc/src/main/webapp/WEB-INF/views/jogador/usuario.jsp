@@ -23,14 +23,7 @@
 						<i class="fa fa-user"></i>&nbsp;&nbsp;${usuarioParticipante.nome } ${usuarioParticipante.sobreNome }
 					</div>
 					<div class="panel-body">
-						<c:if test="${not empty erro}">
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<c:out value="${erro}"></c:out>
-							</div>
-						</c:if>
+						<jsp:include page="../fragments/mensagens.jsp" />
 						<div class="row">
 							<div class="col-md-3 col-lg-3 " align="center">
 								<c:if test="${usuarioParticipante.foto == null }">

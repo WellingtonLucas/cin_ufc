@@ -230,6 +230,7 @@ public class RodadaController {
 			model.addAttribute("prazoReabertura", rodadaService.isPosPrazoSubmissoesEReabertura(rodada));
 			equipes = rodadaEquipeService.atualizaStatusEquipesNaRodada(jogo.getEquipes(), rodada);
 			permissao = usuarioService.definePermissao(jogo, usuario);
+			rodadaEquipeService.atualizaStatusRodadaEquipes(jogo,rodada);
 			if(equipe != null && rodada.getJogo().getEquipes().contains(equipe)){
 				ReaberturaSubmissao reaberturaSubmissao = reaberturaSubmissaoService.find(equipe, rodada);
 				if(reaberturaSubmissao != null){
@@ -359,8 +360,7 @@ public class RodadaController {
 		try{
 			jogo.getRodadas().remove(rodada);
 			jogoService.update(jogo);
-			rodadaEquipeService.deletePor(rodada);
-			rodadaService.delete(rodada);
+			rodadaService.remover(rodada);
 		}catch(Exception e){
 			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
 			return "redirect:/jogo/" + jogo.getId() + "/rodada/"+rodada.getId()+"/detalhes";
@@ -404,7 +404,7 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro",MENSAGEM_EXCEPTION);
 			return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
 		}
-		redirectAttributes.addFlashAttribute("info","Equipe ativada com sucesso.");
+		redirectAttributes.addFlashAttribute("info","Empresa " +equipe.getNome()+ " ativada com sucesso.");
 		return "redirect:/jogo/" + idJogo + "/rodada/" + idRodada+"/detalhes";
 	}
 	
@@ -760,6 +760,7 @@ public class RodadaController {
 				redirectAttributes.addFlashAttribute("erro",e.getMessage());
 				return REDIRECT_PAGINA_LISTAR_JOGO;
 			}
+			rodadaService.verificaGabaritos(rodada);
 			rodadaService.verificaSeNaoPrazoSubmissao(rodada);
 			rodada.setStatusNota(true);
 			rodadaService.update(rodada);
@@ -820,7 +821,14 @@ public class RodadaController {
 			regrasService.verificaRodada(rodada);
 			regrasService.verificaRodadaJogo(rodada, jogo);
 			permissao = usuarioService.definePermissao(jogo, usuario);
+			if(!permissao.equals("professor")){
+				rodadaService.verificaSePrazoSubmissao(rodada);
+				consultoriaService.verificaConsultoria(rodada);
+			}
 			equipe = equipeService.equipePorAlunoNoJogo(usuario, jogo);
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/detalhes";
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -841,7 +849,7 @@ public class RodadaController {
 	}
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/servico/salvar", method = RequestMethod.GET)
 	public String servicoSalvarGet(@PathVariable("idJogo") Integer idJogo,@PathVariable("idRodada") Integer id) {
-		return "rerirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
+		return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/servico/salvar", method = RequestMethod.POST)
@@ -878,7 +886,7 @@ public class RodadaController {
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/servico/editar", method = RequestMethod.GET)
 	public String servicoEditarGet(@PathVariable("idJogo") Integer idJogo,@PathVariable("idRodada") Integer id) {
-		return "rerirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
+		return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/servico/editar", method = RequestMethod.POST)
@@ -918,7 +926,7 @@ public class RodadaController {
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/adquirirServico/{idEquipe}", method = RequestMethod.GET)
 	public String adquirirServicoGet(@PathVariable("idJogo") Integer idJogo,@PathVariable("idRodada") Integer id) {
-		return "rerirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
+		return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/servicos";
 	}
 	
 	@RequestMapping(value = "/jogo/{idJogo}/rodada/{idRodada}/adquirirServico/{idEquipe}", method = RequestMethod.POST)
@@ -1028,6 +1036,9 @@ public class RodadaController {
 			solicitacaoConsultoria = solicitacaoConsultoriaService.find(SolicitacaoConsultoria.class, idS);
 			solicitacaoConsultoriaService.verificaConsistencia(solicitacaoConsultoria, equipe, rodada);
 			solicitacaoConsultoriaService.confirmarSolicitacao(solicitacaoConsultoria, equipe);
+		} catch (IllegalAccessError e) {
+			redirectAttributes.addFlashAttribute("erro",e.getMessage());
+			return "redirect:/jogo/"+idJogo+"/rodada/"+id+"/detalhes";
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro",e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
@@ -1035,7 +1046,7 @@ public class RodadaController {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
 			return REDIRECT_PAGINA_LISTAR_JOGO;
 		}
-		redirectAttributes.addFlashAttribute("info", "Solicitação da equipe \""+equipe.getNome()+"\" confirmada.");
+		redirectAttributes.addFlashAttribute("info", "Solicitação da empresa	 \""+equipe.getNome()+"\" confirmada.");
 		return "redirect:/jogo/"+jogo.getId()+"/rodada/"+rodada.getId()+"/solicitacoes";
 	}
 	

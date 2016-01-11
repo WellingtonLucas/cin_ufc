@@ -150,9 +150,9 @@
 			<c:if test="${(action == 'detalhesRodada')}">
 				<h4><i class="fa fa-cogs"></i><small><b> OPÇÕES RODADA</b></small></h4>
 				<c:if test="${(permissao == 'professor')||(permissao == 'aluno') }">
-					<li><a data-toggle="tooltip" data-placement="top" title="Submissões da rodada ${rodada.nome}." 
+					<li><a data-toggle="tooltip" data-placement="top" title="Através desta opção você pode avaliar e investir nas empresas que desejar." 
 						href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/submissoes"></c:url>">
-						<i class="glyphicon glyphicon-open"></i>&nbsp;&nbsp;Submissões</a>
+						<i class="glyphicon glyphicon-open"></i>&nbsp;&nbsp;Entregas</a>
 					</li>
 					<li><a data-toggle="tooltip" data-placement="top" title="Rankings para a rodada ${rodada.nome}." 
 						href="<c:url value ="/jogo/${jogo.id}/rodada/${rodada.id}/rankings"></c:url>">

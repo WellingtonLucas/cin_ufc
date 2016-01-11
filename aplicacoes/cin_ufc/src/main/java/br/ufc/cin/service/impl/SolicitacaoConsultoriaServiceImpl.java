@@ -41,19 +41,20 @@ public class SolicitacaoConsultoriaServiceImpl extends GenericServiceImpl<Solici
 		if(!solicitacaoConsultoria.isStatus()){
 			solicitacaoConsultoria.setStatus(true);
 			solicitacaoConsultoria.setDiaConfirmacao(new Date());
-			Float saldo = solicitacaoConsultoria.getConsultoria().getValor();
+			Float debito = solicitacaoConsultoria.getConsultoria().getValor();
 			SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(equipe, solicitacaoConsultoria.getConsultoria().getRodada());
 			if(saldoNaRodada==null){
 				saldoNaRodada = new SaldoNaRodada();
 				saldoNaRodada.setEquipe(equipe);
 				saldoNaRodada.setSaldo(0F);
+				saldoNaRodada.setDebito(0f);
 				saldoNaRodada.setRodada(solicitacaoConsultoria.getConsultoria().getRodada());
 			}
-			saldoNaRodada.setSaldo(saldoNaRodada.getSaldo() - saldo);
+			saldoNaRodada.setDebito(saldoNaRodada.getDebito() + debito);
 			saldoNaRodadaService.update(saldoNaRodada);
 			update(solicitacaoConsultoria);
 		}else{
-			throw new IllegalArgumentException("Você não pode confirmar uma consultoria mais de uma vez por rodada.");
+			throw new IllegalArgumentException("Você não pode confirmar uma consultoria mais de uma vez na rodada.");
 		}
 	}
 
@@ -70,5 +71,15 @@ public class SolicitacaoConsultoriaServiceImpl extends GenericServiceImpl<Solici
 	public SolicitacaoConsultoria findByEquipeConsulta(Equipe equipe,
 			Consultoria consultoria) {
 		return solicitacaoConsultoriaRepository.findByEquipeConsulta(equipe, consultoria);
+	}
+
+	@Override
+	public void deletePor(Consultoria consultoria) {
+		List<SolicitacaoConsultoria> solicitacoes = solicitacoesPorConsulta(consultoria);
+		if(solicitacoes!=null){
+			for (SolicitacaoConsultoria solicitacaoConsultoria : solicitacoes) {
+				delete(solicitacaoConsultoria);
+			}
+		}
 	}
 }

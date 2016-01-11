@@ -3,6 +3,7 @@ package br.ufc.cin.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +37,7 @@ public class Entrega {
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "DOC_ID")
 	private Documento documento;
 
@@ -44,10 +45,10 @@ public class Entrega {
 	@JoinColumn(name = "EQUIPE_ID")
 	private Equipe equipe;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Resposta gabarito;
 
-	@OneToMany(mappedBy ="entrega")
+	@OneToMany(mappedBy ="entrega", cascade=CascadeType.ALL)
 	private List<Resposta> respostas;
 	
 	@Transient

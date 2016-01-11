@@ -101,5 +101,23 @@ public class ConcultoriaServiceImpl extends GenericServiceImpl<Consultoria> impl
 		return temp;
 	}
 
+	@Override
+	public void verificaConsultoria(Rodada rodada) {
+		Consultoria consultoria = findByRodada(rodada);
+		if(consultoria == null || consultoria.getId()==null){
+			throw new IllegalAccessError("Esta rodada não possui serviço de consultoria. Entre em contado com o docente.");
+		}
+	}
+
+	@Override
+	public void deletePor(Rodada rodada) {
+		Consultoria consultoria = findByRodada(rodada);
+		if(consultoria.getId()!=null){
+			solicitacaoConsultoriaService.deletePor(consultoria);
+			delete(consultoria);
+		}
+		
+	}
+
 
 }

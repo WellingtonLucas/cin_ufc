@@ -22,4 +22,6 @@ public interface ReaberturaSubmissaoService extends GenericService<ReaberturaSub
 	 * Verifica se a equipe possui pedido de reabertura para a rodada.
 	 * **/
 	public abstract void verificaSeTemPedido(Rodada rodada, Equipe equipe);
+	
+	public abstract void deletePor(Rodada rodada);
 }

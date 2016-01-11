@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Aposta;
-import br.ufc.cin.model.Consultoria;
 import br.ufc.cin.model.Deposito;
 import br.ufc.cin.model.Equipe;
 import br.ufc.cin.model.Jogo;
@@ -16,17 +15,14 @@ import br.ufc.cin.model.NotaEquipeRodada;
 import br.ufc.cin.model.Rodada;
 import br.ufc.cin.model.SaldoNaRodada;
 import br.ufc.cin.model.SaldoPorJogo;
-import br.ufc.cin.model.SolicitacaoConsultoria;
 import br.ufc.cin.model.Usuario;
 import br.ufc.cin.repository.ApostaRepository;
 import br.ufc.cin.repository.DepositoRepository;
 import br.ufc.cin.service.ApostaService;
-import br.ufc.cin.service.ConsultoriaService;
 import br.ufc.cin.service.EquipeService;
 import br.ufc.cin.service.NotaEquipeRodadaService;
 import br.ufc.cin.service.SaldoNaRodadaService;
 import br.ufc.cin.service.SaldoPorJogoService;
-import br.ufc.cin.service.SolicitacaoConsultoriaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
@@ -48,14 +44,8 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 	private EquipeService equipeService;
 	
 	@Inject
-	private ConsultoriaService ConsultoriaService;
-	
-	@Inject
 	private NotaEquipeRodadaService notaEquipeRodadaService;
 
-	@Inject
-	private SolicitacaoConsultoriaService solicitacaoConsultoriaService;
-	
 	@Override
 	public Aposta findByUsuarioRodada(Usuario apostador, Rodada rodada) {
 		return apostaRepository.findByUsuarioRodada(apostador, rodada);
@@ -99,21 +89,26 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 		if(!verificaSaldo(aposta, deposito.getQuantia())){
 			throw new IllegalArgumentException("Saldo insuficiente!");
 		}
-		deposito.setDia(new Date());
-		depositoRepository.save(deposito);
 		SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(deposito.getEquipe(), aposta.getRodada());
 		if(saldoNaRodada == null){
+			deposito.setDia(new Date());
+			depositoRepository.save(deposito);
 			saldoNaRodada = new SaldoNaRodada();
 			saldoNaRodada.setEquipe(deposito.getEquipe());
 			saldoNaRodada.setRodada(aposta.getRodada());
 			saldoNaRodada.setSaldo(deposito.getQuantia());
 			saldoNaRodadaService.save(saldoNaRodada);
+			aposta.addDeposito(deposito);
+			atualizaSaldoDisponivel(aposta, deposito.getQuantia());
 		}else{
+			deposito.setDia(new Date());
+			depositoRepository.save(deposito);
 			saldoNaRodada.setSaldo(saldoNaRodada.getSaldo() + deposito.getQuantia());
 			saldoNaRodadaService.update(saldoNaRodada);
+			aposta.addDeposito(deposito);
+			atualizaSaldoDisponivel(aposta, deposito.getQuantia());
 		}
-		aposta.addDeposito(deposito);
-		atualizaSaldoDisponivel(aposta, deposito.getQuantia());
+		
 	}
 
 
@@ -127,16 +122,10 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 	public void atualizaSaldoEquipes(Jogo jogo, Rodada rodada) {
 		for (Equipe equipe : jogo.getEquipes()) {
 			SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(equipe, rodada);
-			Consultoria consultoria = ConsultoriaService.findByRodada(rodada);
-			SolicitacaoConsultoria solicitacao = solicitacaoConsultoriaService.findByEquipeConsulta(equipe, consultoria);
 			if(saldoNaRodada != null){
 				NotaEquipeRodada notaEquipeRodada = notaEquipeRodadaService.findByEquipeRodada(equipe, rodada);
 				if(notaEquipeRodada != null){
-					Float valor = 0F;
-					if(solicitacao != null && solicitacao.isStatus()){
-						valor = consultoria.getValor();
-					}
-					saldoNaRodada.setSaldoComFator(saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta() - valor);
+					saldoNaRodada.setSaldoComFator((saldoNaRodada.getSaldo() * notaEquipeRodada.getFatorDeAposta()) - saldoNaRodada.getDebito());
 					saldoNaRodadaService.update(saldoNaRodada);
 					
 					equipe.setSaldo(equipe.getSaldo() + saldoNaRodada.getSaldoComFator());
@@ -160,11 +149,9 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 				saldoPorJogo.setSaldo(saldo);
 			}
 			Aposta aposta = findByUsuarioRodada(usuario, rodada);
+			saldo = saldoPorJogo.getSaldo();
 			if(aposta!=null){
 				List<Deposito> depositos = aposta.getDepositos();
-				if(saldoPorJogo != null){
-					saldo = saldoPorJogo.getSaldo();
-				}
 				for (Deposito deposito : depositos) {
 					NotaEquipeRodada notaEquipeRodada =
 							notaEquipeRodadaService.findByEquipeRodada(deposito.getEquipe(), rodada);
@@ -264,18 +251,13 @@ public class ApostaServiceImpl extends GenericServiceImpl<Aposta> implements Apo
 
 
 	@Override
-	public void atualizaSaldosEquipeRodada(Jogo jogo, Rodada rodada) {
-		for (Equipe equipe : jogo.getEquipes()) {
-			SaldoNaRodada saldoNaRodada = saldoNaRodadaService.findByEquipeRodada(equipe, rodada);
-			List<Aposta> apostas = findByRodada(rodada);
+	public void deletePor(Rodada rodada) {
+		List<Aposta> apostas = findByRodada(rodada);
+		if(apostas!=null){
 			for (Aposta aposta : apostas) {
-				for (Deposito deposito : aposta.getDepositos()) {
-					if(deposito.getEquipe().equals(saldoNaRodada.getEquipe())){
-						saldoNaRodada.setSaldo(saldoNaRodada.getSaldo() + deposito.getQuantia());
-					}
-				}
+				delete(aposta);
 			}
-			saldoNaRodadaService.update(saldoNaRodada);
 		}
 	}
+
 }

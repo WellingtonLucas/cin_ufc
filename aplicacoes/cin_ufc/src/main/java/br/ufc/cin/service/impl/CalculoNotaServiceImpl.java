@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Named;
 
+import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Opcao;
 import br.ufc.cin.model.Resposta;
 import br.ufc.cin.service.CalculoNotaService;
@@ -48,8 +49,8 @@ public class CalculoNotaServiceImpl implements CalculoNotaService{
 	}
 
 	@Override
-	public Float calculoNotaEquipe(Resposta resposta) {
-		List<Opcao> gabarito = resposta.getEntrega().getGabarito().getOpcoes();
+	public Float calculoNotaEquipe(Entrega entrega) {
+		List<Opcao> gabarito = entrega.getGabarito().getOpcoes();
 		float somatorio = 0f;
 		for (int i = 0; i < gabarito.size(); i++) {
 			List<Opcao> opcoes = gabarito.get(i).getPergunta().getOpcoes();
@@ -59,7 +60,7 @@ public class CalculoNotaServiceImpl implements CalculoNotaService{
 				if(opcao.equals(gabarito.get(i))){
 					break;
 				}
-				inicial -= 2;
+				inicial -= 2.5;
 			}
 			somatorio += inicial;
 		}

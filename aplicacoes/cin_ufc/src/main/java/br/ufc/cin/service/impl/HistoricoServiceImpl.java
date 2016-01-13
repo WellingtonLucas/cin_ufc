@@ -75,7 +75,8 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 			Nota nota = notaService.findByHistoricoRodada(historico, rodada);
 			if(nota != null){
 				List<Resposta> respostas = new ArrayList<Resposta>();
-				for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
+				List<Entrega> ultimasEntregas = entregaService.getUltimasEntregasDaRodada(rodada); 
+				for (Entrega entrega : ultimasEntregas) {
 					Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
 					if(resposta != null){		
 						respostas.add(resposta);
@@ -85,7 +86,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 				nota.setValor(0F);
 				if(rodada.isStatusRaking() && !respostas.isEmpty()){
 					nota.setSatus(true);
-					nota.setValor(calculoNotaService.calculoMedia(respostas));
+					nota.setValor(calculoNotaService.calculoMedia(respostas, ultimasEntregas));
 				}
 				notaService.update(nota);
 			}
@@ -102,7 +103,8 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 		save(historico);
 		for (Rodada rodada : rodadas) {
 			List<Resposta> respostas = new ArrayList<Resposta>();
-			for (Entrega entrega : entregaService.getUltimasEntregasDaRodada(rodada)) {
+			List<Entrega> ultimasEntregas = entregaService.getUltimasEntregasDaRodada(rodada); 
+			for (Entrega entrega : ultimasEntregas) {
 				Resposta resposta = respostaService.findUltimaRespostaPorEntrega(usuario, entrega);
 				if(resposta != null){		
 					respostas.add(resposta);
@@ -114,7 +116,7 @@ public class HistoricoServiceImpl extends GenericServiceImpl<Historico> implemen
 			nota.setValor(0f);
 			if(rodada.isStatusRaking() && !respostas.isEmpty()){
 				nota.setSatus(true);
-				nota.setValor(calculoNotaService.calculoMedia(respostas));
+				nota.setValor(calculoNotaService.calculoMedia(respostas, ultimasEntregas));
 			}
 			historico.addNota(nota);
 			notaService.save(nota);

@@ -37,13 +37,13 @@ public class CalculoNotaServiceImpl implements CalculoNotaService{
 	}
 
 	@Override
-	public Float calculoMedia(List<Resposta> respostas) {
+	public Float calculoMedia(List<Resposta> respostas, List<Entrega> ultimas) {
 		Float soma =0f;
 		if(respostas != null && !respostas.isEmpty()){
 			for (Resposta resposta : respostas) {
 				soma+= calculoNota(resposta);
 			}
-			return soma/respostas.size();
+			return soma/ultimas.size();
 		}
 		return null;
 	}

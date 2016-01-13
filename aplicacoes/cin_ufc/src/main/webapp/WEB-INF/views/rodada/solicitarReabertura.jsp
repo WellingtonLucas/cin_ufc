@@ -39,7 +39,7 @@
 						<div class="form-group">
 							<div class="col-sm-1"></div>
 							<h3 class="col-sm-11">
-								<small>Lembrete: cada dia tem um custo adicional de <strong>R$ <fmt:formatNumber maxFractionDigits="2" value="${rodada.valorReabertura}"></fmt:formatNumber></strong> para sua equipe.</small>
+								<small>Lembrete: cada dia tem um custo adicional de <strong>R$ <fmt:formatNumber maxFractionDigits="2" value="${rodada.valorReabertura}"></fmt:formatNumber></strong> para sua empresa.</small>
 							</h3>
 						</div>
 				</div>

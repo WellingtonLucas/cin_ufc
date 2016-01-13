@@ -26,11 +26,11 @@
 				<jsp:include page="../fragments/menu.jsp" />
 				<div class="col-sm-8 col-md-10 main">
 					<h2><strong>Rodada: ${rodada.nome }</strong>
-						<c:if test="${permissao != 'professor' }">- Seu saldo é <strong>R$ <fmt:formatNumber currencyCode="BRL" value="${aposta.saldo }" /></strong></c:if>.
+						<c:if test="${permissao != 'professor' }">- Seu saldo é <strong>R$ <fmt:formatNumber currencyCode="BRL" value="${aposta.saldo }" /></strong></c:if>
 					</h2>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4><strong>Últimas Submissões</strong> </h4>
+							<strong>Últimas Submissões</strong>
 						</div>
 						<div class="panel-body">
 							<jsp:include page="../fragments/mensagens.jsp" />

@@ -170,10 +170,10 @@
 					</c:if>
 				</c:if>
 				<c:if test="${ (permissao == 'aluno') && rodada.statusPrazo}">
-					<li>
-						<a data-toggle="modal" data-target="#squarespaceModal" data-toggle="tooltip" data-placement="top"
-						title="Esta funcionalidade permite que você solicite a reabertura desta rodada para sua equipe." 
-						href="<c:url value ="/#"></c:url>"><i class="fa fa-cart-plus"></i>&nbsp;&nbsp;Solicitar Reabertura</a>
+					<li data-toggle="tooltip" data-placement="top"
+						title="Esta funcionalidade permite que você solicite a reabertura desta rodada para sua empresa.">
+						<a data-toggle="modal" data-target="#squarespaceModal"  
+						href="<c:url value ="/#"></c:url>"><i class="fa fa-cart-plus"></i>&nbsp;&nbsp;Reabertura</a>
 					</li>
 				</c:if>
 			</c:if>

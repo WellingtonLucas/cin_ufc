@@ -9,7 +9,7 @@ public interface CalculoNotaService {
 	
 	public abstract Float calculoNota(Resposta resposta);
 	
-	public abstract Float calculoMedia(List<Resposta> respostas);
+	public abstract Float calculoMedia(List<Resposta> respostas, List<Entrega> ultimas);
 
 	public abstract Float calculoNotaEquipe(Entrega entrega);
 }

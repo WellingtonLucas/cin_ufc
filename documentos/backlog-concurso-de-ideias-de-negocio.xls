@@ -1,0 +1,2687 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<Workbook xmlns:html='http://www.w3.org/TR/REC-html40'
+          xmlns:o='urn:schemas-microsoft-com:office:office'
+          xmlns:ss='urn:schemas-microsoft-com:office:spreadsheet'
+          xmlns:x='urn:schemas-microsoft-com:office:excel'
+          xmlns='urn:schemas-microsoft-com:office:spreadsheet'>
+  <DocumentProperties xmlns='urn:schemas-microsoft-com:office:office'>
+    <LastAuthor>Wellington Lucas Moura</LastAuthor>
+    <Created>2016-01-17 21:21:05 UTC</Created>
+    <LastSaved>%= Time.now.utc %></LastSaved>
+    <Version>1.0</Version>
+  </DocumentProperties>
+  <OfficeDocumentSettings xmlns='urn:schemas-microsoft-com:office:office'>
+    <AllowPNG />
+  </OfficeDocumentSettings>
+  <ExcelWorkbook xmlns='urn:schemas-microsoft-com:office:excel'>
+    <ProtectStructure>False</ProtectStructure>
+    <ProtectWindows>False</ProtectWindows>
+  </ExcelWorkbook>
+  <Styles>
+    <Style ss:ID='Default' ss:Name='Normal'>
+      <Alignment ss:Vertical='Top' ss:WrapText='1' />
+      <Borders />
+      <Font ss:Color='#000000' ss:FontName='Calibri' ss:Size='12' x:Family='Swiss' />
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+    <Style ss:ID='title'>
+      <Alignment ss:Vertical='Bottom' ss:WrapText='1' />
+      <Font ss:Bold='1' ss:Color='#000000' ss:FontName='Calibri' ss:Size='15' />
+    </Style>
+    <Style ss:ID='top-base-stats'>
+      <Alignment ss:Horizontal='Right' ss:Vertical='Center' ss:WrapText='1' />
+      <Font ss:Bold='0' ss:Color='#000000' ss:FontName='Calibri' ss:Size='11' />
+    </Style>
+    <Style ss:ID='table-header'>
+      <Alignment ss:Horizontal='Center' ss:Vertical='Center' ss:WrapText='1' />
+      <Font ss:Bold='1' ss:Color='#000000' ss:FontName='Calibri' ss:Size='12' />
+      <Interior ss:Color='#CCFFFF' ss:Pattern='Solid' />
+    </Style>
+    <Style ss:ID='numeric'>
+      <Alignment ss:Horizontal='Right' ss:Vertical='Top'/>
+      <Font ss:Bold='0' ss:Color='#000000' ss:FontName='Calibri' ss:Size='12' />
+    </Style>
+    <Style ss:ID='theme-summary'>
+      <Alignment ss:Horizontal='Left' ss:Vertical='Top' ss:WrapText='1' />
+      <Font ss:Color='#000000' ss:FontName='Calibri' ss:Size='12' />
+      <Interior ss:Color='#C0C0C0' ss:Pattern='Solid' />
+    </Style>
+    <Style ss:ID='theme-total'>
+      <Alignment ss:Horizontal='Right' ss:Vertical='Bottom' ss:WrapText='1' />
+      <Font ss:Bold='1' ss:Color='#000000' ss:FontName='Calibri' ss:Size='12' />
+      <Interior ss:Color='#C0C0C0' ss:Pattern='Solid' />
+    </Style>
+    <Style ss:ID='theme-cell'>
+      <Alignment ss:Vertical='Top' ss:WrapText='1' />
+      <Font ss:Bold='1' ss:Color='#000000' ss:FontName='Calibri' ss:Size='12' />
+    </Style>
+    <Style ss:ID='backlog-summary'>
+      <Alignment ss:Horizontal='Left' ss:Vertical='Top' ss:WrapText='1' />
+      <Font ss:Bold='1' ss:Color='#000000' ss:FontName='Calibri' ss:Size='14' />
+      <Interior ss:Color='#CCFFFF' ss:Pattern='Solid' />
+    </Style>
+    <Style ss:ID='backlog-total'>
+      <Alignment ss:Horizontal='Right' ss:Vertical='Bottom' ss:WrapText='1' />
+      <Font ss:Bold='1' ss:Color='#000000' ss:FontName='Calibri' ss:Size='14' />
+      <Interior ss:Color='#CCFFFF' ss:Pattern='Solid' />
+    </Style>
+          <Style ss:ID='story-color-0'>
+        <Borders>
+          <Border ss:Position='Left' ss:Color='#ff0000' ss:Weight='3' ss:LineStyle='Continuous' />
+        </Borders>
+      </Style>
+
+      <Style ss:ID='story-color-1'>
+        <Borders>
+          <Border ss:Position='Left' ss:Color='#ffff00' ss:Weight='3' ss:LineStyle='Continuous' />
+        </Borders>
+      </Style>
+
+      <Style ss:ID='story-color-2'>
+        <Borders>
+          <Border ss:Position='Left' ss:Color='#ff9900' ss:Weight='3' ss:LineStyle='Continuous' />
+        </Borders>
+      </Style>
+
+      <Style ss:ID='story-color-3'>
+        <Borders>
+          <Border ss:Position='Left' ss:Color='#6666ff' ss:Weight='3' ss:LineStyle='Continuous' />
+        </Borders>
+      </Style>
+
+      <Style ss:ID='story-color-4'>
+        <Borders>
+          <Border ss:Position='Left' ss:Color='#dddddd' ss:Weight='3' ss:LineStyle='Continuous' />
+        </Borders>
+      </Style>
+
+      <Style ss:ID='story-color-5'>
+        <Borders>
+          <Border ss:Position='Left' ss:Color='#b6d7a8' ss:Weight='3' ss:LineStyle='Continuous' />
+        </Borders>
+      </Style>
+
+  </Styles>
+  <Worksheet ss:Name='Backlog Report'>
+  <Table>
+    <Column ss:AutoFitWidth="1" ss:Width="90" /> <!--Theme-->
+    <Column ss:AutoFitWidth="1" ss:Width="45" /> <!--ID-->
+    <Column ss:AutoFitWidth="1" ss:Width="240" /> <!--User Story-->
+    <Column ss:AutoFitWidth="1" ss:Width="240" /> <!--Acceptance Criteria-->
+    <Column ss:AutoFitWidth="1" ss:Width="240" /> <!--Comments-->
+    <Column ss:AutoFitWidth="1" ss:Width="50" /> <!--Sprint-->
+    <Column ss:AutoFitWidth="1" ss:Width="90" /> <!--Status-->
+      <Column ss:AutoFitWidth="1" ss:Width="45" /> <!--Score -->
+      <Column ss:AutoFitWidth="1" ss:Width="45" /> <!--Days-->
+    <Row ss:AutoFitHeight='0' ss:Height='18'>
+      <Cell ss:MergeAcross='3' ss:StyleID='title'>
+        <Data ss:Type='String'>Concurso de Ideias de Negócio</Data>
+      </Cell>
+      <Cell ss:MergeAcross='4' ss:StyleID='top-base-stats'>
+        <Data ss:Type='String'>Velocity: 15.0</Data>
+      </Cell>
+    </Row>
+    <Row>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Tema</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>ID</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>História de Usuário</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Critérios de Aceitação</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Comentários</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Sprint</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Status</Data>
+      </Cell>
+        <Cell ss:StyleID='table-header'>
+          <Data ss:Type='String'><span class="translation_missing" title="translation missing: pt.backlog.points">Points</span></Data>
+        </Cell>
+        <Cell ss:StyleID='table-header'>
+          <Data ss:Type='String'>Dias</Data>
+        </Cell>
+    </Row>
+        <Row>
+      <Cell ss:MergeDown='9' ss:StyleID='theme-cell'>
+        <Data ss:Type='String'>Configuração</Data>
+      </Cell>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-0&#x27;>
+  <Data ss:Type='String'>CON1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> participante
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> me cadastar no sistema
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> eu possa se envolver em jogos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Todos os campos devem ser obrigatórios&#10;&#13;b) Um participante pode ser cadastrado diretamente em um jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Campos: nome completo, email, curso, matrícula, semestre.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-0&#x27;>
+  <Data ss:Type='String'>CON5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> vincular participantes a um jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa participar do jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível vincular mais de um participante por vez</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Além da vinculação fazer também a desvinculação.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-1&#x27;>
+  <Data ss:Type='String'>CON2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> cadastrar/atualizar as informações gerais do jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os participantes tenham acesso às informações</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Campos obrigatórios preenchidos&#10;&#13;b) Cada anexo pode ser configurado com um nome de exibição distinto do nome do arquivo original&#10;&#13;c) A descrição geral e as regras podem ser inseridas usando um editor WYSIWYG</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Campos: descrição em richtext, data de início, data de término, regras em richtext (opcional), anexos (opcional), informações de contato com o docente (email); Informações são extensas, podendo conter figuras e tabelas. Descrição e regras pouco variam de turma para turma</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-2&#x27;>
+  <Data ss:Type='String'>CON3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> organizar equipes de participantes para um jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ser feito acompanhamento por equipe</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Não permitir participante em mais de uma equipe&#10;&#13;b) Visualizar os membros de uma equipe&#10;&#13;c) Vincular um membro a uma equipe&#10;&#13;d) Desvincular um membro de uma equipe&#10;&#13;e) Inativar uma equipe e todos os seus vinculos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Criar equipe com informação do nome da empresa.&#10;&#13;Associar a equipe a um jogo&#10;&#13;Vincular membros a essa equipe. </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>CON8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> criar um novo jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa aplicar em uma nova turma ou disciplina</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Cadastrar um novo jogo com nome não duplicado (de outro jogo do mesmo docente)&#10;&#13;b) Remover jogo apaga todas as informações do jogo (solicitar confirmação de remoção)&#10;&#13;c) Desativar um jogo impede que participantes entrem no jogo e vejam informações&#10;&#13;d) &quot;Poder cadastrar turmas diferentes no mesmo periodo&quot; Executar jogos ao mesmo tempo.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Campos: nome do jogo(curso semestre)&#10;&#13;Opções: cadastrar, remover, listar, desativar&#10;&#13;Turma diferentes: ES 2016.1; CC 2016.1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-1&#x27;>
+  <Data ss:Type='String'>CON9</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> adicionar uma imagem de apresentação para um jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> seja melhor representado um jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) A imagem deve possuir os formatos PNG ou JPEG/JPG &#10;&#13;b) A imagem não deve possuir mais de 1MB</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>História filha de CON8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-0&#x27;>
+  <Data ss:Type='String'>CON10</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> participante
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> alterar meus dados de cadastro
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> eu possa alterar possíveis erros</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Os dados devem ser validados assim como no cadastro</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-0&#x27;>
+  <Data ss:Type='String'>CON11</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> participante
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> alterar minha imagem de perfil
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> outros usuários do sistema possam me reconhecer</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) A imagem não deve possuir mais de 1MB de tamanho&#10;&#13;b) A imagem deve possuir os formatos PNG ou JPEG/JPG</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>CON12</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> adicionar uma imagem que defina minha empresa
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> fique melhor caracterizado minha equipe</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) A imagem deve possuir os formatos PNG ou JPEG/JPG&#10;&#13;b) A imagem não deve possuir mais de 1MB de tamanho</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+  <Row>
+    <Cell ss:Index='2' ss:MergeAcross='2' ss:StyleID='theme-summary'>
+      <Data ss:Type='String'>Total do tema &#x27;Configuração&#x27;</Data>
+    </Cell>
+    <Cell ss:MergeAcross='4' ss:StyleID='theme-total'>
+      <Data ss:Type='String'>0.0 pontos / 0.0 dias</Data>
+    </Cell>
+  </Row>
+  <Row ss:AutoFitHeight='0' ss:Height='5'>
+    <Cell ss:MergeAcross='8' />
+  </Row>
+    <Row>
+      <Cell ss:MergeDown='9' ss:StyleID='theme-cell'>
+        <Data ss:Type='String'>Equipe</Data>
+      </Cell>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar informações dos demais membros
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> seja possível algum feedback interno da equipe</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser exibido apenas as informações aos membros da equipe&#10;&#13;b) Nenhuma informação é mostrada se a pessoa não estiver associada a uma equipe&#10;&#13;c) Uma pessoa consegue ver a lista de demais membros</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Controle de acesso às informações da equipe, como artefatos submetidos, informações gerais dos outros membros, nome, email, etc.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar informações de contato do docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> se estabeleça um meio de comunicação </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser exibido aos alunos o email, ou outro tipo de contato disponibilizado pelo docente</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Exibir informações no rodapé da página</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> editar as informações da minha equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> o dados estejam consistentes </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O campo matrícula não pode ser editado pelo aluno </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Campos: logo e nome da empresa; </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> editar a ideia de negócio
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa se adequar a possíveis feedbacks</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O campo ideia de negócio pode ser editável</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>O aluno deve ser capaz de adicionar uma ideia de negócio.&#10;&#13;O campo será opcional.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> submeter artefato para entrega de rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possam ser avaliados</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível selecionar apenas um arquivo por vez&#10;&#13;b) Deve ser possível submeter arquivo no formato PDF, MS Office, Open/Libre Office</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>- Formato: .pdf, .docx, .odt, .doc, são os formatos mais comuns. com o tempo os arquivos são migrados para PDF pelos alunos.&#10;&#13;- Informações registradas: qual membro da equipe submeteu, data e hora da submissão, nome(s) do(s) arquivo(s original(is).&#10;&#13;Nomeação dos arquivos &lt;nome-da-equipe-rodada&gt;, preferível.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar o histórico de submissão para uma entrega de rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> seja possível analisar as versões entregues</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado ao membro da equipe um histórico de submissão de artefatos para uma entrega de rodada&#10;&#13;b) É possível visualizar quem e quando enviou cada artefato&#10;&#13;c) É possível visualizar quais artefatos foram considerados como última entrega </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Classificar por data, hora e minutos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar o saldo da equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa analisar possíveis valores de investimento futuro</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado aos membros da equipe o saldo disponível da equipe.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar os resultados da equipe numa rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> se tenha um feedback de como estão se saindo no jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado aos membros da equipe as notas, fatores de aposta, valor em dinheiro que obtiveram nas rodadas até então.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Apresentar um histórico da equipe em cada rodada com: nota, fator de aposta, valor em dinheiro recebido/retirado e GABARITO.&#10;&#13;Separar parte acadêmica da lúdica.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU9</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> adquirir um serviço 
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa receber feedback especial do docente</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Serviço solicitado com confirmação pendente do docente não debita do saldo&#10;&#13;b) É possivel solicitar serviço sem saldo apropriado&#10;&#13;c) Serviços solicitados dentro de uma rodada que não foram confirmados são cancelados&#10;&#13;d) Docente pode confirmar um serviço e o saldo da equipe será debitado&#10;&#13;e) Docente pode cancelar um serviço</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>- Serviços possuem uma descrição e um valor&#10;&#13;- Após solicitação, o docente confirmar a venda do serviço&#10;&#13;- A execução do serviço NÃO é mediada pelo sistema (Conflitante com &quot;reabrir rodada&quot;)&#10;&#13;- Serviços: Consultoria, reabrir rodada.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+  <Row>
+    <Cell ss:Index='2' ss:MergeAcross='2' ss:StyleID='theme-summary'>
+      <Data ss:Type='String'>Total do tema &#x27;Equipe&#x27;</Data>
+    </Cell>
+    <Cell ss:MergeAcross='4' ss:StyleID='theme-total'>
+      <Data ss:Type='String'>0.0 pontos / 0.0 dias</Data>
+    </Cell>
+  </Row>
+  <Row ss:AutoFitHeight='0' ss:Height='5'>
+    <Cell ss:MergeAcross='8' />
+  </Row>
+    <Row>
+      <Cell ss:MergeDown='6' ss:StyleID='theme-cell'>
+        <Data ss:Type='String'>Avaliação Individual do Aluno</Data>
+      </Cell>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-3&#x27;>
+  <Data ss:Type='String'>AVA1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> aluno
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar as submissões finais da rodada de todas as equipes
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> para que possa avaliá-los</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Todas as equipes devem ser capazes de acessar as submissões finais das demais equipes ao final do período de submissões de uma rodada </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Pode ser uma lista de equipes, ao acessar uma determinada equipe o aluno poderá ter acesso aos artefatos dessa equipe na rodada que foi finalizada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>AVA2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> aluno
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> submeter uma avaliação individual de uma entrega de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ser comparada à avaliação do docente</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado uma série de perguntas sobre um determinado artefato entregue na rodada; &#10;&#13;b) As perguntas são de múltipla escolha</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Perguntas são as mesmas para todos os alunos e todos os projetos.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>AVA3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> aluno
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar minhas avaliações individuais anteriores
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ter feedback sobre escolhas anteriores </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado um histórico com as avaliações feitas pelo aluno&#10;&#13;b) Deve ser apresentado numa visualização dos detalhes de uma equipe&#10;&#13;c) Deve ser apresentado junto com o  gabarito para a avaliação</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-4&#x27;>
+  <Data ss:Type='String'>AVA4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar as avaliações individuais dos alunos
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa fornecer feedback aos alunos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O docente deve ser capaz de acessar as avaliações individuais que os alunos realizam;</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Obs.: Pensar numa estratégia viável para essa apresentação.&#10;&#13;Solução melhor aceita até o momento é ver pela própria visão do aluno.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>AVA5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> aluno
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar minha nota individual
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> saiba o meu desempenho no decorrer do jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve oferecer uma opção para que os alunos visualizem suas próprias notas.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Pode ser apresentado quando o aluno visualizar sua avaliação da rodada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>AVA6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> configurar um formulário de múltipla escolha e gabarito
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> tenha flexibilidade de configuração dos jogos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Criar/editar formulário e perguntas&#10;&#13;b) Copiar um formulário inteiro e edita-lo&#10;&#13;c) Formulários já usados não podem ser editados/removidos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>- Formulário: nome (distinto) e um conjunto de perguntas&#10;&#13;- Pergunta: título, opções, peso da pergunta&#10;&#13;- Calculo da avaliação (PENDENTE)&#10;&#13;- Provavelmente será preciso salvar apenas uma vez o formulário, podendo ser reusado em novos jogos.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+  <Row>
+    <Cell ss:Index='2' ss:MergeAcross='2' ss:StyleID='theme-summary'>
+      <Data ss:Type='String'>Total do tema &#x27;Avaliação Individual do Aluno&#x27;</Data>
+    </Cell>
+    <Cell ss:MergeAcross='4' ss:StyleID='theme-total'>
+      <Data ss:Type='String'>0.0 pontos / 0.0 dias</Data>
+    </Cell>
+  </Row>
+  <Row ss:AutoFitHeight='0' ss:Height='5'>
+    <Cell ss:MergeAcross='8' />
+  </Row>
+    <Row>
+      <Cell ss:MergeDown='4' ss:StyleID='theme-cell'>
+        <Data ss:Type='String'>Apostador</Data>
+      </Cell>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>APO1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> investidor
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> apostar dinheiro, do valor liberado para a rodada, em uma ou mais equipes em uma rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ter retorno financeiro para meu saldo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve apresentar uma opção de apostar quantias de dinheiro em uma ou mais equipes&#10;&#13;b) Deve ser deixado claro para o investidor a quantidade de valor liberado para a rodada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>APO2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> investidor
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar minhas apostas anteriores
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ter feedback se minhas decisões foram acertadas</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve apresentar um histórico de apostas feitas pelo investidor;</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Pode ser apresentado uma tabela de equipes separadas por rodadas, com os respectivos valores de aposta e o retorno de investimento.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>APO3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar todas as apostas dos alunos
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa avaliar o desempenho dos alunos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve apresentar ao docente todas as apostas que os alunos fizeram;</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Pode ser gerado uma planilha ou relatório</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>APO4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> delimitar valor liberado para uma rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> para que os alunos realizem apostas com base neste valor</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser disponibilizado uma opção para o docente inserir o valor que será gasto em cada rodada&#10;&#13;b) Deve ter uma opção de All in, que é a possibilidade do aluno apostar todo o seu saldo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+  <Row>
+    <Cell ss:Index='2' ss:MergeAcross='2' ss:StyleID='theme-summary'>
+      <Data ss:Type='String'>Total do tema &#x27;Apostador&#x27;</Data>
+    </Cell>
+    <Cell ss:MergeAcross='4' ss:StyleID='theme-total'>
+      <Data ss:Type='String'>0.0 pontos / 0.0 dias</Data>
+    </Cell>
+  </Row>
+  <Row ss:AutoFitHeight='0' ss:Height='5'>
+    <Cell ss:MergeAcross='8' />
+  </Row>
+    <Row>
+      <Cell ss:MergeDown='2' ss:StyleID='theme-cell'>
+        <Data ss:Type='String'>Avaliação do Docente</Data>
+      </Cell>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>AOD1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> salvar uma avaliação para uma entrega de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os membros da equipe possam ver</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado ao docente uma opção de avaliação da entrega da equipe;&#10;&#13;b) Somente os membros da equipe e o docente podem ver essa avaliação&#10;&#13;c) O instrumento de avaliação deve ser o mesmo utilizado pelos alunos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Usar formulário&#10;&#13;DUVIDA: Se a avaliação é mostrada à equipe antes da divulgação geral.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>AOD2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> configurar o fator de aposta para uma equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> saiba-se qual a taxa de retorno para o investidor e equipe</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado ao docente uma opção de inclusão do fator de aposta</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Fator pode ser entre: -x e x, onde x é um valor Real.&#10;&#13;No início de cada rodada o docente já saberá qual o fator de aposta x</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+  <Row>
+    <Cell ss:Index='2' ss:MergeAcross='2' ss:StyleID='theme-summary'>
+      <Data ss:Type='String'>Total do tema &#x27;Avaliação do Docente&#x27;</Data>
+    </Cell>
+    <Cell ss:MergeAcross='4' ss:StyleID='theme-total'>
+      <Data ss:Type='String'>0.0 pontos / 0.0 dias</Data>
+    </Cell>
+  </Row>
+  <Row ss:AutoFitHeight='0' ss:Height='5'>
+    <Cell ss:MergeAcross='8' />
+  </Row>
+    <Row>
+      <Cell ss:MergeDown='9' ss:StyleID='theme-cell'>
+        <Data ss:Type='String'>Controle</Data>
+      </Cell>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>CTR1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> publicar as avaliações e fatores para as entregas de uma rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos tenham feedback de como se saíram na rodada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser disponibilizado ao docente uma opção de publicação de resultados</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>CTR2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> gerar e publicar os rankings
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos saibam sua pontuação no jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser disponibilizado uma opção que gere o ranking da rodada&#10;&#13;b) Deve ser disponibilizado uma opção de publicação do ranking da rodada que consequentemente publicará o ranking geral</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Quebrar em duas histórias</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-1&#x27;>
+  <Data ss:Type='String'>CTR3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> encerrar o jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> não seja mais possível alunos terem acesso ao jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve ser capaz de encerrar o jogo&#10;&#13;b) Os dados devem ser mantidos&#10;&#13;c) Apos encerrado o jogo, os alunos não poderão ter mais acesso ao sistema&#10;&#13;d) O docente deve continuar com acesso total ao sistema&#10;&#13;e) Deve ser apresentado uma opção de encerrar o jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>[Essencial]</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-1&#x27;>
+  <Data ss:Type='String'>CTR4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> iniciar um jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos participantes da disciplina tenham acesso ao jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve ser capaz de começar um novo jogo.&#10;&#13;b) Os dados dos alunos do &quot;jogo&quot; anterior não devem aparecer mais no sistema&#10;&#13;c) Deve ser apresentado uma opção de iniciar o jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>[Essencial]</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-5&#x27;>
+  <Data ss:Type='String'>CTR5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> encerrar período de apostas
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ser analisado as apostas feitas até então</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível encerrar o período de apostas&#10;&#13;b) O sistema deve ser capaz de receber uma data de início e fim de uma rodada&#10;&#13;c) As datas podem ser editáveis&#10;&#13;d) Somente o docente tem acesso a essa funcionalidade</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>[Essencial]</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-5&#x27;>
+  <Data ss:Type='String'>CTR6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente 
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> encerrar período de submissão de artefatos
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos tenham data limite de postar seus artefatos </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível delimitar datas para submissão de artefatos &#10;&#13;b) Deve ser possível editar essas datas&#10;&#13;c) Somente o docente tem acesso</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>[Essencial]</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2' ss:StyleID=&#x27;story-color-5&#x27;>
+  <Data ss:Type='String'>CTR7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> iniciar uma rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos sigam o processo de uma rodada normal</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível iniciar uma rodada&#10;&#13;b) Deve ser possível delimitar datas de início e término &#10;&#13;c) Deve ser possível editar os dados de uma rodada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>O docente definirá previamente todas as rodadas.&#10;&#13;</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>CTR9</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> participante
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> me logar no jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa participar do jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O aluno deve conseguir se logar no jogo com sua matricula e a senha</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell ss:Index='2'>
+  <Data ss:Type='String'>CTR10</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> reabrir o periodo de submissão de artefatos para equipe específica
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos possam submeter novamente sua entrega</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) A submissão deve ficar disponível apenas para equipes específicas;&#10;&#13;b) A equipe deve solicitar reabertura até o dia final da submissão</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+  <Row>
+    <Cell ss:Index='2' ss:MergeAcross='2' ss:StyleID='theme-summary'>
+      <Data ss:Type='String'>Total do tema &#x27;Controle&#x27;</Data>
+    </Cell>
+    <Cell ss:MergeAcross='4' ss:StyleID='theme-total'>
+      <Data ss:Type='String'>0.0 pontos / 0.0 dias</Data>
+    </Cell>
+  </Row>
+  <Row ss:AutoFitHeight='0' ss:Height='5'>
+    <Cell ss:MergeAcross='8' />
+  </Row>
+
+    <Row ss:AutoFitHeight='0' ss:Height='18'>
+      <Cell ss:MergeAcross='3' ss:StyleID='backlog-summary'>
+        <Data ss:Type='String'>Total do Backlog &#x27;Concurso de Ideias de Negócio&#x27;</Data>
+      </Cell>
+      <Cell ss:MergeAcross='4' ss:StyleID='backlog-total'>
+        <Data ss:Type='String'>0.0 pontos / 0.0 dias</Data>
+      </Cell>
+    </Row>
+  </Table>
+  <WorksheetOptions xmlns='urn:schemas-microsoft-com:office:excel'>
+    <PageLayoutZoom>0</PageLayoutZoom>
+    <Selected />
+    <Panes />
+    <ProtectObjects>False</ProtectObjects>
+    <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+</Worksheet>
+  <Worksheet ss:Name='Story List'>
+  <Table>
+    <Column ss:AutoFitWidth="1" ss:Width="90" /> <!--Theme-->
+    <Column ss:AutoFitWidth="1" ss:Width="45" /> <!--ID-->
+    <Column ss:AutoFitWidth="1" ss:Width="240" /> <!--User Story-->
+    <Column ss:AutoFitWidth="1" ss:Width="240" /> <!--Acceptance Criteria-->
+    <Column ss:AutoFitWidth="1" ss:Width="240" /> <!--Comments-->
+    <Column ss:AutoFitWidth="1" ss:Width="50" /> <!--Sprint-->
+    <Column ss:AutoFitWidth="1" ss:Width="50" /> <!--Status-->
+      <Column ss:AutoFitWidth="1" ss:Width="45" /> <!--Score -->
+      <Column ss:AutoFitWidth="1" ss:Width="45" /> <!--Days-->
+    <Row>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Tema</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>ID</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>História de Usuário</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Critérios de Aceitação</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Comentários</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Sprint</Data>
+      </Cell>
+      <Cell ss:StyleID='table-header'>
+        <Data ss:Type='String'>Status</Data>
+      </Cell>
+        <Cell ss:StyleID='table-header'>
+          <Data ss:Type='String'><span class="translation_missing" title="translation missing: pt.backlog.points">Points</span></Data>
+        </Cell>
+        <Cell ss:StyleID='table-header'>
+          <Data ss:Type='String'>Dias</Data>
+        </Cell>
+    </Row>
+        <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-0&#x27;>
+  <Data ss:Type='String'>CON1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> participante
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> me cadastar no sistema
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> eu possa se envolver em jogos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Todos os campos devem ser obrigatórios&#10;&#13;b) Um participante pode ser cadastrado diretamente em um jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Campos: nome completo, email, curso, matrícula, semestre.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-0&#x27;>
+  <Data ss:Type='String'>CON5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> vincular participantes a um jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa participar do jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível vincular mais de um participante por vez</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Além da vinculação fazer também a desvinculação.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-1&#x27;>
+  <Data ss:Type='String'>CON2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> cadastrar/atualizar as informações gerais do jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os participantes tenham acesso às informações</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Campos obrigatórios preenchidos&#10;&#13;b) Cada anexo pode ser configurado com um nome de exibição distinto do nome do arquivo original&#10;&#13;c) A descrição geral e as regras podem ser inseridas usando um editor WYSIWYG</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Campos: descrição em richtext, data de início, data de término, regras em richtext (opcional), anexos (opcional), informações de contato com o docente (email); Informações são extensas, podendo conter figuras e tabelas. Descrição e regras pouco variam de turma para turma</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-2&#x27;>
+  <Data ss:Type='String'>CON3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> organizar equipes de participantes para um jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ser feito acompanhamento por equipe</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Não permitir participante em mais de uma equipe&#10;&#13;b) Visualizar os membros de uma equipe&#10;&#13;c) Vincular um membro a uma equipe&#10;&#13;d) Desvincular um membro de uma equipe&#10;&#13;e) Inativar uma equipe e todos os seus vinculos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Criar equipe com informação do nome da empresa.&#10;&#13;Associar a equipe a um jogo&#10;&#13;Vincular membros a essa equipe. </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>CON8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> criar um novo jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa aplicar em uma nova turma ou disciplina</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Cadastrar um novo jogo com nome não duplicado (de outro jogo do mesmo docente)&#10;&#13;b) Remover jogo apaga todas as informações do jogo (solicitar confirmação de remoção)&#10;&#13;c) Desativar um jogo impede que participantes entrem no jogo e vejam informações&#10;&#13;d) &quot;Poder cadastrar turmas diferentes no mesmo periodo&quot; Executar jogos ao mesmo tempo.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Campos: nome do jogo(curso semestre)&#10;&#13;Opções: cadastrar, remover, listar, desativar&#10;&#13;Turma diferentes: ES 2016.1; CC 2016.1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-1&#x27;>
+  <Data ss:Type='String'>CON9</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> adicionar uma imagem de apresentação para um jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> seja melhor representado um jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) A imagem deve possuir os formatos PNG ou JPEG/JPG &#10;&#13;b) A imagem não deve possuir mais de 1MB</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>História filha de CON8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-0&#x27;>
+  <Data ss:Type='String'>CON10</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> participante
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> alterar meus dados de cadastro
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> eu possa alterar possíveis erros</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Os dados devem ser validados assim como no cadastro</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-0&#x27;>
+  <Data ss:Type='String'>CON11</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> participante
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> alterar minha imagem de perfil
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> outros usuários do sistema possam me reconhecer</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) A imagem não deve possuir mais de 1MB de tamanho&#10;&#13;b) A imagem deve possuir os formatos PNG ou JPEG/JPG</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Configuração</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>CON12</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> adicionar uma imagem que defina minha empresa
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> fique melhor caracterizado minha equipe</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) A imagem deve possuir os formatos PNG ou JPEG/JPG&#10;&#13;b) A imagem não deve possuir mais de 1MB de tamanho</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar informações dos demais membros
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> seja possível algum feedback interno da equipe</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser exibido apenas as informações aos membros da equipe&#10;&#13;b) Nenhuma informação é mostrada se a pessoa não estiver associada a uma equipe&#10;&#13;c) Uma pessoa consegue ver a lista de demais membros</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Controle de acesso às informações da equipe, como artefatos submetidos, informações gerais dos outros membros, nome, email, etc.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar informações de contato do docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> se estabeleça um meio de comunicação </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser exibido aos alunos o email, ou outro tipo de contato disponibilizado pelo docente</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Exibir informações no rodapé da página</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> editar as informações da minha equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> o dados estejam consistentes </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O campo matrícula não pode ser editado pelo aluno </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Campos: logo e nome da empresa; </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> editar a ideia de negócio
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa se adequar a possíveis feedbacks</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O campo ideia de negócio pode ser editável</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>O aluno deve ser capaz de adicionar uma ideia de negócio.&#10;&#13;O campo será opcional.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> submeter artefato para entrega de rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possam ser avaliados</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível selecionar apenas um arquivo por vez&#10;&#13;b) Deve ser possível submeter arquivo no formato PDF, MS Office, Open/Libre Office</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>- Formato: .pdf, .docx, .odt, .doc, são os formatos mais comuns. com o tempo os arquivos são migrados para PDF pelos alunos.&#10;&#13;- Informações registradas: qual membro da equipe submeteu, data e hora da submissão, nome(s) do(s) arquivo(s original(is).&#10;&#13;Nomeação dos arquivos &lt;nome-da-equipe-rodada&gt;, preferível.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar o histórico de submissão para uma entrega de rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> seja possível analisar as versões entregues</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado ao membro da equipe um histórico de submissão de artefatos para uma entrega de rodada&#10;&#13;b) É possível visualizar quem e quando enviou cada artefato&#10;&#13;c) É possível visualizar quais artefatos foram considerados como última entrega </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Classificar por data, hora e minutos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar o saldo da equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa analisar possíveis valores de investimento futuro</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado aos membros da equipe o saldo disponível da equipe.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar os resultados da equipe numa rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> se tenha um feedback de como estão se saindo no jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado aos membros da equipe as notas, fatores de aposta, valor em dinheiro que obtiveram nas rodadas até então.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Apresentar um histórico da equipe em cada rodada com: nota, fator de aposta, valor em dinheiro recebido/retirado e GABARITO.&#10;&#13;Separar parte acadêmica da lúdica.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Equipe</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>EQU9</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> membro de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> adquirir um serviço 
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa receber feedback especial do docente</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Serviço solicitado com confirmação pendente do docente não debita do saldo&#10;&#13;b) É possivel solicitar serviço sem saldo apropriado&#10;&#13;c) Serviços solicitados dentro de uma rodada que não foram confirmados são cancelados&#10;&#13;d) Docente pode confirmar um serviço e o saldo da equipe será debitado&#10;&#13;e) Docente pode cancelar um serviço</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>- Serviços possuem uma descrição e um valor&#10;&#13;- Após solicitação, o docente confirmar a venda do serviço&#10;&#13;- A execução do serviço NÃO é mediada pelo sistema (Conflitante com &quot;reabrir rodada&quot;)&#10;&#13;- Serviços: Consultoria, reabrir rodada.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Avaliação Individual do Aluno</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-3&#x27;>
+  <Data ss:Type='String'>AVA1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> aluno
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar as submissões finais da rodada de todas as equipes
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> para que possa avaliá-los</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Todas as equipes devem ser capazes de acessar as submissões finais das demais equipes ao final do período de submissões de uma rodada </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Pode ser uma lista de equipes, ao acessar uma determinada equipe o aluno poderá ter acesso aos artefatos dessa equipe na rodada que foi finalizada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Avaliação Individual do Aluno</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>AVA2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> aluno
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> submeter uma avaliação individual de uma entrega de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ser comparada à avaliação do docente</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado uma série de perguntas sobre um determinado artefato entregue na rodada; &#10;&#13;b) As perguntas são de múltipla escolha</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Perguntas são as mesmas para todos os alunos e todos os projetos.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Avaliação Individual do Aluno</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>AVA3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> aluno
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar minhas avaliações individuais anteriores
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ter feedback sobre escolhas anteriores </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado um histórico com as avaliações feitas pelo aluno&#10;&#13;b) Deve ser apresentado numa visualização dos detalhes de uma equipe&#10;&#13;c) Deve ser apresentado junto com o  gabarito para a avaliação</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Avaliação Individual do Aluno</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-4&#x27;>
+  <Data ss:Type='String'>AVA4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar as avaliações individuais dos alunos
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa fornecer feedback aos alunos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O docente deve ser capaz de acessar as avaliações individuais que os alunos realizam;</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Obs.: Pensar numa estratégia viável para essa apresentação.&#10;&#13;Solução melhor aceita até o momento é ver pela própria visão do aluno.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Avaliação Individual do Aluno</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>AVA5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> aluno
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar minha nota individual
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> saiba o meu desempenho no decorrer do jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve oferecer uma opção para que os alunos visualizem suas próprias notas.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Pode ser apresentado quando o aluno visualizar sua avaliação da rodada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Avaliação Individual do Aluno</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>AVA6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> configurar um formulário de múltipla escolha e gabarito
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> tenha flexibilidade de configuração dos jogos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Criar/editar formulário e perguntas&#10;&#13;b) Copiar um formulário inteiro e edita-lo&#10;&#13;c) Formulários já usados não podem ser editados/removidos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>- Formulário: nome (distinto) e um conjunto de perguntas&#10;&#13;- Pergunta: título, opções, peso da pergunta&#10;&#13;- Calculo da avaliação (PENDENTE)&#10;&#13;- Provavelmente será preciso salvar apenas uma vez o formulário, podendo ser reusado em novos jogos.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Apostador</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>APO1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> investidor
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> apostar dinheiro, do valor liberado para a rodada, em uma ou mais equipes em uma rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ter retorno financeiro para meu saldo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve apresentar uma opção de apostar quantias de dinheiro em uma ou mais equipes&#10;&#13;b) Deve ser deixado claro para o investidor a quantidade de valor liberado para a rodada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Apostador</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>APO2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> investidor
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar minhas apostas anteriores
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ter feedback se minhas decisões foram acertadas</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve apresentar um histórico de apostas feitas pelo investidor;</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Pode ser apresentado uma tabela de equipes separadas por rodadas, com os respectivos valores de aposta e o retorno de investimento.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 8</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Apostador</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>APO3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> visualizar todas as apostas dos alunos
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa avaliar o desempenho dos alunos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve apresentar ao docente todas as apostas que os alunos fizeram;</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Pode ser gerado uma planilha ou relatório</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Apostador</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>APO4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> delimitar valor liberado para uma rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> para que os alunos realizem apostas com base neste valor</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser disponibilizado uma opção para o docente inserir o valor que será gasto em cada rodada&#10;&#13;b) Deve ter uma opção de All in, que é a possibilidade do aluno apostar todo o seu saldo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Avaliação do Docente</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>AOD1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> salvar uma avaliação para uma entrega de equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os membros da equipe possam ver</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado ao docente uma opção de avaliação da entrega da equipe;&#10;&#13;b) Somente os membros da equipe e o docente podem ver essa avaliação&#10;&#13;c) O instrumento de avaliação deve ser o mesmo utilizado pelos alunos</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Usar formulário&#10;&#13;DUVIDA: Se a avaliação é mostrada à equipe antes da divulgação geral.</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Avaliação do Docente</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>AOD2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> configurar o fator de aposta para uma equipe
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> saiba-se qual a taxa de retorno para o investidor e equipe</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser apresentado ao docente uma opção de inclusão do fator de aposta</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Fator pode ser entre: -x e x, onde x é um valor Real.&#10;&#13;No início de cada rodada o docente já saberá qual o fator de aposta x</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>CTR1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> publicar as avaliações e fatores para as entregas de uma rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos tenham feedback de como se saíram na rodada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser disponibilizado ao docente uma opção de publicação de resultados</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>CTR2</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> gerar e publicar os rankings
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos saibam sua pontuação no jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser disponibilizado uma opção que gere o ranking da rodada&#10;&#13;b) Deve ser disponibilizado uma opção de publicação do ranking da rodada que consequentemente publicará o ranking geral</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Quebrar em duas histórias</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-1&#x27;>
+  <Data ss:Type='String'>CTR3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> encerrar o jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> não seja mais possível alunos terem acesso ao jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve ser capaz de encerrar o jogo&#10;&#13;b) Os dados devem ser mantidos&#10;&#13;c) Apos encerrado o jogo, os alunos não poderão ter mais acesso ao sistema&#10;&#13;d) O docente deve continuar com acesso total ao sistema&#10;&#13;e) Deve ser apresentado uma opção de encerrar o jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>[Essencial]</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-1&#x27;>
+  <Data ss:Type='String'>CTR4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> iniciar um jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos participantes da disciplina tenham acesso ao jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O sistema deve ser capaz de começar um novo jogo.&#10;&#13;b) Os dados dos alunos do &quot;jogo&quot; anterior não devem aparecer mais no sistema&#10;&#13;c) Deve ser apresentado uma opção de iniciar o jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>[Essencial]</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-5&#x27;>
+  <Data ss:Type='String'>CTR5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> encerrar período de apostas
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa ser analisado as apostas feitas até então</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível encerrar o período de apostas&#10;&#13;b) O sistema deve ser capaz de receber uma data de início e fim de uma rodada&#10;&#13;c) As datas podem ser editáveis&#10;&#13;d) Somente o docente tem acesso a essa funcionalidade</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>[Essencial]</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-5&#x27;>
+  <Data ss:Type='String'>CTR6</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente 
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> encerrar período de submissão de artefatos
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos tenham data limite de postar seus artefatos </Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível delimitar datas para submissão de artefatos &#10;&#13;b) Deve ser possível editar essas datas&#10;&#13;c) Somente o docente tem acesso</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>[Essencial]</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 4</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2' ss:StyleID=&#x27;story-color-5&#x27;>
+  <Data ss:Type='String'>CTR7</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> iniciar uma rodada
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos sigam o processo de uma rodada normal</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) Deve ser possível iniciar uma rodada&#10;&#13;b) Deve ser possível delimitar datas de início e término &#10;&#13;c) Deve ser possível editar os dados de uma rodada</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>O docente definirá previamente todas as rodadas.&#10;&#13;</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 3</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>CTR9</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> participante
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> me logar no jogo
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> possa participar do jogo</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) O aluno deve conseguir se logar no jogo com sua matricula e a senha</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 1</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Accepted</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+    <Row>
+      <Cell>
+  <Data ss:Type='String'>Controle</Data>
+</Cell>
+<Cell ss:Index='2'>
+  <Data ss:Type='String'>CTR10</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'><Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Como</Font> docente
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Eu quero</Font> reabrir o periodo de submissão de artefatos para equipe específica
+&#10;&#13;<Font html:Color="#999999" xmlns="http://www.w3.org/TR/REC-html40">Para que</Font> os alunos possam submeter novamente sua entrega</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>a) A submissão deve ficar disponível apenas para equipes específicas;&#10;&#13;b) A equipe deve solicitar reabertura até o dia final da submissão</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'></Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Sprint 5</Data>
+</Cell>
+<Cell>
+  <Data ss:Type='String'>Completed</Data>
+</Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'></Data>
+  </Cell>
+  <Cell ss:StyleID='numeric'>
+    <Data ss:Type='String'>0.0</Data>
+  </Cell>
+
+    </Row>
+
+  </Table>
+  <WorksheetOptions xmlns='urn:schemas-microsoft-com:office:excel'>
+    <PageLayoutZoom>0</PageLayoutZoom>
+    <Selected />
+    <Panes />
+    <ProtectObjects>False</ProtectObjects>
+    <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+  <AutoFilter x:Range='R1C1:R1C9' xmlns='urn:schemas-microsoft-com:office:excel'></AutoFilter>
+</Worksheet>
+</Workbook>

@@ -41,7 +41,7 @@
 										<thead>
 											<tr>
 												<th>Nome</th>
-												<th>Sorenome</th>
+												<th>Sobrenome</th>
 												<th>Curso</th>
 												<th>Matricula</th>
 												<th>Marque aqui</th>

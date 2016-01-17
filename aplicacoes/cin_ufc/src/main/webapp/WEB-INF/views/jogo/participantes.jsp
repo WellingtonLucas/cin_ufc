@@ -34,7 +34,7 @@
 									<thead>
 										<tr>
 											<th>Nome</th>
-											<th>Sorenome</th>
+											<th>Sobrenome</th>
 											<th>Curso</th>
 											<th>Email</th>
 											<c:if test="${permissao eq 'professor' }">

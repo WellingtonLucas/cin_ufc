@@ -45,14 +45,16 @@
 											<tr>
 												<td><h4><strong>Nome: ${equipe.nome }</strong></h4></td>
 											</tr>
-											<tr>
-												<td>
-													<h4><strong>
-													Saldo (R$): &nbsp;&nbsp;<fmt:formatNumber currencyCode="BRL" maxFractionDigits="2" value="${equipe.saldo }" />
-														</strong>
-													</h4>
-												</td>
-											</tr>
+											<c:if test="${permissao == 'professor' || permissao == 'membro'}">
+												<tr>
+													<td>
+														<h4><strong>
+														Saldo (R$): &nbsp;&nbsp;<fmt:formatNumber currencyCode="BRL" maxFractionDigits="2" value="${equipe.saldo }" />
+															</strong>
+														</h4>
+													</td>
+												</tr>
+											</c:if>
 										</tbody>
 									</table>
 								</div>
@@ -115,7 +117,7 @@
 										<thead>
 											<tr>
 												<th>Nome</th>
-												<th>Sorenome</th>
+												<th>Sobrenome</th>
 												<th>Curso</th>
 												<th>Email</th>
 												<c:if test="${permissao eq 'professor' }">

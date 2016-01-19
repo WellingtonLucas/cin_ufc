@@ -36,54 +36,56 @@
 							<jsp:include page="../fragments/mensagens.jsp" />
 							<c:if test="${not empty entregas }">
 						       	<div class="col-sm-12">
-									<table id="tabela-submissoes" class="table table-striped table-hover">
-										<thead>
-											<tr>
-												<th>Empresa</th>
-												<th>Documento</th>
-												<th>Data de Submissão</th>
-												<th>Avalie</th>
-												<c:if test="${permissao != 'professor' }">
-													<th>Aposte</th>
-												</c:if>
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
+						       		<div class="table-responsive">
+										<table id="tabela-submissoes" class="table table-striped table-hover">
+											<thead>
 												<tr>
-													<td>
-														<a href="<c:url value="/jogo/${jogo.id}/equipe/${entrega.equipe.id }"></c:url>">${entrega.equipe.nome}</a>
-													</td>
-													<td>
-														<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
-													</td>
-													<td>
-														<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />
-													</td>
-													
-													<td>
-														<c:if test="${!entrega.respondida }">
-															<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
-																<button class="btn btn-primary">Avaliar</button>
-															</a>
-														</c:if>
-														<c:if test="${entrega.respondida }">
-															<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
-																<button class="btn btn-success">Avaliar</button>
-															</a>
-														</c:if>
-													</td>
+													<th>Empresa</th>
+													<th>Documento</th>
+													<th>Data de Submissão</th>
+													<th>Avalie</th>
 													<c:if test="${permissao != 'professor' }">
-														<td>
-															<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
-																<button class="btn btn-primary">Apostar</button>
-															</a>
-														</td>
+														<th>Aposte</th>
 													</c:if>
 												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
+											</thead>
+											<tbody>
+												<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
+													<tr>
+														<td>
+															<a href="<c:url value="/jogo/${jogo.id}/equipe/${entrega.equipe.id }"></c:url>">${entrega.equipe.nome}</a>
+														</td>
+														<td>
+															<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
+														</td>
+														<td>
+															<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${entrega.dia }" />
+														</td>
+														
+														<td>
+															<c:if test="${!entrega.respondida }">
+																<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
+																	<button class="btn btn-primary">Avaliar</button>
+																</a>
+															</c:if>
+															<c:if test="${entrega.respondida }">
+																<a href="<c:url value="/jogo/${jogo.id}/entrega/${entrega.id }/formulario/${rodada.formulario.id }" ></c:url>">
+																	<button class="btn btn-success">Avaliar</button>
+																</a>
+															</c:if>
+														</td>
+														<c:if test="${permissao != 'professor' }">
+															<td>
+																<a href="<c:url value="/jogo/${jogo.id}/rodada/${rodada.id }/equipe/${entrega.equipe.id }/apostar" ></c:url>">
+																	<button class="btn btn-primary">Apostar</button>
+																</a>
+															</td>
+														</c:if>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</c:if>
 						</div>

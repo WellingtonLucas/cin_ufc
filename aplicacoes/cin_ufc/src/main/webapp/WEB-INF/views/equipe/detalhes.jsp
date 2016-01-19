@@ -113,40 +113,42 @@
 						<div class="panel-body">
 							<div class="col-sm-12">
 								<c:if test="${not empty equipe.alunos }">
-									<table id="table_id" class="table table-striped table-hover">
-										<thead>
-											<tr>
-												<th>Nome</th>
-												<th>Sobrenome</th>
-												<th>Curso</th>
-												<th>Email</th>
-												<c:if test="${permissao eq 'professor' }">
-													<th></th>
-												</c:if>
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach var="usuario" items="${equipe.alunos}">
+									<div class="table-responsive">
+										<table id="table_id" class="table table-striped table-hover">
+											<thead>
 												<tr>
-													<td>
-														<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
-													</td>
-													<td>${usuario.sobreNome}</td>
-													<td>${usuario.curso } </td>
-													<td>${usuario.email } </td>
+													<th>Nome</th>
+													<th>Sobrenome</th>
+													<th>Curso</th>
+													<th>Email</th>
 													<c:if test="${permissao eq 'professor' }">
-														<td>
-															<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
-																data-href="<c:url value="${equipe.id }/usuario/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
-																<button data-tooggle="tooltip"  data-placement="left" title="Desvincule ${usuario.nome } da empresa ${equipe.nome}" 
-																 class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
-															</a>
-														</td>
+														<th></th>
 													</c:if>
 												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
+											</thead>
+											<tbody>
+												<c:forEach var="usuario" items="${equipe.alunos}">
+													<tr>
+														<td>
+															<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
+														</td>
+														<td>${usuario.sobreNome}</td>
+														<td>${usuario.curso } </td>
+														<td>${usuario.email } </td>
+														<c:if test="${permissao eq 'professor' }">
+															<td>
+																<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
+																	data-href="<c:url value="${equipe.id }/usuario/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
+																	<button data-tooggle="tooltip"  data-placement="left" title="Desvincule ${usuario.nome } da empresa ${equipe.nome}" 
+																	 class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
+																</a>
+															</td>
+														</c:if>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 								</c:if>	
 							</div>
 						</div>

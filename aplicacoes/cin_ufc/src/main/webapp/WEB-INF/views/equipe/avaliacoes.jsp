@@ -31,32 +31,34 @@
 						<div class="panel-body">
 							<jsp:include page="../fragments/mensagens.jsp" />
 					       	<div class="col-sm-12">
-								<table id="tabela-avaliacoes" class="table table-striped table-hover">
-									<thead>
-										<tr>
-											<th>Rodada</th>
-											<th>Entrega</th>
-											<th>Avaliação</th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
+					       		<div class="table-responsive">
+									<table id="tabela-avaliacoes" class="table table-striped table-hover">
+										<thead>
 											<tr>
-												<td>
-													<a href="<c:url value="/jogo/${jogo.id}/rodada/${entrega.rodada.id }/detalhes"></c:url>">${entrega.rodada.nome}</a>
-												</td>
-												<td>
-													<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
-												</td>
-												<td>
-													<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/entrega/${entrega.id }/formulario/${entrega.gabarito.formulario.id }/avaliacao" ></c:url>">
-														<button class="btn btn-primary">Ver avaliação</button>
-													</a>
-												</td>
+												<th>Rodada</th>
+												<th>Entrega</th>
+												<th>Avaliação</th>
 											</tr>
-										</c:forEach>
-									</tbody>
-								</table>
+										</thead>
+										<tbody>
+											<c:forEach var="entrega" items="${entregas}" varStatus="entregaId">
+												<tr>
+													<td>
+														<a href="<c:url value="/jogo/${jogo.id}/rodada/${entrega.rodada.id }/detalhes"></c:url>">${entrega.rodada.nome}</a>
+													</td>
+													<td>
+														<a href="<c:url value="/documento/downloadDocumento/${entrega.documento.id }"></c:url>">${entrega.documento.nomeOriginal}</a>
+													</td>
+													<td>
+														<a href="<c:url value="/jogo/${jogo.id}/equipe/${equipe.id }/entrega/${entrega.id }/formulario/${entrega.gabarito.formulario.id }/avaliacao" ></c:url>">
+															<button class="btn btn-primary">Ver avaliação</button>
+														</a>
+													</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>

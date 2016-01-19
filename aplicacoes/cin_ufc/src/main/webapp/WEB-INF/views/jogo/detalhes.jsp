@@ -85,43 +85,34 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col-sm-12">
-						<div class="row placeholders">
+						<div class="panel-footer">
 							<c:if test="${permissao == 'professor' }">
-								<div class="form-group">					
-									<div class="col-sm-2">				
-										<a id="editar" href="<c:url value="/jogo/${jogo.id}/editar" ></c:url>">
-											<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
-										</a>
-									</div>
-									<div class="col-sm-2">
-										<c:if test="${jogo.status == true}">									
-											<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-jogo" href="#" 
-												data-href="<c:url value="/jogo/${jogo.id}/inativar">
-												</c:url>" data-name="${jogo.nomeDoCurso }">
-												<button class="btn btn-warning btn-lg">
-													Inativar&nbsp;<i class="glyphicon glyphicon-ban-circle"></i>
-												</button>
-											</a>
-										</c:if>
-										<c:if test="${jogo.status == false }">
-											<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-jogo" href="#" 
-												data-href="<c:url value="/jogo/${jogo.id}/ativar">
-												</c:url>" data-name="${jogo.nomeDoCurso }">
-												<button class="btn btn-success btn-lg">
-													Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>
-												</button>
-											</a>
-										</c:if>
-									</div>
-									<div class="col-sm-2">
-										<a id="excluir" data-toggle="modal" data-target="#confirm-delete" href="#" 
-										data-href="<c:url value="/jogo/${jogo.id}/excluir"></c:url>" data-name="${jogo.nomeDoCurso }">
-											<button class="btn btn-danger btn-lg">Excluir&nbsp;<i class="glyphicon glyphicon-trash"></i></button>
-										</a>					
-									</div>
-								</div>
+								<a id="editar" href="<c:url value="/jogo/${jogo.id}/editar" ></c:url>">
+									<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
+								</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<c:if test="${jogo.status == true}">									
+									<a id="inativar" data-toggle="modal" data-target="#confirm-inativar-jogo" href="#" 
+										data-href="<c:url value="/jogo/${jogo.id}/inativar">
+										</c:url>" data-name="${jogo.nomeDoCurso }">
+										<button class="btn btn-warning btn-lg">
+											Inativar&nbsp;<i class="glyphicon glyphicon-ban-circle"></i>
+										</button>
+									</a>
+								</c:if>
+								<c:if test="${jogo.status == false }">
+									<a id="ativar" data-toggle="modal" data-target="#confirm-ativar-jogo" href="#" 
+										data-href="<c:url value="/jogo/${jogo.id}/ativar">
+										</c:url>" data-name="${jogo.nomeDoCurso }">
+										<button class="btn btn-success btn-lg">
+											Ativar&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>
+										</button>
+									</a>
+								</c:if>
+								<a id="excluir" data-toggle="modal" data-target="#confirm-delete" href="#" 
+								data-href="<c:url value="/jogo/${jogo.id}/excluir"></c:url>" data-name="${jogo.nomeDoCurso }">
+									<button class="btn btn-danger btn-lg pull-right">Excluir&nbsp;<i class="glyphicon glyphicon-trash"></i></button>
+								</a>					
 							</c:if>
 						</div>
 					</div>

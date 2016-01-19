@@ -30,41 +30,43 @@
 						<div class="panel-body">
 							<jsp:include page="../fragments/mensagens.jsp" />
 							<div class="col-sm-12">
-								<table id="participantes" class="table table-striped table-hover">
-									<thead>
-										<tr>
-											<th>Nome</th>
-											<th>Sobrenome</th>
-											<th>Curso</th>
-											<th>Email</th>
-											<c:if test="${permissao eq 'professor' }">
-												<th></th>
-											</c:if>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="usuario" items="${usuarios}">
+								<div class="table-responsive">
+									<table id="participantes" class="table table-striped table-hover">
+										<thead>
 											<tr>
-												<td>
-													<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
-												</td>
-												<td>	
-													${usuario.sobreNome}										
-												</td>
-												<td>${usuario.curso } </td>
-												<td>${usuario.email } </td>
+												<th>Nome</th>
+												<th>Sobrenome</th>
+												<th>Curso</th>
+												<th>Email</th>
 												<c:if test="${permissao eq 'professor' }">
-													<td>
-														<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
-															data-href="<c:url value="participantes/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
-															<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
-														</a>
-												</td>
+													<th></th>
 												</c:if>
 											</tr>
-										</c:forEach>
-									</tbody>
-								</table>
+										</thead>
+										<tbody>
+											<c:forEach var="usuario" items="${usuarios}">
+												<tr>
+													<td>
+														<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
+													</td>
+													<td>	
+														${usuario.sobreNome}										
+													</td>
+													<td>${usuario.curso } </td>
+													<td>${usuario.email } </td>
+													<c:if test="${permissao eq 'professor' }">
+														<td>
+															<a id="submeter" data-toggle="modal" data-target="#confirm-submit" href="#"
+																data-href="<c:url value="participantes/${usuario.id}/desvincular" ></c:url>" data-name="${usuario.nome }">
+																<button class="btn btn-primary">Desvincular&nbsp;<i class="glyphicon glyphicon-remove"></i></button>
+															</a>
+													</td>
+													</c:if>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>

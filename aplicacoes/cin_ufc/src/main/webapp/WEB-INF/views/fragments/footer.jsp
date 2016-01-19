@@ -26,11 +26,10 @@
 </c:if>
 <script src="<c:url value="/resources/js/formulario.js" />"></script>
 <script src="<c:url value="/webjars/bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js" />"></script>
-<script src="<c:url value="/resources/js/language/pt_BR.js" />"></script>
+<script src="<c:url value="/webjars/bootstrapvalidator/0.5.3/js/language/pt_BR.js" />"></script>
 <script src="<c:url value="/webjars/momentjs/2.10.6/moment.js" />"></script>
-<script src="<c:url value="/resources/js/fileinput.min.js" />"></script>
-<script src="<c:url value="/resources/js/jquery.MultiFile.js" />"></script>
-<script src="<c:url value="/resources/js/jquery.fileupload.js" />"></script>
+<script src="<c:url value="/webjars/bootstrap-fileinput/4.2.6/js/fileinput.min.js" />"></script>
+<script src="<c:url value="/webjars/bootstrap-fileinput/4.2.6/js/fileinput_locale_pt-BR.js" />"></script>
 <script src="<c:url value="/resources/js/dynamic-avatar-blur.js" />"></script>
 <script src="<c:url value="/resources/js/readmore.min.js" />"></script>
 <script src="<c:url value="/webjars/ckeditor/4.5.4/full/ckeditor.js"/>"></script>

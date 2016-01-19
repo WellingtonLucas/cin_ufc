@@ -8,7 +8,7 @@
 <link href="<c:url value="/resources/css/dataTables.bootstrap.min.css"/>" rel="stylesheet" />
 <link href="<c:url value="/resources/css/dashboard.css"/>" rel="stylesheet" />
 <link href="<c:url value="/webjars/bootstrapvalidator/0.5.3/css/bootstrapValidator.css" />" rel="stylesheet" />
-<link href="<c:url value="/resources/css/fileinput.min.css"/>" rel="stylesheet"/>
+<link href="<c:url value="/webjars/bootstrap-fileinput/4.2.6/css/fileinput.min.css"/>" rel="stylesheet"/>
 <link href="<c:url value="/webjars/font-awesome/4.5.0/css/font-awesome.min.css"/>" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/estilo.css"/>" rel="stylesheet" />
 <link href="<c:url value="/resources/css/timeline-dotted.css"/>" rel="stylesheet" />

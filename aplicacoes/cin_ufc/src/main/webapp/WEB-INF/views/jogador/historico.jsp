@@ -42,31 +42,33 @@
 							role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
 								<c:if test="${historico.notas != null }">
-									<table id="tabela-notas-aluno" class="table table-striped table-hover">
-										<thead>
-											<tr>
-												<td><strong>Rodada </strong></td>
-												<td><strong>Nota </strong></td>
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach var="nota" items="${historico.notas }">
-												<c:if test="${nota.rodada.statusRaking }">
-													<tr>
-														<td>${nota.rodada.nome }</td>
-														<c:if test="${nota.valor != null && nota.valor >= 0}">
-															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
-																value= "${nota.valor }" />
-															</td>
-														</c:if>
-														<c:if test="${nota.valor == null || nota.valor < 0 }">
-															<td>-</td>
-														</c:if>
-													</tr>
-												</c:if>
-											</c:forEach>
-										</tbody>
-									</table>
+									<div class="table-responsive">
+										<table id="tabela-notas-aluno" class="table table-striped table-hover">
+											<thead>
+												<tr>
+													<td><strong>Rodada </strong></td>
+													<td><strong>Nota </strong></td>
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="nota" items="${historico.notas }">
+													<c:if test="${nota.rodada.statusRaking }">
+														<tr>
+															<td>${nota.rodada.nome }</td>
+															<c:if test="${nota.valor != null && nota.valor >= 0}">
+																<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+																	value= "${nota.valor }" />
+																</td>
+															</c:if>
+															<c:if test="${nota.valor == null || nota.valor < 0 }">
+																<td>-</td>
+															</c:if>
+														</tr>
+													</c:if>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 									<strong>Média:&nbsp;&nbsp;
 										<fmt:formatNumber type="number" maxFractionDigits="2" 
 												value= "${media }" />
@@ -87,37 +89,39 @@
 							role="tabpanel" aria-labelledby="headingDois">
 							<div class="panel-body">
 								<c:if test="${notasEquipeRodadas != null }">
-									<table id="tabela-notas-equipe2" class="table table-striped table-hover">
-										<thead>
-											<tr>
-												<td><strong>Rodada </strong></td>
-												<td><strong>Fator de aposta </strong></td>
-												<td><strong>Nota </strong></td>
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach var="nota" items="${notasEquipeRodadas }">
-												<c:if test="${nota.rodada.statusRaking }">
-													<tr>
-														<td>${nota.rodada.nome }</td>
-														<c:if test="${nota.fatorDeAposta == null }">
-															<td>-</td>
-														</c:if>
-														<c:if test="${nota.fatorDeAposta != null }">
-															<td>
-																<fmt:formatNumber type="number" maxFractionDigits="2">
-																	 ${nota.fatorDeAposta }
-																 </fmt:formatNumber>
+									<div class="table-responsive">
+										<table id="tabela-notas-equipe2" class="table table-striped table-hover">
+											<thead>
+												<tr>
+													<td><strong>Rodada </strong></td>
+													<td><strong>Fator de aposta </strong></td>
+													<td><strong>Nota </strong></td>
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="nota" items="${notasEquipeRodadas }">
+													<c:if test="${nota.rodada.statusRaking }">
+														<tr>
+															<td>${nota.rodada.nome }</td>
+															<c:if test="${nota.fatorDeAposta == null }">
+																<td>-</td>
+															</c:if>
+															<c:if test="${nota.fatorDeAposta != null }">
+																<td>
+																	<fmt:formatNumber type="number" maxFractionDigits="2">
+																		 ${nota.fatorDeAposta }
+																	 </fmt:formatNumber>
+																</td>
+															</c:if>
+															<td><fmt:formatNumber type="number" maxFractionDigits="2" 
+																value= "${nota.valor }" />
 															</td>
-														</c:if>
-														<td><fmt:formatNumber type="number" maxFractionDigits="2" 
-															value= "${nota.valor }" />
-														</td>
-													</tr>
-												</c:if>
-											</c:forEach>
-										</tbody>
-									</table>
+														</tr>
+													</c:if>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 									<strong>Média:&nbsp;&nbsp;
 										<c:if test="${mediaEquipe >= 0 }">
 											<fmt:formatNumber type="number" maxFractionDigits="2" 

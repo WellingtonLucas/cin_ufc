@@ -30,32 +30,34 @@
 						<div class="panel-body">
 							<jsp:include page="../fragments/mensagens.jsp" />
 							<div class="col-sm-12">
-								<table id="tabela-investimentos" class="table table-striped table-hover">
-									<thead>
-										<tr>
-											<th>Rodada</th>
-											<th>Equipe</th>
-											<th>Quantia</th>
-											<th>Retorno</th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="aposta" items="${apostas}">
-											<c:forEach var="deposito" items="${aposta.depositos}">
-												<tr>
-													<td>
-														<a href="<c:url value="/jogo/${jogo.id}/rodada/${aposta.rodada.id}/detalhes"></c:url>">${aposta.rodada.nome}</a>
-													</td>
-													<td>
-														<a href="<c:url value="/jogo/${jogo.id}/equipe/${deposito.equipe.id }"></c:url>">${deposito.equipe.nome }</a> 
-													</td>
-													<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.quantia }" /></td>
-													<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.retorno }" /> </td>
-												</tr>
+								<div class="table-responsive">
+									<table id="tabela-investimentos" class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th>Rodada</th>
+												<th>Equipe</th>
+												<th>Quantia</th>
+												<th>Retorno</th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="aposta" items="${apostas}">
+												<c:forEach var="deposito" items="${aposta.depositos}">
+													<tr>
+														<td>
+															<a href="<c:url value="/jogo/${jogo.id}/rodada/${aposta.rodada.id}/detalhes"></c:url>">${aposta.rodada.nome}</a>
+														</td>
+														<td>
+															<a href="<c:url value="/jogo/${jogo.id}/equipe/${deposito.equipe.id }"></c:url>">${deposito.equipe.nome }</a> 
+														</td>
+														<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.quantia }" /></td>
+														<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.retorno }" /> </td>
+													</tr>
+												</c:forEach>
 											</c:forEach>
-										</c:forEach>
-									</tbody>
-								</table>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>

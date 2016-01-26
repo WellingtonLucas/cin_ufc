@@ -30,36 +30,38 @@
 						<div class="panel-body">
 							<jsp:include page="../fragments/mensagens.jsp" />
 					       	<div class="col-sm-12">
-								<table id="tabela-avaliacoes-user" class="table table-striped table-hover">
-									<thead>
-										<tr>
-											<th>Rodada</th>
-											<th>Empresa</th>
-											<th>Entrega</th>
-											<th>Avaliação</th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="resposta" items="${respostas}" varStatus="respostaId">
+					       		<div class="table-responsive">
+									<table id="tabela-avaliacoes-user" class="table table-striped table-hover">
+										<thead>
 											<tr>
-												<td>
-													<a href="<c:url value="/jogo/${jogo.id}/rodada/${resposta.entrega.rodada.id }/detalhes"></c:url>">${resposta.entrega.rodada.nome}</a>
-												</td>
-												<td>
-													<a href="<c:url value="/jogo/${jogo.id}/equipe/${resposta.entrega.equipe.id }"></c:url>">${resposta.entrega.equipe.nome}</a>
-												</td>
-												<td>
-													<a href="<c:url value="/documento/downloadDocumento/${resposta.entrega.documento.id }"></c:url>">${resposta.entrega.documento.nomeOriginal}</a>
-												</td>
-												<td>
-													<a href="<c:url value="/usuario/${usuarioRequisitado.id }/jogo/${jogo.id}/resposta/${resposta.id }/avaliacao" ></c:url>">
-														<button class="btn btn-primary">Ver avaliação</button>
-													</a>
-												</td>
+												<th>Rodada</th>
+												<th>Empresa</th>
+												<th>Entrega</th>
+												<th>Avaliação</th>
 											</tr>
-										</c:forEach>
-									</tbody>
-								</table>
+										</thead>
+										<tbody>
+											<c:forEach var="resposta" items="${respostas}" varStatus="respostaId">
+												<tr>
+													<td>
+														<a href="<c:url value="/jogo/${jogo.id}/rodada/${resposta.entrega.rodada.id }/detalhes"></c:url>">${resposta.entrega.rodada.nome}</a>
+													</td>
+													<td>
+														<a href="<c:url value="/jogo/${jogo.id}/equipe/${resposta.entrega.equipe.id }"></c:url>">${resposta.entrega.equipe.nome}</a>
+													</td>
+													<td>
+														<a href="<c:url value="/documento/downloadDocumento/${resposta.entrega.documento.id }"></c:url>">${resposta.entrega.documento.nomeOriginal}</a>
+													</td>
+													<td>
+														<a href="<c:url value="/usuario/${usuarioRequisitado.id }/jogo/${jogo.id}/resposta/${resposta.id }/avaliacao" ></c:url>">
+															<button class="btn btn-primary">Ver avaliação</button>
+														</a>
+													</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>

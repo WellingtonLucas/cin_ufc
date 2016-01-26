@@ -37,39 +37,41 @@
 								<form:hidden path="semestre" value="${jogo.semestre }"/>
 								<form:hidden path="nomeDoCurso" value="${jogo.nomeDoCurso }"/>
 								<div class="col-sm-12">
-									<table id="add-participante-jogo" class="table table-striped table-hover">
-										<thead>
-											<tr>
-												<th>Nome</th>
-												<th>Sobrenome</th>
-												<th>Curso</th>
-												<th>Email</th>
-												<th>Marque aqui</th>
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach var="usuario" items="${usuarios}" varStatus="userId">
+									<div class="table-responsive">
+										<table id="add-participante-jogo" class="table table-striped table-hover">
+											<thead>
 												<tr>
-													<td>
-														<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
-													</td>
-													<td>	
-														${usuario.sobreNome}										
-													</td>
-													<td>${usuario.curso } </td>
-													<td>${usuario.email } </td>
-													<td>
-														<div class="btn-group" data-toggle="buttons">
-															<label class="btn btn-primary">
-																<input name="alunos[${userId.index }].id" type="checkbox" autocomplete="off" value="${usuario.id }">
-																<span class="glyphicon glyphicon-ok"></span>
-															</label>
-														</div>
-													</td>
+													<th>Nome</th>
+													<th>Sobrenome</th>
+													<th>Curso</th>
+													<th>Email</th>
+													<th>Marque aqui</th>
 												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
+											</thead>
+											<tbody>
+												<c:forEach var="usuario" items="${usuarios}" varStatus="userId">
+													<tr>
+														<td>
+															<a href="<c:url value="/usuario/${usuario.id}/detalhes/${jogo.id }"></c:url>">${usuario.nome}</a>
+														</td>
+														<td>	
+															${usuario.sobreNome}										
+														</td>
+														<td>${usuario.curso } </td>
+														<td>${usuario.email } </td>
+														<td>
+															<div class="btn-group" data-toggle="buttons">
+																<label class="btn btn-primary">
+																	<input name="alunos[${userId.index }].id" type="checkbox" autocomplete="off" value="${usuario.id }">
+																	<span class="glyphicon glyphicon-ok"></span>
+																</label>
+															</div>
+														</td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 								</div>
 								<c:if test="${not empty usuarios }">
 									<div class="form-group">

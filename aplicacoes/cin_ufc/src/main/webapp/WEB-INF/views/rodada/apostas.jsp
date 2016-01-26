@@ -29,35 +29,37 @@
 						<div class="panel-body">
 							<jsp:include page="../fragments/mensagens.jsp" />
 							<div class="col-sm-12">
-								<table id="tabela-apostas" class="table table-striped table-hover">
-									<thead>
-										<tr>
-											<th>Nome</th>
-											<th>Equipe</th>
-											<th>Quantia</th>
-											<th>Dia - Hora</th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="aposta" items="${apostas}">
-											<c:forEach var="deposito" items="${aposta.depositos}">
-												<tr>
-													<td>
-														<a href="<c:url value="/usuario/${aposta.apostador.id}/detalhes/${jogo.id }"></c:url>">${aposta.apostador.nome} ${aposta.apostador.sobreNome}</a>
-													</td>
-													<td>
-														<a href="<c:url value="/jogo/${jogo.id}/equipe/${deposito.equipe.id }"></c:url>">${deposito.equipe.nome }</a> 
-													</td>
-													<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.quantia }" /></td>
-													<td>
-														<c:if test="${empty deposito.dia}">-</c:if>
-														<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${deposito.dia }" />
-													</td>
-												</tr>
+								<div class="table-responsive">
+									<table id="tabela-apostas" class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th>Nome</th>
+												<th>Equipe</th>
+												<th>Quantia</th>
+												<th>Dia - Hora</th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="aposta" items="${apostas}">
+												<c:forEach var="deposito" items="${aposta.depositos}">
+													<tr>
+														<td>
+															<a href="<c:url value="/usuario/${aposta.apostador.id}/detalhes/${jogo.id }"></c:url>">${aposta.apostador.nome} ${aposta.apostador.sobreNome}</a>
+														</td>
+														<td>
+															<a href="<c:url value="/jogo/${jogo.id}/equipe/${deposito.equipe.id }"></c:url>">${deposito.equipe.nome }</a> 
+														</td>
+														<td>R$ <fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${deposito.quantia }" /></td>
+														<td>
+															<c:if test="${empty deposito.dia}">-</c:if>
+															<fmt:formatDate pattern="dd/MM/yyyy' - 'HH:mm:ss" value="${deposito.dia }" />
+														</td>
+													</tr>
+												</c:forEach>
 											</c:forEach>
-										</c:forEach>
-									</tbody>
-								</table>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>

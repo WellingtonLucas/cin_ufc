@@ -72,12 +72,12 @@
 						</div>
 						<c:if test="${permissao == 'professorForm' }">
 							<div class="panel-footer">
-								<a id="editar" href="<c:url value="/formulario/${formulario.id }/editar" ></c:url>">
-									<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
+								<a class="btn btn-primary btn-lg" id="editar" href="<c:url value="/formulario/${formulario.id }/editar" ></c:url>">
+									Editar&nbsp;<i class="glyphicon glyphicon-edit"></i>
 								</a>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<a id="copiar" href="<c:url value="/formulario/${formulario.id }/copiar" ></c:url>">
-									<button class="btn btn-success btn-lg">Copiar&nbsp;<i class="glyphicon glyphicon-duplicate"></i></button>
+								<a id="copiar" class="btn btn-success btn-lg" href="<c:url value="/formulario/${formulario.id }/copiar" ></c:url>">
+									Copiar&nbsp;<i class="glyphicon glyphicon-duplicate"></i>
 								</a>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<a id="excluir" data-toggle="modal" data-target="#confirm-delete3" href="#" 

@@ -10,8 +10,8 @@ $(document).ready(function() {
 			nome : {
 				validators : {
 					stringLength : {
-						min : 5,
-						message : 'O nome deve ter no mínimo 5 caracteres'
+						min : 2,
+						message : 'O nome deve ter no mínimo 2 caracteres'
 					},
 					notEmpty : {
 						message : 'O nome é obrigatório'
@@ -21,8 +21,8 @@ $(document).ready(function() {
 			curso : {
 				validators : {
 					stringLength : {
-						min : 5,
-						message : 'O curso deve ter no mínimo 5 caracteres'
+						min : 2,
+						message : 'O curso deve ter no mínimo 2 caracteres'
 					},
 					notEmpty : {
 						message : 'O nome do curso é obrigatório'

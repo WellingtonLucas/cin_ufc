@@ -87,8 +87,8 @@
 						</div>
 						<div class="panel-footer">
 							<c:if test="${permissao == 'professor' }">
-								<a id="editar" href="<c:url value="/jogo/${jogo.id}/editar" ></c:url>">
-									<button class="btn btn-primary btn-lg">Editar&nbsp;<i class="glyphicon glyphicon-edit"></i></button>
+								<a id="editar"  class="btn btn-primary btn-lg" href="<c:url value="/jogo/${jogo.id}/editar" ></c:url>">
+									Editar&nbsp;<i class="glyphicon glyphicon-edit"></i>
 								</a>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<c:if test="${jogo.status == true}">									

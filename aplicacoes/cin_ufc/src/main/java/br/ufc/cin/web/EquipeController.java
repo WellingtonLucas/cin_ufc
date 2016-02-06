@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -284,6 +285,9 @@ public class EquipeController {
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return REDIRECT_PAGINA_LISTAR_JOGO;
+		} catch (PersistenceException e) {
+			redirectAttributes.addFlashAttribute("erro", e.getMessage());
+			return "redirect:/jogo/" + idJogo + "/equipes";
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("erro", MENSAGEM_EXCEPTION);
 			return "redirect:/jogo/" + idJogo + "/equipes";

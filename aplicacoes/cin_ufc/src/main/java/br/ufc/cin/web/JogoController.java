@@ -287,7 +287,7 @@ public class JogoController {
 		try {
 			regrasService.verificaJogo(jogo);
 			regrasService.verificaSeProfessor(usuario, jogo);
-			jogoService.delete(jogo);
+			jogoService.excluir(jogo);
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("erro", e.getMessage());
 			return  "redirect:/jogo/"+jogo.getId()+"/detalhes";

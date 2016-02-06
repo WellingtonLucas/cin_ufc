@@ -16,4 +16,6 @@ public interface JogoService extends GenericService<Jogo> {
 	public abstract void verificaDatas(Jogo jogo);
 
 	public abstract void verificaNomeSemestre(Jogo jogo);
+
+	public abstract void excluir(Jogo jogo);
 }

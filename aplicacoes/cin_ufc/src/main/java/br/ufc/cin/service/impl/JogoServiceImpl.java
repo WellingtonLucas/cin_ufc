@@ -6,8 +6,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.cin.model.Jogo;
+import br.ufc.cin.model.Rodada;
 import br.ufc.cin.repository.JogoRepository;
 import br.ufc.cin.service.JogoService;
+import br.ufc.cin.service.RodadaService;
 import br.ufc.quixada.npi.service.impl.GenericServiceImpl;
 
 @Named
@@ -15,6 +17,9 @@ public class JogoServiceImpl extends GenericServiceImpl<Jogo> implements JogoSer
 	
 	@Inject
 	private JogoRepository turmaRepository;
+
+	@Inject 
+	private RodadaService rodadaService;
 	
 	@Override
 	public List<Jogo> getJogoBySemestre(String semestre) {		
@@ -45,6 +50,16 @@ public class JogoServiceImpl extends GenericServiceImpl<Jogo> implements JogoSer
 			throw new IllegalArgumentException("Verifique os campos com asterísco e preencha-os para criar um novo jogo.");
 		}
 		
+	}
+
+	@Override
+	public void excluir(Jogo jogo) {
+		if(jogo.getRodadas()!=null){
+			for (Rodada rodada : jogo.getRodadas()) {
+				rodadaService.remover(rodada);
+			}
+		}
+		delete(jogo);
 	}
 
 }

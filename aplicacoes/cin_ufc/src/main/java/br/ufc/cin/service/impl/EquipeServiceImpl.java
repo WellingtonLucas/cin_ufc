@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.PersistenceException;
 
 import br.ufc.cin.model.Entrega;
 import br.ufc.cin.model.Equipe;
@@ -174,8 +175,15 @@ public class EquipeServiceImpl extends GenericServiceImpl<Equipe> implements
 			usuarioService.update(aluno);
 		}
 		jogo.getEquipes().remove(equipe);
-		jogoService.update(jogo);
-		delete(equipe);
+		try {
+			delete(equipe);
+			jogoService.update(jogo);
+		} catch (Exception e) {
+			throw new PersistenceException("Não é possível remover equipes "
+					+ "que tenham efetuado entregas e/ou recebido investimentos ou avaliações"
+					+ " numa rodada.");
+		}
+		
 	}
 
 	@Override
